@@ -42,6 +42,9 @@ coverage/
 # Claude Code local settings
 .claude/settings.local.json
 
+# nested standalone repo (github.com/ntgptit/code-verification-guard-v2)
+code-verification-guard-v2/
+
 example
 
 # generated native folders
