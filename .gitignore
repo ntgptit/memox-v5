@@ -36,6 +36,12 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# testing
+coverage/
+
+# Claude Code local settings
+.claude/settings.local.json
+
 example
 
 # generated native folders
