@@ -128,12 +128,17 @@ Concept/business spec (incl. the **Subdeck List variant**) + its future implemen
 | F1.DM.6 | Start study from deck/subdeck row (honors study rules + local-day due; disabled when no studyable content) | FE/BE | Not started | [deck-management.md](../design/screens/deck-management.md), [07-study-modes.md](../design/07-study-modes.md) | TBD | TBD |
 | F1.DM.SORT.1 | Deck/Subdeck Sort Menu concept spec | Docs | In progress → `Done` after merge | [deck-management.md → Sort Menu](../design/screens/deck-management.md#sort-menu) | `npm run check` / `git diff --check` | PR `docs/deck-sort-menu-concept` (squash commit after merge) |
 | F1.DM.SORT.2 | Deck/Subdeck sort behavior implementation (name / created / recently-studied; presentation-only; never-studied ordering; stable tie-break) | FE/BE | Not started | [deck-management.md → Sort Menu](../design/screens/deck-management.md#sort-menu) | TBD | TBD |
+| F1.DM.PLAY.1 | Deck/Subdeck Play Menu concept spec | Docs | In progress → `Done` after merge | [deck-management.md → Play Menu](../design/screens/deck-management.md#play-menu) | `npm run check` / `git diff --check` | PR `docs/deck-play-menu-concept` (squash commit after merge) |
+| F1.DM.PLAY.2 | Play Menu workload read model (`newCount` / `reviewCount` per scope; local-day due) | BE | Not started | [deck-management.md → Play Menu](../design/screens/deck-management.md#play-menu), [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day) | TBD | TBD |
+| F1.DM.PLAY.3 | Play Menu UI behavior (variant A/B; Học/Lặp lại/Xem lại/Một trò chơi/Trình phát; no empty session) | FE | Not started | [deck-management.md → Play Menu](../design/screens/deck-management.md#play-menu) | TBD | TBD |
 
-> `F1.DM.1` and `F1.DM.SORT.1` are docs rows: they flip to `Done` once this PR is **merged** (evidence =
-> squash commit), per the [evidence policy](#done-criteria--evidence-policy). The **Sort Menu** is part
-> of the Deck Management / Subdeck List spec — not a separate feature. Subdeck List is a **variant** of
-> Deck Management, not a separate screen — no separate `F1.SD.*` rows are created. No TTS / advanced-edit
-> / hidden-suspended rows are added — those are not decided (see the spec's
+> `F1.DM.1`, `F1.DM.SORT.1`, and `F1.DM.PLAY.1` are docs rows: they flip to `Done` once this PR is
+> **merged** (evidence = squash commit), per the [evidence policy](#done-criteria--evidence-policy). The
+> **Sort Menu** and **Play Menu** are parts of the Deck Management / Subdeck List spec — not separate
+> features. Subdeck List is a **variant** of Deck Management, not a separate screen — no separate
+> `F1.SD.*` rows are created. **Game** (Match) and **player/listening** modes are **Future** relative to
+> Phase 1 — no implementation rows are added for them here. No TTS / advanced-edit / hidden-suspended
+> rows are added — those are not decided (see the spec's
 > [Open questions](../design/screens/deck-management.md#open-questions--cố-ý-không-chốt)).
 
 ---

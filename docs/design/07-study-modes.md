@@ -125,3 +125,22 @@ nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions
   đặt ở `study-session`, dùng chung cho mọi mode.
 - **`onGrade(cardId, grade)`**: giao diện chung nối mode → `study-session` → engine → repository.
 - Mode **không** tự truy vấn DB; nhận thẻ và trả grade. `study-session` lo I/O + engine.
+
+## Play Menu entry points mapping
+
+Màn [Deck Management / Subdeck List](screens/deck-management.md#play-menu) mở **Play Menu** khi bấm
+Play trên một deck/subdeck row. Các option của Play Menu là **điểm vào (entry point)** ở mức sản phẩm,
+map về mode/flow như sau (mức concept, **không** chốt UI implementation):
+
+| Play Menu option (VI) | Ánh xạ | Ghi chú |
+|-----------------------|--------|---------|
+| **Học** | **new-card learning mode** | Giới hạn phiên theo **thẻ mới** (`newCount`, thẻ `due_at IS NULL`). Phase 1 dùng **Typing**. |
+| **Lặp lại** | **review / due-card mode** | Giới hạn phiên theo **thẻ đến hạn** (`reviewCount`, due local-day — [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)). Chỉ khi `reviewCount > 0`. |
+| **Xem lại các từ** | **browse / review content mode** | Duyệt nội dung ([Flashcard List](screens/flashcard-list.md)); **không** bắt buộc tạo study session. |
+| **Một trò chơi** | **game mode** | = **Match** ([Bảng đối chiếu mode](#bảng-đối-chiếu-mode)), hiện **Phase 3** → **Future** so với Phase 1. |
+| **Trình phát** | **player / listening mode** | **Chưa** có trong docs (audio là non-goal hiện tại) → **Future** nếu chưa thuộc Phase 1. |
+
+Quan hệ với cơ chế chung: các entry point **Học** / **Lặp lại** chỉ **giới hạn tập thẻ** (new-only /
+due-only) của cùng một [cơ chế chọn thẻ + study flow](#luồng-chung-một-phiên-học); chúng **không** định
+nghĩa engine mới. Cơ chế "due + thẻ mới trong hạn mức" ở
+[06-srs-8box](06-srs-8box.md#chọn-thẻ-cho-một-phiên-học) vẫn là nền tảng chung.

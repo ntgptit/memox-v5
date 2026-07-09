@@ -25,6 +25,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   the current study direction (e.g. `KO → VI`); choosing the reverse direction stays out of scope (it
   ties to the bidirectional extension). Speaker/edit/hidden-suspended behaviors and any
   progress/mastery formula are **not** decided here.
+  - **Play Menu.** Tapping Play on a deck/subdeck row opens a **Play Menu** whose options adapt to the
+    scope's learning state: **Học** (new cards, shown when `newCount > 0`), **Lặp lại** (due review,
+    shown **only** when `reviewCount > 0`), **Xem lại các từ** (browse — no forced session), **Một trò
+    chơi** (game — Future if not in Phase 1), and **Trình phát** (player/listening — Future; audio not
+    yet in scope). First-time or no-review-due scopes do **not** show **Lặp lại**; when both counts are
+    zero no study session starts (no empty session). Concept spec:
+    [`../design/screens/deck-management.md`](../design/screens/deck-management.md#play-menu).
 - **Cards.** A card has a `term` and a `meaning` (both required) and an optional `note`. Content is
   free-form Unicode.
 - **Flashcard List screen.** Browse and manage the flashcards inside a deck/section: quickly read each
