@@ -17,7 +17,7 @@
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
-const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxModalSheet, MxListRow, MxSectionHeader, MxBottomNav } = K;
+const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxModalSheet, MxListRow, MxSectionHeader, MxBottomNav, MxEmptyState, MxErrorState } = K;
 function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
 
 function Ring({ p, size = 46 }) {
@@ -164,7 +164,41 @@ function LoadingPhone({ theme }) {
     </div>
   );
 }
-ReactDOM.createRoot(document.getElementById('root')).render(<><Phone theme="dark" /><Phone theme="light" /><LoadingPhone theme="dark" /><LoadingPhone theme="light" /></>);
+function StatePhone({ theme, children }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="signal" style={{width:15,height:15}}></i><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+      <MxTopBar leading={<MxIconButton icon={<Ic n="search" s={20} />} label="Search" />} title="MemoX" actions={<MxIconButton icon={<Ic n="bell" s={20} />} label="Notifications" />} />
+      <div className="mx-scroll" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 var(--mx-space-16)' }}>{children}</div>
+      <MxBottomNav value="home" onChange={() => {}} items={[
+        { key: 'home', label: 'Home', icon: 'house' },
+        { key: 'decks', label: 'Decks', icon: 'layers' },
+        { key: 'stats', label: 'Stats', icon: 'bar-chart-3' },
+        { key: 'more', label: 'More', icon: 'menu' },
+      ]} />
+    </div>
+  );
+}
+function EmptyPhone({ theme }) {
+  return (
+    <StatePhone theme={theme}>
+      <MxEmptyState icon={<Ic n="layers" s={40} />} title="No decks yet"
+        message="Create your first deck or import words to start learning."
+        action={<MxActionButton leadingIcon={<Ic n="plus" s={18} />}>Create deck</MxActionButton>} />
+    </StatePhone>
+  );
+}
+function ErrorPhone({ theme }) {
+  return (
+    <StatePhone theme={theme}>
+      <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't load your decks"
+        message="Your learning data is safe. Check your connection and try again."
+        action={<MxActionButton variant="secondary" leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry</MxActionButton>} />
+    </StatePhone>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<><Phone theme="dark" /><Phone theme="light" /><LoadingPhone theme="dark" /><LoadingPhone theme="light" /><EmptyPhone theme="dark" /><EmptyPhone theme="light" /><ErrorPhone theme="dark" /><ErrorPhone theme="light" /></>);
 setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
 </script>
 </body>
