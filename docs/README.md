@@ -22,6 +22,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [architecture/dependency-boundaries.md](architecture/dependency-boundaries.md) | Luật import (được enforce) |
 | — | [decision-tables/phase-1-contracts.md](decision-tables/phase-1-contracts.md) | Quyết định Phase 1: due (local-day), session persistence, starter template |
 | — | [decision-tables/study-srs-decision-table.md](decision-tables/study-srs-decision-table.md) | Bảng tra nhanh: due eligibility + SRS box + session |
+| — | [decision-tables/play-menu-decision-table.md](decision-tables/play-menu-decision-table.md) | Play Menu: Học vs Lặp lại, activation 5 mode, SRS Repeat |
 | — | [project-management/wbs.md](project-management/wbs.md) | Work breakdown (foundation-first) |
 | — | [verification.md](verification.md) | Cách verify (`npm run check`) |
 

@@ -25,13 +25,23 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   the current study direction (e.g. `KO → VI`); choosing the reverse direction stays out of scope (it
   ties to the bidirectional extension). Speaker/edit/hidden-suspended behaviors and any
   progress/mastery formula are **not** decided here.
-  - **Play Menu.** Tapping Play on a deck/subdeck row opens a **Play Menu** whose options adapt to the
-    scope's learning state: **Học** (new cards, shown when `newCount > 0`), **Lặp lại** (due review,
-    shown **only** when `reviewCount > 0`), **Xem lại các từ** (browse — no forced session), **Một trò
-    chơi** (game — Future if not in Phase 1), and **Trình phát** (player/listening — Future; audio not
-    yet in scope). First-time or no-review-due scopes do **not** show **Lặp lại**; when both counts are
-    zero no study session starts (no empty session). Concept spec:
-    [`../design/screens/deck-management.md`](../design/screens/deck-management.md#play-menu).
+  - **Play Menu (Học vs. Lặp lại).** Tapping Play on a deck/subdeck row opens a **Play Menu** whose
+    options adapt to the scope's learning state:
+    - **Học** = **New Learning Flow** — learn **new** cards and **activate** them into SRS. A new card
+      must complete five modes (**review → match → guess → recall → fill**) to move from **Box 0** to
+      **Box 1**; only then is SRS enabled for it. Học is **not** SRS review.
+    - **Lặp lại** = **SRS review** for cards already learned (**Box 1+**). Shown when scope
+      **progress > 0%**, but its count depends on what is **due now** and **may be 0** (progress > 0%
+      does not mean everything is due). A first-time / 0% scope does **not** show **Lặp lại**; tapping
+      Lặp lại with 0 due starts **no empty session**.
+    - **Xem lại các từ** = browse/review content mode (no forced session). **Một trò chơi** = game mode
+      (may use new and/or review workload). **Trình phát** = player/listening concept — **Future** if
+      not yet in scope (audio not decided).
+
+    Concept spec:
+    [`../design/screens/deck-management.md`](../design/screens/deck-management.md#play-menu);
+    decision table:
+    [`../decision-tables/play-menu-decision-table.md`](../decision-tables/play-menu-decision-table.md).
 - **Cards.** A card has a `term` and a `meaning` (both required) and an optional `note`. Content is
   free-form Unicode.
 - **Flashcard List screen.** Browse and manage the flashcards inside a deck/section: quickly read each

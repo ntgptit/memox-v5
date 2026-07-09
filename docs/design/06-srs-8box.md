@@ -6,11 +6,41 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 
 ## Mô hình
 
-- Có **8 box**, đánh số **1 → 8**.
-  - Box **1** = thẻ mới hoặc hay quên (ôn dày).
+- **Box 0 / chưa activate** = trạng thái **trước SRS**: thẻ mới **chưa** được đưa vào lịch SRS.
+- Có **8 box SRS**, đánh số **1 → 8**.
+  - Box **1** = **điểm bắt đầu SRS** (thẻ vừa được activate vào SRS).
   - Box **8** = nhớ rất chắc (ôn thưa nhất).
-- Mỗi box gắn một **interval** = số **ngày** chờ trước lần ôn kế.
-- Thẻ mới bắt đầu ở **box 1** (FR-S2).
+- Mỗi box (1–8) gắn một **interval** = số **ngày** chờ trước lần ôn kế.
+- **Thẻ mới bắt đầu ở Box 0 / chưa activate**, **không** ở Box 1. Thẻ chỉ vào **Box 1** sau khi hoàn
+  thành **New Learning Flow** (xem [Kích hoạt SRS](#kích-hoạt-srs-box-0--box-1) và
+  [07-study-modes → New Learning Flow](07-study-modes.md#new-learning-flow)).
+
+## Kích hoạt SRS (Box 0 → Box 1)
+
+- Thẻ mới ở **Box 0 / not activated** — **chưa** thuộc SRS, **không** có `due`, **không** xuất hiện
+  trong luồng **Lặp lại** (SRS Repeat).
+- Thẻ chỉ được **activate** (Box 0 → **Box 1**) sau khi hoàn thành đủ **5 mode** của New Learning Flow
+  theo thứ tự: **review → match → guess → recall → fill** (xem
+  [07-study-modes → New Learning Flow](07-study-modes.md#new-learning-flow)).
+- **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
+- **Repeat mode** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate **không** được đưa vào
+  Repeat.
+- Card chưa hoàn thành đủ 5 mode → **vẫn Box 0 / not SRS-active** (tiến độ có thể phản ánh partial
+  learning nếu docs progress cho phép, nhưng **không** phải SRS review).
+
+> **DRIFT DETECTED — mô hình activation vs. docs hiện có**
+> ```
+> File code: (none — chưa có code)
+> File doc:  docs/design/05-data-model.md (cards.box DEFAULT 1, CHECK (box BETWEEN 1 AND 8); Box = 1..8),
+>            docs/product/02-requirements.md (FR-S2 "Thẻ mới bắt đầu ở box 1")
+> Mismatch:  Docs cũ cho thẻ mới bắt đầu ngay ở Box 1 và box chỉ nhận 1..8. Nghiệp vụ mới yêu cầu thẻ
+>            mới ở Box 0 / not-activated và chỉ vào Box 1 sau New Learning Flow (5 mode). => cần Box 0
+>            (hoặc cờ activated) mà schema/enum hiện tại chưa có.
+> Suggested fix: Ở task docs này KHÔNG chốt schema/migration. Cần một task riêng cập nhật data model:
+>            thêm trạng thái not-activated (ví dụ box 0 hoặc cột activated_at / learning_progress),
+>            nới CHECK box (0..8) hoặc tách cột, và sửa FR-S2. Cho tới khi đó, Box 0 là khái niệm
+>            nghiệp vụ (concept) trong docs SRS/study, chưa phải schema đã chốt.
+> ```
 
 ## Cấu hình (từ Settings — xem 09-settings)
 
@@ -67,9 +97,15 @@ due_at'           = now + intervals[box' - 1] * MS_PER_DAY
 
 với `MS_PER_DAY = 86_400_000`. (Interval index 0-based: box `b` dùng `intervals[b-1]`.)
 
-**Thẻ mới lần đầu được học:** trước lần chấm đầu tiên `due_at = NULL`, `box = 1`. Ngay khi đưa vào
-phiên học lần đầu, đặt `new_seen_on = ngày local hôm nay` (để đếm hạn mức thẻ mới). Sau lần chấm đầu,
-`due_at` được tính như trên.
+**Thẻ mới (Box 0 / chưa activate):** `due_at = NULL`, **chưa** thuộc SRS, không được `schedule()`. Thẻ
+đi qua **New Learning Flow** (5 mode) — đây **không** phải SRS review. Khi đưa vào học lần đầu, đặt
+`new_seen_on = ngày local hôm nay` (để đếm hạn mức thẻ mới). **Khi hoàn thành đủ 5 mode**, card được
+**activate**: chuyển sang **Box 1** và **lần đầu** được `schedule()` để có `due_at` (xem
+[Kích hoạt SRS](#kích-hoạt-srs-box-0--box-1)). Từ Box 1 trở đi, mỗi lần chấm dùng công thức trên.
+
+> Lưu ý: hàm `schedule()`/`isDue()` dưới đây thao tác trên card **đã activate (Box 1–8)**. Việc chuyển
+> Box 0 → Box 1 là do **New Learning Flow** quyết định (hoàn thành 5 mode), **không** phải một lần
+> `schedule()` thông thường.
 
 > **Quyết định thiết kế — lưu trữ vs. eligibility:** `due_at` được **lưu** dưới dạng mốc tuyệt đối
 > (epoch ms; interval cộng theo mili-giây). Nhưng việc **xác định đến hạn (due)** thì **normalize về
