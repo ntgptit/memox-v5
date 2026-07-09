@@ -94,7 +94,7 @@ function CorrectPhone({ theme }) {
 function WrongPhone({ theme }) {
   return (
     <StudyShell theme={theme} step="4 / 12" percent={33}
-      feedback={<MxCallout tone="warning" icon={<Ic n="x" s={16} />} title="Not quite">You picked “To write”. Check the correct answer below.</MxCallout>}
+      feedback={<MxCallout tone="destructive" icon={<Ic n="x" s={16} />} title="Not quite">You picked “To write”. Check the correct answer below.</MxCallout>}
       bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next word</MxActionButton>}>
       <Prompt /><Options states={{ 1: 'wrong', 0: 'disabled', 2: 'disabled', 3: 'disabled' }} />
     </StudyShell>

@@ -101,7 +101,7 @@ function CorrectPhone({ theme }) {
 function WrongPhone({ theme }) {
   return (
     <StudyShell theme={theme} step="0 / 4 matched" percent={0} bottom={null}
-      feedback={<MxCallout tone="warning" icon={<Ic n="x" s={16} />} title="Not a match">“학교” isn’t “Time”. The tiles reset — try again.</MxCallout>}>
+      feedback={<MxCallout tone="destructive" icon={<Ic n="x" s={16} />} title="Not a match">“학교” isn’t “Time”. The tiles reset — try again.</MxCallout>}>
       <Board states={{ p_b: 'wrong', m_d: 'wrong' }} />
     </StudyShell>
   );
