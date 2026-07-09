@@ -1,0 +1,168 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Appearance / Theme Settings" subtitle="Theme presets, app icon, live preview: presets / selected / app-icon / live-preview / save-failed, dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxSettingsSection, MxThemePresetTile, MxBadge, MxCallout, MxErrorState, MxActionButton } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+/* Theme preview swatch — forces the previewed theme via data-theme so tokens
+   resolve to that theme regardless of the surrounding frame. */
+function Swatch({ mode }) {
+  const Box = ({ theme }) => (
+    <div data-theme={theme} style={{ flex: 1, minWidth: 0, background: 'var(--mx-color-background-app)', borderRadius: 8, padding: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <div style={{ height: 8, borderRadius: 3, background: 'var(--mx-color-surface-elevated)' }} />
+      <div style={{ height: 6, width: '65%', borderRadius: 3, background: 'var(--mx-color-action-primary)' }} />
+      <div style={{ height: 6, width: '40%', borderRadius: 3, background: 'var(--mx-color-surface-card)' }} />
+    </div>
+  );
+  if (mode === 'system') {
+    return <div style={{ display: 'flex', gap: 3, width: '100%', height: 56 }}><Box theme="dark" /><Box theme="light" /></div>;
+  }
+  return <div style={{ height: 56 }}><Box theme={mode} /></div>;
+}
+
+function IconSwatch({ tint, glyph, ink }) {
+  return (
+    <div style={{ height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: 44, height: 44, borderRadius: 12, background: tint, color: ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Ic n={glyph} s={22} /></div>
+    </div>
+  );
+}
+
+function Shell({ theme, children }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar variant="settings" leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Appearance" />
+      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
+    </div>
+  );
+}
+
+function ThemeGrid({ selected }) {
+  return (
+    <MxSettingsSection title="Theme">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+        <MxThemePresetTile name="System" preview={<Swatch mode="system" />} selected={selected === 'system'} onClick={() => {}} />
+        <MxThemePresetTile name="Dark" preview={<Swatch mode="dark" />} selected={selected === 'dark'} onClick={() => {}} />
+        <MxThemePresetTile name="Light" preview={<Swatch mode="light" />} selected={selected === 'light'} onClick={() => {}} />
+      </div>
+    </MxSettingsSection>
+  );
+}
+
+function IconGrid() {
+  return (
+    <MxSettingsSection title="App icon">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+        <MxThemePresetTile name="Classic" preview={<IconSwatch tint="var(--mx-color-action-primary)" ink="var(--mx-color-text-onAction)" glyph="brain" />} selected onClick={() => {}} />
+        <MxThemePresetTile name="Mint" preview={<IconSwatch tint="var(--mx-color-feedback-correctSurface)" ink="var(--mx-color-srs-noDue)" glyph="brain" />} onClick={() => {}} />
+        <MxThemePresetTile name="Sunset" preview={<IconSwatch tint="var(--mx-color-feedback-warningSurface)" ink="var(--mx-color-srs-due)" glyph="brain" />} unavailable />
+      </div>
+    </MxSettingsSection>
+  );
+}
+
+/* ---- MX-16.1 Presets default (system selected) ---- */
+function PresetsPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <ThemeGrid selected="system" />
+      <MxCallout tone="info" icon={<Ic n="info" s={16} />}>“System” follows your device’s light or dark setting automatically.</MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-16.2 Selected theme (dark frame → Dark, light frame → Light) ---- */
+function SelectedPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <ThemeGrid selected={theme === 'light' ? 'light' : 'dark'} />
+      <MxCallout tone="noDue" icon={<Ic n="check" s={16} />}>{theme === 'light' ? '“Light” is applied.' : '“Dark” is applied.'} Your choice is saved automatically.</MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-16.3 App icon states ---- */
+function AppIconPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <IconGrid />
+      <MxCallout tone="unavailable" icon={<Ic n="lock" s={16} />}>“Sunset” is a future icon — it isn’t available in this version yet.</MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-16.4 Live preview ---- */
+function LivePreviewPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <ThemeGrid selected={theme === 'light' ? 'light' : 'dark'} />
+      <MxSettingsSection title="Live preview" description="How your decks look with this theme.">
+        <div style={{ borderRadius: 'var(--mx-radius-lg)', border: '1px solid var(--mx-color-border-default)', background: 'var(--mx-color-surface-card)', padding: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ width: 44, height: 44, flex: '0 0 auto', borderRadius: 12, background: 'var(--mx-color-state-selectedSurface)', color: 'var(--mx-color-action-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '800 20px var(--mx-font-display)' }} className="mx-korean">한</span>
+            <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+              <div style={{ font: '700 var(--mx-text-body-large-size) var(--mx-font-display)', color: 'var(--mx-color-text-primary)' }}>Korean TOPIK I</div>
+              <div style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>120 words</div>
+            </div>
+            <MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>83</MxBadge>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <MxBadge tone="active">Active</MxBadge><MxBadge tone="noDue" icon={<Ic n="check" s={12} />}>Done</MxBadge><MxBadge tone="preSrs">New</MxBadge>
+          </div>
+        </div>
+      </MxSettingsSection>
+    </Shell>
+  );
+}
+
+/* ---- MX-16.5 Save failed ---- */
+function SaveFailedPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <ThemeGrid selected="system" />
+      <MxErrorState icon={<Ic n="cloud-off" s={36} />} title="Couldn't save appearance"
+        message="Your current theme still works and your settings are safe on this device. Try again to apply the change."
+        action={<MxActionButton variant="secondary" leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry</MxActionButton>} />
+    </Shell>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-16.1 · Presets default (System selected)</DeskCaption>
+    <PresetsPhone theme="dark" /><PresetsPhone theme="light" />
+    <DeskCaption>MX-16.2 · Selected theme (Dark / Light)</DeskCaption>
+    <SelectedPhone theme="dark" /><SelectedPhone theme="light" />
+    <DeskCaption>MX-16.3 · App icon (selected + unavailable)</DeskCaption>
+    <AppIconPhone theme="dark" /><AppIconPhone theme="light" />
+    <DeskCaption>MX-16.4 · Live preview</DeskCaption>
+    <LivePreviewPhone theme="dark" /><LivePreviewPhone theme="light" />
+    <DeskCaption>MX-16.5 · Save failed</DeskCaption>
+    <SaveFailedPhone theme="dark" /><SaveFailedPhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>

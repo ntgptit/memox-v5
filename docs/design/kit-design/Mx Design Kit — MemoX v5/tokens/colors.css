@@ -15,7 +15,11 @@
    both themes; colour is never the ONLY signal (pair with icon + label).
    ============================================================================ */
 
-:root {
+/* Dark is the default (:root). [data-theme="dark"] is also accepted so a dark
+   theme can be forced on a descendant even inside a light-themed ancestor
+   (e.g. theme-preview swatches on the Appearance screen). */
+:root,
+[data-theme="dark"] {
   /* ---- PRIMITIVES : neutral (cool grey, faint purple cast) --------------- */
   --mx-slate-0:   #ffffff;
   --mx-slate-50:  #faf9fd;
