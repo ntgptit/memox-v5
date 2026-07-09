@@ -126,6 +126,54 @@ nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions
 - **`onGrade(cardId, grade)`**: giao diện chung nối mode → `study-session` → engine → repository.
 - Mode **không** tự truy vấn DB; nhận thẻ và trả grade. `study-session` lo I/O + engine.
 
+## New Learning Flow
+
+**Học** (từ [Play Menu](screens/deck-management.md#play-menu)) là **New Learning Flow** — luồng học
+**thẻ/từ mới**, **không** phải SRS review.
+
+- Học **bắt đầu bằng `reviewMode`**.
+- Một thẻ mới phải đi qua đủ **5 mode** theo thứ tự mặc định:
+
+  **1. review → 2. match → 3. guess → 4. recall → 5. fill**
+
+  (`fill` = gõ đáp án, tương ứng mode **Typing** trong [Bảng đối chiếu mode](#bảng-đối-chiếu-mode).)
+- **Chỉ khi hoàn thành đủ 5 mode**, card mới được đưa từ **Box 0 / not-activated** lên **Box 1** và
+  **SRS được enable** cho card đó (xem [06-srs-8box → Kích hoạt SRS](06-srs-8box.md#kích-hoạt-srs-box-0--box-1)).
+- **SRS chỉ enable từ Box 1 trở đi.** Card **chưa** vào Box 1 **không** được tính vào **Lặp lại** (SRS
+  Repeat), **không** có `due`.
+- Card chưa hoàn thành đủ 5 mode → vẫn Box 0 / not SRS-active (tiến độ có thể phản ánh partial learning
+  nếu docs progress cho phép; **không** phải SRS review).
+
+> **DRIFT DETECTED — vai trò mode & phasing**
+> ```
+> File code: (none — chưa có code)
+> File doc:  docs/design/07-study-modes.md (bảng phase: Typing=P1; Review/Recall/Guess=P2; Match=P3 &
+>            "Match KHÔNG cập nhật SRS"), FR-M* trong docs/product/02-requirements.md
+> Mismatch:  Nghiệp vụ mới yêu cầu MỌI thẻ mới đi qua review+match+guess+recall+fill để activate SRS,
+>            tức 5 mode cùng thuộc New Learning Flow (Phase 1). Docs cũ phân các mode vào Phase 1/2/3 và
+>            coi Match là game không đụng SRS. => vai trò/giai đoạn của mode và ý nghĩa "cập nhật SRS"
+>            cần được diễn giải lại cho pha học-mới (pre-SRS).
+> Suggested fix: Trong New Learning Flow (pre-SRS), 5 mode là các BƯỚC HỌC để activate card (không có
+>            SRS update vì SRS chưa bật). Việc "cập nhật SRS" (bảng đối chiếu mode) chỉ áp dụng cho card
+>            đã activate ở luồng Lặp lại. Cần một task riêng cập nhật bảng phase/roles cho khớp; task
+>            docs này ghi nhận drift, không tự chốt lại toàn bộ phasing.
+> ```
+
+## SRS Repeat Flow
+
+**Lặp lại** (từ Play Menu) là **review SRS**.
+
+- Chỉ lấy card **SRS-active** (Box 1+) và **đến hạn** (`due`) tại **thời điểm hiện tại** (quy tắc
+  **local-day**, [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day) —
+  **không** thay đổi trong task này).
+- Deck/subdeck có **progress > 0%** thì **có** Repeat mode.
+- **Repeat count có thể bằng 0** nếu chưa có card nào đến hạn — progress > 0% **không** đồng nghĩa mọi
+  learned card đều cần lặp lại ngay.
+- Repeat count là **số due SRS cards tại thời điểm mở menu**, **không** phải tổng card đã học, **không**
+  phải progress %, **không** phải tổng card trong deck.
+- Nếu Repeat count = 0: **không** tạo review session **rỗng**; hiển thị trạng thái **không có từ đến
+  hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).
+
 ## Play Menu entry points mapping
 
 Màn [Deck Management / Subdeck List](screens/deck-management.md#play-menu) mở **Play Menu** khi bấm
@@ -134,13 +182,12 @@ map về mode/flow như sau (mức concept, **không** chốt UI implementation)
 
 | Play Menu option (VI) | Ánh xạ | Ghi chú |
 |-----------------------|--------|---------|
-| **Học** | **new-card learning mode** | Giới hạn phiên theo **thẻ mới** (`newCount`, thẻ `due_at IS NULL`). Phase 1 dùng **Typing**. |
-| **Lặp lại** | **review / due-card mode** | Giới hạn phiên theo **thẻ đến hạn** (`reviewCount`, due local-day — [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)). Chỉ khi `reviewCount > 0`. |
+| **Học** | **[New Learning Flow](#new-learning-flow)** (new-card, pre-SRS) | Thẻ mới (`newCount`, Box 0 / `due_at IS NULL`) đi qua **review→match→guess→recall→fill**; hoàn thành đủ 5 mode → activate lên **Box 1**. |
+| **Lặp lại** | **[SRS Repeat Flow](#srs-repeat-flow)** (review/due) | Chỉ card **Box 1+** đã **đến hạn** (`reviewDueCount`, due local-day — [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)). Count có thể = 0. |
 | **Xem lại các từ** | **browse / review content mode** | Duyệt nội dung ([Flashcard List](screens/flashcard-list.md)); **không** bắt buộc tạo study session. |
 | **Một trò chơi** | **game mode** | = **Match** ([Bảng đối chiếu mode](#bảng-đối-chiếu-mode)), hiện **Phase 3** → **Future** so với Phase 1. |
 | **Trình phát** | **player / listening mode** | **Chưa** có trong docs (audio là non-goal hiện tại) → **Future** nếu chưa thuộc Phase 1. |
 
-Quan hệ với cơ chế chung: các entry point **Học** / **Lặp lại** chỉ **giới hạn tập thẻ** (new-only /
-due-only) của cùng một [cơ chế chọn thẻ + study flow](#luồng-chung-một-phiên-học); chúng **không** định
-nghĩa engine mới. Cơ chế "due + thẻ mới trong hạn mức" ở
-[06-srs-8box](06-srs-8box.md#chọn-thẻ-cho-một-phiên-học) vẫn là nền tảng chung.
+Quan hệ với cơ chế chung: **Học** đi qua New Learning Flow (pre-SRS, chưa có due); **Lặp lại** chỉ dùng
+card đã activate (Box 1+) và due. Cơ chế chọn thẻ + local-day ở
+[06-srs-8box](06-srs-8box.md#chọn-thẻ-cho-một-phiên-học) vẫn là nền tảng cho luồng **Lặp lại**.

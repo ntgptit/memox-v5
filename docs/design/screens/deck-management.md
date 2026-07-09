@@ -143,76 +143,78 @@ Xuất hiện khi người dùng bấm nút **Play/Start** trên một deck/subd
 hoặc xem lại** nội dung trong **scope hiện tại**. Play Menu là **một phần của Deck Management / Subdeck
 List**, không phải feature độc lập.
 
-Nội dung menu **phụ thuộc trạng thái học của scope**, dựa trên hai biến nghiệp vụ:
+**Học vs. Lặp lại** là hai luồng khác nhau:
 
-- **`newCount`** — số card/từ **mới** có thể học trong scope (thẻ chưa xếp lịch, `due_at IS NULL` —
-  xem [05-data-model](../05-data-model.md)).
-- **`reviewCount`** — số card/từ **đã học và đang cần ôn/lặp lại** trong scope (thẻ **due** theo quy tắc
-  **local-day** — xem [DT-1](../../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)).
+- **Học = [New Learning Flow](../07-study-modes.md#new-learning-flow)** — học **thẻ mới** (pre-SRS).
+  Thẻ mới đi qua **review → match → guess → recall → fill**; hoàn thành đủ 5 mode thì card mới được
+  **activate** từ **Box 0** lên **Box 1** và SRS mới bật. **Học không phải SRS review.**
+- **Lặp lại = [SRS Repeat Flow](../07-study-modes.md#srs-repeat-flow)** — review SRS, **chỉ** cho card
+  đã **activate** (Box 1+) và **đến hạn**.
 
-Cả hai count **lấy theo scope hiện tại**. **Search/filter của list không làm thay đổi count của Play
+Nội dung menu **phụ thuộc trạng thái học của scope**, dựa trên các biến nghiệp vụ:
+
+- **`newCount`** — số card/từ **mới** (Box 0 / chưa activate, `due_at IS NULL`) có thể học trong scope.
+- **`reviewDueCount`** — số card **SRS-active (Box 1+)** đã **đến hạn** (`due`, local-day —
+  [DT-1](../../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)) tại **thời điểm
+  mở menu**. **Không** phải tổng card đã học, **không** phải progress %, **không** phải tổng card trong deck.
+- **`progress`** — tiến độ học của scope (theo progress docs; công thức chưa chốt). `progress > 0%` ⇔
+  scope **đã có** ít nhất một card activate vào SRS / lịch sử học hợp lệ.
+
+Các count **lấy theo scope hiện tại**. **Search/filter của list không làm thay đổi count của Play
 Menu**, trừ khi người dùng đang chọn một **filtered scope rõ ràng**.
 
 ### Ý nghĩa các option
 
 | Option (VI) | Ý nghĩa | Label phụ | Điều kiện hiển thị |
 |-------------|---------|-----------|--------------------|
-| **Học** | Học card/từ **mới** (new-card learning). | Số từ mới, ví dụ `120 từ mới`. | `newCount > 0`. |
-| **Lặp lại** | Ôn card/từ **đã học & đến hạn** (review/due theo SRS). | Số cần lặp lại, ví dụ `Lặp lại 83 từ`. | **Chỉ khi `reviewCount > 0`**. |
-| **Xem lại các từ** | Mở chế độ **browse/xem lại** danh sách từ trong scope ([Flashcard List](flashcard-list.md)). **Không** nhất thiết tạo study session. | — | Khi scope **có card** (không phụ thuộc `newCount`/`reviewCount`). |
+| **Học** | New Learning Flow cho card/từ **mới** (activate vào SRS). | Số từ mới, ví dụ `120 từ mới`. | `newCount > 0`. |
+| **Lặp lại** | SRS Repeat Flow cho card **Box 1+ đã đến hạn**. | Số cần lặp lại, ví dụ `Lặp lại 83 từ`; **`0`/no-due** nếu chưa đến hạn. | **Khi `progress > 0%`** (có card SRS-active). Count **có thể = 0**. |
+| **Xem lại các từ** | Mở chế độ **browse/xem lại** danh sách từ trong scope ([Flashcard List](flashcard-list.md)). **Không** nhất thiết tạo study session. | — | Khi scope **có card** (không phụ thuộc count/due). |
 | **Một trò chơi** | Mở **game mode** nếu game nằm trong product scope. | Phản ánh workload hiện có (xem dưới). | Khi scope có nội dung phù hợp; **Future** nếu game chưa thuộc Phase 1. |
 | **Trình phát** | Mở **player/listening mode** nếu product scope cho phép. | — | Chỉ khi product scope cho phép player; **Future** nếu audio/player chưa thuộc Phase 1. |
 
-**Label phụ của "Một trò chơi"** phản ánh workload khả dụng:
+**Label phụ của "Một trò chơi"** phản ánh workload khả dụng (new / review / cả hai):
 
 - Chỉ có từ mới: `120 từ mới`.
 - Chỉ có lặp lại: `Lặp lại 83 từ`.
 - Có cả hai: `Lặp lại 83 từ, 563 từ mới`.
 
-> Mapping mode: **Học** = new-card learning, **Lặp lại** = review/due-card mode, **Xem lại các từ** =
-> browse/review content, **Một trò chơi** = game mode (Future nếu chưa thuộc Phase 1), **Trình phát** =
-> player/listening mode (Future). Chi tiết mapping ở
-> [07-study-modes → Play Menu](../07-study-modes.md#play-menu-entry-points-mapping). Play Menu là các
-> **điểm vào (entry point)** giới hạn phiên theo new-only / due-only; cơ chế chọn thẻ chung (due + new)
-> ở [07-study-modes](../07-study-modes.md) vẫn là nền tảng.
-
 ### Menu variants
 
-**Variant A — First-time / no review due.** Điều kiện: `reviewCount = 0`, **hoặc** scope chưa từng học,
-**hoặc** progress = 0% (theo progress docs).
+**Variant A — Deck chưa học / progress = 0%.** Điều kiện: `progress = 0%`, **chưa** có card nào
+SRS-active, `reviewDueCount = 0`.
 
-- Hiển thị: **Học** (nếu `newCount > 0`), **Xem lại các từ**, **Một trò chơi** (nếu scope có nội dung
-  phù hợp), **Trình phát** (nếu product scope cho phép).
+- Hiển thị: **Học** (nếu `newCount > 0`), **Xem lại các từ** (nếu scope có card), **Một trò chơi** (nếu
+  game trong product scope), **Trình phát** (nếu player trong product scope).
 - **Không** hiển thị: **Lặp lại**.
 
-**Variant B — Has due review.** Điều kiện: `reviewCount > 0` (scope đã có lịch sử học hoặc có card đã
-đến hạn ôn).
+**Variant B — Deck đã có progress > 0%.** Điều kiện: `progress > 0%` (có ≥ 1 card đã activate vào SRS
+hoặc có lịch sử học hợp lệ).
 
-- Hiển thị: **Học** (nếu `newCount > 0`), **Lặp lại** (kèm `reviewCount`), **Xem lại các từ**, **Một
-  trò chơi** (kèm workload hiện có), **Trình phát** (nếu product scope cho phép).
-
-**Trường hợp `newCount = 0` và `reviewCount = 0`:**
-
-- **Không** bắt đầu study session trực tiếp; **không** được tạo **session rỗng**.
-- Hiển thị trạng thái **không có nội dung học phù hợp**, hoặc chỉ cho phép **Xem lại các từ** nếu scope
-  có card.
+- Hiển thị: **Học** (nếu vẫn còn `newCount > 0`), **Lặp lại**, **Xem lại các từ**, **Một trò chơi**,
+  **Trình phát** (nếu product scope cho phép).
+- **Lặp lại count** = `reviewDueCount` tại thời điểm mở menu — có thể là `83`, `5`, hoặc **`0`** nếu
+  chưa đến hạn. `progress > 0%` **không** đồng nghĩa mọi learned card đều cần lặp lại ngay.
 
 ### Count display
 
 - **Học** hiển thị **số từ mới** (`newCount`).
-- **Lặp lại** hiển thị **số từ cần ôn/lặp lại** (`reviewCount`).
+- **Lặp lại** hiển thị **`reviewDueCount`** (số card Box 1+ đến hạn); nếu `= 0` → trạng thái **no-due**.
 - **Một trò chơi** hiển thị **workload khả dụng** (new / review / cả hai).
-- Nếu **count = 0**, **không** hiển thị option tương ứng — **trừ** option vẫn có ý nghĩa browse/view
-  (Xem lại các từ).
 - Count **lấy theo scope hiện tại**; search/filter của list không đổi count (xem trên).
 
 ### Behavior (nghiệp vụ)
 
-- Bấm **Học** → bắt đầu luồng học **từ mới** theo rule study hiện có ([07-study-modes](../07-study-modes.md)).
-- Bấm **Lặp lại** → bắt đầu luồng **ôn tập** theo **SRS/due rule** hiện có (local-day, DT-1).
+- Bấm **Học** → bắt đầu **New Learning Flow** (review→match→guess→recall→fill) cho thẻ mới
+  ([07-study-modes](../07-study-modes.md#new-learning-flow)). Đây **không** phải SRS review.
+- Bấm **Lặp lại** khi `reviewDueCount > 0` → bắt đầu **SRS Repeat Flow** (card Box 1+ đến hạn, local-day).
+- Bấm **Lặp lại** khi `reviewDueCount = 0` → **không** tạo **session rỗng**; hiển thị trạng thái **không
+  có từ đến hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).
+- Khi `newCount = 0` **và** `reviewDueCount = 0` → **không** bắt đầu study session trực tiếp; chỉ cho
+  **Xem lại các từ** nếu scope có card. **Không** tạo session rỗng.
 - Bấm **Xem lại các từ** → mở **browse/xem lại** card trong scope (không bắt buộc tạo study session).
-- Bấm **Một trò chơi** → mở **game mode** nếu được hỗ trợ (Future nếu chưa thuộc Phase 1).
-- Bấm **Trình phát** → mở **player mode** nếu được hỗ trợ (Future nếu chưa thuộc Phase 1).
+- Bấm **Một trò chơi** → **game mode** nếu được hỗ trợ (Future nếu chưa thuộc Phase 1).
+- Bấm **Trình phát** → **player mode** nếu được hỗ trợ (Future nếu chưa thuộc Phase 1).
 - **Mở menu không tự thay đổi dữ liệu học.** Chỉ khi người dùng **chọn một mode** thì flow tương ứng mới
   bắt đầu.
 - Mode nào **chưa** thuộc Phase 1 thì **mark Future**, **không** implement trong docs này.
@@ -247,9 +249,10 @@ Các state liên quan **Play Menu** (xem [Play Menu](#play-menu)):
 | State | Ý nghĩa |
 |-------|---------|
 | `play menu closed` | Play Menu đang đóng (mặc định). |
-| `play menu open — variant A` | Mở ở trạng thái first-time / no review due (`reviewCount = 0`): không có **Lặp lại**. |
-| `play menu open — variant B` | Mở ở trạng thái có due review (`reviewCount > 0`): có **Lặp lại** kèm count. |
-| `no studyable content in scope` | `newCount = 0` và `reviewCount = 0` — không bắt đầu session; chỉ cho **Xem lại các từ** nếu scope có card. |
+| `play menu open — variant A` | `progress = 0%` (chưa có card SRS-active): **không** có **Lặp lại**. |
+| `play menu open — variant B` | `progress > 0%`: **có** **Lặp lại** (count = `reviewDueCount`, **có thể = 0**). |
+| `repeat no-due` | Bấm **Lặp lại** khi `reviewDueCount = 0`: hiển thị no-due, **không** tạo session rỗng. |
+| `no studyable content in scope` | `newCount = 0` và `reviewDueCount = 0` — không bắt đầu session; chỉ cho **Xem lại các từ** nếu scope có card. |
 | `mode unavailable (future)` | Option map tới mode chưa thuộc Phase 1 (game/player) — hiển thị **Future** / không khả dụng. |
 
 ## Open questions / cố ý không chốt
