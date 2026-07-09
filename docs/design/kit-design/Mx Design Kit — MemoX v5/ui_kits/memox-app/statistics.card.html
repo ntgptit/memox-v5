@@ -1,4 +1,4 @@
-<!-- @dsCard group="Sample Screens" viewport="430x900" name="Statistics" subtitle="Bazar-language stats — hero header, underline tabs, metrics, chart, bottom nav (light-first)" -->
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Statistics" subtitle="Long-term stats — Words/Time/Quality tabs, chart; loaded / loading / empty / no-data / read-model-needed / tab-switch / error, dark + light" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,32 +16,22 @@
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
-const { MxTopBar, MxIconButton, MxTabs, MxMetricCard, MxStatsChartPanel, MxSectionHeader, MxBottomNav } = K;
+const { MxTopBar, MxIconButton, MxTabs, MxMetricCard, MxStatsChartPanel, MxSectionHeader, MxBottomNav, MxEmptyState, MxErrorState, MxCallout } = K;
 function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
 
-function App() {
-  const [tab, setTab] = React.useState('Quality');
-  const [nav, setNav] = React.useState('stats');
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
+}
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+function Shell({ theme, children }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
-    <div className="mx-phone" data-theme="light">
-      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" title="Statistics" actions={<MxIconButton icon={<Ic n="sliders-horizontal" s={18} />} label="Scope" />} />
-      <div className="mx-scroll" style={{ padding: '4px 16px 12px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <MxSectionHeader size="hero" eyebrow="Last 30 days" title="Your progress" style={{ margin: '4px 4px 4px' }} />
-        <MxTabs options={["Words","Time","Quality"]} value={tab} onChange={setTab} />
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <MxMetricCard label="Correct" value={342} tone="correct" delta={18} />
-          <MxMetricCard label="Wrong" value={57} tone="wrong" delta={-4} />
-        </div>
-        <MxStatsChartPanel title="Quality by day"
-          xLabels={["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]}
-          series={[
-            { name: "Correct", tone: "correct", points: [12,18,15,22,20,26,24] },
-            { name: "Wrong", tone: "wrong", points: [4,3,6,2,3,2,1] },
-          ]} />
-      </div>
-      <MxBottomNav value={nav} onChange={setNav} items={[
+      <div className="mx-scroll" style={{ padding: '4px 16px 12px', display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
+      <MxBottomNav value="stats" onChange={() => {}} items={[
         { key: 'home', label: 'Home', icon: 'house' },
         { key: 'decks', label: 'Decks', icon: 'layers' },
         { key: 'stats', label: 'Stats', icon: 'bar-chart-3' },
@@ -50,7 +40,149 @@ function App() {
     </div>
   );
 }
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+function Hero() {
+  return <MxSectionHeader size="hero" eyebrow="Last 30 days" title="Your progress" style={{ margin: '4px 4px 4px' }} />;
+}
+function Metrics2({ a, b }) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+      <MxMetricCard {...a} /><MxMetricCard {...b} />
+    </div>
+  );
+}
+
+/* per-tab demo content (illustrative golden data) */
+function TabContent({ tab }) {
+  if (tab === 'Words') {
+    return (
+      <>
+        <Metrics2 a={{ label: 'Words learned', value: 512, tone: 'word', delta: 34 }} b={{ label: 'New this month', value: 88, tone: 'neutral' }} />
+        <MxStatsChartPanel title="Words learned by day" xLabels={DAYS}
+          series={[{ name: 'Learned', tone: 'word', points: [40, 52, 38, 60, 55, 70, 66] }]} />
+      </>
+    );
+  }
+  if (tab === 'Time') {
+    return (
+      <>
+        <Metrics2 a={{ label: 'Study time', value: '4h 20m', tone: 'time', delta: 12 }} b={{ label: 'Avg / session', value: '6:40', tone: 'neutral' }} />
+        <MxStatsChartPanel title="Minutes by day" xLabels={DAYS}
+          series={[{ name: 'Minutes', tone: 'time', points: [22, 18, 30, 12, 25, 34, 28] }]} />
+      </>
+    );
+  }
+  return (
+    <>
+      <Metrics2 a={{ label: 'Correct', value: 342, tone: 'correct', delta: 18 }} b={{ label: 'Wrong', value: 57, tone: 'wrong', delta: -4 }} />
+      <MxStatsChartPanel title="Quality by day" xLabels={DAYS}
+        series={[
+          { name: 'Correct', tone: 'correct', points: [12, 18, 15, 22, 20, 26, 24] },
+          { name: 'Wrong', tone: 'wrong', points: [4, 3, 6, 2, 3, 2, 1] },
+        ]} />
+    </>
+  );
+}
+function TabsRow({ tab }) {
+  return <MxTabs options={["Words", "Time", "Quality"]} value={tab} onChange={() => {}} />;
+}
+
+/* ---- MX-14.1 / 14.6 loaded per tab ---- */
+function LoadedPhone({ theme, tab }) {
+  return (
+    <Shell theme={theme}>
+      <Hero /><TabsRow tab={tab} /><TabContent tab={tab} />
+    </Shell>
+  );
+}
+
+/* ---- MX-14.2 Loading ---- */
+function LoadingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <Shell theme={theme}>
+      <div style={{ padding: '4px' }}><Skel w={120} h={12} r="var(--mx-radius-sm)" /><div style={{ height: 8 }} /><Skel w={180} h={26} r="var(--mx-radius-sm)" /></div>
+      <Skel w="100%" h={40} r="999px" />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}><Skel w="100%" h={80} r="var(--mx-radius-lg)" /><Skel w="100%" h={80} r="var(--mx-radius-lg)" /></div>
+      <Skel w="100%" h={200} r="var(--mx-radius-lg)" />
+    </Shell>
+  );
+}
+
+/* ---- MX-14.3 Empty no history ---- */
+function EmptyPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <Hero />
+      <div style={{ minHeight: '48vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MxEmptyState icon={<Ic n="bar-chart-3" s={40} />} title="No study history yet"
+          message="Finish a study or repeat session and your progress charts will appear here." />
+      </div>
+    </Shell>
+  );
+}
+
+/* ---- MX-14.4 No data per metric ---- */
+function NoDataPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <Hero /><TabsRow tab="Time" />
+      <Metrics2 a={{ label: 'Study time', value: '—', tone: 'neutral' }} b={{ label: 'Avg / session', value: '—', tone: 'neutral' }} />
+      <MxStatsChartPanel title="Minutes by day" empty xLabels={DAYS} />
+      <MxCallout tone="info" icon={<Ic n="info" s={16} />}>No time was recorded in the last 30 days. Study a session and this metric will fill in.</MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-14.5 Chart read-model needed (no fake data) ---- */
+function ReadModelPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <Hero /><TabsRow tab="Quality" />
+      <Metrics2 a={{ label: 'Correct', value: '—', tone: 'neutral' }} b={{ label: 'Wrong', value: '—', tone: 'neutral' }} />
+      <MxStatsChartPanel title="Quality by day" empty xLabels={DAYS} />
+      <MxCallout tone="unavailable" icon={<Ic n="database" s={16} />} title="Chart data not ready">This chart needs the stats read model, which isn’t built yet — no numbers are shown so nothing is guessed.</MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-14.7 Error ---- */
+function ErrorPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <Hero />
+      <div style={{ minHeight: '48vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't load statistics"
+          message="Your study history is safe on this device. Check your connection and try again."
+          action={<span style={{ display: 'inline-flex' }}><MxIconButton icon={<Ic n="rotate-cw" s={18} />} label="Retry" variant="surface" /></span>} />
+      </div>
+    </Shell>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-14.1 · Loaded (Quality tab)</DeskCaption>
+    <LoadedPhone theme="dark" tab="Quality" /><LoadedPhone theme="light" tab="Quality" />
+    <DeskCaption>MX-14.2 · Loading</DeskCaption>
+    <LoadingPhone theme="dark" /><LoadingPhone theme="light" />
+    <DeskCaption>MX-14.3 · Empty — no history</DeskCaption>
+    <EmptyPhone theme="dark" /><EmptyPhone theme="light" />
+    <DeskCaption>MX-14.4 · No data for metric</DeskCaption>
+    <NoDataPhone theme="dark" /><NoDataPhone theme="light" />
+    <DeskCaption>MX-14.5 · Chart read-model needed</DeskCaption>
+    <ReadModelPhone theme="dark" /><ReadModelPhone theme="light" />
+    <DeskCaption>MX-14.6 · Tab switch — Words</DeskCaption>
+    <LoadedPhone theme="dark" tab="Words" /><LoadedPhone theme="light" tab="Words" />
+    <DeskCaption>MX-14.6 · Tab switch — Time</DeskCaption>
+    <LoadedPhone theme="dark" tab="Time" /><LoadedPhone theme="light" tab="Time" />
+    <DeskCaption>MX-14.7 · Load error</DeskCaption>
+    <ErrorPhone theme="dark" /><ErrorPhone theme="light" />
+  </>
+);
 setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
 </script>
 </body>
