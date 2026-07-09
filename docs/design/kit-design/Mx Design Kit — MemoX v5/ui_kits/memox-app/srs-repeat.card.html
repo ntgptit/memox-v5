@@ -1,0 +1,186 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="SRS Repeat — Session" subtitle="SRS Repeat (Box 1+ due cards): due / correct box-up / wrong lapse / no-due / completed / loading-finalize-failed, dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxStudyProgressBar, MxStudyCard, MxActionButton, MxBadge, MxCallout, MxEmptyState, MxErrorState } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
+}
+
+const PROMPT = '연습하다';
+const MEANING = 'To practice';
+
+function BoxRow({ children }) {
+  return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>{children}</div>;
+}
+function BoxMove({ from, to, dir }) {
+  const up = dir === 'up';
+  return (
+    <BoxRow>
+      <MxBadge tone="active" icon={<Ic n="layers" s={12} />}>Box {from}</MxBadge>
+      <i data-lucide={up ? 'arrow-up' : 'arrow-down'} style={{ width: 18, height: 18, color: up ? 'var(--mx-color-srs-noDue)' : 'var(--mx-color-srs-lapse)' }}></i>
+      <MxBadge tone={up ? 'mastered' : 'lapse'} icon={<Ic n={up ? 'arrow-up' : 'rotate-ccw'} s={12} />}>Box {to}</MxBadge>
+    </BoxRow>
+  );
+}
+
+function StudyShell({ theme, step, percent, boxTop, feedback, children, bottom }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar variant="study" leading={<MxIconButton icon={<Ic n="x" />} label="Exit repeat" />} title="Repeat"
+        actions={<MxIconButton icon={<Ic n="volume-2" s={18} />} label="Play audio" variant="ghost" />} />
+      {typeof percent === 'number' && (
+        <div style={{ padding: '0 20px' }}><MxStudyProgressBar percent={percent} modeLabel="Repeat · Recall" stepLabel={step} /></div>
+      )}
+      <div className="mx-scroll" style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {boxTop}
+        {children}
+        {feedback}
+      </div>
+      {bottom && <div className="mx-bottom">{bottom}</div>}
+    </div>
+  );
+}
+function Centered({ children }) {
+  return <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{children}</div>;
+}
+
+/* ---- MX-12.1 Due card ---- */
+function DuePhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="3 / 24" percent={12}
+      boxTop={<BoxRow><MxBadge tone="active" icon={<Ic n="layers" s={12} />}>Box 3</MxBadge><MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>Due today</MxBadge></BoxRow>}
+      bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="eye" s={18} />}>Reveal answer</MxActionButton>}>
+      <MxStudyCard variant="prompt" prompt={PROMPT} note="An SRS review — recall the meaning" onAudio={() => {}} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-12.2 Correct box up ---- */
+function CorrectPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="3 / 24" percent={12}
+      boxTop={<BoxMove from={3} to={4} dir="up" />}
+      feedback={<MxCallout tone="noDue" icon={<Ic n="check" s={16} />} title="Correct — moved up to Box 4">Nice recall. Next review in about 2 weeks.</MxCallout>}
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next card</MxActionButton>}>
+      <MxStudyCard variant="both" prompt={PROMPT} meaning={MEANING} note="Verb · dictionary form" onAudio={() => {}} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-12.3 Wrong / lapse ---- */
+function WrongPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="3 / 24" percent={12}
+      boxTop={<BoxMove from={3} to={1} dir="down" />}
+      feedback={<MxCallout tone="warning" icon={<Ic n="rotate-ccw" s={16} />} title="Lapsed — back to Box 1">Missed reviews reset to Box 1, never lower. You’ll see this word again later today.</MxCallout>}
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next card</MxActionButton>}>
+      <MxStudyCard variant="both" prompt={PROMPT} meaning={MEANING} note="Verb · dictionary form" onAudio={() => {}} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-12.4 No due — empty session ---- */
+function NoDuePhone({ theme }) {
+  return (
+    <StudyShell theme={theme} percent={undefined} bottom={<MxActionButton variant="secondary" fullWidth leadingIcon={<Ic n="chevron-left" s={18} />}>Back to deck</MxActionButton>}>
+      <Centered>
+        <MxEmptyState tone="positive" icon={<Ic n="party-popper" s={40} />} title="Nothing due to repeat"
+          message="All your active words are up to date. New reviews unlock as their due dates arrive — no empty session started." />
+      </Centered>
+    </StudyShell>
+  );
+}
+
+/* ---- MX-12.5 Completed ---- */
+function CompletedPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} percent={100} step="24 / 24"
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>See summary</MxActionButton>}>
+      <Centered>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, textAlign: 'center' }}>
+          <span style={{ width: 72, height: 72, borderRadius: '50%', background: 'var(--mx-color-feedback-correctSurface)', color: 'var(--mx-color-srs-noDue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Ic n="trophy" s={34} /></span>
+          <div style={{ font: '800 var(--mx-text-title-medium-size)/1.2 var(--mx-font-display)', color: 'var(--mx-color-text-primary)' }}>Repeat complete</div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <MxBadge tone="active" icon={<Ic n="layers" s={12} />}>24 reviewed</MxBadge>
+            <MxBadge tone="mastered" icon={<Ic n="arrow-up" s={12} />}>19 up</MxBadge>
+            <MxBadge tone="lapse" icon={<Ic n="rotate-ccw" s={12} />}>5 lapsed</MxBadge>
+          </div>
+        </div>
+      </Centered>
+    </StudyShell>
+  );
+}
+
+/* ---- MX-12.6 Loading ---- */
+function LoadingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <StudyShell theme={theme} percent={undefined}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}><Skel w={110} h={26} r="999px" /></div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '40px 0' }}>
+        <Skel w={180} h={48} r="var(--mx-radius-md)" />
+        <Skel w={120} h={16} r="var(--mx-radius-sm)" />
+      </div>
+      <div style={{ textAlign: 'center', font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>Loading due words…</div>
+    </StudyShell>
+  );
+}
+
+/* ---- MX-12.6 Finalize failed ---- */
+function FinalizeFailedPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} percent={undefined}
+      bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry saving</MxActionButton>}>
+      <Centered>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't save your review"
+          message="Your box changes are safe on this device — we just couldn't finish saving. Retry to record this repeat session." />
+      </Centered>
+    </StudyShell>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-12.1 · Due card (Box 1+)</DeskCaption>
+    <DuePhone theme="dark" /><DuePhone theme="light" />
+    <DeskCaption>MX-12.2 · Correct → box up</DeskCaption>
+    <CorrectPhone theme="dark" /><CorrectPhone theme="light" />
+    <DeskCaption>MX-12.3 · Wrong → lapse (never below Box 1)</DeskCaption>
+    <WrongPhone theme="dark" /><WrongPhone theme="light" />
+    <DeskCaption>MX-12.4 · No due — no empty session</DeskCaption>
+    <NoDuePhone theme="dark" /><NoDuePhone theme="light" />
+    <DeskCaption>MX-12.5 · Completed</DeskCaption>
+    <CompletedPhone theme="dark" /><CompletedPhone theme="light" />
+    <DeskCaption>MX-12.6 · Loading</DeskCaption>
+    <LoadingPhone theme="dark" /><LoadingPhone theme="light" />
+    <DeskCaption>MX-12.6 · Finalize failed (data safe)</DeskCaption>
+    <FinalizeFailedPhone theme="dark" /><FinalizeFailedPhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
