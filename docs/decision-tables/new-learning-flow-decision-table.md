@@ -14,9 +14,12 @@ boundary with **SRS Repeat** and **browse**. Authoritative specs:
 | user taps **Học** | start **`reviewMode`** (first mode) |
 | card enters **`reviewMode`** | card remains **not SRS-active** (Box 0) |
 | **`reviewMode` completed** | **transition to `matchMode`** |
-| **`matchMode` correct pair** | mark pair **complete** in `matchMode` |
-| **`matchMode` wrong pair** | show **incorrect** feedback; keep pair **incomplete** (retry) |
-| **`matchMode` completed** | **transition to `guessMode`** |
+| **`matchMode`** shows prompt/front items and answer/meaning items | user **selects one pair** (evaluate only when 2 items selected) |
+| **`matchMode` correct pair** selected | show **correct** feedback (green-style); mark pair **complete** in `matchMode` |
+| **`matchMode` wrong pair** selected | show **incorrect** feedback (red-style); keep pair **incomplete** |
+| **`matchMode` wrong pair** selected | **allow retry** |
+| **`matchMode` pair complete** | may **remove / lock / mark as completed** per UI implementation |
+| **all `matchMode` pairs complete** | **transition to `guessMode`** |
 | **`guessMode`** shows prompt + answer options | user **selects one option** |
 | **`guessMode` correct** option selected | show **correct** feedback; mark item **complete** in `guessMode` |
 | **`guessMode` wrong** option selected | show **incorrect** feedback; keep item **incomplete** (or retry per docs) |

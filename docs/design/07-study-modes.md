@@ -226,12 +226,35 @@ thứ 2/5). Không quay lại Play Menu, không vào SRS Repeat.
 tự item **có thể được xáo trộn** để người dùng phải nhận diện cặp đúng. `matchMode` dùng **cùng learning
 batch** với `reviewMode` (trừ khi docs quy định khác).
 
-**Expected user action.** Người dùng chọn **một item ở bên này** và **một item ở bên kia**.
+**Selection behavior (concept).**
 
-**Correct match.** Nếu hai item thuộc **cùng một card** → **match đúng**: phản hồi tích cực, cặp đó được
-xem là **đã hoàn thành** trong `matchMode`.
+- Người dùng chọn **1 item ở mỗi phía** (một prompt/front và một answer/meaning).
+- Hệ thống **chỉ đánh giá cặp khi đủ 2 item** được chọn; **không** đánh giá khi mới chọn **một** item.
+- Sau khi feedback được xử lý: **cặp đúng** được đánh dấu hoàn thành, hoặc **selection được reset** để
+  chọn lại.
+- **Không** chốt: chọn bên trái hay bên phải trước, animation chọn card, exact layout (2 cột / grid),
+  color token, thời gian hiển thị xanh/đỏ.
 
-**Wrong match.** Nếu chọn **sai cặp** → phản hồi lỗi, cặp **vẫn chưa hoàn thành**, người dùng **thử lại**.
+**Correct match (ghép đúng).** Nếu hai item thuộc **cùng một card** → **match đúng**:
+
+- **Cả hai** card được chọn hiển thị trạng thái **correct**; UI **nên** dùng **màu xanh** (hoặc style
+  correct tương đương).
+- Cặp đó được tính **hoàn thành** trong `matchMode`; có thể **biến mất / bị khóa / đánh dấu đã hoàn
+  thành** tùy UI implementation.
+- Ghép đúng **chưa** đưa card vào **Box 1**, **chưa** tạo SRS due schedule, **chưa** làm card xuất hiện
+  trong **Lặp lại**.
+
+**Wrong match (ghép sai).** Nếu hai item **không** thuộc cùng một card → **match sai**:
+
+- **Cả hai** card được chọn hiển thị trạng thái **incorrect**; UI **nên** dùng **màu đỏ** (hoặc style
+  incorrect tương đương). Hệ thống **phải** cho user biết lựa chọn đó sai.
+- Cặp đó **chưa** hoàn thành; sau feedback sai, người dùng **phải có cơ hội thử lại**.
+- Ghép sai **không** activate SRS, **không** đưa card vào Box 1, và **không** được làm **mất** item khỏi
+  learning flow khi item chưa hoàn thành.
+
+**Retry (future / implementation detail — không chốt timing).** Ví dụ: retry ngay; reset selection sau
+một khoảng ngắn; cho chọn lại ngay; đưa item về trạng thái chưa chọn. **Rule bắt buộc:** cặp sai **chưa
+hoàn thành**, **không** SRS-active, **không** Box 1.
 
 **Completion rule.** `matchMode` kết thúc khi **mọi cặp trong batch** được ghép đúng; khi đó flow **tự
 chuyển** sang `guessMode` (mode thứ 3).

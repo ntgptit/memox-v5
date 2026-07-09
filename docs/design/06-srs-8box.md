@@ -25,9 +25,10 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 - **`reviewMode`** (mode 1), **`matchMode`** (mode 2) và **`guessMode`** (mode 3) đều **thuộc pha trước
   SRS**. Hoàn thành **riêng** `reviewMode`, hoặc **review + match**, hoặc **review + match + guess**,
   đều **không** đủ để bật SRS: card **vẫn Box 0 / not SRS-active** cho tới khi hoàn thành **đủ cả 5
-  mode** (review → match → guess → recall → fill). Feedback **đúng/sai** trong `guessMode` là **pre-SRS
-  learning**, **không** phải SRS review grading; guess-correct không đủ để bật SRS, guess-incorrect
-  không đưa card vào Box 1. Card đang ở `reviewMode`/`matchMode`/`guessMode` vẫn là **pre-SRS card**.
+  mode** (review → match → guess → recall → fill). Feedback **đúng/sai** trong `matchMode` (ghép cặp) và
+  `guessMode` (chọn đáp án) đều là **pre-SRS learning**, **không** phải SRS review grading:
+  match-correct / guess-correct **không** đủ để bật SRS, và match-incorrect / guess-incorrect **không**
+  đưa card vào Box 1. Card đang ở `reviewMode`/`matchMode`/`guessMode` vẫn là **pre-SRS card**.
 - **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
 - **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate (kể cả đang
   ở `reviewMode`) **không** được đưa vào Repeat.
