@@ -1,0 +1,122 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Repeat Mode Menu" subtitle="SRS Repeat mode picker (match/guess/recall/fill — no review): modes / no-due / unavailable; dark + light parity" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxBadge, MxListRow, MxModalSheet, MxCallout } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+const MODES = [
+  { key: 'match', icon: 'layout-grid', title: 'Match', sub: 'Match prompt ↔ meaning' },
+  { key: 'guess', icon: 'list-checks', title: 'Guess', sub: 'Pick the right meaning' },
+  { key: 'recall', icon: 'eye-off', title: 'Recall', sub: 'Reveal, then self-grade' },
+  { key: 'fill', icon: 'keyboard', title: 'Fill', sub: 'Type the prompt' },
+];
+
+function ModeRow({ m, due, disabled, note }) {
+  return (
+    <MxListRow
+      leading={<Ic n={m.icon} />}
+      title={m.title}
+      subtitle={note || m.sub}
+      disabled={disabled}
+      trailing={disabled ? <MxBadge tone="neutral" size="small">Soon</MxBadge> : <MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>{due}</MxBadge>}
+      showChevron={!disabled}
+      onClick={disabled ? undefined : () => {}}
+    />
+  );
+}
+
+function DeckBg() {
+  return (
+    <div className="mx-scroll" style={{ padding: '4px 16px 12px', opacity: 0.55 }} aria-hidden="true">
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 16px' }}>
+        <div style={{ width: 108, height: 138, borderRadius: 18, background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className="mx-korean" style={{ font: '800 44px var(--mx-font-display)', color: 'var(--mx-color-action-primary)' }}>한</span>
+        </div>
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ font: '800 var(--mx-text-title-medium-size)/1.2 var(--mx-font-display)', color: 'var(--mx-color-text-primary)' }}>Korean TOPIK I</div>
+        <div style={{ marginTop: 6, display: 'inline-flex' }}><MxBadge tone="active" icon={<i data-lucide="arrow-right" style={{ width: 13, height: 13 }}></i>}>KO → EN</MxBadge></div>
+      </div>
+    </div>
+  );
+}
+
+function RepeatPhone({ theme, subtitle, callout, children }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Deck" />
+      <DeckBg />
+      <MxModalSheet title="Repeat · Korean TOPIK I" onClose={() => {}}>
+        {subtitle && <div style={{ padding: '0 4px 8px', font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>{subtitle}</div>}
+        {callout && <div style={{ paddingBottom: 10 }}>{callout}</div>}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingBottom: 8 }}>{children}</div>
+      </MxModalSheet>
+    </div>
+  );
+}
+
+/* ---- MX-11.1 Modes without reviewMode ---- */
+function ModesPhone({ theme }) {
+  return (
+    <RepeatPhone theme={theme} subtitle="83 words due · choose how to repeat">
+      {MODES.map(m => <ModeRow key={m.key} m={m} due={83} />)}
+    </RepeatPhone>
+  );
+}
+
+/* ---- MX-11.2 No due (positive) ---- */
+function NoDuePhone({ theme }) {
+  return (
+    <RepeatPhone theme={theme} subtitle="Nothing due right now"
+      callout={<MxCallout tone="noDue" icon={<Ic n="check" s={16} />} title="All caught up">No words are due to repeat yet. New due words appear as their review dates arrive — nothing to do now.</MxCallout>}>
+      {MODES.map(m => <MxListRow key={m.key} leading={<Ic n={m.icon} />} title={m.title} subtitle={m.sub} disabled trailing={<MxBadge tone="noDue" size="small" icon={<Ic n="check" s={12} />}>0 due</MxBadge>} />)}
+    </RepeatPhone>
+  );
+}
+
+/* ---- MX-11.3 Unavailable / soon ---- */
+function UnavailablePhone({ theme }) {
+  return (
+    <RepeatPhone theme={theme} subtitle="83 words due · some modes need more words"
+      callout={<MxCallout tone="unavailable" icon={<Ic n="info" s={16} />}>Match needs at least 4 due words in one round — only 3 are due right now, so it’s unavailable this session.</MxCallout>}>
+      <MxListRow leading={<Ic n="layout-grid" />} title="Match" subtitle="Needs 4+ due words · 3 due" disabled trailing={<MxBadge tone="neutral" size="small">Unavailable</MxBadge>} />
+      {MODES.slice(1).map(m => <ModeRow key={m.key} m={m} due={83} />)}
+    </RepeatPhone>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-11.1 · Modes (match / guess / recall / fill — no review)</DeskCaption>
+    <ModesPhone theme="dark" /><ModesPhone theme="light" />
+    <DeskCaption>MX-11.2 · No due (positive)</DeskCaption>
+    <NoDuePhone theme="dark" /><NoDuePhone theme="light" />
+    <DeskCaption>MX-11.3 · Unavailable / soon</DeskCaption>
+    <UnavailablePhone theme="dark" /><UnavailablePhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
