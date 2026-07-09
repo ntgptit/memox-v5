@@ -112,6 +112,27 @@ All `Not started`. Type: `BE`, `FE`, `Test`, `Docs`, `Foundation`.
 
 ---
 
+## Deck Management (F1.DM)
+
+Concept/business spec + its future implementation rows. Spec:
+[`../design/screens/deck-management.md`](../design/screens/deck-management.md).
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.DM.1 | Deck Management concept and business spec | Docs | In progress → `Done` after merge | [`../design/screens/deck-management.md`](../design/screens/deck-management.md) | `npm run check` / `git diff --check` | PR `docs/deck-management-concept` (squash commit after merge) |
+| F1.DM.2 | Deck Management read model (child decks, counts, progress/workload indicators) | BE | Not started | [deck-management.md](../design/screens/deck-management.md), [05-data-model.md](../design/05-data-model.md), [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day) | TBD | TBD |
+| F1.DM.3 | Deck Management UI skeleton (header, control area, deck rows, bottom actions) | FE | Not started | [deck-management.md](../design/screens/deck-management.md) | TBD | TBD |
+| F1.DM.4 | Deck Management states (loading / loaded / empty / search-empty / error / no-studyable / creating) | FE | Not started | [deck-management.md states](../design/screens/deck-management.md#các-state-chính) | TBD | TBD |
+| F1.DM.5 | Add deck/card entry actions (create child deck/folder, add card) | FE/BE | Not started | [deck-management.md actions](../design/screens/deck-management.md#các-action-chính) | TBD | TBD |
+| F1.DM.6 | Start study from deck row (honors study rules + local-day due; disabled when no studyable content) | FE/BE | Not started | [deck-management.md](../design/screens/deck-management.md), [07-study-modes.md](../design/07-study-modes.md) | TBD | TBD |
+
+> `F1.DM.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
+> per the [evidence policy](#done-criteria--evidence-policy). No TTS / advanced-edit / hidden-suspended
+> rows are added — those are not decided (see the spec's
+> [Open questions](../design/screens/deck-management.md#open-questions--cố-ý-không-chốt)).
+
+---
+
 ## 5. Later phases (NOT started)
 
 | ID | Deliverable | Status |
