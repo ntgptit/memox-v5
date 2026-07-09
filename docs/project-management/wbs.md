@@ -184,8 +184,8 @@ Concept/business spec (incl. the **Subdeck List variant**) + its future implemen
 | F1.STUDY.NEW.FILL.2 | fillMode answer evaluation and activation gate (Kiểm tra vs expected; empty=invalid; correct→complete; activate Box 1 when all 5 done; needs normalization rule) | BE | Not started | [07-study-modes.md → fillMode](../design/07-study-modes.md#fillmode-mode-thứ-5--cổng-activate-srs) | TBD | TBD |
 | F1.STUDY.NEW.FILL.3 | fillMode UI states (meaning prompt + input; Trợ giúp / Kiểm tra / Thử lại; correct green / incorrect red) | FE | Not started | [07-study-modes.md → fillMode](../design/07-study-modes.md#fillmode-mode-thứ-5--cổng-activate-srs) | TBD | TBD |
 
-> `F1.DM.1`, `F1.DM.SORT.1`, `F1.DM.PLAY.1`, `F1.DM.REPEAT.1`, `F1.STUDY.NEW.REVIEW.1`, `F1.STUDY.NEW.MATCH.1`, `F1.STUDY.NEW.GUESS.1`, `F1.STUDY.NEW.RECALL.1`, and `F1.STUDY.NEW.FILL.1` are docs rows: they flip to `Done` once this PR is
-> **merged** (evidence = squash commit), per the [evidence policy](#done-criteria--evidence-policy). The
+> `F1.DM.1`, `F1.DM.SORT.1`, `F1.DM.PLAY.1`, `F1.DM.REPEAT.1`, `F1.STUDY.NEW.REVIEW.1`, `F1.STUDY.NEW.MATCH.1`, `F1.STUDY.NEW.GUESS.1`, `F1.STUDY.NEW.RECALL.1`, and `F1.STUDY.NEW.FILL.1` are docs rows, now **`Done`** (merged; evidence in each row + [Traceability log](#traceability-log)),
+> per the [evidence policy](#done-criteria--evidence-policy). The
 > **Sort Menu** and **Play Menu** are parts of the Deck Management / Subdeck List spec — not separate
 > features. Subdeck List is a **variant** of Deck Management, not a separate screen — no separate
 > `F1.SD.*` rows are created. **Game** (Match) and **player/listening** modes are **Future** relative to
@@ -210,7 +210,7 @@ Concept/business spec + its future implementation rows. Spec:
 | F1.RESULT.3 | New Learning Result UI (learned / activated Box 1 / not activated / per-mode failures) | FE | Not started | [session-result.md](../design/screens/session-result.md) | TBD | TBD |
 | F1.RESULT.4 | SRS Repeat Result UI (reviewed / remembered / forgotten / promotion·demotion) | FE | Not started | [session-result.md](../design/screens/session-result.md) | TBD | TBD |
 
-> `F1.RESULT.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
+> `F1.RESULT.1` is a docs row, now **`Done`** (merged; evidence in the row + [Traceability log](#traceability-log)),
 > per the [evidence policy](#done-criteria--evidence-policy). Session Result reflects **only the
 > just-finished session** and does **not** replace Dashboard/Progress; activation happens in the flow,
 > not on Result. Progress/Dashboard and Review-mistakes are separate screens, **not** created here. Game
@@ -232,7 +232,7 @@ Concept/business spec + its future implementation rows. Spec:
 | F1.FL.5 | Add card entry action (create card in current scope, even under active search/filter) | FE/BE | Not started | [flashcard-list.md actions](../design/screens/flashcard-list.md#các-action-chính) | TBD | TBD |
 | F1.FL.6 | Open card detail/edit entry | FE | Not started | [flashcard-list.md actions](../design/screens/flashcard-list.md#các-action-chính) | TBD | TBD |
 
-> `F1.FL.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
+> `F1.FL.1` is a docs row, now **`Done`** (merged; evidence in the row + [Traceability log](#traceability-log)),
 > per the [evidence policy](#done-criteria--evidence-policy). No TTS/audio / progress-indicator /
 > advanced-edit rows are added — those are not decided (see the spec's
 > [Open questions](../design/screens/flashcard-list.md#open-questions--cố-ý-không-chốt)).
@@ -258,8 +258,8 @@ Drawer-derived system functions, surfaced via a modern Settings / More Hub (draw
 | _(Appearance)_ | Appearance / Theme has its **own section** — see [Appearance / Theme Settings (F1.APPEARANCE)](#appearance--theme-settings-f1appearance) | — | — | [settings-more-hub.md → Group E](../design/screens/settings-more-hub.md#group-e--appearance--theme-chủ-đề) | — | — |
 | F1.SUPPORT.1 | FAQ and support contact entries (email / Telegram) | FE | Future | [settings-more-hub.md → Group G](../design/screens/settings-more-hub.md#group-g--help--support-trợ-giúp); links not decided | TBD | TBD |
 
-> `F1.SETTINGS.HUB.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash
-> commit), per the [evidence policy](#done-criteria--evidence-policy). **Drawer is not a required UI** —
+> `F1.SETTINGS.HUB.1` is a docs row, now **`Done`** (merged; evidence in the row + [Traceability
+> log](#traceability-log)), per the [evidence policy](#done-criteria--evidence-policy). **Drawer is not a required UI** —
 > it only sourced the function list. **Add/Delete language** (learning-language workspace) is **not** in
 > the current data model and needs a **data-model + destructive-policy task** first — marked **Future**.
 > Import/export file formats, theme storage, and support links are **not** decided here; those functions
@@ -282,7 +282,7 @@ Long-term statistics screen (opened from Settings / More Hub). Spec:
 | F1.STATS.5 | Time metrics aggregation (học / lặp lại / tổng; recorded sessions only) | BE | Not started | [statistics.md → Tab Thời gian](../design/screens/statistics.md#tab-thời-gian-time) | TBD | TBD |
 | F1.STATS.6 | Quality metrics aggregation (correct/wrong; learning/repeat quality; evaluation modes only) | BE | Not started | [statistics.md → Tab Chất lượng](../design/screens/statistics.md#tab-chất-lượng-quality) | TBD | TBD |
 
-> `F1.STATS.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
+> `F1.STATS.1` is a docs row, now **`Done`** (merged; evidence in the row + [Traceability log](#traceability-log)),
 > per the [evidence policy](#done-criteria--evidence-policy). Statistics is **long-term** and **distinct**
 > from Session Result (just-finished session) and Activity summary (today). **Aggregation formulas are
 > not decided** — the read-model rows (`F1.STATS.4/.5/.6`) must define them; docs **do not invent** them.
@@ -304,8 +304,8 @@ Theme/appearance configuration (opened from Settings / More Hub → Chủ đề)
 | F1.APPEARANCE.4 | Theme application runtime behavior (follow system / apply day-night themes) | FE | Not started | [appearance-theme-settings.md → Auto dark mode](../design/screens/appearance-theme-settings.md#auto-dark-mode-chế-độ-đêm-tự-động) | TBD | TBD |
 | F1.APPEARANCE.5 | App icon switching platform spike | Research/Foundation | Future | [appearance-theme-settings.md → Platform notes](../design/screens/appearance-theme-settings.md#platform-notes-for-app-icon); Expo/native support not verified | TBD | TBD |
 
-> `F1.APPEARANCE.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash
-> commit), per the [evidence policy](#done-criteria--evidence-policy). **Appearance settings never mutate
+> `F1.APPEARANCE.1` is a docs row, now **`Done`** (merged; evidence in the row + [Traceability
+> log](#traceability-log)), per the [evidence policy](#done-criteria--evidence-policy). **Appearance settings never mutate
 > learning data.** **App icon switching is Future** — it needs verified platform support (spike) and can
 > remove Home-screen shortcuts. Theme token values, icon assets, dynamic-app-icon API, and persistence
 > schema are **not** decided here.
@@ -339,8 +339,8 @@ Picker, Reminder Settings, Spaced Repetition Settings). Specs:
 | F1.BACKUP.1 | Backup/Restore policy and flow | BE/FE | Not started | [app-settings.md → Backup / Restore](../design/screens/app-settings.md#backup--restore-sao-lưu--khôi-phục) | TBD | TBD |
 | F1.SYNC.1 | Cloud sync policy | Docs/Research | Future | [app-settings.md → Cloud sync](../design/screens/app-settings.md#cloud-sync-đồng-bộ-đám-mây); provider/conflict policy not decided | TBD | TBD |
 
-> `F1.SETTINGS.APP.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash
-> commit), per the [evidence policy](#done-criteria--evidence-policy). Native Language Picker, Reminder
+> `F1.SETTINGS.APP.1` is a docs row, now **`Done`** (merged; evidence in the row + [Traceability
+> log](#traceability-log)), per the [evidence policy](#done-criteria--evidence-policy). Native Language Picker, Reminder
 > Settings, and Spaced Repetition Settings are **child flows of App Settings**, not separate modules — all
 > in **one** PR. Opening App Settings **never mutates** learning data. **"Ô: 7"** must not distort the
 > documented **8-box** model — it is an **open question** (see the SRS settings drift). **Restore** is
