@@ -1,0 +1,170 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="New Learning — Guess" subtitle="guessMode (mode 3/5): prompt + multiple-choice options; default / selected / correct / wrong / reveal-correct / loading-error, dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxStudyProgressBar, MxStudyCard, MxAnswerOption, MxActionButton, MxCallout, MxErrorState } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
+}
+
+const PROMPT = '읽다';
+const OPTIONS = ['To read', 'To write', 'To listen', 'To speak']; // index 0 = correct
+
+/* states: map option index -> state (default | selected | correct | wrong | disabled) */
+function Options({ states = {} }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {OPTIONS.map((o, i) => (
+        <MxAnswerOption key={i} state={states[i] || 'default'} onClick={states[i] === 'disabled' ? undefined : () => {}}>{o}</MxAnswerOption>
+      ))}
+    </div>
+  );
+}
+
+function StudyShell({ theme, step, percent, feedback, children, bottom }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar variant="study" leading={<MxIconButton icon={<Ic n="x" />} label="Exit guess" />} title="Guess"
+        actions={<MxIconButton icon={<Ic n="volume-2" s={18} />} label="Play audio" variant="ghost" />} />
+      {typeof percent === 'number' && (
+        <div style={{ padding: '0 20px' }}><MxStudyProgressBar percent={percent} modeLabel="Guess" stepLabel={step} /></div>
+      )}
+      <div className="mx-scroll" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+        {children}
+        {feedback}
+      </div>
+      {bottom !== null && <div className="mx-bottom">{bottom}</div>}
+    </div>
+  );
+}
+function Prompt() {
+  return <MxStudyCard variant="prompt" prompt={PROMPT} note="Choose the correct meaning" onAudio={() => {}} />;
+}
+
+/* ---- MX-08.1 Options default ---- */
+function DefaultPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="4 / 12" percent={33}
+      bottom={<MxActionButton variant="primary" fullWidth disabled>Check answer</MxActionButton>}>
+      <Prompt /><Options />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-08.2 Selected (not correct) ---- */
+function SelectedPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="4 / 12" percent={33}
+      bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="check-check" s={18} />}>Check answer</MxActionButton>}>
+      <Prompt /><Options states={{ 1: 'selected' }} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-08.3 Correct ---- */
+function CorrectPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="4 / 12" percent={33}
+      feedback={<MxCallout tone="info" icon={<Ic n="check" s={16} />} title="Correct!">“읽다” means “To read”.</MxCallout>}
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next word</MxActionButton>}>
+      <Prompt /><Options states={{ 0: 'correct', 1: 'disabled', 2: 'disabled', 3: 'disabled' }} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-08.4 Wrong ---- */
+function WrongPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="4 / 12" percent={33}
+      feedback={<MxCallout tone="warning" icon={<Ic n="x" s={16} />} title="Not quite">You picked “To write”. Check the correct answer below.</MxCallout>}
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next word</MxActionButton>}>
+      <Prompt /><Options states={{ 1: 'wrong', 0: 'disabled', 2: 'disabled', 3: 'disabled' }} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-08.5 Disabled / reveal-correct ---- */
+function RevealPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="4 / 12" percent={33}
+      feedback={<MxCallout tone="info" icon={<Ic n="lightbulb" s={16} />} title="Correct answer">The right meaning of “읽다” is “To read”.</MxCallout>}
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next word</MxActionButton>}>
+      <Prompt /><Options states={{ 1: 'wrong', 0: 'correct', 2: 'disabled', 3: 'disabled' }} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-08.6 Loading ---- */
+function LoadingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <StudyShell theme={theme} percent={undefined} bottom={<Skel w="100%" h={52} r="var(--mx-radius-lg)" />}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '16px 0 8px' }}>
+        <Skel w={140} h={44} r="var(--mx-radius-md)" />
+        <Skel w={160} h={14} r="var(--mx-radius-sm)" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {[0, 1, 2, 3].map(i => <Skel key={i} w="100%" h={56} r="var(--mx-radius-md)" />)}
+      </div>
+      <div style={{ textAlign: 'center', font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>Loading question…</div>
+    </StudyShell>
+  );
+}
+
+/* ---- MX-08.6 Error ---- */
+function ErrorPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} percent={undefined} bottom={null}>
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't load question"
+          message="Your words and progress are safe on this device. Check your connection and try again."
+          action={<MxActionButton variant="secondary" leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry</MxActionButton>} />
+      </div>
+    </StudyShell>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-08.1 · Options default</DeskCaption>
+    <DefaultPhone theme="dark" /><DefaultPhone theme="light" />
+    <DeskCaption>MX-08.2 · Selected (not correct)</DeskCaption>
+    <SelectedPhone theme="dark" /><SelectedPhone theme="light" />
+    <DeskCaption>MX-08.3 · Correct</DeskCaption>
+    <CorrectPhone theme="dark" /><CorrectPhone theme="light" />
+    <DeskCaption>MX-08.4 · Wrong</DeskCaption>
+    <WrongPhone theme="dark" /><WrongPhone theme="light" />
+    <DeskCaption>MX-08.5 · Disabled / reveal correct</DeskCaption>
+    <RevealPhone theme="dark" /><RevealPhone theme="light" />
+    <DeskCaption>MX-08.6 · Loading</DeskCaption>
+    <LoadingPhone theme="dark" /><LoadingPhone theme="light" />
+    <DeskCaption>MX-08.6 · Error</DeskCaption>
+    <ErrorPhone theme="dark" /><ErrorPhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
