@@ -340,6 +340,77 @@ SRS box progress và **không** phải bằng chứng card đã SRS-active. **Kh
 > [Bảng đối chiếu mode](#bảng-đối-chiếu-mode); vai trò/giai đoạn đang được ghi nhận drift ở
 > [New Learning Flow](#new-learning-flow).
 
+### recallMode (mode thứ 4)
+
+**Purpose.** `recallMode` là **bước nhớ lại chủ động** (active recall) trong New Learning Flow: người
+học phải **tự nhớ** answer/meaning từ prompt/front **trước khi** xem đáp án, và chủ động **bấm Hiển
+thị** trong thời gian cho phép để chứng minh đã nhớ ra. Vẫn là **pha trước SRS**.
+
+**When it appears.** Ngay **sau khi `guessMode` hoàn thành**, flow **tự chuyển** sang `recallMode` (mode
+thứ 4/5). Hoàn thành `recallMode` → chuyển sang `fillMode`.
+
+`recallMode` **không** phải multiple-choice, **không** phải match, **không** phải SRS Repeat.
+
+**What user sees before reveal.** Chỉ **prompt/front** của card; **answer/meaning bị ẩn**. Người dùng
+**tự nhớ** answer/meaning trong đầu. Ví dụ hướng `KO → VI`:
+
+- prompt/front: `바쁜 생활`
+- answer/meaning **bị ẩn** lúc đầu (nghĩa đúng: `Busy life / Cuộc sống bận rộn`)
+
+**Nút Hiển thị + bộ đếm 20 giây.**
+
+- Mỗi recall item có **giới hạn 20 giây** (default). Timer **bắt đầu** khi item được hiển thị.
+- Nút **Hiển thị** thể hiện **countdown 20 giây** (hoặc trạng thái countdown tương đương).
+- Nếu đã nhớ ra, người dùng **phải bấm Hiển thị trước khi hết giờ**.
+
+**Timeout behavior (hết 20 giây).**
+
+- Nếu **không** bấm Hiển thị trong 20 giây → item tính là **Đã quên** (recall **failure**).
+- Nếu người dùng **nhớ ra trong đầu nhưng không bấm Hiển thị** trước timeout → **vẫn** tính **Đã quên**.
+- Timeout **tự** chuyển sang màn/ item tiếp theo theo flow (không chốt animation/transition).
+- Timeout **không** tính là **Nhớ được**, **không** activate SRS, **không** đưa card vào Box 1.
+
+**What user sees after reveal (bấm Hiển thị trước timeout).**
+
+- Timer **dừng lại**; **answer/meaning được hiện ra**.
+- UI hiển thị lựa chọn **tự đánh giá**: **Đã quên** / **Nhớ được**.
+
+**Đã quên / Nhớ được.**
+
+- Bấm **Nhớ được** → item = **recall success**.
+- Bấm **Đã quên** → item = **recall failure**.
+- **Nhớ được chỉ hợp lệ** khi user **đã bấm Hiển thị trước timeout**; nếu chưa bấm Hiển thị thì **không**
+  được chọn Nhớ được.
+
+**Recall success / failure.**
+
+- **Success** = bấm Hiển thị trước timeout **và** chọn Nhớ được → item hoàn thành thành công ở `recallMode`.
+- **Failure** = hết 20 giây chưa bấm Hiển thị, **hoặc** bấm Hiển thị rồi chọn Đã quên. Failure **không**
+  tính là success, **không** Box 1, **không** SRS-active. (Retry: **chưa chốt** — có thể là implementation
+  detail / future rule; **không** tự bịa. Rule bắt buộc: failure ≠ success, không Box 1, không SRS-active.)
+
+**Completion rule.** `recallMode` kết thúc khi **các recall item** được xử lý theo rule trên; khi đó
+flow **tự chuyển** sang **`fillMode`** (mode thứ 5).
+
+**What it must NOT do.**
+
+- **Recall success chưa** đủ để bật SRS; card **chỉ** vào Box 1 sau khi hoàn thành tiếp **`fillMode`**
+  (đủ 5 mode).
+- **Không** coi recall success/failure là **SRS review grading**.
+- **Không** áp SRS due scheduling cho card chưa vào Box 1.
+
+**Progress (concept).** Progress trong `recallMode` phản ánh tiến độ **New Learning Flow** (hoặc mode
+hiện tại); **có thể tăng** khi một recall item được xử lý. **Không** phải SRS box progress, **không**
+phải bằng chứng card đã SRS-active. **Không** chốt % cụ thể (ví dụ 60%/64%).
+
+**Thoát giữa chừng (concept).** Nếu thoát khi đang ở `recallMode`, các item **chưa** hoàn thành đủ 5
+mode **vẫn** not SRS-active; **không** tự vào Box 1; **không** tạo SRS due schedule. Chi tiết resume do
+docs session/flow-state quyết định (ngoài phạm vi task này).
+
+> `recallMode` (bước học, pre-SRS) tương ứng cơ chế tự-đánh-giá của mode **Recall** trong
+> [Bảng đối chiếu mode](#bảng-đối-chiếu-mode), **thêm** ràng buộc **Hiển thị + 20s timer**; vai
+> trò/giai đoạn đang được ghi nhận drift ở [New Learning Flow](#new-learning-flow).
+
 ## SRS Repeat Flow
 
 **Lặp lại** (từ Play Menu) là **review SRS**.

@@ -25,13 +25,24 @@ boundary with **SRS Repeat** and **browse**. Authoritative specs:
 | **`guessMode` wrong** option selected | show **incorrect** feedback; keep item **incomplete** (or retry per docs) |
 | **`guessMode` item complete** | may move to **next item** |
 | **all `guessMode` items complete** | **transition to `recallMode`** |
+| **`recallMode`** shows prompt/front with **hidden** answer | **start 20s timer** |
+| user taps **Hiển thị** before timeout | **reveal** answer/meaning and **stop** timer |
+| user does **not** tap Hiển thị within 20s | mark **Đã quên** (failure) and **move next** |
+| user remembers mentally but does **not** tap Hiển thị before timeout | mark **Đã quên** (failure) |
+| after reveal, user taps **Nhớ được** | mark **recall success** |
+| after reveal, user taps **Đã quên** | mark **recall failure** |
+| **recall success** | item **complete** in `recallMode`, **not SRS-active** yet |
+| **recall failure** | **not** recall-success; **not SRS-active** |
+| all required **recall items** processed | **transition to `fillMode`** |
 | card completed **review only** | **not SRS-active** |
 | card completed **review + match only** | **not SRS-active** |
 | card completed **review + match + guess only** | **not SRS-active** |
+| card completed **review + match + guess + recall only** | **not SRS-active** |
 | card completes **review + match + guess + recall + fill** | move to **Box 1** and **enable SRS** |
 | card has **not** completed all five modes | do **not** show in **SRS Repeat**; do **not** schedule SRS due |
 | user **exits during `matchMode`** | card remains **not SRS-active** unless all five modes already completed |
 | user **exits during `guessMode`** | unfinished cards remain **not SRS-active** |
+| user **exits during `recallMode`** | unfinished cards remain **not SRS-active** |
 
 ## Repeat vs. browse boundaries
 
