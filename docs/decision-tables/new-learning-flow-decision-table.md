@@ -11,8 +11,10 @@ boundary with **SRS Repeat** and **browse**. Authoritative specs:
 
 | Condition / action | Result |
 |--------------------|--------|
+| **new card created** | **Box 0 / not SRS-active** (pre-SRS; no due) |
 | user taps **Học** | start **`reviewMode`** (first mode) |
 | card enters **`reviewMode`** | card remains **not SRS-active** (Box 0) |
+| any **pre-SRS mode feedback** (review/match/guess/recall/fill before activation) | **no SRS box/due mutation** |
 | **`reviewMode` completed** | **transition to `matchMode`** |
 | **`matchMode`** shows prompt/front items and answer/meaning items | user **selects one pair** (evaluate only when 2 items selected) |
 | **`matchMode` correct pair** selected | show **correct** feedback (green-style); mark pair **complete** in `matchMode` |

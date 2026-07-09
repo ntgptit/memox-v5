@@ -23,6 +23,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [decision-tables/phase-1-contracts.md](decision-tables/phase-1-contracts.md) | Quyết định Phase 1: due (local-day), session persistence, starter template |
 | — | [decision-tables/study-srs-decision-table.md](decision-tables/study-srs-decision-table.md) | Bảng tra nhanh: due eligibility + SRS box + session |
 | — | [decision-tables/play-menu-decision-table.md](decision-tables/play-menu-decision-table.md) | Play Menu: Học vs Lặp lại, activation 5 mode, SRS Repeat |
+| — | [decision-tables/repeat-mode-menu-decision-table.md](decision-tables/repeat-mode-menu-decision-table.md) | Repeat Mode Menu: Box 1+ due, reviewMode invalid, SRS grading |
 | — | [decision-tables/new-learning-flow-decision-table.md](decision-tables/new-learning-flow-decision-table.md) | New Learning Flow + reviewMode; activation vs browse/Repeat |
 | — | [decision-tables/session-result-decision-table.md](decision-tables/session-result-decision-table.md) | Session Result: khi nào hiện, counting, không mutate |
 | — | [decision-tables/settings-more-hub-decision-table.md](decision-tables/settings-more-hub-decision-table.md) | Settings / More Hub: chức năng hệ thống, destructive, import/export |
