@@ -35,6 +35,11 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
   — là **điều kiện cuối** đưa card vào **Box 1** và bật SRS. **Fill-incorrect** **không** đưa card vào
   Box 1. **Trợ giúp** (gợi ý) **không** tự bật SRS và **không** thay cho Kiểm tra đúng. Card **chưa**
   hoàn thành `fillMode` vẫn pre-SRS.
+- **Session Result (cuối phiên SRS Repeat).** Màn [Session Result](screens/session-result.md) sau một
+  phiên **Lặp lại** **chỉ** thống kê card **Box 1+ đã review** trong session đó. Mọi thay đổi box
+  (**promotion** khi correct / **demotion / reset** theo `lapseRule`) **phải được finalize trước** khi
+  Result hiển thị. Result **không** được **schedule SRS** cho card **chưa activate** (chưa vào Box 1), và
+  **không** trộn New Learning activation với SRS Repeat metrics.
 - **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
 - **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate (kể cả đang
   ở `reviewMode`) **không** được đưa vào Repeat.
