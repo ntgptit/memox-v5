@@ -137,6 +137,11 @@ nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions
   **1. review → 2. match → 3. guess → 4. recall → 5. fill**
 
   (`fill` = gõ đáp án, tương ứng mode **Typing** trong [Bảng đối chiếu mode](#bảng-đối-chiếu-mode).)
+- **Chuyển tiếp giữa các mode:** hoàn thành **`reviewMode`** → tự chuyển sang **`matchMode`**; hoàn
+  thành **`matchMode`** → sang **`guessMode`**; rồi **`recallMode`**; cuối cùng **`fillMode`**. **Không**
+  quay lại Play Menu, **không** vào SRS Repeat giữa chừng.
+- **Không mode nào trước `fill` được tự activate card vào SRS.** Hoàn thành review, hoặc review+match,
+  … đều **chưa** đủ.
 - **Chỉ khi hoàn thành đủ 5 mode**, card mới được đưa từ **Box 0 / not-activated** lên **Box 1** và
   **SRS được enable** cho card đó (xem [06-srs-8box → Kích hoạt SRS](06-srs-8box.md#kích-hoạt-srs-box-0--box-1)).
 - **SRS chỉ enable từ Box 1 trở đi.** Card **chưa** vào Box 1 **không** được tính vào **Lặp lại** (SRS
@@ -207,6 +212,51 @@ Hai khái niệm **khác nghiệp vụ**, dù label tiếng Việt gần giống
 
 > **Browse mode không được tự động activate card vào SRS.** Chỉ New Learning Flow hoàn thành đủ 5 mode
 > mới đưa card lên Box 1.
+
+### matchMode (mode thứ 2)
+
+**Purpose.** `matchMode` là **mode ghép đôi** trong New Learning Flow — bước củng cố thẻ **mới** bằng
+cách nhận diện đúng cặp prompt ↔ meaning. Vẫn là **pha trước SRS**.
+
+**When it appears.** Ngay **sau khi `reviewMode` hoàn thành**, flow **tự chuyển** sang `matchMode` (mode
+thứ 2/5). Không quay lại Play Menu, không vào SRS Repeat.
+
+**What user sees.** Hai bên/cột: một bên hiển thị **prompt** (ví dụ tiếng Hàn), bên kia hiển thị
+**meaning/answer/giải thích**. Ví dụ hướng `KO → VI`: một bên `기자`, bên kia `Nhà báo / Reporter`. Thứ
+tự item **có thể được xáo trộn** để người dùng phải nhận diện cặp đúng. `matchMode` dùng **cùng learning
+batch** với `reviewMode` (trừ khi docs quy định khác).
+
+**Expected user action.** Người dùng chọn **một item ở bên này** và **một item ở bên kia**.
+
+**Correct match.** Nếu hai item thuộc **cùng một card** → **match đúng**: phản hồi tích cực, cặp đó được
+xem là **đã hoàn thành** trong `matchMode`.
+
+**Wrong match.** Nếu chọn **sai cặp** → phản hồi lỗi, cặp **vẫn chưa hoàn thành**, người dùng **thử lại**.
+
+**Completion rule.** `matchMode` kết thúc khi **mọi cặp trong batch** được ghép đúng; khi đó flow **tự
+chuyển** sang `guessMode` (mode thứ 3).
+
+**What it must NOT do.**
+
+- Match **sai** **không** activate card vào SRS.
+- Match **đúng riêng lẻ** (một cặp) cũng **chưa** đủ để card vào **Box 1**.
+- Hoàn thành **cả** `matchMode` **vẫn chưa** đủ — card **chỉ** SRS-active sau khi hoàn thành **đủ 5
+  mode** (review → match → guess → recall → fill).
+- **Không** áp SRS due scheduling cho card chưa vào Box 1.
+
+**Progress (concept).** Progress bar trong `matchMode` thể hiện tiến độ trong **New Learning Flow** (hoặc
+trong mode hiện tại) theo rule UI docs; progress **có thể tăng** khi chuyển từ review sang match. Progress
+này **không** phải **SRS box progress**, và **không** có nghĩa card đã vào SRS — SRS activation **chỉ**
+xảy ra sau khi `fillMode` hoàn thành.
+
+**Thoát giữa chừng (concept).** Nếu người dùng thoát giữa `matchMode` mà card **chưa** hoàn thành đủ 5
+mode → card **vẫn** not SRS-active, **không** tự vào Box 1, **không** tạo SRS due schedule. Chi tiết
+resume do docs session/flow-state quyết định (ngoài phạm vi task này; xem
+[DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence-persisted)).
+
+> `matchMode` (bước học, pre-SRS) dùng cùng cơ chế ghép đôi như mode **Match** trong
+> [Bảng đối chiếu mode](#bảng-đối-chiếu-mode); vai trò/giai đoạn của các mode đang được ghi nhận drift ở
+> [New Learning Flow](#new-learning-flow) (Match từng được xếp Phase 3 / practice-only).
 
 ## SRS Repeat Flow
 

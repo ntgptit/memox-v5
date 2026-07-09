@@ -11,11 +11,17 @@ boundary with **SRS Repeat** and **browse**. Authoritative specs:
 
 | Condition / action | Result |
 |--------------------|--------|
-| user taps **Học** | start **New Learning Flow** at **`reviewMode`** (first mode) |
+| user taps **Học** | start **`reviewMode`** (first mode) |
 | card enters **`reviewMode`** | card remains **not SRS-active** (Box 0) |
-| card completes **`reviewMode` only** | continue to **match** (then guess → recall → fill); do **not** move to Box 1 |
+| **`reviewMode` completed** | **transition to `matchMode`** |
+| **`matchMode` correct pair** | mark pair **complete** in `matchMode` |
+| **`matchMode` wrong pair** | show **incorrect** feedback; keep pair **incomplete** (retry) |
+| **`matchMode` completed** | **transition to `guessMode`** |
+| card completed **review only** | **not SRS-active** |
+| card completed **review + match only** | **not SRS-active** |
 | card completes **review + match + guess + recall + fill** | move to **Box 1** and **enable SRS** |
 | card has **not** completed all five modes | do **not** show in **SRS Repeat**; do **not** schedule SRS due |
+| user **exits during `matchMode`** | card remains **not SRS-active** unless all five modes already completed |
 
 ## Repeat vs. browse boundaries
 
