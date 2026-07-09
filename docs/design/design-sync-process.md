@@ -40,8 +40,9 @@ Hooks live in `.githooks/` and require `core.hooksPath` to point there. On a fre
 git config core.hooksPath .githooks
 ```
 
-- **`pre-push`** — runs `npm run check` (verify gate), then, if the pushed range changes the kit,
-  pushes that delta in `--no-record` mode.
+- **`pre-push`** — runs `npm run check` (verify gate, **blocks** on failure), then, if the pushed
+  range changes the kit, pushes that delta in `--no-record` mode. A **design-sync failure only warns**
+  and does not block the code push — catch up later with `npm run design:sync`.
 - **`post-merge`** — on `main` only: if the kit changed since `lastSyncedCommit`, pushes the delta in
   record mode. Closes the gap left by server-side PR merges and agent pushes.
 

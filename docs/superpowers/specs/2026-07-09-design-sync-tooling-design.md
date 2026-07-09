@@ -139,7 +139,7 @@ so the first delta is empty until the next kit edit.
 | No `lastSyncedCommit` | warn, fall back `HEAD~1..HEAD` | post-merge skips (needs it) |
 | Empty delta | exit 0 "nothing to push" | exit 0 |
 | `claude` CLI not found | exit 1 (ENOENT) | warn + exit 0 (never block) |
-| Nested push not `SYNCED` | exit 1, do NOT record | propagates non-zero (pre-push blocks) |
+| Nested push not `SYNCED` | exit 1, do NOT record | pre-push WARNS, push continues (design-sync is non-blocking; verify gate still blocks) |
 | Agent/CI (no design TTY) | n/a | `MEMOX_SKIP_DESIGN_SYNC=1` required to avoid hang |
 
 ## 6. Testing & verification
