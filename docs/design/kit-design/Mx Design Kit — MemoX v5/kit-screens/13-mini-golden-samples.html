@@ -1,0 +1,832 @@
+<!-- @dsCard group="Kit Screens" viewport="1240x4400" name="13 · Mx Mini Golden Samples" subtitle="5 composition exemplars — list, study, settings, modal, statistics — dark+light+non-happy" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>13 · Mx Mini Golden Samples</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 13 Mini Golden Samples</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="12-composition-recipe-gallery.html">‹ Prev</a>
+    <a href="14-react-native-handoff-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page mx-page-wide">
+  <p class="mx-kicker">Mx Kit Screens · 13</p>
+  <h1 class="mx-title">Mx Mini Golden Samples</h1>
+  <p class="mx-lead">
+    Five miniature <b>composition exemplars</b> — a list, a study session, a settings hub, a modal, and a
+    statistics view — each built only from <code>Mx</code> components and <code>mx</code> tokens. They show
+    <i>how the pieces sit together</i>: row rhythm, action hierarchy, state separation. These are
+    <b>reference compositions, not final product screens</b> — deck/flashcard/language lists, the five study
+    modes, SRS Repeat, and the real Settings/Statistics screens are built by <i>mimicking</i> these shapes,
+    not by copying this content. React Native is the only target; there are no Flutter concepts here.
+  </p>
+  <div class="mx-note"><b>Exemplar, not spec</b> Content below (KO→EN cards, the deck "TOPIK I Core 800",
+    "Due 83", "Nothing due") is illustrative. The <b>structure</b> — regions, spacing rhythm, one-primary
+    rule, and state coverage — is what future screens copy. Each sample pairs a <b>dark</b> loaded phone with
+    a <b>light</b> (<code>data-theme="light"</code>) loaded phone, plus one small frame in a non-happy state.</p>
+
+  <!-- =================================================================== -->
+  <!-- SAMPLE 1 — GOLDEN LIST                                               -->
+  <!-- =================================================================== -->
+  <section class="mx-section mx-anchor" id="list">
+    <h2>1 · Mx Golden List Sample</h2>
+    <p>List hierarchy and row rhythm — the reference for any <b>deck, subdeck, flashcard, or language list</b>.
+      One section header, evenly spaced <code>MxCard</code> rows, a due <code>MxBadge</code>, and a long title
+      that wraps rather than truncates. The third frame shows the same list in its empty / error state.</p>
+
+    <div class="mx-phones">
+      <!-- DARK LOADED -->
+      <div class="mx-phone">
+        <span class="ph-cap">dark · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-8); display:flex; align-items:center; justify-content:space-between;">
+            <span style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Your decks</span>
+            <span style="font-size: var(--mx-text-label-medium-size); color: var(--mx-color-srs-active); font-family: var(--mx-font-display); font-weight: var(--mx-weight-semibold);">See all</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div class="mx-panel" style="padding: var(--mx-space-16); box-shadow: none;">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12);">
+                <div style="width:44px; height:44px; border-radius: var(--mx-radius-md); background: var(--mx-color-state-selectedSurface); flex:0 0 auto; display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 15px var(--mx-font-display);">가</div>
+                <div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                  <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">TOPIK I Core 800</span>
+                  <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">312 cards · <span class="mx-tabular">64%</span> learned</span>
+                </div>
+                <span style="flex:0 0 auto; display:inline-flex; align-items:center; height:22px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-feedback-warningSurface); color: var(--mx-color-srs-due); font: var(--mx-weight-semibold) 11px var(--mx-font-mono);">Due 83</span>
+              </div>
+            </div>
+            <div class="mx-panel" style="padding: var(--mx-space-16); box-shadow: none;">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12);">
+                <div style="width:44px; height:44px; border-radius: var(--mx-radius-md); background: var(--mx-color-state-selectedSurface); flex:0 0 auto; display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 15px var(--mx-font-display);">여</div>
+                <div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                  <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Travel &amp; Directions — everyday phrases for getting around</span>
+                  <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-srs-noDue);">Nothing due</span>
+                </div>
+                <span style="flex:0 0 auto; display:inline-flex; align-items:center; height:22px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-feedback-correctSurface); color: var(--mx-color-srs-noDue); font: var(--mx-weight-semibold) 11px var(--mx-font-mono);">Done</span>
+              </div>
+            </div>
+            <div class="mx-panel" style="padding: var(--mx-space-16); box-shadow: none;">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12);">
+                <div style="width:44px; height:44px; border-radius: var(--mx-radius-md); background: var(--mx-color-state-selectedSurface); flex:0 0 auto; display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 15px var(--mx-font-display);">신</div>
+                <div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                  <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Food &amp; Cooking</span>
+                  <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">140 cards · new</span>
+                </div>
+                <span style="flex:0 0 auto; display:inline-flex; align-items:center; height:22px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-state-selectedSurface); color: var(--mx-color-srs-active); font: var(--mx-weight-semibold) 11px var(--mx-font-mono);">New</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Study now</div>
+        </div>
+      </div>
+
+      <!-- LIGHT LOADED -->
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">light · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-8); display:flex; align-items:center; justify-content:space-between;">
+            <span style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Your decks</span>
+            <span style="font-size: var(--mx-text-label-medium-size); color: var(--mx-color-srs-active); font-family: var(--mx-font-display); font-weight: var(--mx-weight-semibold);">See all</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div class="mx-panel" style="padding: var(--mx-space-16);">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12);">
+                <div style="width:44px; height:44px; border-radius: var(--mx-radius-md); background: var(--mx-color-state-selectedSurface); flex:0 0 auto; display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 15px var(--mx-font-display);">가</div>
+                <div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                  <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">TOPIK I Core 800</span>
+                  <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">312 cards · <span class="mx-tabular">64%</span> learned</span>
+                </div>
+                <span style="flex:0 0 auto; display:inline-flex; align-items:center; height:22px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-feedback-warningSurface); color: var(--mx-color-srs-due); font: var(--mx-weight-semibold) 11px var(--mx-font-mono);">Due 83</span>
+              </div>
+            </div>
+            <div class="mx-panel" style="padding: var(--mx-space-16);">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12);">
+                <div style="width:44px; height:44px; border-radius: var(--mx-radius-md); background: var(--mx-color-state-selectedSurface); flex:0 0 auto; display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 15px var(--mx-font-display);">여</div>
+                <div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                  <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Travel &amp; Directions — everyday phrases for getting around</span>
+                  <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-srs-noDue);">Nothing due</span>
+                </div>
+                <span style="flex:0 0 auto; display:inline-flex; align-items:center; height:22px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-feedback-correctSurface); color: var(--mx-color-srs-noDue); font: var(--mx-weight-semibold) 11px var(--mx-font-mono);">Done</span>
+              </div>
+            </div>
+            <div class="mx-panel" style="padding: var(--mx-space-16);">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12);">
+                <div style="width:44px; height:44px; border-radius: var(--mx-radius-md); background: var(--mx-color-state-selectedSurface); flex:0 0 auto; display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 15px var(--mx-font-display);">신</div>
+                <div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                  <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Food &amp; Cooking</span>
+                  <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">140 cards · new</span>
+                </div>
+                <span style="flex:0 0 auto; display:inline-flex; align-items:center; height:22px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-state-selectedSurface); color: var(--mx-color-srs-active); font: var(--mx-weight-semibold) 11px var(--mx-font-mono);">New</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Study now</div>
+        </div>
+      </div>
+
+      <!-- EMPTY / ERROR -->
+      <div class="mx-phone" style="width: 260px; height: 420px;">
+        <span class="ph-cap">non-happy · empty</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll" style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap: var(--mx-space-16); padding: var(--mx-space-24);">
+          <div style="width:64px; height:64px; border-radius: var(--mx-radius-full); background: var(--mx-color-state-selectedSurface); display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 26px var(--mx-font-display);">＋</div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-8);">
+            <span style="font: var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">No decks yet</span>
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary); line-height:1.5;">Create your first deck to start studying Korean.</span>
+          </div>
+          <div style="height: var(--mx-size-button-height-compact); padding:0 var(--mx-space-24); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Create deck</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-grid-2">
+      <table class="mx-spec">
+        <caption>Region → Mx component</caption>
+        <thead><tr><th>Region</th><th>Mx component</th></tr></thead>
+        <tbody>
+          <tr><td>Title + See-all</td><td class="tok">MxSectionHeader</td></tr>
+          <tr><td>Deck row</td><td class="tok">MxCard (interactive)</td></tr>
+          <tr><td>Cover glyph</td><td class="tok">MxAvatar / tinted cover</td></tr>
+          <tr><td>Due / Done / New</td><td class="tok">MxBadge</td></tr>
+          <tr><td>Bottom CTA</td><td class="tok">MxActionButton</td></tr>
+          <tr><td>Empty frame</td><td class="tok">MxEmptyState</td></tr>
+          <tr><td>Load failure</td><td class="tok">MxErrorState</td></tr>
+        </tbody>
+      </table>
+      <div class="mx-stack">
+        <div class="mx-panel">
+          <p class="mx-h">Spacing annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag space">gutter 16</span>
+            <span class="mx-tag space">title→list 8</span>
+            <span class="mx-tag space">row gap 12</span>
+            <span class="mx-tag space">card pad 16</span>
+            <span class="mx-tag space">glyph→text 12</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Typography annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag">L2 title.large</span>
+            <span class="mx-tag">L3 label.large deck name</span>
+            <span class="mx-tag">L4 body.small meta</span>
+            <span class="mx-tag">badge mono 11</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Action hierarchy</p>
+          <div class="mx-legend">
+            <span class="mx-tag">1 primary · Study now</span>
+            <span class="mx-tag">See-all ghost</span>
+            <span class="mx-tag">rows navigational</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Let the long "Travel &amp; Directions…" title wrap to two lines; keep the badge
+        pinned right and never let it shrink the title below its token size.</div>
+      <div class="mx-dont"><b></b>Truncate deck names to force single-line rows, or colour the due badge red — <code>srs-due</code>
+        is amber ("needs review"), never <code>wrong</code>/<code>destructive</code> red.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Maps 1:1: <code>&lt;FlatList&gt;</code> of <code>MxCard</code> rows,
+      header via <code>ListHeaderComponent = MxSectionHeader</code>, <code>ListEmptyComponent</code> switches
+      between <code>MxEmptyState</code> and <code>MxErrorState</code> on the load <code>Result</code>. Badge
+      colour comes from <code>theme.color.srs.*</code>; row gap is <code>MxSpacing.s12</code>. No raw style
+      needed — an RN agent builds this from the mapping table alone.</div>
+    <figure class="mx-embed"><figcaption>Companion · base-kit golden list <span class="path">guidelines/golden-deck.card.html</span></figcaption>
+      <iframe src="../guidelines/golden-deck.card.html" height="900" loading="lazy" title="Golden Deck reference"></iframe></figure>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- SAMPLE 2 — GOLDEN STUDY                                              -->
+  <!-- =================================================================== -->
+  <section class="mx-section mx-anchor" id="study">
+    <h2>2 · Mx Golden Study Sample</h2>
+    <p>The study shell — protected exit, progress that is <b>not</b> mastery, one <code>MxStudyCard</code>
+      prompt, answer options, and a single primary action. Reference for <b>New Learning</b> (the five modes)
+      and every <b>SRS Repeat</b> mode. The dark and light phones show the loaded prompt; the third frame shows
+      a <code>wrong → retry</code> feedback state.</p>
+
+    <div class="mx-phones">
+      <!-- DARK LOADED -->
+      <div class="mx-phone">
+        <span class="ph-cap">dark · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding: var(--mx-space-12) 0;">
+            <span style="width:34px; height:34px; border-radius: var(--mx-radius-pill); background: var(--mx-color-surface-card); display:flex; align-items:center; justify-content:center; color: var(--mx-color-text-secondary); font-size:16px;">✕</span>
+            <span style="font: var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display); color: var(--mx-color-text-secondary);">Review · 12 / 40</span>
+            <span style="width:34px; height:34px; border-radius: var(--mx-radius-pill); background: var(--mx-color-surface-card); display:flex; align-items:center; justify-content:center; color: var(--mx-color-text-secondary); font-size:15px;">♪</span>
+          </div>
+          <div style="height:6px; border-radius: var(--mx-radius-pill); background: var(--mx-color-state-loadingSurface); overflow:hidden; margin-bottom: var(--mx-space-24);">
+            <div style="width:30%; height:100%; border-radius: var(--mx-radius-pill); background: var(--mx-color-srs-active);"></div>
+          </div>
+          <div class="mx-panel" style="border-radius: var(--mx-radius-xl); padding: var(--mx-space-24); min-height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: var(--mx-space-8); text-align:center; margin-bottom: var(--mx-space-16);">
+            <span class="mx-korean" style="font: var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size)/var(--mx-text-study-korean-line) var(--mx-font-korean); color: var(--mx-color-text-primary);">사과</span>
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Tap the English meaning</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-selected); background: var(--mx-color-state-selectedSurface); display:flex; align-items:center; padding:0 var(--mx-space-16); font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">apple</div>
+            <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-default); background: var(--mx-color-surface-card); display:flex; align-items:center; padding:0 var(--mx-space-16); font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-secondary);">pear</div>
+            <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-default); background: var(--mx-color-surface-card); display:flex; align-items:center; padding:0 var(--mx-space-16); font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-secondary);">grape</div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Check</div>
+        </div>
+      </div>
+
+      <!-- LIGHT LOADED -->
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">light · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding: var(--mx-space-12) 0;">
+            <span style="width:34px; height:34px; border-radius: var(--mx-radius-pill); background: var(--mx-color-surface-card); border: var(--mx-border-subtle); display:flex; align-items:center; justify-content:center; color: var(--mx-color-text-secondary); font-size:16px;">✕</span>
+            <span style="font: var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display); color: var(--mx-color-text-secondary);">Review · 12 / 40</span>
+            <span style="width:34px; height:34px; border-radius: var(--mx-radius-pill); background: var(--mx-color-surface-card); border: var(--mx-border-subtle); display:flex; align-items:center; justify-content:center; color: var(--mx-color-text-secondary); font-size:15px;">♪</span>
+          </div>
+          <div style="height:6px; border-radius: var(--mx-radius-pill); background: var(--mx-color-state-loadingSurface); overflow:hidden; margin-bottom: var(--mx-space-24);">
+            <div style="width:30%; height:100%; border-radius: var(--mx-radius-pill); background: var(--mx-color-srs-active);"></div>
+          </div>
+          <div class="mx-panel" style="border-radius: var(--mx-radius-xl); padding: var(--mx-space-24); min-height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: var(--mx-space-8); text-align:center; margin-bottom: var(--mx-space-16);">
+            <span class="mx-korean" style="font: var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size)/var(--mx-text-study-korean-line) var(--mx-font-korean); color: var(--mx-color-text-primary);">사과</span>
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Tap the English meaning</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-selected); background: var(--mx-color-state-selectedSurface); display:flex; align-items:center; padding:0 var(--mx-space-16); font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">apple</div>
+            <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-default); background: var(--mx-color-surface-card); display:flex; align-items:center; padding:0 var(--mx-space-16); font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-secondary);">pear</div>
+            <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-default); background: var(--mx-color-surface-card); display:flex; align-items:center; padding:0 var(--mx-space-16); font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-secondary);">grape</div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Check</div>
+        </div>
+      </div>
+
+      <!-- WRONG → RETRY -->
+      <div class="mx-phone" style="width: 260px; height: 420px;">
+        <span class="ph-cap">non-happy · wrong→retry</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll" style="display:flex; flex-direction:column; gap: var(--mx-space-12); justify-content:center;">
+          <div class="mx-panel" style="border-radius: var(--mx-radius-xl); padding: var(--mx-space-20); text-align:center;">
+            <span class="mx-korean" style="font: var(--mx-weight-bold) 28px var(--mx-font-korean); color: var(--mx-color-text-primary);">사과</span>
+          </div>
+          <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-wrong); background: var(--mx-color-feedback-wrongSurface); display:flex; align-items:center; justify-content:space-between; padding:0 var(--mx-space-16); font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-feedback-wrong);"><span>pear</span><span>✕</span></div>
+          <div style="height: var(--mx-size-button-height); border-radius: var(--mx-radius-md); border: var(--mx-border-correct); background: var(--mx-color-feedback-correctSurface); display:flex; align-items:center; justify-content:space-between; padding:0 var(--mx-space-16); font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-feedback-correct);"><span>apple</span><span>✓</span></div>
+          <div style="height: var(--mx-size-button-height-compact); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Try again</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-grid-2">
+      <table class="mx-spec">
+        <caption>Region → Mx component</caption>
+        <thead><tr><th>Region</th><th>Mx component</th></tr></thead>
+        <tbody>
+          <tr><td>Exit / mode / audio bar</td><td class="tok">MxTopBar (study) + MxIconButton</td></tr>
+          <tr><td>Progress</td><td class="tok">MxStudyProgressBar</td></tr>
+          <tr><td>Prompt surface</td><td class="tok">MxStudyCard</td></tr>
+          <tr><td>Answer option</td><td class="tok">MxAnswerOption</td></tr>
+          <tr><td>Bottom action</td><td class="tok">MxActionButton</td></tr>
+          <tr><td>Correct / wrong feedback</td><td class="tok">MxAnswerOption states</td></tr>
+        </tbody>
+      </table>
+      <div class="mx-stack">
+        <div class="mx-panel">
+          <p class="mx-h">Spacing annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag space">topbar→progress 12</span>
+            <span class="mx-tag space">progress→card 24</span>
+            <span class="mx-tag space">card→answers 16</span>
+            <span class="mx-tag space">option gap 12</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Typography annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag">L1 study.korean 34</span>
+            <span class="mx-tag">L3 body.medium option</span>
+            <span class="mx-tag">L4 label.medium progress</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Action hierarchy</p>
+          <div class="mx-legend">
+            <span class="mx-tag">1 primary · Check / Continue</span>
+            <span class="mx-tag">exit protected</span>
+            <span class="mx-tag">audio ghost</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep the progress bar as <i>session position</i> (12/40), separate from mastery;
+        show one selected answer border before Check, feedback borders after.</div>
+      <div class="mx-dont"><b></b>Read the progress bar as mastery, or style pre-SRS "wrong" with destructive red —
+        <code>feedback-wrong</code> is answer-level, distinct from data-loss intent.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Shell is <code>MxStudyScreen</code>: <code>MxTopBar variant="study"</code>,
+      <code>MxStudyProgressBar step={12} total={40}</code>, a <code>MxStudyCard</code>, then a mapped list of
+      <code>MxAnswerOption</code> whose <code>state</code> (<code>idle | selected | correct | wrong</code>)
+      drives border + glyph from tokens. Korean prompt uses <code>fontFamily: theme.font.korean</code> at the
+      <code>study.korean</code> role — never shrunk. Same tree serves all five modes plus SRS Repeat.</div>
+    <figure class="mx-embed"><figcaption>Companion · base-kit golden study <span class="path">guidelines/golden-study.card.html</span></figcaption>
+      <iframe src="../guidelines/golden-study.card.html" height="900" loading="lazy" title="Golden Study reference"></iframe></figure>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- SAMPLE 3 — GOLDEN SETTINGS                                           -->
+  <!-- =================================================================== -->
+  <section class="mx-section mx-anchor" id="settings">
+    <h2>3 · Mx Golden Settings Sample</h2>
+    <p>Grouped settings with dividers <i>inside</i> a group (no divider + gap), a theme row, an
+      <b>unavailable</b> ("Soon") row, and a separated high-risk <b>Data</b> group whose one destructive row
+      is the only red on the screen. Reference for the Settings/More Hub, App Settings, Appearance, Reminder,
+      and SRS Settings. Opening never mutates.</p>
+
+    <div class="mx-phones">
+      <!-- DARK LOADED -->
+      <div class="mx-phone">
+        <span class="ph-cap">dark · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-4);">
+            <span style="font: var(--mx-weight-bold) 11px var(--mx-font-display); letter-spacing:0.14em; text-transform:uppercase; color: var(--mx-color-srs-active);">Preferences</span>
+            <div style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary); margin-top: var(--mx-space-4);">Settings</div>
+          </div>
+          <div style="margin-top: var(--mx-space-24);">
+            <span style="font: var(--mx-weight-semibold) 11px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">General</span>
+            <div class="mx-panel" style="padding:0; margin-top: var(--mx-space-8); box-shadow:none;">
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16); border-bottom: var(--mx-divider-subtle);">
+                <span style="font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Theme</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">System ›</span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16); border-bottom: var(--mx-divider-subtle);">
+                <span style="font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Daily reminder</span>
+                <span style="width:44px; height:26px; border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); position:relative;"><span style="position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius: var(--mx-radius-full); background: var(--mx-color-text-onAction);"></span></span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16);">
+                <span style="font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-disabled);">Cloud sync</span>
+                <span style="display:inline-flex; align-items:center; height:20px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-state-unavailableSurface); color: var(--mx-color-text-tertiary); font: var(--mx-weight-semibold) 10px var(--mx-font-mono);">Soon</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: var(--mx-space-24);">
+            <span style="font: var(--mx-weight-semibold) 11px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-destructive-text);">Data</span>
+            <div class="mx-panel" style="padding:0; margin-top: var(--mx-space-8); box-shadow:none; border: var(--mx-border-destructive);">
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16);">
+                <span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-destructive-text);">Restore data</span>
+                <span style="font-size: 16px; color: var(--mx-color-destructive-text);">›</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT LOADED -->
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">light · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-4);">
+            <span style="font: var(--mx-weight-bold) 11px var(--mx-font-display); letter-spacing:0.14em; text-transform:uppercase; color: var(--mx-color-srs-active);">Preferences</span>
+            <div style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary); margin-top: var(--mx-space-4);">Settings</div>
+          </div>
+          <div style="margin-top: var(--mx-space-24);">
+            <span style="font: var(--mx-weight-semibold) 11px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">General</span>
+            <div class="mx-panel" style="padding:0; margin-top: var(--mx-space-8);">
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16); border-bottom: var(--mx-divider-subtle);">
+                <span style="font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Theme</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">System ›</span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16); border-bottom: var(--mx-divider-subtle);">
+                <span style="font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Daily reminder</span>
+                <span style="width:44px; height:26px; border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); position:relative;"><span style="position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius: var(--mx-radius-full); background: var(--mx-color-text-onAction);"></span></span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16);">
+                <span style="font: var(--mx-weight-medium) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-disabled);">Cloud sync</span>
+                <span style="display:inline-flex; align-items:center; height:20px; padding:0 var(--mx-space-8); border-radius: var(--mx-radius-pill); background: var(--mx-color-state-unavailableSurface); color: var(--mx-color-text-tertiary); font: var(--mx-weight-semibold) 10px var(--mx-font-mono);">Soon</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: var(--mx-space-24);">
+            <span style="font: var(--mx-weight-semibold) 11px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-destructive-text);">Data</span>
+            <div class="mx-panel" style="padding:0; margin-top: var(--mx-space-8); border: var(--mx-border-destructive);">
+              <div style="display:flex; align-items:center; justify-content:space-between; height:56px; padding:0 var(--mx-space-16);">
+                <span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-destructive-text);">Restore data</span>
+                <span style="font-size: 16px; color: var(--mx-color-destructive-text);">›</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONFIRM DIALOG (destructive) -->
+      <div class="mx-phone" style="width: 260px; height: 420px;">
+        <span class="ph-cap">non-happy · confirm</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll" style="display:flex; align-items:center; justify-content:center; padding: var(--mx-space-16);">
+          <div class="mx-panel" style="border: var(--mx-border-destructive); box-shadow: var(--mx-elevation-modal);">
+            <div style="display:flex; flex-direction:column; gap: var(--mx-space-8);">
+              <span style="font: var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Restore data?</span>
+              <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); line-height:1.5;">This replaces your current cards from a backup. This cannot be undone.</span>
+            </div>
+            <div style="display:flex; gap: var(--mx-space-8); margin-top: var(--mx-space-16);">
+              <div style="flex:1; height: var(--mx-size-button-height-compact); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-secondary); color: var(--mx-color-text-primary); display:flex; align-items:center; justify-content:center; font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display);">Cancel</div>
+              <div style="flex:1; height: var(--mx-size-button-height-compact); border-radius: var(--mx-radius-pill); background: var(--mx-color-destructive-surface); border: var(--mx-border-destructive); color: var(--mx-color-destructive-text); display:flex; align-items:center; justify-content:center; font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display);">Restore</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-grid-2">
+      <table class="mx-spec">
+        <caption>Region → Mx component</caption>
+        <thead><tr><th>Region</th><th>Mx component</th></tr></thead>
+        <tbody>
+          <tr><td>Hero intro</td><td class="tok">MxSectionHeader size="hero"</td></tr>
+          <tr><td>Group</td><td class="tok">MxSettingsSection</td></tr>
+          <tr><td>Value / nav row</td><td class="tok">MxSettingsRow</td></tr>
+          <tr><td>Toggle row</td><td class="tok">MxSettingsRow + MxSwitch</td></tr>
+          <tr><td>Unavailable row</td><td class="tok">MxSettingsRow (unavailable)</td></tr>
+          <tr><td>Destructive row</td><td class="tok">MxSettingsRow (destructive)</td></tr>
+          <tr><td>Confirm</td><td class="tok">MxConfirmDialog</td></tr>
+        </tbody>
+      </table>
+      <div class="mx-stack">
+        <div class="mx-panel">
+          <p class="mx-h">Spacing annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag space">group gap 24</span>
+            <span class="mx-tag space">row height 56</span>
+            <span class="mx-tag space">in-group divider 0</span>
+            <span class="mx-tag space">row pad 16</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Typography annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag">L1 eyebrow + title.large</span>
+            <span class="mx-tag">L4 group title uppercase</span>
+            <span class="mx-tag">L3 row body.medium</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Action hierarchy</p>
+          <div class="mx-legend">
+            <span class="mx-tag">no primary · navigational</span>
+            <span class="mx-tag">1 destructive · Restore</span>
+            <span class="mx-tag">separated Data group</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Divide rows <i>inside</i> a group with a hairline and keep 24 <i>between</i>
+        groups; put the only destructive row in its own separated Data group behind a confirm.</div>
+      <div class="mx-dont"><b></b>Add a primary CTA to a navigational settings screen, style "Restore" like a
+        normal primary, or mutate anything on open — the theme row is visual preference only.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> A <code>&lt;ScrollView&gt;</code> of <code>MxSettingsSection</code>,
+      each wrapping <code>MxSettingsRow</code> variants (<code>value | switch | unavailable | destructive</code>).
+      The switch is <code>MxSwitch</code>; "Restore" opens <code>MxConfirmDialog variant="destructive"</code>.
+      Row height is <code>MxSpacing</code>-driven (56); the destructive group border resolves from
+      <code>theme.color.destructive.border</code>. Fully buildable from the mapping alone.</div>
+    <figure class="mx-embed"><figcaption>Companion · base-kit golden settings <span class="path">guidelines/golden-settings.card.html</span></figcaption>
+      <iframe src="../guidelines/golden-settings.card.html" height="900" loading="lazy" title="Golden Settings reference"></iframe></figure>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- SAMPLE 4 — GOLDEN MODAL                                              -->
+  <!-- =================================================================== -->
+  <section class="mx-section mx-anchor" id="modal">
+    <h2>4 · Mx Golden Modal Sample</h2>
+    <p>A bottom-sheet menu in the <b>Play Menu / Repeat Mode Menu</b> style — normal rows, a
+      <b>no-due</b> disabled row, an <b>unavailable</b> row, and a <b>destructive</b> row separated below a
+      divider. One sheet, clear intent separation. Reference for any action menu that mixes available,
+      unavailable, and destructive choices.</p>
+
+    <div class="mx-phones">
+      <!-- DARK LOADED -->
+      <div class="mx-phone">
+        <span class="ph-cap">dark · sheet</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll" style="display:flex; flex-direction:column; justify-content:flex-end; padding-bottom: var(--mx-space-16);">
+          <div style="border-radius: var(--mx-radius-xl) var(--mx-radius-xl) 0 0; background: var(--mx-color-surface-modal); box-shadow: var(--mx-elevation-sheet); padding: var(--mx-space-16); margin: 0 calc(var(--mx-layout-screen-padding-x) * -1) calc(var(--mx-space-20) * -1);">
+            <div style="width:36px; height:4px; border-radius: var(--mx-radius-pill); background: var(--mx-color-border-strong); margin: 0 auto var(--mx-space-16);"></div>
+            <span style="font: var(--mx-weight-semibold) 11px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">Play · TOPIK I Core 800</span>
+            <div style="display:flex; flex-direction:column; gap: var(--mx-space-8); margin-top: var(--mx-space-12);">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-surface-card);">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-state-selectedSurface); color: var(--mx-color-srs-active); display:flex; align-items:center; justify-content:center;">▶</span>
+                <div style="flex:1; display:flex; flex-direction:column;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">New Learning</span><span style="font-size:11px; color: var(--mx-color-text-tertiary);">140 new cards</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-state-unavailableSurface); opacity:0.6;">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-state-unavailableSurface); color: var(--mx-color-text-tertiary); display:flex; align-items:center; justify-content:center;">↻</span>
+                <div style="flex:1; display:flex; flex-direction:column;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-tertiary);">SRS Repeat</span><span style="font-size:11px; color: var(--mx-color-srs-noDue);">Nothing due</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-state-unavailableSurface); opacity:0.6;">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-state-unavailableSurface); color: var(--mx-color-text-tertiary); display:flex; align-items:center; justify-content:center;">✎</span>
+                <div style="flex:1; display:flex; flex-direction:column;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-tertiary);">Fill mode</span><span style="font-size:11px; color: var(--mx-color-text-tertiary);">Soon</span></div>
+              </div>
+              <div style="height:1px; background: var(--mx-color-border-subtle); margin: var(--mx-space-4) 0;"></div>
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-destructive-surface);">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-destructive-surface); color: var(--mx-color-destructive-text); display:flex; align-items:center; justify-content:center;">⟲</span>
+                <div style="flex:1;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-destructive-text);">Reset progress</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT LOADED -->
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">light · sheet</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll" style="display:flex; flex-direction:column; justify-content:flex-end; padding-bottom: var(--mx-space-16);">
+          <div style="border-radius: var(--mx-radius-xl) var(--mx-radius-xl) 0 0; background: var(--mx-color-surface-modal); box-shadow: var(--mx-elevation-sheet); border-top: var(--mx-border-subtle); padding: var(--mx-space-16); margin: 0 calc(var(--mx-layout-screen-padding-x) * -1) calc(var(--mx-space-20) * -1);">
+            <div style="width:36px; height:4px; border-radius: var(--mx-radius-pill); background: var(--mx-color-border-strong); margin: 0 auto var(--mx-space-16);"></div>
+            <span style="font: var(--mx-weight-semibold) 11px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">Play · TOPIK I Core 800</span>
+            <div style="display:flex; flex-direction:column; gap: var(--mx-space-8); margin-top: var(--mx-space-12);">
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-surface-card); border: var(--mx-border-subtle);">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-state-selectedSurface); color: var(--mx-color-srs-active); display:flex; align-items:center; justify-content:center;">▶</span>
+                <div style="flex:1; display:flex; flex-direction:column;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">New Learning</span><span style="font-size:11px; color: var(--mx-color-text-tertiary);">140 new cards</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-state-unavailableSurface); opacity:0.6;">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-state-unavailableSurface); color: var(--mx-color-text-tertiary); display:flex; align-items:center; justify-content:center;">↻</span>
+                <div style="flex:1; display:flex; flex-direction:column;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-tertiary);">SRS Repeat</span><span style="font-size:11px; color: var(--mx-color-srs-noDue);">Nothing due</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-state-unavailableSurface); opacity:0.6;">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-state-unavailableSurface); color: var(--mx-color-text-tertiary); display:flex; align-items:center; justify-content:center;">✎</span>
+                <div style="flex:1; display:flex; flex-direction:column;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-text-tertiary);">Fill mode</span><span style="font-size:11px; color: var(--mx-color-text-tertiary);">Soon</span></div>
+              </div>
+              <div style="height:1px; background: var(--mx-color-border-subtle); margin: var(--mx-space-4) 0;"></div>
+              <div style="display:flex; align-items:center; gap: var(--mx-space-12); height: var(--mx-size-list-row-height); padding:0 var(--mx-space-12); border-radius: var(--mx-radius-md); background: var(--mx-color-destructive-surface);">
+                <span style="width:32px; height:32px; border-radius: var(--mx-radius-sm); background: var(--mx-color-destructive-surface); color: var(--mx-color-destructive-text); display:flex; align-items:center; justify-content:center;">⟲</span>
+                <div style="flex:1;"><span style="font: var(--mx-weight-semibold) var(--mx-text-body-medium-size) var(--mx-font-display); color: var(--mx-color-destructive-text);">Reset progress</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NO-DUE VARIANT -->
+      <div class="mx-phone" style="width: 260px; height: 420px;">
+        <span class="ph-cap">non-happy · no due</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll" style="display:flex; align-items:center; justify-content:center; padding: var(--mx-space-16);">
+          <div class="mx-panel" style="width:100%; text-align:center; box-shadow: var(--mx-elevation-modal);">
+            <div style="width:52px; height:52px; margin:0 auto var(--mx-space-12); border-radius: var(--mx-radius-full); background: var(--mx-color-feedback-correctSurface); color: var(--mx-color-srs-noDue); display:flex; align-items:center; justify-content:center; font-size:22px;">✓</div>
+            <span style="display:block; font: var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Nothing due</span>
+            <span style="display:block; font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary); margin-top: var(--mx-space-4); line-height:1.5;">SRS Repeat is disabled until cards are due. New Learning is still available.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-grid-2">
+      <table class="mx-spec">
+        <caption>Region → Mx component</caption>
+        <thead><tr><th>Region</th><th>Mx component</th></tr></thead>
+        <tbody>
+          <tr><td>Sheet + grabber</td><td class="tok">MxModalSheet</td></tr>
+          <tr><td>Menu label</td><td class="tok">MxSectionHeader (compact)</td></tr>
+          <tr><td>Normal row</td><td class="tok">MxListRow</td></tr>
+          <tr><td>No-due / unavailable row</td><td class="tok">MxListRow (disabled)</td></tr>
+          <tr><td>Destructive row</td><td class="tok">MxListRow (destructive)</td></tr>
+        </tbody>
+      </table>
+      <div class="mx-stack">
+        <div class="mx-panel">
+          <p class="mx-h">Spacing annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag space">sheet pad 16</span>
+            <span class="mx-tag space">row gap 8</span>
+            <span class="mx-tag space">row height 60</span>
+            <span class="mx-tag space">divider before destructive</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Typography annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag">L4 menu label uppercase</span>
+            <span class="mx-tag">L3 body.medium row title</span>
+            <span class="mx-tag">caption row subtitle</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Action hierarchy</p>
+          <div class="mx-legend">
+            <span class="mx-tag">New Learning active</span>
+            <span class="mx-tag">Repeat disabled · no due</span>
+            <span class="mx-tag">Reset destructive · separated</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Disable (not hide) SRS Repeat when nothing is due and say <i>why</i>; separate the
+        destructive "Reset" below a divider so it can't be tapped by momentum.</div>
+      <div class="mx-dont"><b></b>Mix the destructive row into the normal group, or leave a disabled row looking
+        tappable — dim it and mark the reason ("Nothing due" / "Soon").</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> <code>MxModalSheet</code> hosts a column of <code>MxListRow</code>
+      with a <code>disabled</code> prop for no-due/unavailable and <code>intent="destructive"</code> for Reset.
+      Repeat's disabled state is driven by the due count (local-day rule), not hidden. The grabber, sheet radius,
+      and shadow all come from <code>MxModalSheet</code> tokens — an RN agent wires rows and intents, no raw
+      style.</div>
+    <figure class="mx-embed"><figcaption>Companion · base-kit feedback &amp; dialogs <span class="path">components/feedback/feedback.card.html</span></figcaption>
+      <iframe src="../components/feedback/feedback.card.html" height="620" loading="lazy" title="Feedback and dialogs reference"></iframe></figure>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- SAMPLE 5 — GOLDEN STATISTICS                                         -->
+  <!-- =================================================================== -->
+  <section class="mx-section mx-anchor" id="statistics">
+    <h2>5 · Mx Golden Statistics Sample</h2>
+    <p>A stats view — a hero header, a chart panel, a row of metric cards with tabular numbers, and an empty
+      state for when no <b>read-model</b> data exists yet. Reference for the Statistics screen. Charts are a
+      read model; the empty frame shows the honest "needs data" state rather than a fake zero chart.</p>
+
+    <div class="mx-phones">
+      <!-- DARK LOADED -->
+      <div class="mx-phone">
+        <span class="ph-cap">dark · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-8);">
+            <span style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Statistics</span>
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary); margin-top: var(--mx-space-4);">Last 7 days</div>
+          </div>
+          <div class="mx-panel" style="box-shadow:none; margin-bottom: var(--mx-space-12);">
+            <p class="mx-h">Words reviewed</p>
+            <div style="display:flex; align-items:flex-end; gap: var(--mx-space-8); height:96px;">
+              <div style="flex:1; height:40%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:65%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:50%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:85%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:70%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:100%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-srs-active);"></div>
+              <div style="flex:1; height:55%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+            </div>
+          </div>
+          <div class="mx-grid-2" style="gap: var(--mx-space-12);">
+            <div class="mx-panel" style="box-shadow:none;">
+              <span style="font: var(--mx-weight-semibold) 10px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">Reviewed</span>
+              <div class="mx-tabular" style="font: var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono); color: var(--mx-color-text-primary); margin-top: var(--mx-space-4);">642</div>
+              <span style="font-size:11px; color: var(--mx-color-srs-noDue);">▲ 12%</span>
+            </div>
+            <div class="mx-panel" style="box-shadow:none;">
+              <span style="font: var(--mx-weight-semibold) 10px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">Accuracy</span>
+              <div class="mx-tabular" style="font: var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono); color: var(--mx-color-text-primary); margin-top: var(--mx-space-4);">88%</div>
+              <span style="font-size:11px; color: var(--mx-color-srs-noDue);">▲ 3%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT LOADED -->
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">light · loaded</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-8);">
+            <span style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Statistics</span>
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary); margin-top: var(--mx-space-4);">Last 7 days</div>
+          </div>
+          <div class="mx-panel" style="margin-bottom: var(--mx-space-12);">
+            <p class="mx-h">Words reviewed</p>
+            <div style="display:flex; align-items:flex-end; gap: var(--mx-space-8); height:96px;">
+              <div style="flex:1; height:40%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:65%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:50%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:85%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:70%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+              <div style="flex:1; height:100%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-srs-active);"></div>
+              <div style="flex:1; height:55%; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric);"></div>
+            </div>
+          </div>
+          <div class="mx-grid-2" style="gap: var(--mx-space-12);">
+            <div class="mx-panel">
+              <span style="font: var(--mx-weight-semibold) 10px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">Reviewed</span>
+              <div class="mx-tabular" style="font: var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono); color: var(--mx-color-text-primary); margin-top: var(--mx-space-4);">642</div>
+              <span style="font-size:11px; color: var(--mx-color-srs-noDue);">▲ 12%</span>
+            </div>
+            <div class="mx-panel">
+              <span style="font: var(--mx-weight-semibold) 10px var(--mx-font-display); letter-spacing:0.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary);">Accuracy</span>
+              <div class="mx-tabular" style="font: var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono); color: var(--mx-color-text-primary); margin-top: var(--mx-space-4);">88%</div>
+              <span style="font-size:11px; color: var(--mx-color-srs-noDue);">▲ 3%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- READ-MODEL-NEEDED EMPTY -->
+      <div class="mx-phone" style="width: 260px; height: 420px;">
+        <span class="ph-cap">non-happy · needs data</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll" style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap: var(--mx-space-16); padding: var(--mx-space-24);">
+          <div style="width:64px; height:64px; border-radius: var(--mx-radius-full); background: var(--mx-color-state-selectedSurface); display:flex; align-items:center; justify-content:center; color: var(--mx-color-srs-active); font-size:26px;">▤</div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-8);">
+            <span style="font: var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display); color: var(--mx-color-text-primary);">No stats yet</span>
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary); line-height:1.5;">Finish a study session and your review stats will appear here.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-grid-2">
+      <table class="mx-spec">
+        <caption>Region → Mx component</caption>
+        <thead><tr><th>Region</th><th>Mx component</th></tr></thead>
+        <tbody>
+          <tr><td>Hero header</td><td class="tok">MxSectionHeader size="hero"</td></tr>
+          <tr><td>Range tabs</td><td class="tok">MxTabs / MxSegmentedControl</td></tr>
+          <tr><td>Chart panel</td><td class="tok">MxStatsChartPanel</td></tr>
+          <tr><td>Metric tile</td><td class="tok">MxMetricCard</td></tr>
+          <tr><td>No-data frame</td><td class="tok">MxEmptyState</td></tr>
+        </tbody>
+      </table>
+      <div class="mx-stack">
+        <div class="mx-panel">
+          <p class="mx-h">Spacing annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag space">header→chart 8</span>
+            <span class="mx-tag space">chart→metrics 12</span>
+            <span class="mx-tag space">metric gap 12</span>
+            <span class="mx-tag space">bar gap 8</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Typography annotation</p>
+          <div class="mx-legend">
+            <span class="mx-tag">L2 title.large header</span>
+            <span class="mx-tag">L1 stat.number mono</span>
+            <span class="mx-tag">L4 metric label uppercase</span>
+            <span class="mx-tag">tabular-nums</span>
+          </div>
+        </div>
+        <div class="mx-panel">
+          <p class="mx-h">Action hierarchy</p>
+          <div class="mx-legend">
+            <span class="mx-tag">no primary · read-only</span>
+            <span class="mx-tag">range tabs select</span>
+            <span class="mx-tag">metrics informational</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Use tabular mono for every count and percent so columns align; colour chart series
+        from <code>chart-*</code> roles and show the honest empty state when the read model is empty.</div>
+      <div class="mx-dont"><b></b>Render a flat zero-chart to avoid an empty state, or use feedback/SRS colours as
+        chart series — chart hues are their own <code>chart-*</code> role.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> <code>MxStatsChartPanel</code> takes the read-model series and renders
+      bars in <code>theme.color.chart.wordMetric</code>; <code>MxMetricCard</code> shows value + delta with
+      <code>fontVariant: ['tabular-nums']</code> at the <code>stat.number</code> role. When the read model
+      resolves empty, swap the panel for <code>MxEmptyState</code> — never a fake chart. Fully token-driven.</div>
+    <figure class="mx-embed"><figcaption>Companion · base-kit statistics screen <span class="path">ui_kits/memox-app/statistics.card.html</span></figcaption>
+      <iframe src="../ui_kits/memox-app/statistics.card.html" height="900" loading="lazy" title="Statistics screen reference"></iframe></figure>
+  </section>
+
+  <hr class="mx-rule" />
+  <div class="mx-rn"><b>Handoff summary</b> Each sample above maps 1:1 to shared <code>Mx</code> components —
+    <code>MxCard</code>, <code>MxStudyCard</code>, <code>MxSettingsRow</code>, <code>MxModalSheet</code>,
+    <code>MxStatsChartPanel</code> — assembled from <code>mx</code> tokens. An RN agent can build any of them
+    from the region→component table without writing a single raw hex or px value. These are exemplars: pick the
+    matching shape, then fill it with real product data.</div>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="12-composition-recipe-gallery.html">‹ 12 Composition Recipe Gallery</a>
+    <a href="14-react-native-handoff-gallery.html">14 React Native Handoff Gallery ›</a>
+  </nav>
+</main>
+
+</body>
+</html>

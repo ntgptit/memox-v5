@@ -113,6 +113,7 @@
   --mx-color-action-primaryPressed: #3b2d72;
   --mx-color-action-primaryDisabled: #322e4d;
   --mx-color-action-secondary: #302d46;
+  --mx-color-action-onSecondary: #b4aadd; /* secondary button text — light lavender for ~6:1 on dark secondary surface */
   --mx-color-action-ghost: transparent;
   --mx-color-action-focusRing: #b4aadd;
 
@@ -196,6 +197,7 @@
   --mx-color-action-primaryPressed: #3b2d72;
   --mx-color-action-primaryDisabled: #dad5ec;
   --mx-color-action-secondary: #f1eff9;
+  --mx-color-action-onSecondary: #4b3a8c; /* secondary button text — royal purple on light lavender surface */
   --mx-color-action-ghost: transparent;
   --mx-color-action-focusRing: #4b3a8c;
 

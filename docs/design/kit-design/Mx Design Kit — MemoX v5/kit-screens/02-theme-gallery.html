@@ -1,0 +1,335 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3200" name="02 · Mx Theme Gallery" subtitle="MxDarkDefault + MxLightDefault, token matrix, dark/light comparison, RN theme resolver" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>02 · Mx Theme Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 02 Theme Gallery</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="01-token-gallery.html">‹ Prev</a>
+    <a href="index.html">Index</a>
+    <a href="03-typography-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 02</p>
+  <h1 class="mx-title">Mx Theme Gallery</h1>
+  <p class="mx-lead">
+    MemoX ships <b>two first-class themes</b>: <b>MxDarkDefault</b> (the primary direction — a calm,
+    purple-tinted deep aubergine surface that keeps attention on the card) and <b>MxLightDefault</b> (a
+    clean, white-first, production-ready surface — <b>not</b> a mechanical inversion of dark). Every
+    semantic token defines a dark value on <code>:root</code> and a light value under
+    <code>[data-theme="light"]</code>; a screen consumes the <b>role</b> and the theme resolves the value.
+    Below, each demo is shown in <b>both</b> themes side by side using the same markup — the theme comes
+    only from the <code>data-theme</code> attribute, never from a duplicated <code>Dark*</code>/<code>Light*</code>
+    component.
+  </p>
+  <div class="mx-note"><b>Source of truth</b> Dark values resolve from <code>:root</code>; light values from
+    <code>[data-theme="light"]</code> in <code>tokens/colors.css · elevation.css</code>. The two panes in every
+    <code>.mx-duo</code> render identical HTML — only the theme scope differs.</div>
+
+  <!-- ============ THEME TOKEN MATRIX ============ -->
+  <section class="mx-section mx-anchor" id="matrix">
+    <h2>Theme token matrix</h2>
+    <p>Every semantic role, listed with its <b>MxDarkDefault</b> and <b>MxLightDefault</b> value. This is the
+      base kit's own matrix card, embedded unchanged — it is the canonical dark-vs-light reference.</p>
+    <figure class="mx-embed"><figcaption>Theme token matrix <span class="path">guidelines/theme-matrix.card.html</span></figcaption>
+      <iframe src="../guidelines/theme-matrix.card.html" height="680" loading="lazy" title="Every semantic role, dark vs light value"></iframe></figure>
+  </section>
+
+  <!-- ============ SURFACES IN BOTH THEMES ============ -->
+  <section class="mx-section mx-anchor" id="surfaces">
+    <h2>Surfaces in both themes</h2>
+    <p>Background and surface roles across the two themes. Dark distinguishes layers by <b>surface contrast +
+      border</b> (shadows are near-invisible on dark); light uses a <b>soft, low-spread shadow + visible
+      border</b>.</p>
+    <figure class="mx-embed"><figcaption>Surfaces <span class="path">guidelines/colors-surfaces.card.html</span></figcaption>
+      <iframe src="../guidelines/colors-surfaces.card.html" height="230" loading="lazy" title="Surface colour roles — dark and light"></iframe></figure>
+  </section>
+
+  <!-- ============ SEMANTIC TOKENS — DARK VS LIGHT ============ -->
+  <section class="mx-section mx-anchor" id="semantic">
+    <h2>Semantic tokens — dark vs light</h2>
+    <p>The same building blocks rendered in <b>MxDarkDefault</b> (left) and <b>MxLightDefault</b> (right).
+      Every sample is built from <code>var(--mx-*)</code> semantic roles, so the identical markup resolves to
+      the correct value per theme. Nothing here is a colour literal.</p>
+
+    <!-- Surfaces & elevation -->
+    <h3>Surfaces &amp; elevation</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-background-screen);border:1px solid var(--mx-color-border-subtle)">
+            <span style="font:var(--mx-weight-semibold) 11px var(--mx-font-mono);color:var(--mx-color-text-tertiary)">background-app · background-screen</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-card);border:1px solid var(--mx-color-border-default);box-shadow:var(--mx-elevation-low)">
+            <span style="font:var(--mx-weight-semibold) 13px var(--mx-font-display);color:var(--mx-color-text-primary)">surface-card</span>
+            <span style="display:block;font-size:11px;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-4)">MxCard · elevation-low</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-elevated);border:1px solid var(--mx-color-border-default);box-shadow:var(--mx-elevation-medium)">
+            <span style="font:var(--mx-weight-semibold) 13px var(--mx-font-display);color:var(--mx-color-text-primary)">surface-elevated</span>
+            <span style="display:block;font-size:11px;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-4)">menu · elevation-medium</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-modal);border:1px solid var(--mx-color-border-strong);box-shadow:var(--mx-elevation-modal)">
+            <span style="font:var(--mx-weight-semibold) 13px var(--mx-font-display);color:var(--mx-color-text-primary)">surface-modal</span>
+            <span style="display:block;font-size:11px;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-4)">MxModalSheet · elevation-modal</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-background-screen);border:1px solid var(--mx-color-border-subtle)">
+            <span style="font:var(--mx-weight-semibold) 11px var(--mx-font-mono);color:var(--mx-color-text-tertiary)">background-app · background-screen</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-card);border:1px solid var(--mx-color-border-default);box-shadow:var(--mx-elevation-low)">
+            <span style="font:var(--mx-weight-semibold) 13px var(--mx-font-display);color:var(--mx-color-text-primary)">surface-card</span>
+            <span style="display:block;font-size:11px;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-4)">MxCard · elevation-low</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-elevated);border:1px solid var(--mx-color-border-default);box-shadow:var(--mx-elevation-medium)">
+            <span style="font:var(--mx-weight-semibold) 13px var(--mx-font-display);color:var(--mx-color-text-primary)">surface-elevated</span>
+            <span style="display:block;font-size:11px;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-4)">menu · elevation-medium</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-modal);border:1px solid var(--mx-color-border-strong);box-shadow:var(--mx-elevation-modal)">
+            <span style="font:var(--mx-weight-semibold) 13px var(--mx-font-display);color:var(--mx-color-text-primary)">surface-modal</span>
+            <span style="display:block;font-size:11px;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-4)">MxModalSheet · elevation-modal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Text hierarchy -->
+    <h3>Text hierarchy</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-panel">
+          <p class="mx-h">text roles</p>
+          <div class="mx-stack" style="gap:var(--mx-space-8)">
+            <span style="font:var(--mx-weight-semibold) 17px var(--mx-font-display);color:var(--mx-color-text-primary)">Primary — Start studying</span>
+            <span style="font:var(--mx-weight-regular) 15px var(--mx-font-body);color:var(--mx-color-text-secondary)">Secondary — 83 cards due today</span>
+            <span style="font:var(--mx-weight-medium) 13px var(--mx-font-body);color:var(--mx-color-text-tertiary)">Tertiary — updated 2 hours ago</span>
+            <span style="font:var(--mx-weight-medium) 13px var(--mx-font-body);color:var(--mx-color-text-disabled)">Disabled — Nothing to repeat</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-panel">
+          <p class="mx-h">text roles</p>
+          <div class="mx-stack" style="gap:var(--mx-space-8)">
+            <span style="font:var(--mx-weight-semibold) 17px var(--mx-font-display);color:var(--mx-color-text-primary)">Primary — Start studying</span>
+            <span style="font:var(--mx-weight-regular) 15px var(--mx-font-body);color:var(--mx-color-text-secondary)">Secondary — 83 cards due today</span>
+            <span style="font:var(--mx-weight-medium) 13px var(--mx-font-body);color:var(--mx-color-text-tertiary)">Tertiary — updated 2 hours ago</span>
+            <span style="font:var(--mx-weight-medium) 13px var(--mx-font-body);color:var(--mx-color-text-disabled)">Disabled — Nothing to repeat</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <h3>Action states</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-panel">
+          <p class="mx-h">MxActionButton</p>
+          <div class="mx-row">
+            <span style="display:inline-flex;align-items:center;height:44px;padding:0 var(--mx-space-20);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-weight-semibold) 15px var(--mx-font-display)">Primary</span>
+            <span style="display:inline-flex;align-items:center;height:44px;padding:0 var(--mx-space-20);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-secondary);color:var(--mx-color-action-onSecondary);border:1px solid var(--mx-color-border-default);font:var(--mx-weight-semibold) 15px var(--mx-font-display)">Secondary</span>
+            <span style="display:inline-flex;align-items:center;height:44px;padding:0 var(--mx-space-20);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primaryDisabled);color:var(--mx-color-text-disabled);font:var(--mx-weight-semibold) 15px var(--mx-font-display)">Disabled</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-panel">
+          <p class="mx-h">MxActionButton</p>
+          <div class="mx-row">
+            <span style="display:inline-flex;align-items:center;height:44px;padding:0 var(--mx-space-20);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-weight-semibold) 15px var(--mx-font-display)">Primary</span>
+            <span style="display:inline-flex;align-items:center;height:44px;padding:0 var(--mx-space-20);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-secondary);color:var(--mx-color-action-onSecondary);border:1px solid var(--mx-color-border-default);font:var(--mx-weight-semibold) 15px var(--mx-font-display)">Secondary</span>
+            <span style="display:inline-flex;align-items:center;height:44px;padding:0 var(--mx-space-20);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primaryDisabled);color:var(--mx-color-text-disabled);font:var(--mx-weight-semibold) 15px var(--mx-font-display)">Disabled</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selected + feedback + SRS states -->
+    <h3>Selected, feedback &amp; warning states</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-state-selectedSurface);border:2px solid var(--mx-color-state-selected);color:var(--mx-color-text-primary);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">Selected — apple</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:2px solid var(--mx-color-feedback-correctBorder);color:var(--mx-color-feedback-correct);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">✓ Correct — apple</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-wrongSurface);border:2px solid var(--mx-color-feedback-wrongBorder);color:var(--mx-color-feedback-wrong);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">✕ Wrong — pear</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-feedback-warning);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">Due 83 — review soon (amber)</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-destructive-surface);border:1.5px solid var(--mx-color-destructive-border);color:var(--mx-color-destructive-text);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">Destructive — Delete deck</div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-state-selectedSurface);border:2px solid var(--mx-color-state-selected);color:var(--mx-color-text-primary);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">Selected — apple</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:2px solid var(--mx-color-feedback-correctBorder);color:var(--mx-color-feedback-correct);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">✓ Correct — apple</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-wrongSurface);border:2px solid var(--mx-color-feedback-wrongBorder);color:var(--mx-color-feedback-wrong);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">✕ Wrong — pear</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-feedback-warning);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">Due 83 — review soon (amber)</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-destructive-surface);border:1.5px solid var(--mx-color-destructive-border);color:var(--mx-color-destructive-text);font:var(--mx-weight-semibold) 14px var(--mx-font-display)">Destructive — Delete deck</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart sample -->
+    <h3>Chart sample</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-panel">
+          <p class="mx-h">MxStatsChartPanel · chart tokens</p>
+          <div class="mx-row" style="align-items:flex-end;height:96px;gap:var(--mx-space-12);padding-top:var(--mx-space-8);border-bottom:1px solid var(--mx-color-chart-grid)">
+            <div style="width:28px;height:78px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-wordMetric)"></div>
+            <div style="width:28px;height:52px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-timeMetric)"></div>
+            <div style="width:28px;height:64px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-qualityCorrect)"></div>
+            <div style="width:28px;height:34px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-qualityWrong)"></div>
+            <div style="width:28px;height:46px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-neutralTotal)"></div>
+          </div>
+          <span style="display:block;font-size:11px;color:var(--mx-color-chart-axis);margin-top:var(--mx-space-8);font-family:var(--mx-font-mono)">words · time · correct · wrong · total</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-panel">
+          <p class="mx-h">MxStatsChartPanel · chart tokens</p>
+          <div class="mx-row" style="align-items:flex-end;height:96px;gap:var(--mx-space-12);padding-top:var(--mx-space-8);border-bottom:1px solid var(--mx-color-chart-grid)">
+            <div style="width:28px;height:78px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-wordMetric)"></div>
+            <div style="width:28px;height:52px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-timeMetric)"></div>
+            <div style="width:28px;height:64px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-qualityCorrect)"></div>
+            <div style="width:28px;height:34px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-qualityWrong)"></div>
+            <div style="width:28px;height:46px;border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0;background:var(--mx-color-chart-neutralTotal)"></div>
+          </div>
+          <span style="display:block;font-size:11px;color:var(--mx-color-chart-axis);margin-top:var(--mx-space-8);font-family:var(--mx-font-mono)">words · time · correct · wrong · total</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings row -->
+    <h3>Settings row sample</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div style="background:var(--mx-color-surface-card);border:1px solid var(--mx-color-border-default);border-radius:var(--mx-radius-md);box-shadow:var(--mx-elevation-low)">
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);height:56px;padding:0 var(--mx-space-16)">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-selectedSurface);color:var(--mx-color-srs-active);font:var(--mx-weight-bold) 14px var(--mx-font-display)">A</span>
+            <span style="flex:1;font:var(--mx-weight-medium) 15px var(--mx-font-display);color:var(--mx-color-text-primary)">Appearance</span>
+            <span style="font:var(--mx-weight-regular) 13px var(--mx-font-body);color:var(--mx-color-text-tertiary)">Dark</span>
+            <span style="color:var(--mx-color-text-tertiary);font-size:16px">›</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div style="background:var(--mx-color-surface-card);border:1px solid var(--mx-color-border-default);border-radius:var(--mx-radius-md);box-shadow:var(--mx-elevation-low)">
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);height:56px;padding:0 var(--mx-space-16)">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-selectedSurface);color:var(--mx-color-srs-active);font:var(--mx-weight-bold) 14px var(--mx-font-display)">A</span>
+            <span style="flex:1;font:var(--mx-weight-medium) 15px var(--mx-font-display);color:var(--mx-color-text-primary)">Appearance</span>
+            <span style="font:var(--mx-weight-regular) 13px var(--mx-font-body);color:var(--mx-color-text-tertiary)">Light</span>
+            <span style="color:var(--mx-color-text-tertiary);font-size:16px">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Study card -->
+    <h3>Study card sample</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div style="background:var(--mx-color-surface-card);border:1px solid var(--mx-color-border-default);border-radius:var(--mx-radius-xl);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-24);text-align:center">
+          <span class="mx-korean" style="display:block;font-weight:var(--mx-weight-bold);font-size:var(--mx-text-study-korean-size);line-height:var(--mx-text-study-korean-line);color:var(--mx-color-text-primary)">사과</span>
+          <span style="display:block;font:var(--mx-weight-medium) 11px var(--mx-font-mono);letter-spacing:0.1em;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-8)">KO → EN</span>
+          <span style="display:block;font-size:var(--mx-text-study-explanation-size);line-height:var(--mx-text-study-explanation-line);color:var(--mx-color-text-secondary);margin-top:var(--mx-space-12)">apple</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div style="background:var(--mx-color-surface-card);border:1px solid var(--mx-color-border-default);border-radius:var(--mx-radius-xl);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-24);text-align:center">
+          <span class="mx-korean" style="display:block;font-weight:var(--mx-weight-bold);font-size:var(--mx-text-study-korean-size);line-height:var(--mx-text-study-korean-line);color:var(--mx-color-text-primary)">사과</span>
+          <span style="display:block;font:var(--mx-weight-medium) 11px var(--mx-font-mono);letter-spacing:0.1em;color:var(--mx-color-text-tertiary);margin-top:var(--mx-space-8)">KO → EN</span>
+          <span style="display:block;font-size:var(--mx-text-study-explanation-size);line-height:var(--mx-text-study-explanation-line);color:var(--mx-color-text-secondary);margin-top:var(--mx-space-12)">apple</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THEME BEHAVIOUR ============ -->
+  <section class="mx-section mx-anchor" id="behaviour">
+    <h2>Theme behaviour</h2>
+    <p>Both themes are first-class. Dark is the primary direction and light is <b>complete and
+      production-ready</b> — a designed surface, not a mechanical negative of dark. The rules below are what
+      keeps the two themes coherent.</p>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Define every semantic token in <b>both</b> themes — a dark value on
+        <code>:root</code> and a light value under <code>[data-theme="light"]</code> — and consume the
+        <b>role</b> so a screen renders correctly in either.</div>
+      <div class="mx-dont"><b></b>Invert colours mechanically (flip dark to light by negating hex) or leave a
+        role defined in only one theme — light is designed white-first, not a computed inversion.</div>
+      <div class="mx-do"><b></b>Use <b>one</b> <code>MxCard</code> that reads theme tokens; toggle the theme by
+        setting <code>data-theme="light"</code> on an ancestor.</div>
+      <div class="mx-dont"><b></b>Create <code>MxDarkCard</code>/<code>MxLightCard</code> (or any
+        theme-specific duplicate component) — same markup, different theme tokens only.</div>
+    </div>
+    <div class="mx-note"><b>Theme switch is visual only</b> Switching MxDarkDefault ⇄ MxLightDefault is a
+      display preference. It <b>never</b> mutates learning progress, study-session state, or SRS box/due data
+      — those live in <code>cards</code>, <code>card_reviews</code>, and the session tables, untouched by the
+      appearance setting.</div>
+  </section>
+
+  <!-- ============ REACT NATIVE THEME HANDOFF ============ -->
+  <section class="mx-section mx-anchor" id="rn">
+    <h2>React Native theme handoff</h2>
+    <p>In the app, both themes resolve through a single provider. <code>MxThemeProvider</code> wraps the app
+      and holds an <code>MxThemeMode</code>; <code>MxThemeResolver</code> maps that mode to the concrete
+      dark/light token set; <code>useMxTheme()</code> reads the resolved <code>theme</code> inside a screen.
+      Tokens are resolved <b>before</b> a component renders, so a screen never branches on the OS colour
+      scheme itself.</p>
+
+    <table class="mx-spec">
+      <caption>Theme resolver → React Native</caption>
+      <thead><tr><th>Name</th><th>Role</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">MxThemeProvider</td><td>App-root provider</td><td>Wraps the app once; supplies the resolved token set via context</td></tr>
+        <tr><td class="tok">MxThemeMode</td><td>Mode enum</td><td><code>MxThemeMode.system</code> · <code>.dark</code> · <code>.light</code></td></tr>
+        <tr><td class="tok">MxThemeResolver</td><td>Mode → tokens</td><td>Resolves <code>system</code> against the OS scheme <b>once</b>, then hands screens concrete tokens</td></tr>
+        <tr><td class="tok">useMxTheme()</td><td>Screen hook</td><td>Returns the resolved <code>theme</code>; e.g. <code>theme.color.surface.card</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mx-code"><span class="c">// app entry — wrap once, mode from the appearance setting</span>
+&lt;<span class="k">MxThemeProvider</span> mode={<span class="k">MxThemeMode</span>.system}&gt;
+  &lt;AppNavigator /&gt;
+&lt;/<span class="k">MxThemeProvider</span>&gt;
+
+<span class="c">// any screen — read resolved tokens, never a hex or a colour-scheme branch</span>
+<span class="k">function</span> DeckScreen() {
+  <span class="k">const</span> theme = <span class="k">useMxTheme</span>();
+  <span class="k">return</span> (
+    &lt;MxScreen style={{ backgroundColor: theme.color.background.app }}&gt;
+      &lt;MxCard style={{ backgroundColor: theme.color.surface.card }} /&gt;
+    &lt;/MxScreen&gt;
+  );
+}</div>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Resolve <code>MxThemeMode.system</code> in <code>MxThemeResolver</code> at the
+        root, then read tokens with <code>useMxTheme()</code>.</div>
+      <div class="mx-dont"><b></b>Call raw <code>useColorScheme()</code> inside a product screen and branch on
+        <code>'dark'</code>/<code>'light'</code> — that duplicates the resolver and drifts from the tokens.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> The appearance setting sets <code>MxThemeMode</code> on
+      <code>MxThemeProvider</code>; <code>MxThemeResolver</code> resolves it to the dark or light token set
+      once, and every <code>Mx</code> component reads its colours from <code>useMxTheme()</code>. Screens
+      never hold a hex literal and never run a per-screen <code>useColorScheme()</code> branch.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav"><a href="01-token-gallery.html">‹ 01 Token Gallery</a><a href="index.html">Index</a><a href="03-typography-gallery.html">03 Typography Gallery ›</a></nav>
+</main>
+
+</body>
+</html>

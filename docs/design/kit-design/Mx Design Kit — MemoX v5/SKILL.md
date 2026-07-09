@@ -12,8 +12,9 @@ the other files:
   Dark is `:root`; set `data-theme="light"` on any ancestor for light mode.
 - `components/<group>/` — reusable `Mx` primitives (core, learning, settings, data, feedback). Each has a
   `.d.ts` contract and a `.prompt.md` with a usage snippet. Mount them from the compiled bundle.
-- `guidelines/` — specimen cards, `governance.md` (the rules that prevent style drift), and
-  `flutter-handoff.md` (1:1 token/widget mapping).
+- `guidelines/` — specimen cards, `governance.md` (the rules that prevent style drift). The
+  implementation handoff (1:1 token/component mapping) is the React Native Handoff Gallery at
+  `kit-screens/14-react-native-handoff-gallery.html`.
 - `ui_kits/memox-app/` — sample screens (deck management, study session, settings, statistics/result)
   proving the kit composes into real MemoX views.
 

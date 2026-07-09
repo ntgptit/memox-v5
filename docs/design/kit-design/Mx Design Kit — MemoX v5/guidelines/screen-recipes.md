@@ -21,7 +21,7 @@ empty/error state.
 **States:** loading, loaded, empty (no decks), search-empty, error, no-due (if surfaced).
 **Dark/light:** rows must separate from bg by surface + border in both.
 **Common mistakes:** mixed row styles in one list; row height that clips long deck names; two primaries.
-**Flutter:** `ListView` of `MxListRow`/`MxCard`; never a raw `Card`/`ListTile` style.
+**React Native:** `FlatList` of `MxListRow`/`MxCard`; never a raw hand-rolled row style.
 
 ## 2. MxDetailScreenRecipe
 **For:** card detail, deck detail, future detail pages.
@@ -30,7 +30,7 @@ empty/error state.
 **Rules:** one primary content area; metadata never dominates; destructive visually separated.
 **Spacing:** section gap 24; meta tiles gap 12. **States:** loaded, loading, error, unavailable.
 **Common mistakes:** metadata competing with the title; delete mixed into normal actions.
-**Flutter:** one primary CTA (`MxActionButton` primary); destructive is its own section.
+**React Native:** one primary CTA (`MxActionButton` primary); destructive is its own section.
 
 ## 3. MxStudyScreenRecipe
 **For:** New Learning modes, SRS Repeat modes, Review Words variant.
@@ -46,7 +46,7 @@ feedback must **not** look like SRS grading; exit is a protected/clear action.
 **Keyboard:** fillMode keeps input + actions above the keyboard.
 **States:** loaded, correct, wrong, selected, revealed, retry, finalize-failed (preserve data).
 **Common mistakes:** progress bar read as mastery; two primaries; cramped answer area.
-**Flutter:** progress always via `MxStudyProgressBar`; never a custom progress widget.
+**React Native:** progress always via `MxStudyProgressBar`; never a custom progress bar.
 
 ## 4. MxFormScreenRecipe
 **For:** settings forms, reminder settings, import/restore configuration.
@@ -54,7 +54,7 @@ feedback must **not** look like SRS grading; exit is a protected/clear action.
 **Rules:** explicit labels; validation errors near the field; keyboard-safe bottom; high-risk action
 separated from a normal save.
 **States:** idle, invalid (inline), saving, save-failed, high-risk confirm.
-**Flutter:** fields grouped in `MxSettingsSection`; high-risk save uses destructive + `MxConfirmDialog`.
+**React Native:** fields grouped in `MxSettingsSection`; high-risk save uses destructive + `MxConfirmDialog`.
 
 ## 5. MxSettingsScreenRecipe
 **For:** Settings / More Hub, App Settings, Appearance Settings, Spaced Repetition Settings.
@@ -72,7 +72,7 @@ future/unavailable rows are visibly unavailable ("Soon"), not broken.
 **Rules:** task-focused; no nested modal unless unavoidable; rows large enough to tap; destructive option
 separated; unavailable future option visible but disabled with explanation.
 **States:** open, scrolled, destructive-confirm variant.
-**Flutter:** `MxModalSheet`; option rows are `MxListRow`.
+**React Native:** `MxModalSheet` (RN `Modal`); option rows are `MxListRow`.
 
 ## 7. MxResultScreenRecipe
 **For:** Session Result, future import/export result.

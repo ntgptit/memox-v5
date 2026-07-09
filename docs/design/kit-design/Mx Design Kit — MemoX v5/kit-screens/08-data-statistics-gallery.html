@@ -1,0 +1,426 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x2600" name="08 · Mx Data & Statistics Gallery" subtitle="Metric cards, chart panel, session result — empty / no-data / read-model-needed states + RN" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>08 · Mx Data &amp; Statistics Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 08 Data &amp; Statistics</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="07-settings-component-gallery.html">‹ Prev</a>
+    <a href="09-feedback-dialog-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 08</p>
+  <h1 class="mx-title">Mx Data &amp; Statistics Gallery</h1>
+  <p class="mx-lead">
+    The data surface of MemoX is deliberately honest: <b>MxMetricCard</b> shows a single finalized
+    number, <b>MxStatsChartPanel</b> renders a per-day trend of <b>real</b> history, and
+    <b>MxSessionResultSummary</b> reports only the phiên that just finished. Statistics is
+    <b>read-only</b> — opening it never mutates learning data, never schedules SRS. Where a formula
+    or aggregation isn't defined yet, these components must show a <b>no-data</b> or
+    <b>read-model-needed</b> state — never fabricate a line or a percentage.
+  </p>
+  <div class="mx-note"><b>Concept spec, not fake data</b> Per
+    <code>docs/design/screens/statistics.md</code>, exact aggregation formulas (Đang học / Đã học /
+    Đã lặp lại, time totals, quality ratios) are owned by the read-model tasks
+    (<code>F1.STATS.4–6</code>). Until a formula lands, the panel shows a read-model-needed state —
+    it does not invent numbers.</div>
+
+  <!-- ============ LIVE GALLERY ============ -->
+  <section class="mx-section mx-anchor" id="live">
+    <h2>Live component gallery</h2>
+    <p>The kit's own data card, embedded unchanged — metric tiles plus the stats chart panel with its
+      empty state, in dark <b>and</b> light. This is the source of truth for the specs below.</p>
+    <figure class="mx-embed">
+      <figcaption>Data &amp; chart components <span class="path">components/data/data.card.html</span></figcaption>
+      <iframe src="../components/data/data.card.html" height="560" loading="lazy" title="Mx metric cards and stats chart panel, dark and light"></iframe>
+    </figure>
+    <p class="mx-muted">The full learning deck (study card, 5-mode primitives, progress,
+      <b>MxSessionResultSummary</b>) lives at
+      <code>components/learning/learning.card.html</code>; the session-result summary is documented and
+      demoed compactly below rather than re-embedding that heavy card here.</p>
+  </section>
+
+  <!-- ============ MxMetricCard ============ -->
+  <section class="mx-section mx-anchor" id="metric-card">
+    <h2>MxMetricCard</h2>
+    <p><b>Purpose</b> — a labelled stat tile for Statistics, Activity summary, and Session Result.
+      Numbers are always <b>real, finalized</b> data; a tile never shows a guessed or placeholder value.</p>
+
+    <table class="mx-spec">
+      <caption>Anatomy &amp; props (from MxMetricCard.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Role</th><th>Token / mapping</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">label</td><td><code>ReactNode</code></td><td>Metric name (e.g. "Learned")</td><td><code>--mx-text-label-medium</code> · <code>text-tertiary</code></td></tr>
+        <tr><td class="tok">value</td><td><code>ReactNode</code></td><td>The number / percentage</td><td><code>--mx-text-stat-number</code> · mono tabular</td></tr>
+        <tr><td class="tok">unit</td><td><code>ReactNode?</code></td><td>Suffix e.g. "min", "%"</td><td><code>--mx-text-body-small</code> · <code>text-tertiary</code></td></tr>
+        <tr><td class="tok">delta</td><td><code>number?</code></td><td>Signed change; + = correct tone, − = wrong tone</td><td><code>feedback-correct</code> / <code>feedback-wrong</code></td></tr>
+        <tr><td class="tok">tone</td><td><code>"neutral"|"word"|"time"|"correct"|"wrong"</code></td><td>Accent for value / rule</td><td><code>chart-wordMetric</code> · <code>chart-timeMetric</code> · feedback</td></tr>
+      </tbody>
+    </table>
+
+    <h3>States — default (with data)</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-grid-2">
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Learned</div>
+            <div style="display:flex;align-items:baseline;gap:var(--mx-space-6)">
+              <span class="mx-tabular" style="font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size)/var(--mx-text-stat-number-line) var(--mx-font-mono);color:var(--mx-color-chart-wordMetric)">128</span>
+              <span style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-feedback-correct);font-family:var(--mx-font-mono)">▲ 12</span>
+            </div>
+          </div>
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Study time</div>
+            <div style="display:flex;align-items:baseline;gap:var(--mx-space-6)">
+              <span class="mx-tabular" style="font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size)/var(--mx-text-stat-number-line) var(--mx-font-mono);color:var(--mx-color-chart-timeMetric)">14</span>
+              <span style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-tertiary)">min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <div class="mx-grid-2">
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Learned</div>
+            <div style="display:flex;align-items:baseline;gap:var(--mx-space-6)">
+              <span class="mx-tabular" style="font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size)/var(--mx-text-stat-number-line) var(--mx-font-mono);color:var(--mx-color-chart-wordMetric)">128</span>
+              <span style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-feedback-correct);font-family:var(--mx-font-mono)">▲ 12</span>
+            </div>
+          </div>
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Study time</div>
+            <div style="display:flex;align-items:baseline;gap:var(--mx-space-6)">
+              <span class="mx-tabular" style="font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size)/var(--mx-text-stat-number-line) var(--mx-font-mono);color:var(--mx-color-chart-timeMetric)">14</span>
+              <span style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-tertiary)">min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>States — loading &amp; no-data</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark · loading / no-data">
+        <div class="mx-grid-2">
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Learned</div>
+            <div style="height:34px;width:64px;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+          </div>
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Repeated</div>
+            <div style="display:flex;align-items:baseline;gap:var(--mx-space-6)">
+              <span class="mx-tabular" style="font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size)/var(--mx-text-stat-number-line) var(--mx-font-mono);color:var(--mx-color-text-tertiary)">—</span>
+              <span style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-tertiary)">no data yet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light · loading / no-data">
+        <div class="mx-grid-2">
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Learned</div>
+            <div style="height:34px;width:64px;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+          </div>
+          <div class="mx-panel" style="box-shadow:none">
+            <div class="mx-h">Repeated</div>
+            <div style="display:flex;align-items:baseline;gap:var(--mx-space-6)">
+              <span class="mx-tabular" style="font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size)/var(--mx-text-stat-number-line) var(--mx-font-mono);color:var(--mx-color-text-tertiary)">—</span>
+              <span style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-tertiary)">no data yet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mx-muted">Loading uses <code>--mx-color-state-loadingSurface</code> as a skeleton block.
+      A metric with no finalized data shows a neutral <code>—</code> dash, never a fabricated <code>0</code>
+      styled as a real reading unless zero is genuinely the value.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Feed only finalized counts; render the numeric value with the mono
+        tabular token so digits align column-to-column across tiles.</div>
+      <div class="mx-dont"><b></b>Show a placeholder / guessed number, or colour a positive delta
+        with <code>destructive</code> red — <code>+</code> deltas use <code>feedback-correct</code>,
+        <code>−</code> uses <code>feedback-wrong</code>.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxMetricCard</code>; props
+      <code>{ label, value, unit?, delta?, tone? }</code>. The number renders through a
+      <code>&lt;Text&gt;</code> using the <code>--mx-text-stat-number</code> mono token with
+      <code>fontVariant: ['tabular-nums']</code>; tone resolves from <code>MxTheme.color.chart.*</code>.</div>
+  </section>
+
+  <!-- ============ MxStatsChartPanel ============ -->
+  <section class="mx-section mx-anchor" id="chart-panel">
+    <h2>MxStatsChartPanel</h2>
+    <p><b>Purpose</b> — the long-term Statistics chart: a per-day, multi-series trend over recorded
+      history (<b>not</b> just the last session). It <b>reads</b> finalized statistics and never mutates
+      learning data. With no data it shows a friendly empty state — never a fake line.</p>
+
+    <table class="mx-spec">
+      <caption>Anatomy &amp; props (from MxStatsChartPanel.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Role</th><th>Token / mapping</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">title</td><td><code>ReactNode?</code></td><td>Panel heading (e.g. "Quality by day")</td><td><code>--mx-text-title-medium</code></td></tr>
+        <tr><td class="tok">legend</td><td><code>boolean?</code></td><td>Show series legend</td><td><code>--mx-text-label-medium</code></td></tr>
+        <tr><td class="tok">series</td><td><code>MxChartSeries[]?</code></td><td><code>{ name, tone, points[] }</code> per line</td><td><code>chart-wordMetric / timeMetric / qualityCorrect / qualityWrong / neutralTotal</code></td></tr>
+        <tr><td class="tok">xLabels</td><td><code>ReactNode[]?</code></td><td>Day axis labels</td><td><code>--mx-color-chart-axis</code></td></tr>
+        <tr><td class="tok">height</td><td><code>number?</code></td><td>Plot height (structural)</td><td>plot area / <code>--mx-color-chart-grid</code></td></tr>
+        <tr><td class="tok">empty</td><td><code>boolean?</code></td><td>Force the no-data empty state</td><td><code>MxEmptyState</code></td></tr>
+      </tbody>
+    </table>
+    <p class="mx-muted">Series tones map to the tab per <code>statistics.md</code>: <b>Từ</b> = word ·
+      <b>Thời gian</b> = time · <b>Chất lượng</b> = correct/wrong. Only evaluation modes contribute
+      correct/wrong; <code>reviewMode</code> (làm quen, no evaluation) does not.</p>
+
+    <h3>States — default trend (real data)</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark · quality by day">
+        <div class="mx-panel" style="box-shadow:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--mx-space-12)">
+            <span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Quality by day</span>
+            <span class="mx-row" style="gap:var(--mx-space-12)">
+              <span class="mx-row" style="gap:var(--mx-space-6)"><i style="width:10px;height:10px;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-qualityCorrect);display:inline-block"></i><span style="font-size:var(--mx-text-label-medium-size);color:var(--mx-color-text-tertiary)">Correct</span></span>
+              <span class="mx-row" style="gap:var(--mx-space-6)"><i style="width:10px;height:10px;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-qualityWrong);display:inline-block"></i><span style="font-size:var(--mx-text-label-medium-size);color:var(--mx-color-text-tertiary)">Wrong</span></span>
+            </span>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:var(--mx-space-8);height:120px;border-bottom:1px solid var(--mx-color-chart-grid);padding-bottom:var(--mx-space-4)">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:60%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:82%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:70%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:100%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:88%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+          </div>
+          <div class="mx-row" style="justify-content:space-between;margin-top:var(--mx-space-6)">
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Mon</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Tue</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Wed</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Thu</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Fri</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light · quality by day">
+        <div class="mx-panel" style="box-shadow:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--mx-space-12)">
+            <span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Quality by day</span>
+            <span class="mx-row" style="gap:var(--mx-space-12)">
+              <span class="mx-row" style="gap:var(--mx-space-6)"><i style="width:10px;height:10px;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-qualityCorrect);display:inline-block"></i><span style="font-size:var(--mx-text-label-medium-size);color:var(--mx-color-text-tertiary)">Correct</span></span>
+              <span class="mx-row" style="gap:var(--mx-space-6)"><i style="width:10px;height:10px;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-qualityWrong);display:inline-block"></i><span style="font-size:var(--mx-text-label-medium-size);color:var(--mx-color-text-tertiary)">Wrong</span></span>
+            </span>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:var(--mx-space-8);height:120px;border-bottom:1px solid var(--mx-color-chart-grid);padding-bottom:var(--mx-space-4)">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:60%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:82%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:70%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:100%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;align-items:center"><span style="width:70%;height:88%;background:var(--mx-color-chart-qualityCorrect);border-radius:var(--mx-radius-xs) var(--mx-radius-xs) 0 0"></span></div>
+          </div>
+          <div class="mx-row" style="justify-content:space-between;margin-top:var(--mx-space-6)">
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Mon</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Tue</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Wed</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Thu</span>
+            <span style="font-size:11px;color:var(--mx-color-chart-axis);font-family:var(--mx-font-mono)">Fri</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mx-muted">Bars above are a <b>visual contract</b> only — they use
+      <code>--mx-color-chart-*</code> and grid/axis tokens to show where a real series would render.
+      The bar chart is a stand-in; the shipped chart type follows the chosen library (see rules).</p>
+
+    <h3>States — loading</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark · loading">
+        <div class="mx-panel" style="box-shadow:none">
+          <div style="height:20px;width:140px;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface);margin-bottom:var(--mx-space-16)"></div>
+          <div style="display:flex;align-items:flex-end;gap:var(--mx-space-8);height:120px">
+            <div style="flex:1;height:55%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:78%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:66%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:90%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:72%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light · loading">
+        <div class="mx-panel" style="box-shadow:none">
+          <div style="height:20px;width:140px;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface);margin-bottom:var(--mx-space-16)"></div>
+          <div style="display:flex;align-items:flex-end;gap:var(--mx-space-8);height:120px">
+            <div style="flex:1;height:55%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:78%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:66%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:90%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+            <div style="flex:1;height:72%;border-radius:var(--mx-radius-sm);background:var(--mx-color-state-loadingSurface)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>States — empty / no-data (<code>empty</code>)</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark · no data">
+        <div class="mx-panel" style="box-shadow:none;text-align:center;padding:var(--mx-space-40) var(--mx-space-20)">
+          <div style="font-size:28px;line-height:1;margin-bottom:var(--mx-space-12)">📊</div>
+          <div style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);margin-bottom:var(--mx-space-4)">No history yet</div>
+          <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-tertiary)">Study a session and your daily trend will appear here.</div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light · no data">
+        <div class="mx-panel" style="box-shadow:none;text-align:center;padding:var(--mx-space-40) var(--mx-space-20)">
+          <div style="font-size:28px;line-height:1;margin-bottom:var(--mx-space-12)">📊</div>
+          <div style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);margin-bottom:var(--mx-space-4)">No history yet</div>
+          <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-tertiary)">Study a session and your daily trend will appear here.</div>
+        </div>
+      </div>
+    </div>
+    <p class="mx-muted">Scope-empty ("selected scope has no data") and time-range-empty variants reuse
+      the same friendly <code>MxEmptyState</code> — the copy names the filter, but no fake line is drawn.</p>
+
+    <h3>States — chart unavailable / read-model-needed</h3>
+    <p>When the underlying aggregation isn't defined yet (formula owned by <code>F1.STATS.4–6</code>),
+      the panel must say so on a neutral <code>--mx-color-state-unavailableSurface</code> panel — it
+      does <b>not</b> render bars or a line.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark · read-model needed">
+        <div class="mx-panel" style="box-shadow:none;background:var(--mx-color-state-unavailableSurface);border:1px dashed var(--mx-color-border-strong);text-align:center;padding:var(--mx-space-32) var(--mx-space-20)">
+          <div style="font-size:24px;line-height:1;margin-bottom:var(--mx-space-12)">🧮</div>
+          <div style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);margin-bottom:var(--mx-space-4)">Aggregation not defined</div>
+          <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);max-width:38ch;margin:0 auto">This metric's read-model / formula is owned by <span style="font-family:var(--mx-font-mono);color:var(--mx-color-srs-active)">F1.STATS.4–6</span>. No numbers are shown until it's specified.</div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light · read-model needed">
+        <div class="mx-panel" style="box-shadow:none;background:var(--mx-color-state-unavailableSurface);border:1px dashed var(--mx-color-border-strong);text-align:center;padding:var(--mx-space-32) var(--mx-space-20)">
+          <div style="font-size:24px;line-height:1;margin-bottom:var(--mx-space-12)">🧮</div>
+          <div style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);margin-bottom:var(--mx-space-4)">Aggregation not defined</div>
+          <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);max-width:38ch;margin:0 auto">This metric's read-model / formula is owned by <span style="font-family:var(--mx-font-mono);color:var(--mx-color-srs-active)">F1.STATS.4–6</span>. No numbers are shown until it's specified.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Render series only from finalized history using
+        <code>--mx-color-chart-*</code>; when there's nothing to plot, show the empty or
+        read-model-needed state.</div>
+      <div class="mx-dont"><b></b>Draw a placeholder line, interpolate missing days, or present the
+        visual-contract bars as if they were a real reading.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxStatsChartPanel</code>; props
+      <code>{ title?, legend?, series?, xLabels?, height?, empty? }</code>. Charts render through
+      this one panel and the chart tokens (<code>chart-grid</code>, <code>chart-axis</code>,
+      <code>chart-tooltip</code>, per-series colours). The chart <b>library is an open dependency</b> —
+      candidates include <code>victory-native</code> or <code>react-native-svg</code>; none is chosen
+      yet, so screens depend on the panel contract, not a specific library.</div>
+  </section>
+
+  <!-- ============ MxSessionResultSummary ============ -->
+  <section class="mx-section mx-anchor" id="session-result">
+    <h2>MxSessionResultSummary</h2>
+    <p><b>Purpose</b> — the end-of-session summary shown after a New Learning or SRS Repeat flow
+      finalizes. It reports <b>only the phiên that just finished</b> and is strictly
+      <b>read-only</b>: it never activates cards into Box 1 and never schedules SRS. It is
+      <b>not</b> Statistics — it may link to Statistics but does not replace it.</p>
+
+    <div class="mx-note"><b>Session Result ≠ Statistics</b> Per
+      <code>docs/design/screens/session-result.md</code>, Result covers a single finalized session;
+      long-term trends live on the separate <b>Statistics</b> screen (<code>MxStatsChartPanel</code>).
+      Result must not fabricate a composite score or progress % — those formulas are open questions.</div>
+
+    <table class="mx-spec">
+      <caption>Anatomy &amp; props (from MxSessionResultSummary.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Role</th><th>Token / mapping</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">type</td><td><code>"newLearning"|"srsRepeat"</code></td><td>Which flow finished (kept distinct)</td><td><code>srs-active</code> accent</td></tr>
+        <tr><td class="tok">headline</td><td><code>ReactNode</code></td><td>Result title</td><td><code>--mx-text-title-large</code></td></tr>
+        <tr><td class="tok">subhead</td><td><code>ReactNode?</code></td><td>Context line</td><td><code>--mx-text-body-medium</code> · <code>text-secondary</code></td></tr>
+        <tr><td class="tok">stats</td><td><code>MxResultStat[]?</code></td><td><code>{ label, value, tone? }</code> — correct / wrong / active / due</td><td>feedback + srs tokens</td></tr>
+      </tbody>
+    </table>
+
+    <h3>States — New Learning result &amp; empty / not-finalized</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark · newLearning">
+        <div class="mx-panel" style="box-shadow:none">
+          <div style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size)/var(--mx-text-title-large-line) var(--mx-font-display);color:var(--mx-color-text-primary)">Session complete</div>
+          <div style="font-size:var(--mx-text-body-medium-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-16)">New Learning · 8 cards finished all 5 modes</div>
+          <div class="mx-grid-3">
+            <div><div class="mx-h" style="margin-bottom:var(--mx-space-4)">Activated</div><span class="mx-tabular" style="font:700 var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-srs-active)">8</span></div>
+            <div><div class="mx-h" style="margin-bottom:var(--mx-space-4)">Correct</div><span class="mx-tabular" style="font:700 var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-feedback-correct)">31</span></div>
+            <div><div class="mx-h" style="margin-bottom:var(--mx-space-4)">Wrong</div><span class="mx-tabular" style="font:700 var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-feedback-wrong)">5</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light · srsRepeat / not-finalized">
+        <div class="mx-panel" style="box-shadow:none">
+          <div style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size)/var(--mx-text-title-large-line) var(--mx-font-display);color:var(--mx-color-text-primary)">Repeat done</div>
+          <div style="font-size:var(--mx-text-body-medium-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-16)">SRS Repeat · Box 1+ due cards reviewed</div>
+          <div class="mx-grid-3">
+            <div><div class="mx-h" style="margin-bottom:var(--mx-space-4)">Reviewed</div><span class="mx-tabular" style="font:700 var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-srs-active)">12</span></div>
+            <div><div class="mx-h" style="margin-bottom:var(--mx-space-4)">Remembered</div><span class="mx-tabular" style="font:700 var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-feedback-correct)">9</span></div>
+            <div><div class="mx-h" style="margin-bottom:var(--mx-space-4)">Due left</div><span class="mx-tabular" style="font:700 var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-srs-due)">3</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mx-muted">If a session has no valid items or finalize fails, Result is <b>not</b> shown as
+      completed — there is no "empty success" state. A partial session reflects <b>unfinished</b>, it is
+      never silently marked done.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep New Learning activation counts separate from SRS Repeat metrics;
+        surface a "Go to Statistics" link for long-term trends.</div>
+      <div class="mx-dont"><b></b>Activate a card into Box 1 from here, schedule SRS, invent a composite
+        score, or reuse this component as the Statistics screen.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxSessionResultSummary</code>; props
+      <code>{ type?, headline, subhead?, stats? }</code> where each stat carries a
+      <code>tone</code> of <code>correct | wrong | active | due</code>. Numbers use the
+      <code>--mx-text-stat-number</code> mono tabular token; the component reads a finalized session
+      read-model and performs no writes.</div>
+  </section>
+
+  <!-- ============ RULES ============ -->
+  <section class="mx-section mx-anchor" id="rules">
+    <h2>Rules — honest data, read-only statistics</h2>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Charts and tiles render <b>only real, finalized</b> data. With none,
+        show the friendly empty state or the read-model-needed state.</div>
+      <div class="mx-dont"><b></b>Present fake / placeholder data as real — no invented lines,
+        interpolated gaps, or guessed percentages.</div>
+      <div class="mx-do"><b></b>When a formula/aggregation is undefined, show the
+        <b>read-model-needed</b> state and cite the owning task (<code>F1.STATS.4–6</code>).</div>
+      <div class="mx-dont"><b></b>Let opening Statistics mutate learning data — it is
+        <b>read-only</b>: no box change, no due-date change, no SRS scheduling.</div>
+      <div class="mx-do"><b></b>Keep <b>Session Result</b> (one finished session) distinct from
+        <b>Statistics</b> (long-term, many sessions); Result may link to Statistics.</div>
+      <div class="mx-dont"><b></b>Treat Session Result as Statistics, or mix New Learning activation
+        with SRS Repeat metrics in the same reading.</div>
+    </div>
+    <div class="mx-note"><b>Open dependency — chart library</b> The chart type/library is
+      <b>not chosen</b> yet. This page shows the <b>visual contract</b> (tokens, grid, axis, series
+      colours, empty + read-model-needed states); the implementation dependency is <b>OPEN</b>
+      (candidates: <code>victory-native</code>, <code>react-native-svg</code>). Do not hard-code a
+      library into screens — depend on the <code>MxStatsChartPanel</code> contract.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="07-settings-component-gallery.html">‹ 07 Settings</a>
+    <a href="09-feedback-dialog-gallery.html">09 Feedback &amp; Dialogs ›</a>
+  </nav>
+</main>
+
+</body>
+</html>

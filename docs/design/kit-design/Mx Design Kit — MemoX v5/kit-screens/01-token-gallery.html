@@ -1,0 +1,199 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3200" name="01 · Mx Token Gallery" subtitle="Every mx token group — value, usage, do/don't, dark/light, and React Native style mapping" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>01 · Mx Token Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 01 Token Gallery</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="02-theme-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 01</p>
+  <h1 class="mx-title">Mx Token Gallery</h1>
+  <p class="mx-lead">
+    Every visual value in MemoX is a token defined once in <code>tokens/*.css</code> and consumed through
+    <code>var(--mx-*)</code>. Screens never hardcode colour, spacing, or type. Each group below shows the
+    token, a live sample (dark <b>and</b> light), its usage, a do/don't, and the <b>React Native</b> style
+    it maps to. Live swatch specimens are the base kit's own token cards, embedded here unchanged.
+  </p>
+  <div class="mx-note"><b>Source of truth</b> Values shown are the resolved token values from
+    <code>tokens/colors.css · typography.css · spacing.css · radius.css · elevation.css · motion.css</code>.
+    If a value you need is missing, add a token — do not hardcode it.</div>
+
+  <!-- ============ COLOR ============ -->
+  <section class="mx-section mx-anchor" id="color">
+    <h2>Colour tokens</h2>
+    <p>Primitive palette (raw hues) → semantic roles (surface, text, action, state) → feedback, SRS,
+      destructive, and chart roles. Screens use <b>semantic</b> tokens, not primitives.</p>
+
+    <figure class="mx-embed"><figcaption>Surfaces <span class="path">guidelines/colors-surfaces.card.html</span></figcaption>
+      <iframe src="../guidelines/colors-surfaces.card.html" height="230" loading="lazy" title="Surface colour roles"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Text &amp; action <span class="path">guidelines/colors-text-action.card.html</span></figcaption>
+      <iframe src="../guidelines/colors-text-action.card.html" height="260" loading="lazy" title="Text and action colour roles"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Feedback <span class="path">guidelines/colors-feedback.card.html</span></figcaption>
+      <iframe src="../guidelines/colors-feedback.card.html" height="240" loading="lazy" title="Feedback colour roles"></iframe></figure>
+    <figure class="mx-embed"><figcaption>SRS lifecycle <span class="path">guidelines/colors-srs.card.html</span></figcaption>
+      <iframe src="../guidelines/colors-srs.card.html" height="230" loading="lazy" title="SRS lifecycle colour roles"></iframe></figure>
+
+    <table class="mx-spec">
+      <caption>Semantic colour → React Native mapping</caption>
+      <thead><tr><th>Token</th><th>Role</th><th>Dark</th><th>Light</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">--mx-color-background-app</td><td>App / screen bg</td><td><code>#141220</code></td><td><code>#f6f5fc</code></td><td><code>backgroundColor</code> on <code>MxScreen</code> from <code>MxTheme.color.background.app</code></td></tr>
+        <tr><td class="tok">--mx-color-surface-card</td><td>Card surface</td><td><code>#252338</code></td><td><code>#ffffff</code></td><td><code>backgroundColor</code> on <code>MxCard</code></td></tr>
+        <tr><td class="tok">--mx-color-surface-modal</td><td>Modal / sheet</td><td><code>#252338</code></td><td><code>#ffffff</code></td><td><code>backgroundColor</code> on <code>MxModalSheet</code></td></tr>
+        <tr><td class="tok">--mx-color-text-primary</td><td>Primary text</td><td><code>#f4f2fb</code></td><td><code>#1b1a26</code></td><td><code>color</code> on <code>&lt;Text&gt;</code></td></tr>
+        <tr><td class="tok">--mx-color-action-primary</td><td>Brand / only action</td><td><code>#4b3a8c</code></td><td><code>#4b3a8c</code></td><td><code>backgroundColor</code> on primary <code>MxActionButton</code></td></tr>
+        <tr><td class="tok">--mx-color-feedback-correct</td><td>Correct</td><td><code>#4fd08f</code></td><td><code>#159a5f</code></td><td>answer <code>correct</code> border/text — never destructive red</td></tr>
+        <tr><td class="tok">--mx-color-feedback-wrong</td><td>Wrong</td><td><code>#ff8a8a</code></td><td><code>#db3e44</code></td><td>answer <code>wrong</code> — distinct from destructive intent</td></tr>
+        <tr><td class="tok">--mx-color-srs-due</td><td>Due / warning (amber)</td><td><code>#ffc76f</code></td><td><code>#c77b12</code></td><td>due badge — amber, so "needs review" ≠ "danger"</td></tr>
+        <tr><td class="tok">--mx-color-srs-mastered</td><td>Mastered (violet)</td><td><code>#a88fff</code></td><td><code>#7355d6</code></td><td>mastery pill in <code>MxBadge</code></td></tr>
+        <tr><td class="tok">--mx-color-destructive-text</td><td>Destructive</td><td><code>#ff8a8a</code></td><td><code>#db3e44</code></td><td>destructive <code>MxActionButton</code> + <code>MxConfirmDialog</code></td></tr>
+        <tr><td class="tok">--mx-color-chart-wordMetric</td><td>Chart series</td><td><code>#8a79e0</code></td><td><code>#4b3a8c</code></td><td>series colour in <code>MxStatsChartPanel</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Use the semantic role that names the intent: <code>feedback-correct</code> for a
+        right answer, <code>srs-due</code> (amber) for due cards, <code>destructive-*</code> only for data loss.</div>
+      <div class="mx-dont"><b></b>Reach for a primitive (<code>--mx-green-500</code>) in a screen, or reuse
+        <code>wrong</code> red for a destructive action — they are different roles even when the hue is close.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Colours resolve from <code>MxTheme</code> via
+      <code>useMxTheme()</code> — never a literal hex and never a <code>useColorScheme()</code> branch inside a
+      screen. Example: <code>{ backgroundColor: theme.color.surface.card }</code>.</div>
+  </section>
+
+  <!-- ============ TYPOGRAPHY ============ -->
+  <section class="mx-section mx-anchor" id="type">
+    <h2>Typography tokens</h2>
+    <p>Three families — Plus Jakarta Sans (UI/display/body), Noto Sans KR (Korean prompts), JetBrains Mono
+      (numbers) — across display, title, body, label, caption, study, and button roles.</p>
+
+    <figure class="mx-embed"><figcaption>Display &amp; title <span class="path">guidelines/type-display-title.card.html</span></figcaption>
+      <iframe src="../guidelines/type-display-title.card.html" height="300" loading="lazy" title="Display and title type"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Body, label &amp; caption <span class="path">guidelines/type-body-label.card.html</span></figcaption>
+      <iframe src="../guidelines/type-body-label.card.html" height="320" loading="lazy" title="Body label caption type"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Study &amp; numeric <span class="path">guidelines/type-study-numeric.card.html</span></figcaption>
+      <iframe src="../guidelines/type-study-numeric.card.html" height="300" loading="lazy" title="Study and numeric type"></iframe></figure>
+
+    <table class="mx-spec">
+      <caption>Text role → React Native <code>&lt;Text&gt;</code> mapping</caption>
+      <thead><tr><th>Token group</th><th>Size / line</th><th>Family</th><th>Usage</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">--mx-text-display-large</td><td>40 / 46</td><td>Jakarta</td><td>Screen hero</td><td><code>MxText role="displayLarge"</code></td></tr>
+        <tr><td class="tok">--mx-text-title-large</td><td>26 / 32</td><td>Jakarta</td><td>Screen title</td><td><code>MxTopBar</code> title</td></tr>
+        <tr><td class="tok">--mx-text-body-large</td><td>17 / 26</td><td>Jakarta</td><td>Reading content</td><td><code>&lt;Text&gt;</code> default body</td></tr>
+        <tr><td class="tok">--mx-text-study-korean</td><td>34 / 44</td><td>Noto Sans KR</td><td>Korean prompt</td><td><code>&lt;Text&gt;</code> with <code>fontFamily: korean</code>, centred, min 34</td></tr>
+        <tr><td class="tok">--mx-text-study-explanation</td><td>18 / 28</td><td>Jakarta</td><td>Meaning (wraps)</td><td><code>&lt;Text&gt;</code>, no line clamp — wraps</td></tr>
+        <tr><td class="tok">--mx-text-stat-number</td><td>30 / 34</td><td>JetBrains Mono</td><td>Counts / %</td><td><code>&lt;Text&gt;</code> tabular in <code>MxMetricCard</code></td></tr>
+        <tr><td class="tok">--mx-text-button</td><td>16 / 20</td><td>Jakarta</td><td>Button label</td><td><code>MxActionButton</code> label</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Let long Korean prompts and Vietnamese meanings wrap in a scrollable area at
+        full token size.</div>
+      <div class="mx-dont"><b></b>Shrink text below the token size to make it fit, or clip Korean/Vietnamese
+        content — never below body 13px / study 34px.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Expose text roles as an <code>MxText</code> wrapper or a
+      <code>MxTextTokens</code> style map; screens pick a <code>role</code>, never a raw <code>fontSize</code>.
+      Korean uses <code>fontFamily</code> from the Noto Sans KR token; numerics use the mono token with
+      <code>fontVariant: ['tabular-nums']</code>.</div>
+  </section>
+
+  <!-- ============ SPACING ============ -->
+  <section class="mx-section mx-anchor" id="spacing">
+    <h2>Spacing tokens</h2>
+    <p>A 4px grid. These are the <b>only</b> gaps a screen may use.</p>
+    <figure class="mx-embed"><figcaption>Spacing scale <span class="path">guidelines/spacing-scale.card.html</span></figcaption>
+      <iframe src="../guidelines/spacing-scale.card.html" height="210" loading="lazy" title="Spacing scale"></iframe></figure>
+    <table class="mx-spec">
+      <caption>Space scale → React Native</caption>
+      <thead><tr><th>Token</th><th>Value</th><th>Typical use</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">--mx-space-0</td><td>0px</td><td>reset</td><td><code>0</code></td></tr>
+        <tr><td class="tok">--mx-space-2</td><td>2px</td><td>hairline nudge</td><td><code>2</code></td></tr>
+        <tr><td class="tok">--mx-space-4</td><td>4px</td><td>title/subtitle gap</td><td><code>4</code></td></tr>
+        <tr><td class="tok">--mx-space-6</td><td>6px</td><td>chip inset</td><td><code>6</code></td></tr>
+        <tr><td class="tok">--mx-space-8</td><td>8px</td><td>icon/text gap, compact row gap</td><td><code>8</code></td></tr>
+        <tr><td class="tok">--mx-space-12</td><td>12px</td><td>item gap</td><td><code>12</code></td></tr>
+        <tr><td class="tok">--mx-space-16</td><td>16px</td><td>screen gutter, card padding</td><td><code>paddingHorizontal: 16</code></td></tr>
+        <tr><td class="tok">--mx-space-20</td><td>20px</td><td>wide gutter</td><td><code>20</code></td></tr>
+        <tr><td class="tok">--mx-space-24</td><td>24px</td><td>section gap</td><td><code>24</code></td></tr>
+        <tr><td class="tok">--mx-space-32</td><td>32px</td><td>large section</td><td><code>32</code></td></tr>
+        <tr><td class="tok">--mx-space-40</td><td>40px</td><td>screen top pad</td><td><code>40</code></td></tr>
+        <tr><td class="tok">--mx-space-48</td><td>48px</td><td>empty-state breathing room</td><td><code>48</code></td></tr>
+        <tr><td class="tok">--mx-space-64</td><td>64px</td><td>hero / end padding</td><td><code>64</code></td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>React Native</b> Import <code>MxSpacing</code> constants; use
+      <code>MxSpacing.s16</code> for padding/margins. No raw numbers except <code>flex</code> and documented
+      exceptions.</div>
+  </section>
+
+  <!-- ============ RADIUS ============ -->
+  <section class="mx-section mx-anchor" id="radius">
+    <h2>Radius tokens</h2>
+    <figure class="mx-embed"><figcaption>Radius scale <span class="path">guidelines/spacing-radius.card.html</span></figcaption>
+      <iframe src="../guidelines/spacing-radius.card.html" height="180" loading="lazy" title="Radius scale"></iframe></figure>
+    <table class="mx-spec">
+      <thead><tr><th>Token</th><th>Value</th><th>Usage</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">--mx-radius-none</td><td>0px</td><td>flush edges</td><td><code>borderRadius: 0</code></td></tr>
+        <tr><td class="tok">--mx-radius-xs</td><td>4px</td><td>tiny chips</td><td><code>4</code></td></tr>
+        <tr><td class="tok">--mx-radius-sm</td><td>8px</td><td>inputs, small tiles</td><td><code>8</code></td></tr>
+        <tr><td class="tok">--mx-radius-md</td><td>12px</td><td>metric tiles, callouts</td><td><code>12</code></td></tr>
+        <tr><td class="tok">--mx-radius-lg</td><td>16px</td><td>cards (<code>MxCard</code>)</td><td><code>16</code></td></tr>
+        <tr><td class="tok">--mx-radius-xl</td><td>22px</td><td>study card, modal sheet</td><td><code>22</code></td></tr>
+        <tr><td class="tok">--mx-radius-pill</td><td>999px</td><td>buttons, chips, segmented</td><td><code>999</code></td></tr>
+        <tr><td class="tok">--mx-radius-full</td><td>50%</td><td>avatars</td><td><code>borderRadius: size/2</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ BORDER / ELEVATION / MOTION ============ -->
+  <section class="mx-section mx-anchor" id="border-elevation-motion">
+    <h2>Border, elevation &amp; motion tokens</h2>
+    <figure class="mx-embed"><figcaption>Sizing &amp; elevation <span class="path">guidelines/spacing-sizing-elevation.card.html</span></figcaption>
+      <iframe src="../guidelines/spacing-sizing-elevation.card.html" height="210" loading="lazy" title="Sizing and elevation"></iframe></figure>
+    <table class="mx-spec">
+      <caption>Border · elevation · motion → React Native</caption>
+      <thead><tr><th>Token</th><th>Value</th><th>Usage</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">--mx-border-subtle / default / strong</td><td>1px hairline steps</td><td>card + divider borders</td><td><code>borderWidth</code> + <code>borderColor</code> from <code>MxBorderTokens</code></td></tr>
+        <tr><td class="tok">--mx-border-selected</td><td>2px selected</td><td>selected answer/card</td><td>2px border, <code>state-selected</code> colour</td></tr>
+        <tr><td class="tok">--mx-border-correct / wrong</td><td>2px feedback</td><td>answer feedback</td><td>2px border, feedback colour + glyph</td></tr>
+        <tr><td class="tok">--mx-border-destructive</td><td>1.5px destructive</td><td>destructive surfaces</td><td>1.5px, destructive colour</td></tr>
+        <tr><td class="tok">--mx-elevation-low / medium / high</td><td>theme-aware shadow</td><td>cards → menus → dialogs</td><td><code>shadow*</code> (iOS) / <code>elevation</code> (Android) from <code>MxTheme</code></td></tr>
+        <tr><td class="tok">--mx-elevation-modal / sheet</td><td>modal + bottom sheet</td><td>overlays</td><td><code>MxModalSheet</code> shadow token</td></tr>
+        <tr><td class="tok">--mx-motion-fast / normal / slow</td><td>120 / 200 / 320ms*</td><td>taps → sheets → screens</td><td><code>MxMotionTokens.duration.*</code> in <code>Animated</code>/Reanimated</td></tr>
+        <tr><td class="tok">--mx-ease-standard</td><td>cubic-bezier(.2,0,0,1)</td><td>standard easing</td><td>shared easing curve</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-note"><b>Reduced motion</b> The kit's motion durations resolve to <code>0ms</code> under
+      <code>prefers-reduced-motion</code>; in RN mirror this with <code>AccessibilityInfo.isReduceMotionEnabled</code>.
+      (*Durations above are the design intent; the kit CSS collapses them for the static preview.)</div>
+    <div class="mx-rn"><b>React Native</b> Dark leans on surface + border contrast (shadows are near-invisible on
+      dark); light uses gentle neutral shadows. Resolve both through the theme so a screen never sets a raw
+      shadow.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav"><a href="index.html">‹ Index</a><a href="02-theme-gallery.html">02 Theme Gallery ›</a></nav>
+</main>
+
+</body>
+</html>

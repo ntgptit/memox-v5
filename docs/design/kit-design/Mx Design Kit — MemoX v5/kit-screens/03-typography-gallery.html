@@ -1,0 +1,342 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3000" name="03 · Mx Typography Gallery" subtitle="Korean prompts, Vietnamese explanations, long content, numerics — wrap/truncate + RN Text" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>03 · Mx Typography Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 03 Typography</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="02-theme-gallery.html">‹ Prev</a>
+    <a href="04-spacing-layout-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 03</p>
+  <h1 class="mx-title">Mx Typography Gallery</h1>
+  <p class="mx-lead">
+    Three families — <b>Plus Jakarta Sans</b> (UI / display / body), <b>Noto Sans KR</b> (Korean
+    prompts), <b>JetBrains Mono</b> (numbers) — resolved through <code>--mx-text-*</code> and
+    <code>--mx-font-*</code> tokens. A screen never sets a raw <code>fontSize</code>; it picks a
+    <b>role</b>. Below: the base kit's type specimen cards (embedded unchanged), then live KO / VI
+    specimens per text role — each with its token, an example, the max-line rule, the wrap/truncate
+    rule, and the <b>React Native</b> <code>&lt;Text&gt;</code> it maps to, shown dark <b>and</b> light.
+  </p>
+  <div class="mx-note"><b>Source of truth</b> Sizes are the resolved values from
+    <code>tokens/typography.css</code>. Korean prompt is <b>34/44</b>, meaning wraps at <b>18/28</b>,
+    body floor is <b>13px</b>. If a role you need is missing, add a token — never hardcode a
+    <code>px</code> size in a screen.</div>
+
+  <!-- ============ BASE TYPE CARDS (embedded) ============ -->
+  <section class="mx-section mx-anchor" id="specimen-cards">
+    <h2>Base type specimen cards</h2>
+    <p>The base kit's own type cards, composed here by iframe so this gallery and the Design System tab
+      never drift. Display &amp; title, then body / label / caption, then study &amp; numeric.</p>
+
+    <figure class="mx-embed"><figcaption>Display &amp; title <span class="path">guidelines/type-display-title.card.html</span></figcaption>
+      <iframe src="../guidelines/type-display-title.card.html" height="300" loading="lazy" title="Display and title type"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Body, label &amp; caption <span class="path">guidelines/type-body-label.card.html</span></figcaption>
+      <iframe src="../guidelines/type-body-label.card.html" height="320" loading="lazy" title="Body label caption type"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Study &amp; numeric <span class="path">guidelines/type-study-numeric.card.html</span></figcaption>
+      <iframe src="../guidelines/type-study-numeric.card.html" height="300" loading="lazy" title="Study and numeric type"></iframe></figure>
+  </section>
+
+  <!-- ============ STUDY: KOREAN PROMPT ============ -->
+  <section class="mx-section mx-anchor" id="korean">
+    <h2>Study — Korean prompt / front</h2>
+    <p>The front of a study card. Large, centred, highest contrast — the one thing on screen that must
+      dominate. Renders in <b>Noto Sans KR</b> at the study-korean role. Long prompts wrap and the card
+      grows; they never shrink below the token size.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-study-korean</span>
+      <span class="mx-muted" style="font-size: var(--mx-text-body-small-size);">34 / 44 · Noto Sans KR · weight 700 · centred · max-lines 3 then wrap</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <p class="mx-korean" style="font-size: var(--mx-text-study-korean-size); line-height: var(--mx-text-study-korean-line); font-weight: var(--mx-text-study-korean-weight); letter-spacing: var(--mx-text-study-korean-tracking); color: var(--mx-color-text-primary); text-align: center; margin: var(--mx-space-16) 0;">배고프다</p>
+        <p style="font-size: var(--mx-text-caption-size); color: var(--mx-color-text-tertiary); text-align: center; margin: 0;">Front · KO → VI</p>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <p class="mx-korean" style="font-size: var(--mx-text-study-korean-size); line-height: var(--mx-text-study-korean-line); font-weight: var(--mx-text-study-korean-weight); letter-spacing: var(--mx-text-study-korean-tracking); color: var(--mx-color-text-primary); text-align: center; margin: var(--mx-space-16) 0;">배고프다</p>
+        <p style="font-size: var(--mx-text-caption-size); color: var(--mx-color-text-tertiary); text-align: center; margin: 0;">Front · KO → VI</p>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep the Korean prompt at full <code>study-korean</code> size, centred and
+        high-contrast; let a long prompt wrap and grow the card.</div>
+      <div class="mx-dont"><b></b>Shrink the prompt to avoid a second line, or drop it below 34px — the
+        prompt is the whole screen's focus.</div>
+    </div>
+  </section>
+
+  <!-- ============ STUDY: VIETNAMESE EXPLANATION ============ -->
+  <section class="mx-section mx-anchor" id="explanation">
+    <h2>Study — Vietnamese explanation / meaning</h2>
+    <p>The meaning, revealed on the back. Comfortable reading size that <b>wraps</b> across as many lines
+      as needed inside a scrollable area — it is never clamped or shrunk.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-study-explanation</span>
+      <span class="mx-muted" style="font-size: var(--mx-text-body-small-size);">18 / 28 · Jakarta · weight 400 · wraps, no clamp</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <p style="font-size: var(--mx-text-study-explanation-size); line-height: var(--mx-text-study-explanation-line); font-weight: var(--mx-text-study-explanation-weight); color: var(--mx-color-text-secondary); margin: var(--mx-space-8) 0 0; text-wrap: pretty;">Cảm giác muốn ăn khi dạ dày trống rỗng; trạng thái cần nạp năng lượng.</p>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <p style="font-size: var(--mx-text-study-explanation-size); line-height: var(--mx-text-study-explanation-line); font-weight: var(--mx-text-study-explanation-weight); color: var(--mx-color-text-secondary); margin: var(--mx-space-8) 0 0; text-wrap: pretty;">Cảm giác muốn ăn khi dạ dày trống rỗng; trạng thái cần nạp năng lượng.</p>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Let the Vietnamese explanation wrap comfortably at <code>study-explanation</code>
+        (18/28); grow the scroll area, not the type down.</div>
+      <div class="mx-dont"><b></b>Truncate the meaning with an ellipsis or reduce it below body-readable
+        size to make it fit one screen.</div>
+    </div>
+  </section>
+
+  <!-- ============ MIXED KO + VI + EN ============ -->
+  <section class="mx-section mx-anchor" id="mixed">
+    <h2>Mixed script — Korean + Vietnamese + English in one card</h2>
+    <p>A single card often carries a Korean prompt, a Vietnamese meaning, and an English gloss or
+      example. Each role keeps its own token; only the Korean line switches family.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <p class="mx-korean" style="font-size: var(--mx-text-title-large-size); line-height: var(--mx-text-title-large-line); font-weight: var(--mx-text-study-korean-weight); color: var(--mx-color-text-primary); margin: 0;">공부하다</p>
+        <p style="font-size: var(--mx-text-study-explanation-size); line-height: var(--mx-text-study-explanation-line); color: var(--mx-color-text-secondary); margin: var(--mx-space-8) 0 0; text-wrap: pretty;">Học tập — tiếp thu kiến thức qua việc đọc, luyện tập và ghi nhớ.</p>
+        <p style="font-size: var(--mx-text-body-small-size); line-height: var(--mx-text-body-small-line); color: var(--mx-color-text-tertiary); margin: var(--mx-space-8) 0 0; font-style: italic; text-wrap: pretty;">e.g. "I study Korean every evening."</p>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <p class="mx-korean" style="font-size: var(--mx-text-title-large-size); line-height: var(--mx-text-title-large-line); font-weight: var(--mx-text-study-korean-weight); color: var(--mx-color-text-primary); margin: 0;">공부하다</p>
+        <p style="font-size: var(--mx-text-study-explanation-size); line-height: var(--mx-text-study-explanation-line); color: var(--mx-color-text-secondary); margin: var(--mx-space-8) 0 0; text-wrap: pretty;">Học tập — tiếp thu kiến thức qua việc đọc, luyện tập và ghi nhớ.</p>
+        <p style="font-size: var(--mx-text-body-small-size); line-height: var(--mx-text-body-small-line); color: var(--mx-color-text-tertiary); margin: var(--mx-space-8) 0 0; font-style: italic; text-wrap: pretty;">e.g. "I study Korean every evening."</p>
+      </div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Wrap each line in its own <code>&lt;Text&gt;</code> with the
+      matching role — Korean uses <code>fontFamily</code> from the <code>--mx-font-korean</code> token,
+      Latin lines use the body family. Do not force one family across scripts.</div>
+  </section>
+
+  <!-- ============ LONG DECK TITLE (TRUNCATE) ============ -->
+  <section class="mx-section mx-anchor" id="deck-title">
+    <h2>Deck title — truncates to one line</h2>
+    <p>A deck / list-row title is a single line that <b>truncates with an ellipsis</b> — it never wraps to
+      a second line or pushes the trailing meta out of the row.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-title-medium</span>
+      <span class="mx-muted" style="font-size: var(--mx-text-body-small-size);">20 / 26 · Jakarta · weight 600 · max-lines 1 · ellipsis tail</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <p style="font-size: var(--mx-text-title-medium-size); line-height: var(--mx-text-title-medium-line); font-weight: var(--mx-text-title-medium-weight); color: var(--mx-color-text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">TOPIK II · Advanced Vocabulary — Unit 12: Abstract nouns and formal register</p>
+        <p style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary); margin: var(--mx-space-4) 0 0;">120 words · Due 83</p>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <p style="font-size: var(--mx-text-title-medium-size); line-height: var(--mx-text-title-medium-line); font-weight: var(--mx-text-title-medium-weight); color: var(--mx-color-text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">TOPIK II · Advanced Vocabulary — Unit 12: Abstract nouns and formal register</p>
+        <p style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary); margin: var(--mx-space-4) 0 0;">120 words · Due 83</p>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Truncate a long deck title to one line so counts and the chevron stay
+        aligned in the row.</div>
+      <div class="mx-dont"><b></b>Let a title wrap to three lines or shrink its size — that breaks the row
+        rhythm; use the full title in the detail header instead.</div>
+    </div>
+  </section>
+
+  <!-- ============ LONG CARD MEANING (WRAP) ============ -->
+  <section class="mx-section mx-anchor" id="long-meaning">
+    <h2>Long card meaning — wraps, never shrinks</h2>
+    <p>Definition / example bodies wrap freely at body size inside a scroll region. Length changes the
+      height, never the size.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-body-medium</span>
+      <span class="mx-muted" style="font-size: var(--mx-text-body-small-size);">15 / 22 · Jakarta · weight 400 · wraps, no clamp</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <p style="font-size: var(--mx-text-body-medium-size); line-height: var(--mx-text-body-medium-line); color: var(--mx-color-text-secondary); margin: 0; text-wrap: pretty;">Trạng thái cảm thấy đói bụng, khi cơ thể cần được nạp thức ăn để duy trì năng lượng và hoạt động bình thường. Trong tiếng Hàn, động từ này thường được dùng ở dạng thân mật khi nói về cảm giác của bản thân, và có thể kết hợp với các trợ từ để nhấn mạnh mức độ đói.</p>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <p style="font-size: var(--mx-text-body-medium-size); line-height: var(--mx-text-body-medium-line); color: var(--mx-color-text-secondary); margin: 0; text-wrap: pretty;">Trạng thái cảm thấy đói bụng, khi cơ thể cần được nạp thức ăn để duy trì năng lượng và hoạt động bình thường. Trong tiếng Hàn, động từ này thường được dùng ở dạng thân mật khi nói về cảm giác của bản thân, và có thể kết hợp với các trợ từ để nhấn mạnh mức độ đói.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NUMBER / STAT DISPLAY ============ -->
+  <section class="mx-section mx-anchor" id="stat">
+    <h2>Number / stat display</h2>
+    <p>Counts, percentages, and timers render in <b>JetBrains Mono</b> with <code>tabular-nums</code> so
+      digits line up column-to-column and a live timer does not jitter.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-stat-number</span>
+      <span class="mx-muted" style="font-size: var(--mx-text-body-small-size);">30 / 34 · JetBrains Mono · weight 700 · tabular-nums</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <div class="mx-row" style="gap: var(--mx-space-24); align-items: baseline;">
+          <span class="mx-tabular" style="font-size: var(--mx-text-stat-number-size); line-height: var(--mx-text-stat-number-line); font-weight: var(--mx-text-stat-number-weight); letter-spacing: var(--mx-text-stat-number-tracking); color: var(--mx-color-text-primary);">1,284</span>
+          <span class="mx-tabular" style="font-size: var(--mx-text-stat-number-size); line-height: var(--mx-text-stat-number-line); font-weight: var(--mx-text-stat-number-weight); color: var(--mx-color-srs-noDue);">94%</span>
+          <span class="mx-tabular" style="font-size: var(--mx-text-stat-number-size); line-height: var(--mx-text-stat-number-line); font-weight: var(--mx-text-stat-number-weight); color: var(--mx-color-text-primary);">14:08</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <div class="mx-row" style="gap: var(--mx-space-24); align-items: baseline;">
+          <span class="mx-tabular" style="font-size: var(--mx-text-stat-number-size); line-height: var(--mx-text-stat-number-line); font-weight: var(--mx-text-stat-number-weight); letter-spacing: var(--mx-text-stat-number-tracking); color: var(--mx-color-text-primary);">1,284</span>
+          <span class="mx-tabular" style="font-size: var(--mx-text-stat-number-size); line-height: var(--mx-text-stat-number-line); font-weight: var(--mx-text-stat-number-weight); color: var(--mx-color-srs-noDue);">94%</span>
+          <span class="mx-tabular" style="font-size: var(--mx-text-stat-number-size); line-height: var(--mx-text-stat-number-line); font-weight: var(--mx-text-stat-number-weight); color: var(--mx-color-text-primary);">14:08</span>
+        </div>
+      </div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Numeric <code>&lt;Text&gt;</code> uses
+      <code>fontFamily</code> from the <code>--mx-font-mono</code> token plus
+      <code>fontVariant: ['tabular-nums']</code> — the same recipe <code>MxMetricCard</code> applies.</div>
+  </section>
+
+  <!-- ============ SETTINGS ROW ============ -->
+  <section class="mx-section mx-anchor" id="settings-row">
+    <h2>Settings row — label + value</h2>
+    <p>A settings row pairs a <code>body-medium</code> label with a <code>body-small</code> tertiary
+      value. Long labels truncate; the value stays right-aligned.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-body-medium</span>
+      <span class="tok">--mx-text-body-small</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <div class="mx-row" style="justify-content: space-between; gap: var(--mx-space-16);">
+          <span style="font-size: var(--mx-text-body-medium-size); line-height: var(--mx-text-body-medium-line); color: var(--mx-color-text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Native language</span>
+          <span style="font-size: var(--mx-text-body-small-size); line-height: var(--mx-text-body-small-line); color: var(--mx-color-text-tertiary); flex: 0 0 auto;">Tiếng Việt</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <div class="mx-row" style="justify-content: space-between; gap: var(--mx-space-16);">
+          <span style="font-size: var(--mx-text-body-medium-size); line-height: var(--mx-text-body-medium-line); color: var(--mx-color-text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Native language</span>
+          <span style="font-size: var(--mx-text-body-small-size); line-height: var(--mx-text-body-small-line); color: var(--mx-color-text-tertiary); flex: 0 0 auto;">Tiếng Việt</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BUTTON TEXT ============ -->
+  <section class="mx-section mx-anchor" id="button">
+    <h2>Button text</h2>
+    <p>Action labels use the <code>button</code> role — never wrap and never truncate; keep labels short
+      and real (<code>Start studying</code>, <code>Check</code>, <code>Reveal</code>).</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-button</span>
+      <span class="mx-muted" style="font-size: var(--mx-text-body-small-size);">16 / 20 · Jakarta · weight 600</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <span style="display: inline-flex; align-items: center; justify-content: center; height: var(--mx-size-button-height); padding: 0 var(--mx-space-24); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); font-size: var(--mx-text-button-size); line-height: var(--mx-text-button-line); font-weight: var(--mx-text-button-weight); letter-spacing: var(--mx-text-button-tracking);">Start studying</span>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <span style="display: inline-flex; align-items: center; justify-content: center; height: var(--mx-size-button-height); padding: 0 var(--mx-space-24); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); font-size: var(--mx-text-button-size); line-height: var(--mx-text-button-line); font-weight: var(--mx-text-button-weight); letter-spacing: var(--mx-text-button-tracking);">Start studying</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAPTION / HELPER ============ -->
+  <section class="mx-section mx-anchor" id="caption">
+    <h2>Caption / helper text</h2>
+    <p>Metadata, section labels, and helper lines — the smallest role. Section labels are UPPERCASE with
+      wide tracking; helper lines stay sentence case.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-caption</span>
+      <span class="mx-muted" style="font-size: var(--mx-text-body-small-size);">12 / 16 · Jakarta · weight 500</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <p style="font-size: var(--mx-text-caption-size); line-height: var(--mx-text-caption-line); font-weight: var(--mx-text-caption-weight); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 0;">Learning</p>
+        <p style="font-size: var(--mx-text-caption-size); line-height: var(--mx-text-caption-line); color: var(--mx-color-text-tertiary); margin: var(--mx-space-6) 0 0;">Last reviewed 2 hours ago · KO → VI</p>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <p style="font-size: var(--mx-text-caption-size); line-height: var(--mx-text-caption-line); font-weight: var(--mx-text-caption-weight); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 0;">Learning</p>
+        <p style="font-size: var(--mx-text-caption-size); line-height: var(--mx-text-caption-line); color: var(--mx-color-text-tertiary); margin: var(--mx-space-6) 0 0;">Last reviewed 2 hours ago · KO → VI</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ERROR / HELPER TEXT ============ -->
+  <section class="mx-section mx-anchor" id="error">
+    <h2>Error / helper text</h2>
+    <p>Error copy uses the <code>feedback-wrong</code> colour on a <code>body-small</code> role and always
+      reassures that learning data is safe — never alarming, never colour-only.</p>
+    <div class="mx-row" style="gap: var(--mx-space-8);">
+      <span class="tok">--mx-text-body-small</span>
+      <span class="tok">--mx-color-feedback-wrong</span>
+    </div>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="dark">
+        <p style="font-size: var(--mx-text-body-small-size); line-height: var(--mx-text-body-small-line); color: var(--mx-color-feedback-wrong); margin: 0; text-wrap: pretty;">Couldn't save — your learning data is safe.</p>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="light">
+        <p style="font-size: var(--mx-text-body-small-size); line-height: var(--mx-text-body-small-line); color: var(--mx-color-feedback-wrong); margin: 0; text-wrap: pretty;">Couldn't save — your learning data is safe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RULES ============ -->
+  <section class="mx-section mx-anchor" id="rules">
+    <h2>Typography rules</h2>
+    <p>How each role behaves under long KO / VI content and OS text scaling.</p>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep the Korean prompt highly readable — full <code>study-korean</code>
+        size, centred, high contrast — and let the Vietnamese explanation wrap comfortably at
+        <code>study-explanation</code>.</div>
+      <div class="mx-dont"><b></b>Shrink long text below the accessibility floor (body 13px, study 34px)
+        to make it fit — or clip Korean / Vietnamese with an ellipsis.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Wrap long content and put it in a <code>ScrollView</code>; truncate only
+        single-line labels (deck titles, list rows) with a tail ellipsis.</div>
+      <div class="mx-dont"><b></b>Let RN <code>&lt;Text&gt;</code> overflow or clip its container — for long
+        KO / VI, prefer wrapping + a scrollable area over tiny type.</div>
+    </div>
+    <div class="mx-note"><b>Accessibility floor</b> Body text never renders below <b>13px</b> and the
+      study prompt never below <b>34px</b>, even when content is long. Length grows the height (and the
+      scroll area), never shrinks the type.</div>
+  </section>
+
+  <!-- ============ SPEC TABLE ============ -->
+  <section class="mx-section mx-anchor" id="spec">
+    <h2>Text role → React Native <code>&lt;Text&gt;</code></h2>
+    <table class="mx-spec">
+      <caption>Every text role, its token, family, wrap/truncate rule, and RN mapping</caption>
+      <thead><tr><th>Token</th><th>Size / line</th><th>Family</th><th>Wrap or truncate</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">--mx-text-study-korean</td><td>34 / 44</td><td>Noto Sans KR</td><td>Wrap (≤3 lines then grow), centred</td><td><code>&lt;Text&gt;</code> · <code>fontFamily: korean</code>, <code>textAlign:'center'</code>, no clamp</td></tr>
+        <tr><td class="tok">--mx-text-study-explanation</td><td>18 / 28</td><td>Jakarta</td><td>Wrap, no clamp</td><td><code>&lt;Text&gt;</code> in a <code>ScrollView</code> — no <code>numberOfLines</code></td></tr>
+        <tr><td class="tok">--mx-text-title-large</td><td>26 / 32</td><td>Jakarta</td><td>Truncate (screen title)</td><td><code>MxText role="titleLarge"</code> · <code>numberOfLines={1}</code></td></tr>
+        <tr><td class="tok">--mx-text-title-medium</td><td>20 / 26</td><td>Jakarta</td><td>Truncate 1 line, ellipsis</td><td><code>&lt;Text numberOfLines={1} ellipsizeMode="tail"&gt;</code></td></tr>
+        <tr><td class="tok">--mx-text-body-large</td><td>17 / 26</td><td>Jakarta</td><td>Wrap</td><td><code>&lt;Text&gt;</code> default reading body</td></tr>
+        <tr><td class="tok">--mx-text-body-medium</td><td>15 / 22</td><td>Jakarta</td><td>Wrap (meaning / label)</td><td><code>MxText role="bodyMedium"</code></td></tr>
+        <tr><td class="tok">--mx-text-body-small</td><td>13 / 19</td><td>Jakarta</td><td>Wrap (value / error)</td><td><code>MxText role="bodySmall"</code> — floor size</td></tr>
+        <tr><td class="tok">--mx-text-stat-number</td><td>30 / 34</td><td>JetBrains Mono</td><td>Fixed, tabular</td><td><code>&lt;Text&gt;</code> · <code>fontFamily: mono</code> + <code>fontVariant:['tabular-nums']</code></td></tr>
+        <tr><td class="tok">--mx-text-button</td><td>16 / 20</td><td>Jakarta</td><td>No wrap, no truncate</td><td><code>MxActionButton</code> label</td></tr>
+        <tr><td class="tok">--mx-text-caption</td><td>12 / 16</td><td>Jakarta</td><td>Wrap / label</td><td><code>MxText role="caption"</code></td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>React Native</b> Resolve every text role through an <code>MxText</code> wrapper or
+      an <code>MxTextTokens</code> style map — a screen picks a <code>role</code>, never a raw
+      <code>fontSize</code>. Korean pulls <code>fontFamily</code> from the <code>--mx-font-korean</code>
+      token; numerics use the mono token with <code>fontVariant: ['tabular-nums']</code>. Truncate with
+      <code>numberOfLines={1} ellipsizeMode="tail"</code>; wrap by leaving the clamp off inside a
+      <code>ScrollView</code>.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav"><a href="02-theme-gallery.html">‹ 02 Theme Gallery</a><a href="04-spacing-layout-gallery.html">04 Spacing &amp; Layout ›</a></nav>
+</main>
+
+</body>
+</html>

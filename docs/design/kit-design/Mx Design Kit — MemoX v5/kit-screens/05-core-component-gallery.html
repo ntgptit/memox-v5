@@ -1,0 +1,373 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3600" name="05 · Mx Core Component Gallery" subtitle="Shell, top bar, card, list row, buttons, segmented, modal, empty/error — anatomy + states + RN" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>05 · Mx Core Component Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 05 Core Components</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="04-spacing-layout-gallery.html">‹ Prev</a>
+    <a href="06-learning-component-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 05</p>
+  <h1 class="mx-title">Mx Core Component Gallery</h1>
+  <p class="mx-lead">
+    The core layer is the grammar every MemoX screen is written in: a screen <b>shell</b>, a
+    <b>top bar</b>, one <b>card</b> surface, one <b>list row</b>, one text-action <b>button</b>, one
+    icon-only button, a <b>segmented</b> switcher, a <b>modal sheet</b>, a <b>confirm dialog</b>, and
+    the calm <b>empty</b> / reassuring <b>error</b> states. Every value is a <code>var(--mx-*)</code>
+    token; nothing here hardcodes colour, spacing, or type. The live specimens below are the base kit's
+    own component cards, embedded unchanged in dark <b>and</b> light — the spec blocks add anatomy,
+    states, token usage, accessibility, and the React Native handoff name and props for each.
+  </p>
+  <div class="mx-note"><b>Built vs. contract</b> Ten of these are <b>built kit components</b> (in the
+    manifest <code>components[]</code>): MxTopBar, MxCard, MxListRow, MxActionButton, MxIconButton,
+    MxSegmentedControl, MxModalSheet, MxConfirmDialog, MxEmptyState, MxErrorState. The four shells —
+    <b>MxAppShell, MxScreen, MxSafeAreaShell, MxContentShell</b> — are <b>React Native handoff
+    contracts named here, not yet kit components</b>. Do not assume a shell exists as base-kit UI.</div>
+
+  <!-- ============ LIVE GALLERY ============ -->
+  <section class="mx-section mx-anchor" id="live">
+    <h2>Live specimens</h2>
+    <p>The base kit's core-component card renders buttons, cards, rows, the top bar, badges, and the
+      empty/error states in both themes. It is the source of truth for pixels — the spec blocks below do
+      not redraw it.</p>
+    <figure class="mx-embed">
+      <figcaption>Core components — buttons · cards · rows · top bar · badges · states
+        <span class="path">components/core/core.card.html</span></figcaption>
+      <iframe src="../components/core/core.card.html" height="1180" loading="lazy" title="Mx core components — dark and light"></iframe>
+    </figure>
+    <figure class="mx-embed">
+      <figcaption>Confirm dialog — normal · destructive · high-risk
+        <span class="path">components/feedback/feedback.card.html</span></figcaption>
+      <iframe src="../components/feedback/feedback.card.html" height="620" loading="lazy" title="MxConfirmDialog states — dark and light"></iframe>
+    </figure>
+  </section>
+
+  <!-- ============ SHELLS (RN CONTRACTS) ============ -->
+  <section class="mx-section mx-anchor" id="shells">
+    <h2>Screen shells <span class="mx-tag">RN contract</span></h2>
+    <p>Four nesting contracts that frame every screen. They are named by the React Native handoff and
+      are <b>not yet built kit components</b> — they describe how the built components compose inside a
+      safe-area-aware, scrollable, single-column screen. Screens never re-invent padding or safe-area
+      insets; they consume these shells.</p>
+
+    <h3>MxAppShell <span class="mx-muted">— RN handoff contract, not yet a kit component</span></h3>
+    <p><b>Purpose</b> The outermost app frame: theme provider, root background, and navigation host that
+      wraps every route. <b>Anatomy</b> theme context (<code>useMxTheme</code>) → root
+      <code>&lt;View&gt;</code> at <span class="tok">--mx-color-background-app</span> → navigator.
+      <b>Variants / states</b> none beyond the active theme (<code>MxDarkDefault</code> /
+      <code>MxLightDefault</code>); there is no per-screen theme branch. <b>Tokens</b>
+      <span class="tok">--mx-color-background-app</span>, elevation + motion tokens for transitions.
+      <b>Accessibility</b> owns nothing tappable; sets the theme so downstream contrast tokens resolve.
+      <b>RN handoff</b> <code>MxAppShell</code> over a <code>View</code> + navigation container; expected
+      state: current theme, resolved once at the root, never inside a screen.</p>
+
+    <h3>MxSafeAreaShell <span class="mx-muted">— RN handoff contract, not yet a kit component</span></h3>
+    <p><b>Purpose</b> Applies device safe-area insets (notch, home indicator, status bar) so content and
+      sticky bars never sit under system chrome. <b>Anatomy</b> a <code>SafeAreaView</code> that pads
+      top/bottom by the inset. <b>Variants</b> <code>edges</code> selection (top, bottom, both).
+      <b>States</b> orientation- and device-driven insets; no interactive state. <b>Tokens</b> combines
+      the platform inset with <span class="tok">--mx-space-*</span> gutters — inset is additive, never a
+      substitute for a spacing token. <b>Accessibility</b> keeps the first focusable element and sticky
+      actions clear of system bars. <b>RN handoff</b> <code>MxSafeAreaShell</code> over
+      <code>SafeAreaView</code> (react-native-safe-area-context); expected props:
+      <code>edges</code>, <code>children</code>.</p>
+
+    <h3>MxScreen <span class="mx-muted">— RN handoff contract, not yet a kit component</span></h3>
+    <p><b>Purpose</b> The per-route screen frame: screen background + the horizontal gutter every screen
+      shares, hosting an <code>MxTopBar</code> and a scrollable content region. <b>Anatomy</b>
+      background <code>&lt;View&gt;</code> → optional <code>MxTopBar</code> → <code>MxContentShell</code>.
+      <b>Variants</b> <code>variant</code> mirrors the top-bar intent (default / study / settings).
+      <b>States</b> loading (renders skeletons), empty (delegates to <code>MxEmptyState</code>), error
+      (delegates to <code>MxErrorState</code>) — the screen designs each applicable state, never just
+      the happy path. <b>Tokens</b> <span class="tok">--mx-color-background-screen</span>,
+      <span class="tok">--mx-layout-screen-padding-x</span> (16), <span class="tok">--mx-space-40</span>
+      top pad. <b>Accessibility</b> one screen title (from the top bar) as the a11y heading.
+      <b>RN handoff</b> <code>MxScreen</code> over <code>View</code>; expected props:
+      <code>variant</code>, <code>title</code>, <code>children</code>; expected state:
+      <code>status: 'ready' | 'loading' | 'empty' | 'error'</code>.</p>
+
+    <h3>MxContentShell <span class="mx-muted">— RN handoff contract, not yet a kit component</span></h3>
+    <p><b>Purpose</b> The scrollable content column with a capped reading width and a consistent bottom
+      inset so the last item clears any sticky CTA. <b>Anatomy</b> a <code>ScrollView</code> whose
+      content is centred and clamped to <span class="tok">--mx-layout-content-max-width</span> (520).
+      <b>Variants</b> <code>scroll</code> vs. non-scroll (a study screen may lock its card), and an
+      optional sticky bottom-action inset. <b>States</b> at-top / scrolled (drives top-bar shadow),
+      refreshing. <b>Tokens</b> <span class="tok">--mx-layout-content-max-width</span>,
+      <span class="tok">--mx-layout-section-gap</span> (24), <span class="tok">--mx-space-64</span> end
+      pad, <span class="tok">--mx-layout-bottom-action-inset</span>. <b>Accessibility</b> the scroll
+      region is the main landmark; sticky actions announce after content. <b>RN handoff</b>
+      <code>MxContentShell</code> over <code>ScrollView</code>; expected props: <code>scroll</code>,
+      <code>contentInsetBottom</code>, <code>children</code>.</p>
+
+    <div class="mx-note"><b>Contract, not code</b> These four names appear in handoff diagrams and the RN
+      summary table below. Until they are built and added to the manifest <code>components[]</code>,
+      treat them as the agreed <b>composition contract</b>, not importable base-kit UI.</div>
+  </section>
+
+  <!-- ============ TOP BAR ============ -->
+  <section class="mx-section mx-anchor" id="topbar">
+    <h2>MxTopBar</h2>
+    <p><b>Purpose</b> The screen header primitive — title, optional subtitle, a leading slot (usually a
+      back/close <code>MxIconButton</code>), and a trailing actions slot. <b>Anatomy</b>
+      <code>leading</code> → title + <code>subtitle</code> block → <code>actions</code>.
+      <b>Variants</b> <code>variant</code>: <code>default</code> / <code>study</code> /
+      <code>settings</code>. <b>States</b> default; <code>sticky</code> gains an elevation/hairline once
+      the content below scrolls; there is no pressed/disabled state on the bar itself (its slots own
+      that). <b>Tokens</b> title at <span class="tok">--mx-text-title-large</span>, background
+      <span class="tok">--mx-color-background-screen</span>, hairline
+      <span class="tok">--mx-color-border-subtle</span>, sticky layer
+      <span class="tok">--mx-layer-sticky</span>. <b>Accessibility</b> the <code>title</code> is the
+      screen's a11y heading; every icon slot must be an <code>MxIconButton</code> with a
+      <code>label</code>. <b>RN handoff</b> <code>MxTopBar</code> over <code>View</code> + <code>Text</code>;
+      real props: <code>title</code>, <code>subtitle</code>, <code>leading</code>, <code>actions</code>,
+      <code>variant</code>, <code>sticky</code>.</p>
+  </section>
+
+  <!-- ============ CARD ============ -->
+  <section class="mx-section mx-anchor" id="card">
+    <h2>MxCard</h2>
+    <p><b>Purpose</b> The one surface-container primitive; feedback outlines are driven by
+      <code>state</code> while the base surface stays constant, so selection is never confused with
+      correctness. <b>Anatomy</b> padded surface + optional border + optional elevation, wrapping
+      arbitrary <code>children</code>. <b>Variants</b> <code>variant</code>: <code>default</code> /
+      <code>elevated</code> / <code>interactive</code>. <b>States</b> <code>state</code>:
+      <code>none</code> / <code>selected</code> (2px selected border) / <code>correct</code> /
+      <code>wrong</code> (2px feedback border, base surface kept) / <code>disabled</code>; pressed is
+      only meaningful for <code>interactive</code> via <code>onClick</code>. <b>Tokens</b> surface
+      <span class="tok">--mx-color-surface-card</span>, radius <span class="tok">--mx-radius-lg</span>
+      (16), <span class="tok">--mx-border-selected / --mx-border-correct / --mx-border-wrong</span>,
+      <span class="tok">--mx-elevation-low</span>, padding via the <code>padding</code> token number.
+      <b>Accessibility</b> feedback state is paired with an icon/label, never colour alone; an
+      interactive card exposes a role/label. <b>RN handoff</b> <code>MxCard</code> over
+      <code>View</code> (or <code>Pressable</code> when <code>interactive</code>); real props:
+      <code>variant</code>, <code>state</code>, <code>padding</code> (e.g. "12" | "16" | "20"),
+      <code>onClick</code>.</p>
+  </section>
+
+  <!-- ============ LIST ROW ============ -->
+  <section class="mx-section mx-anchor" id="listrow">
+    <h2>MxListRow</h2>
+    <p><b>Purpose</b> The list-row primitive for deck/content lists — a leading slot, a title/subtitle
+      block, a trailing slot, and an optional chevron. <b>Anatomy</b> <code>leading</code> →
+      <code>title</code> + <code>subtitle</code> → <code>trailing</code> → chevron. <b>Variants</b>
+      <code>variant</code>: <code>default</code> / <code>error</code>. <b>States</b> default; pressed
+      (via <code>onClick</code>); <code>disabled</code>; <code>error</code> variant tints for a failed
+      row. <b>Tokens</b> single-line height <span class="tok">--mx-size-list-row-height</span> (60),
+      two-line <span class="tok">--mx-size-list-row-height-two-line</span> (68), title
+      <span class="tok">--mx-text-body-large</span>, subtitle
+      <span class="tok">--mx-text-body-small</span> at <span class="tok">--mx-color-text-tertiary</span>,
+      divider <span class="tok">--mx-color-divider-default</span>. <b>Accessibility</b> whole row is one
+      44px+ target; chevron is decorative and the row carries the label. <b>RN handoff</b>
+      <code>MxListRow</code> over <code>Pressable</code> + <code>View</code>; real props:
+      <code>title</code>, <code>subtitle</code>, <code>leading</code>, <code>trailing</code>,
+      <code>variant</code>, <code>disabled</code>, <code>onClick</code>, <code>showChevron</code>.</p>
+  </section>
+
+  <!-- ============ ACTION BUTTON ============ -->
+  <section class="mx-section mx-anchor" id="actionbutton">
+    <h2>MxActionButton</h2>
+    <p><b>Purpose</b> The one button primitive for MemoX — every text action is a variant of this; no
+      screen hand-rolls a <code>Pressable</code> button. <b>Anatomy</b> optional
+      <code>leadingIcon</code> → label (<code>children</code>) → optional <code>trailingIcon</code>.
+      <b>Variants</b> <code>variant</code>: <code>primary</code> / <code>secondary</code> /
+      <code>ghost</code> / <code>destructive</code>; <code>size</code>: <code>small</code> /
+      <code>medium</code> / <code>bottom</code> (large sticky CTA). <b>States</b> default, pressed
+      (<span class="tok">--mx-color-action-primaryPressed</span>), <code>disabled</code>
+      (<span class="tok">--mx-color-action-primaryDisabled</span>), and <code>loading</code> (spinner,
+      taps blocked). <b>Tokens</b> primary fill <span class="tok">--mx-color-action-primary</span>, label
+      <span class="tok">--mx-text-button</span> / <span class="tok">--mx-color-text-onAction</span>,
+      pill radius <span class="tok">--mx-radius-pill</span>, heights
+      <span class="tok">--mx-size-button-height</span> (48) /
+      <span class="tok">--mx-size-button-height-bottom</span> (54); destructive uses
+      <span class="tok">--mx-color-destructive-*</span>. <b>Accessibility</b> ≥44px target; label is the
+      a11y name; <code>loading</code>/<code>disabled</code> announce a busy/disabled state.
+      <b>RN handoff</b> <code>MxActionButton</code> over <code>Pressable</code>; real props:
+      <code>variant</code>, <code>size</code>, <code>fullWidth</code>, <code>disabled</code>,
+      <code>loading</code>, <code>leadingIcon</code>, <code>trailingIcon</code>, <code>onClick</code>.</p>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep <b>one</b> <code>primary</code> per region; make the sticky CTA
+        <code>size="bottom"</code>; route data-loss actions to <code>variant="destructive"</code>.</div>
+      <div class="mx-dont"><b></b>Style a destructive action as a normal primary, or ship a bare
+        <code>Pressable</code> as a text button instead of <code>MxActionButton</code>.</div>
+    </div>
+  </section>
+
+  <!-- ============ ICON BUTTON ============ -->
+  <section class="mx-section mx-anchor" id="iconbutton">
+    <h2>MxIconButton</h2>
+    <p><b>Purpose</b> A square, icon-only tap target (≥44px) for top-bar and inline actions.
+      <b>Anatomy</b> a single centred <code>icon</code> inside a 44px hit area. <b>Variants</b>
+      <code>variant</code>: <code>ghost</code> / <code>surface</code> / <code>destructive</code>;
+      <code>size</code>: <code>small</code> / <code>medium</code>. <b>States</b> default, pressed,
+      <code>disabled</code>. <b>Tokens</b> icon <span class="tok">--mx-size-icon-md</span> (24), target
+      <span class="tok">--mx-size-touch-target</span> (44), surface variant
+      <span class="tok">--mx-color-surface-card</span>, destructive
+      <span class="tok">--mx-color-destructive-text</span>. <b>Accessibility</b> <code>label</code> is
+      <b>required</b> and maps to <code>accessibilityLabel</code> (rendered as aria-label + title) — an
+      icon-only control is invisible to assistive tech without it. <b>RN handoff</b>
+      <code>MxIconButton</code> over <code>Pressable</code>; real props: <code>icon</code>,
+      <code>label</code> (required), <code>variant</code>, <code>size</code>, <code>disabled</code>,
+      <code>onClick</code>.</p>
+  </section>
+
+  <!-- ============ SEGMENTED CONTROL ============ -->
+  <section class="mx-section mx-anchor" id="segmented">
+    <h2>MxSegmentedControl</h2>
+    <p><b>Purpose</b> A pill-track tab switcher (Statistics tabs, filter toggles) — a controlled,
+      single-select segment group. <b>Anatomy</b> a pill track holding one segment per option, with a
+      moving selected pill. <b>Variants</b> single style; each option is a string or
+      <code>{ value, label, disabled }</code>. <b>States</b> selected segment
+      (<span class="tok">--mx-color-state-selectedSurface</span> /
+      <span class="tok">--mx-color-state-selected</span>), unselected, per-option
+      <code>disabled</code>, pressed. <b>Tokens</b> track radius
+      <span class="tok">--mx-radius-pill</span>, height <span class="tok">--mx-size-chip-height</span>
+      (34), label <span class="tok">--mx-text-label-medium</span>. <b>Accessibility</b> exposes a
+      tablist/radiogroup semantic; the selected value is announced, not colour-only. <b>RN handoff</b>
+      <code>MxSegmentedControl</code> over <code>Pressable</code> segments in a <code>View</code>;
+      real props: <code>options</code>, <code>value</code>, <code>onChange</code> — <b>controlled</b>,
+      so the parent owns the selected <code>value</code> in state.</p>
+  </section>
+
+  <!-- ============ MODAL SHEET ============ -->
+  <section class="mx-section mx-anchor" id="modalsheet">
+    <h2>MxModalSheet</h2>
+    <p><b>Purpose</b> The bottom-sheet primitive (Play Menu, Repeat Mode Menu, pickers) — a dismissable
+      overlay anchored to the bottom edge. <b>Anatomy</b> scrim → sheet surface with optional
+      <code>title</code> → <code>children</code> → optional sticky <code>actions</code> row.
+      <b>Variants</b> single sheet form; content-driven height. <b>States</b> <code>open</code> /
+      closed, scrim-press-to-dismiss (<code>onClose</code>), scrolling when content exceeds the cap.
+      <b>Tokens</b> surface <span class="tok">--mx-color-surface-modal</span>, scrim
+      <span class="tok">--mx-color-overlay-scrim</span>, radius <span class="tok">--mx-radius-xl</span>
+      (22), max height <span class="tok">--mx-size-sheet-max-height</span> (88vh), shadow
+      <span class="tok">--mx-elevation-sheet</span>, layer <span class="tok">--mx-layer-modal</span>.
+      <b>Accessibility</b> traps focus while <code>open</code>, restores on close; scrim tap and a
+      cancel action both dismiss. <b>RN handoff</b> <code>MxModalSheet</code> over <code>Modal</code>
+      + <code>View</code>; real props: <code>open</code>, <code>title</code>, <code>onClose</code>,
+      <code>actions</code>, <code>children</code>.</p>
+  </section>
+
+  <!-- ============ CONFIRM DIALOG ============ -->
+  <section class="mx-section mx-anchor" id="confirm">
+    <h2>MxConfirmDialog</h2>
+    <p><b>Purpose</b> A centred confirmation dialog where high-risk <b>never</b> looks like a normal
+      confirm. See the live specimen above for all three variants in both themes. <b>Anatomy</b> scrim →
+      centred card → <code>title</code> → <code>message</code> → optional <code>warning</code> line →
+      cancel + confirm action row. <b>Variants</b> <code>variant</code>: <code>normal</code> /
+      <code>destructive</code> / <code>highRisk</code> (auto-shows the <code>warning</code> line and a
+      destructive-styled confirm). <b>States</b> <code>open</code> / closed; confirm
+      (<code>onConfirm</code>) and cancel (<code>onCancel</code>). <b>Tokens</b> surface
+      <span class="tok">--mx-color-surface-modal</span>, scrim
+      <span class="tok">--mx-color-overlay-scrim</span>, destructive confirm
+      <span class="tok">--mx-color-destructive-*</span>, warning
+      <span class="tok">--mx-color-feedback-warning</span>, width
+      <span class="tok">--mx-size-modal-width</span> (400), shadow
+      <span class="tok">--mx-elevation-modal</span>, layer <span class="tok">--mx-layer-dialog</span>.
+      <b>Accessibility</b> alertdialog role; cancel is the default focus for destructive/high-risk so a
+      stray tap never destroys data; copy reassures what is and isn't lost. <b>RN handoff</b>
+      <code>MxConfirmDialog</code> over <code>Modal</code>; real props: <code>open</code>,
+      <code>variant</code>, <code>title</code>, <code>message</code>, <code>warning</code>,
+      <code>confirmLabel</code>, <code>cancelLabel</code>, <code>onConfirm</code>,
+      <code>onCancel</code>.</p>
+  </section>
+
+  <!-- ============ EMPTY STATE ============ -->
+  <section class="mx-section mx-anchor" id="empty">
+    <h2>MxEmptyState</h2>
+    <p><b>Purpose</b> A calm "nothing here" state — never styled like an error. <b>Anatomy</b> optional
+      <code>icon</code> → <code>title</code> → optional <code>message</code> → optional
+      <code>action</code>. <b>Variants</b> <code>tone</code>: <code>neutral</code> /
+      <code>positive</code> (e.g. "all caught up") / <code>unavailable</code>. <b>States</b> static;
+      the optional <code>action</code> (an <code>MxActionButton</code>) carries its own states.
+      <b>Tokens</b> muted glyph/text <span class="tok">--mx-color-text-tertiary</span>, positive tone
+      <span class="tok">--mx-color-srs-noDue</span>, unavailable
+      <span class="tok">--mx-color-state-unavailableSurface</span>, breathing room
+      <span class="tok">--mx-space-48</span>, title <span class="tok">--mx-text-title-medium</span>.
+      <b>Accessibility</b> reads as informational, not an alert; the action is a labelled button.
+      <b>RN handoff</b> <code>MxEmptyState</code> over <code>View</code> + <code>Text</code>; real
+      props: <code>icon</code>, <code>title</code>, <code>message</code>, <code>action</code>,
+      <code>tone</code>.</p>
+  </section>
+
+  <!-- ============ ERROR STATE ============ -->
+  <section class="mx-section mx-anchor" id="error">
+    <h2>MxErrorState</h2>
+    <p><b>Purpose</b> A failure state with retry; copy must reassure that data is preserved.
+      <b>Anatomy</b> optional <code>icon</code> → optional <code>title</code> → optional
+      <code>message</code> → <code>action</code> (retry). <b>Variants</b> single form (distinct from
+      the calm <code>MxEmptyState</code>). <b>States</b> static error; the retry
+      <code>action</code> owns its default/pressed/<code>loading</code> states. <b>Tokens</b> warning
+      accent <span class="tok">--mx-color-feedback-warning</span> (not destructive red — a load error
+      isn't data loss), surface <span class="tok">--mx-color-surface-card</span>, title
+      <span class="tok">--mx-text-title-medium</span>, breathing room
+      <span class="tok">--mx-space-48</span>. <b>Accessibility</b> announced as an alert; retry is a
+      labelled <code>MxActionButton</code>; message states data is safe. <b>RN handoff</b>
+      <code>MxErrorState</code> over <code>View</code> + <code>Text</code>; real props:
+      <code>icon</code>, <code>title</code>, <code>message</code>, <code>action</code>.</p>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Use amber <code>feedback-warning</code> for a transient failure and say
+        "your cards are safe — tap retry".</div>
+      <div class="mx-dont"><b></b>Paint a load error in destructive red, or reuse
+        <code>MxErrorState</code> for an empty list — that's <code>MxEmptyState</code>.</div>
+    </div>
+  </section>
+
+  <!-- ============ SUMMARY TABLE ============ -->
+  <section class="mx-section mx-anchor" id="summary">
+    <h2>Summary — component → React Native handoff</h2>
+    <p>Every core component, its RN handoff name, the RN primitive it wraps, its key real props, and the
+      states it must design. Shell rows are <b>contracts</b>, not yet built kit components.</p>
+    <table class="mx-spec">
+      <caption>Core component → React Native</caption>
+      <thead><tr><th>Component</th><th>RN handoff name</th><th>RN primitive base</th><th>Key props</th><th>States</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">MxAppShell <span class="mx-muted">(contract)</span></td><td><code>MxAppShell</code></td><td>View + navigator</td><td class="tok">children</td><td>active theme only</td></tr>
+        <tr><td class="tok">MxSafeAreaShell <span class="mx-muted">(contract)</span></td><td><code>MxSafeAreaShell</code></td><td>SafeAreaView</td><td class="tok">edges, children</td><td>inset (device/orientation)</td></tr>
+        <tr><td class="tok">MxScreen <span class="mx-muted">(contract)</span></td><td><code>MxScreen</code></td><td>View</td><td class="tok">variant, title, children</td><td>ready / loading / empty / error</td></tr>
+        <tr><td class="tok">MxContentShell <span class="mx-muted">(contract)</span></td><td><code>MxContentShell</code></td><td>ScrollView</td><td class="tok">scroll, contentInsetBottom, children</td><td>at-top / scrolled / refreshing</td></tr>
+        <tr><td class="tok">MxTopBar</td><td><code>MxTopBar</code></td><td>View + Text</td><td class="tok">title, subtitle, leading, actions, variant, sticky</td><td>default / sticky-scrolled</td></tr>
+        <tr><td class="tok">MxCard</td><td><code>MxCard</code></td><td>View / Pressable</td><td class="tok">variant, state, padding, onClick</td><td>none / selected / correct / wrong / disabled</td></tr>
+        <tr><td class="tok">MxListRow</td><td><code>MxListRow</code></td><td>Pressable + View</td><td class="tok">title, subtitle, leading, trailing, variant, disabled, showChevron, onClick</td><td>default / pressed / disabled / error</td></tr>
+        <tr><td class="tok">MxActionButton</td><td><code>MxActionButton</code></td><td>Pressable</td><td class="tok">variant, size, fullWidth, disabled, loading, leadingIcon, trailingIcon, onClick</td><td>default / pressed / disabled / loading</td></tr>
+        <tr><td class="tok">MxIconButton</td><td><code>MxIconButton</code></td><td>Pressable</td><td class="tok">icon, label, variant, size, disabled, onClick</td><td>default / pressed / disabled</td></tr>
+        <tr><td class="tok">MxSegmentedControl</td><td><code>MxSegmentedControl</code></td><td>Pressable + View</td><td class="tok">options, value, onChange</td><td>selected / unselected / disabled / pressed</td></tr>
+        <tr><td class="tok">MxModalSheet</td><td><code>MxModalSheet</code></td><td>Modal + View</td><td class="tok">open, title, onClose, actions, children</td><td>open / closed / scrolling</td></tr>
+        <tr><td class="tok">MxConfirmDialog</td><td><code>MxConfirmDialog</code></td><td>Modal</td><td class="tok">open, variant, title, message, warning, confirmLabel, cancelLabel, onConfirm, onCancel</td><td>open / closed · normal / destructive / highRisk</td></tr>
+        <tr><td class="tok">MxEmptyState</td><td><code>MxEmptyState</code></td><td>View + Text</td><td class="tok">icon, title, message, action, tone</td><td>neutral / positive / unavailable</td></tr>
+        <tr><td class="tok">MxErrorState</td><td><code>MxErrorState</code></td><td>View + Text</td><td class="tok">icon, title, message, action</td><td>error (action: default / pressed / loading)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="mx-rn"><b>React Native contract</b> Every tappable <b>text</b> action is an
+    <code>MxActionButton</code> — never a hand-rolled <code>Pressable</code> with a <code>Text</code>
+    child. Every <b>surface</b> is an <code>MxCard</code> (or a shell that composes it), never a raw
+    <code>View</code> with ad-hoc padding and borders. Every <b>icon-only</b> action is an
+    <code>MxIconButton</code> and <b>must</b> pass <code>label</code>, which maps to
+    <code>accessibilityLabel</code>. Colours, spacing, radii, and shadows resolve from
+    <code>MxTheme</code> via <code>useMxTheme()</code> — no literal hex, px, or
+    <code>useColorScheme()</code> branch inside a screen.</div>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="04-spacing-layout-gallery.html">‹ 04 Spacing &amp; Layout</a>
+    <a href="06-learning-component-gallery.html">06 Learning Components ›</a>
+  </nav>
+</main>
+
+</body>
+</html>

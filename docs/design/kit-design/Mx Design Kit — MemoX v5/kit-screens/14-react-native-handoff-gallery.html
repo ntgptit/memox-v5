@@ -1,0 +1,195 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3800" name="14 · Mx React Native Handoff Gallery" subtitle="Token/theme/component module maps, RN primitives, NativeWind vs StyleSheet guard rules" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>14 · Mx React Native Handoff Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 14 React Native Handoff</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="13-mini-golden-samples.html">‹ Prev</a>
+    <a href="15-kit-qa-checklist.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 14</p>
+  <h1 class="mx-title">Mx React Native Handoff Gallery</h1>
+  <p class="mx-lead">
+    The implementation contract for React Native agents. MemoX v5 is <b>Expo SDK 57 · React Native ·
+    TypeScript · NativeWind</b>. Every kit name maps 1:1 to a token module, a theme module, or a shared
+    component; every shared component maps to a React Native primitive. Follow the guard rules and no screen
+    will need a raw style.
+  </p>
+  <div class="mx-note"><b>Authoritative handoff</b> This page is the single source of truth for React
+    Native work. The base kit's earlier Flutter handoff docs conflicted with the real Expo/RN stack and
+    have been <b>removed</b>; every reference now points here (see <code>DRIFT-002 — RESOLVED</code> in the
+    repo drift log). Ignore Flutter concepts entirely.</div>
+
+  <!-- ============ TOKEN MODULES ============ -->
+  <section class="mx-section mx-anchor" id="token-modules">
+    <h2>Token modules</h2>
+    <p>The <code>tokens/*.css</code> variables become typed TypeScript modules. Screens import these — never
+      a literal value. In NativeWind they surface as approved Tailwind theme keys; in StyleSheet as constants.</p>
+    <table class="mx-spec">
+      <thead><tr><th>Module</th><th>Wraps tokens</th><th>Example member</th><th>Consumed by</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">MxColorTokens</td><td><code>--mx-color-*</code> (primitives + roles)</td><td><code>MxColorTokens.surface.card</code></td><td>via <code>MxTheme</code> (theme-aware)</td></tr>
+        <tr><td class="tok">MxTextTokens</td><td><code>--mx-text-*</code>, <code>--mx-font-*</code></td><td><code>MxTextTokens.studyKorean</code></td><td><code>MxText</code>, <code>&lt;Text&gt;</code></td></tr>
+        <tr><td class="tok">MxSpacing</td><td><code>--mx-space-*</code>, <code>--mx-layout-*</code></td><td><code>MxSpacing.s16</code></td><td>padding / margin / gap</td></tr>
+        <tr><td class="tok">MxRadius</td><td><code>--mx-radius-*</code></td><td><code>MxRadius.lg</code></td><td><code>borderRadius</code></td></tr>
+        <tr><td class="tok">MxBorderTokens</td><td><code>--mx-border-*</code>, <code>--mx-border-width-*</code></td><td><code>MxBorderTokens.selected</code></td><td>borders / dividers</td></tr>
+        <tr><td class="tok">MxMotionTokens</td><td><code>--mx-motion-*</code>, <code>--mx-ease-*</code></td><td><code>MxMotionTokens.duration.normal</code></td><td>Animated / Reanimated</td></tr>
+        <tr><td class="tok">MxComponentTokens</td><td>per-component sizing (<code>--mx-size-*</code>)</td><td><code>MxComponentTokens.button.height</code></td><td>shared components</td></tr>
+        <tr><td class="tok">MxTheme</td><td>resolved semantic colours + elevation for the active mode</td><td><code>theme.color.action.primary</code></td><td>everything, via <code>useMxTheme()</code></td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>Rule</b> Colours and elevation are <b>theme-aware</b> → always read them from
+      <code>MxTheme</code> (via <code>useMxTheme()</code>). Spacing, radius, type sizes, and motion are
+      <b>theme-invariant</b> → import them as plain constants.</div>
+  </section>
+
+  <!-- ============ THEME MODULES ============ -->
+  <section class="mx-section mx-anchor" id="theme-modules">
+    <h2>Theme modules</h2>
+    <table class="mx-spec">
+      <thead><tr><th>Module</th><th>Responsibility</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">MxThemeProvider</td><td>Wraps the app once at the root; supplies the resolved <code>MxTheme</code> via context.</td></tr>
+        <tr><td class="tok">MxThemeResolver</td><td>Maps <code>MxThemeMode</code> + OS colour scheme → the concrete <code>MxDarkDefault</code> / <code>MxLightDefault</code> theme object. The <b>only</b> place a mode → theme decision happens.</td></tr>
+        <tr><td class="tok">MxThemeMode</td><td>Enum: <code>system</code> · <code>dark</code> · <code>light</code>. User preference persisted; default <code>system</code>.</td></tr>
+        <tr><td class="tok">MxDarkDefault</td><td>The primary theme object (dark <code>:root</code> token values).</td></tr>
+        <tr><td class="tok">MxLightDefault</td><td>The production-ready light theme object (<code>[data-theme="light"]</code> values). Not an inversion.</td></tr>
+        <tr><td class="tok">useMxTheme()</td><td>Hook returning the active <code>MxTheme</code>. The one sanctioned way a component reads colours.</td></tr>
+      </tbody>
+    </table>
+    <span class="mx-code"><span class="c">// App root — resolve the theme ONCE.</span>
+&lt;<span class="k">MxThemeProvider</span> mode={<span class="k">MxThemeMode</span>.system}&gt;
+  &lt;<span class="k">MxAppShell</span>&gt;{/* navigation + screens */}&lt;/<span class="k">MxAppShell</span>&gt;
+&lt;/<span class="k">MxThemeProvider</span>&gt;
+
+<span class="c">// Any component — read colours from the resolved theme.</span>
+function <span class="k">DeckCount</span>() {
+  const theme = <span class="k">useMxTheme</span>();
+  return &lt;<span class="k">MxCard</span> style={{ backgroundColor: theme.color.surface.card }} /&gt;;
+}</span>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Resolve mode → theme once in <code>MxThemeResolver</code>; read colours via
+        <code>useMxTheme()</code>. Theme change is visual only — it never touches SRS, sessions, or stored data.</div>
+      <div class="mx-dont"><b></b>Call <code>useColorScheme()</code> in a screen and branch into raw colours, or
+        duplicate a dark and a light style block inside a component.</div>
+    </div>
+  </section>
+
+  <!-- ============ COMPONENT MAP ============ -->
+  <section class="mx-section mx-anchor" id="component-map">
+    <h2>Shared component → React Native map</h2>
+    <p>Design names are shared RN components. "Built" = a component already in this kit
+      (<a href="index.html#pages">see galleries 05–09</a>); "Contract" = a name defined by this handoff whose
+      component is not yet built — implement to the contract, do not assume it exists.</p>
+    <table class="mx-spec">
+      <thead><tr><th>Mx component</th><th>RN primitive base</th><th>Status</th><th>Replaces raw</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">MxAppShell</td><td>SafeAreaView + navigation container</td><td>Contract</td><td>app root boilerplate</td></tr>
+        <tr><td class="tok">MxScreen</td><td>SafeAreaView + View</td><td>Contract</td><td>per-screen safe-area wrapper</td></tr>
+        <tr><td class="tok">MxSafeAreaShell</td><td>SafeAreaView</td><td>Contract</td><td>manual inset math</td></tr>
+        <tr><td class="tok">MxContentShell</td><td>ScrollView / View</td><td>Contract</td><td>content padding wrapper</td></tr>
+        <tr><td class="tok">MxTopBar</td><td>View + Text + Pressable</td><td>Built</td><td>custom headers</td></tr>
+        <tr><td class="tok">MxCard</td><td>View</td><td>Built</td><td>any surface with a custom card style</td></tr>
+        <tr><td class="tok">MxListRow</td><td>Pressable + View</td><td>Built</td><td>hand-rolled rows</td></tr>
+        <tr><td class="tok">MxActionButton</td><td>Pressable + Text</td><td>Built</td><td>every custom button</td></tr>
+        <tr><td class="tok">MxIconButton</td><td>Pressable</td><td>Built</td><td>icon taps (requires <code>label</code>)</td></tr>
+        <tr><td class="tok">MxSegmentedControl</td><td>View + Pressable</td><td>Built</td><td>tab/segment rows</td></tr>
+        <tr><td class="tok">MxModalSheet</td><td>Modal + SafeAreaView</td><td>Built</td><td>bottom sheets</td></tr>
+        <tr><td class="tok">MxConfirmDialog</td><td>Modal</td><td>Built</td><td>raw <code>Alert</code> for destructive actions</td></tr>
+        <tr><td class="tok">MxStudyShell</td><td>SafeAreaView + View</td><td>Contract</td><td>study screen scaffold</td></tr>
+        <tr><td class="tok">MxStudyCard</td><td>View + Text</td><td>Built</td><td>custom study surface</td></tr>
+        <tr><td class="tok">MxStudyProgressBar</td><td>View</td><td>Built</td><td>any hand-rolled progress bar</td></tr>
+        <tr><td class="tok">MxMatchTile</td><td>Pressable</td><td>Built</td><td>match-mode tiles</td></tr>
+        <tr><td class="tok">MxAnswerOption</td><td>Pressable</td><td>Built</td><td>choice options with colour branching</td></tr>
+        <tr><td class="tok">MxSettingsRow</td><td>Pressable + View</td><td>Built</td><td>every settings line</td></tr>
+        <tr><td class="tok">MxEmptyState</td><td>View + Text</td><td>Built</td><td>empty placeholders</td></tr>
+        <tr><td class="tok">MxErrorState</td><td>View + Text</td><td>Built</td><td>error placeholders</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>Lists</b> Long collections (decks, words, reminders) render through
+      <code>FlatList</code> / <code>SectionList</code> with <code>MxListRow</code> / <code>MxSettingsRow</code>
+      as the row renderer — never a <code>.map()</code> inside a <code>ScrollView</code> for large data.</div>
+  </section>
+
+  <!-- ============ GUARD RULES ============ -->
+  <section class="mx-section mx-anchor" id="guards">
+    <h2>Guard rules</h2>
+    <p>These are the review gates for any React Native screen. Each maps to a forbidden pattern.</p>
+    <div class="mx-callouts">
+      <div class="mx-dont"><b></b>Raw hex colour in a screen style (<code>color: '#4b3a8c'</code>).</div>
+      <div class="mx-do"><b></b><code>theme.color.action.primary</code> via <code>useMxTheme()</code>.</div>
+      <div class="mx-dont"><b></b>Arbitrary spacing / font size / radius (<code>padding: 13</code>, <code>fontSize: 15.5</code>).</div>
+      <div class="mx-do"><b></b><code>MxSpacing.s12</code>, <code>MxTextTokens.bodyMedium</code>, <code>MxRadius.lg</code>.</div>
+      <div class="mx-dont"><b></b>A one-off <code>StyleSheet</code> that re-implements a kit component (custom card, custom button, custom settings row, custom progress bar).</div>
+      <div class="mx-do"><b></b>Use <code>MxCard</code> / <code>MxActionButton</code> / <code>MxSettingsRow</code> / <code>MxStudyProgressBar</code>.</div>
+      <div class="mx-dont"><b></b><code>useColorScheme()</code> branching into raw colours, or duplicated dark/light style blocks inside a screen.</div>
+      <div class="mx-do"><b></b>One <code>MxThemeProvider</code> / <code>MxThemeResolver</code>; components read <code>useMxTheme()</code>.</div>
+      <div class="mx-dont"><b></b>A bare <code>Pressable</code> styled as a button, or an inline style array with raw values for reusable UI.</div>
+      <div class="mx-do"><b></b><code>MxActionButton variant="…"</code> — every tappable text action.</div>
+    </div>
+  </section>
+
+  <!-- ============ NATIVEWIND ============ -->
+  <section class="mx-section mx-anchor" id="nativewind">
+    <h2>If the implementation uses NativeWind</h2>
+    <p>Expose only mx-approved token classes; forbid arbitrary values.</p>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Approved token aliases only: <code>p-mx-16</code>, <code>rounded-mx-lg</code>,
+        <code>bg-mx-surface-card</code>, <code>text-mx-body-md</code> — generated from the mx tokens in the
+        Tailwind theme config.</div>
+      <div class="mx-dont"><b></b>Arbitrary values: <code>p-[13px]</code>, <code>text-[#123456]</code>,
+        <code>rounded-[11px]</code>. Feature screens must use approved aliases or Mx components — no
+        per-screen Tailwind class soup for reusable UI.</div>
+    </div>
+    <span class="mx-code"><span class="c">// tailwind.config — theme keys come from mx tokens ONLY.</span>
+theme: { extend: {
+  colors:  { <span class="k">'mx-surface-card'</span>: <span class="k">'var(--mx-color-surface-card)'</span> },
+  spacing: { <span class="k">'mx-16'</span>: <span class="k">'16px'</span> },
+  borderRadius: { <span class="k">'mx-lg'</span>: <span class="k">'16px'</span> },
+}}
+<span class="c">// eslint / tailwind rule: block arbitrary-value class syntax for reusable UI.</span></span>
+  </section>
+
+  <!-- ============ STYLESHEET ============ -->
+  <section class="mx-section mx-anchor" id="stylesheet">
+    <h2>If the implementation uses StyleSheet</h2>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Every value references an mx token constant:
+        <code>padding: MxSpacing.s16</code>, <code>borderRadius: MxRadius.lg</code>,
+        <code>color: theme.color.text.primary</code>.</div>
+      <div class="mx-dont"><b></b>Raw numbers (except <code>flex</code> and documented exceptions), raw colour
+        strings, or raw typography values.</div>
+    </div>
+    <span class="mx-code">const styles = <span class="k">StyleSheet</span>.create({
+  card: {
+    padding: <span class="k">MxSpacing</span>.s16,
+    borderRadius: <span class="k">MxRadius</span>.lg,
+    borderWidth: <span class="k">MxBorderTokens</span>.width.hairline,
+    <span class="c">// colour comes from useMxTheme() at render, not hardcoded here</span>
+  },
+});</span>
+    <div class="mx-note"><b>Open dependencies</b> Icon set (Expo declares <code>expo-symbols</code> / SF Symbols;
+      kit previews substitute Lucide — confirm the cross-platform strategy) and the chart library for
+      <code>MxStatsChartPanel</code> are unresolved. Do not hardcode a choice; treat both as implementation
+      dependencies to confirm before building Statistics.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav"><a href="13-mini-golden-samples.html">‹ 13 Golden Samples</a><a href="15-kit-qa-checklist.html">15 QA Checklist ›</a></nav>
+</main>
+
+</body>
+</html>

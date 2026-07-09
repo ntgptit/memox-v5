@@ -6,4 +6,4 @@ Primary button primitive — every text action in MemoX is an MxActionButton. Us
 <MxActionButton variant="destructive" leadingIcon={<TrashIcon/>}>Delete deck</MxActionButton>
 ```
 
-Variants: `primary` (filled purple), `secondary` (lavender surface, purple text), `ghost` (text only), `destructive` (red tint + border). Sizes: `small`, `medium`, `bottom` (54px sticky CTA). `loading` shows a spinner; `disabled` mutes to the disabled token. Destructive actions still require a confirm pattern (see MxConfirmDialog).
+Variants: `primary` (filled purple), `secondary` (lavender surface, readable purple text via `action-onSecondary`), `ghost` (transparent with a subtle border + readable purple text, so it still reads as a button in dark), `destructive` (red tint + border). Sizes: `small`, `medium`, `bottom` (54px sticky CTA). `loading` shows a spinner; `disabled` mutes to the disabled token. Destructive actions still require a confirm pattern (see MxConfirmDialog).

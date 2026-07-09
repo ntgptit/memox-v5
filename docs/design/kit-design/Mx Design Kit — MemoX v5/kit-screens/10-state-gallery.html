@@ -1,0 +1,448 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3600" name="10 · Mx State Gallery" subtitle="Full state matrix × dark/light × component × semantic meaning × allowed/forbidden usage" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10 · Mx State Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 10 State Gallery</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="09-feedback-dialog-gallery.html">‹ Prev</a>
+    <a href="11-layout-template-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 10</p>
+  <h1 class="mx-title">Mx State Gallery</h1>
+  <p class="mx-lead">
+    Every interactive and learning surface in MemoX has a defined visual for each <b>state</b> it can
+    enter. A state is never a colour a screen invents on the spot — it is a <code>state</code>/<code>variant</code>
+    prop the component resolves to <code>var(--mx-color-state-*)</code>, <code>--mx-color-feedback-*</code>,
+    <code>--mx-color-srs-*</code>, or <code>--mx-color-destructive-*</code> tokens. This page is the master
+    vocabulary: what each state <b>means</b>, where it is <b>allowed</b>, where it is <b>forbidden</b>, and
+    the dangerous confusions to avoid — shown in dark <b>and</b> light together.
+  </p>
+  <div class="mx-note"><b>Source of truth</b> The state token values shown resolve from
+    <code>tokens/colors.css</code> (<code>--mx-color-state-* · --mx-color-feedback-* · --mx-color-srs-* ·
+    --mx-color-destructive-*</code>). Every state below already has both a dark <code>:root</code> value and a
+    light <code>[data-theme="light"]</code> value — a component never picks a new colour per state.</div>
+
+  <!-- ============ EMBEDDED CANONICAL STATE GALLERIES ============ -->
+  <section class="mx-section mx-anchor" id="galleries">
+    <h2>Canonical state galleries — dark &amp; light</h2>
+    <p>The base kit ships a single specimen of every interaction and learning state, rendered once per theme.
+      These are the source specimens; everything below is the vocabulary and the per-component breakdown that
+      cites them.</p>
+
+    <figure class="mx-embed"><figcaption>State Gallery — Dark <span class="path">guidelines/state-gallery-dark.card.html</span></figcaption>
+      <iframe src="../guidelines/state-gallery-dark.card.html" height="760" loading="lazy" title="Every interaction and learning state in MxDarkDefault"></iframe></figure>
+    <figure class="mx-embed"><figcaption>State Gallery — Light <span class="path">guidelines/state-gallery-light.card.html</span></figcaption>
+      <iframe src="../guidelines/state-gallery-light.card.html" height="760" loading="lazy" title="Every interaction and learning state in MxLightDefault"></iframe></figure>
+  </section>
+
+  <!-- ============ MASTER STATE VOCABULARY ============ -->
+  <section class="mx-section mx-anchor" id="vocabulary">
+    <h2>State vocabulary — meaning, allowed, forbidden, token</h2>
+    <p>Read this table as a contract. The <b>Forbidden usage</b> column is the important one: most state bugs
+      are a correct token used to mean the wrong thing. The confusions that break MemoX are called out
+      explicitly — <code>selected ≠ correct</code>, <code>wrong ≠ destructive</code>,
+      <code>warning (amber / due) ≠ error (red)</code>, <code>no-due ≠ error</code>, and
+      <code>unavailable ≠ disabled ≠ broken</code>.</p>
+
+    <table class="mx-spec">
+      <caption>Interaction states</caption>
+      <thead><tr><th>State</th><th>Semantic meaning</th><th>Allowed usage</th><th>Forbidden usage</th><th>Key token</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tok">default</td>
+          <td>Resting, interactive, nothing chosen yet.</td>
+          <td>Every idle button, card, row, option.</td>
+          <td>Do not tint it toward selected/correct to "hint" the answer.</td>
+          <td class="tok">--mx-color-surface-card</td>
+        </tr>
+        <tr>
+          <td class="tok">pressed</td>
+          <td>Momentary touch-down feedback.</td>
+          <td>Active press on any tappable — darker fill / <code>primaryPressed</code>.</td>
+          <td>Never persist after finger-up; pressed is not selected.</td>
+          <td class="tok">--mx-color-action-primaryPressed</td>
+        </tr>
+        <tr>
+          <td class="tok">focused</td>
+          <td>Keyboard / a11y focus target.</td>
+          <td>Focus ring on inputs and controls (web + external keyboard).</td>
+          <td>Do not reuse the focus ring colour as a selection fill.</td>
+          <td class="tok">--mx-color-action-focusRing</td>
+        </tr>
+        <tr>
+          <td class="tok">selected</td>
+          <td>User <b>chose</b> this — no correctness judgement yet.</td>
+          <td>Chosen answer before grading; active tab / segment; picked tile.</td>
+          <td><b>selected ≠ correct.</b> Never use green feedback for a mere choice.</td>
+          <td class="tok">--mx-color-state-selected</td>
+        </tr>
+        <tr>
+          <td class="tok">disabled</td>
+          <td>Exists but not actionable <b>right now</b> (precondition unmet).</td>
+          <td>Submit before an answer is picked; greyed control.</td>
+          <td><b>disabled ≠ unavailable ≠ broken.</b> Not for missing features or errors.</td>
+          <td class="tok">--mx-color-state-disabledSurface</td>
+        </tr>
+        <tr>
+          <td class="tok">loading</td>
+          <td>Work in progress; outcome pending.</td>
+          <td>Button spinner, skeleton surface while fetching.</td>
+          <td>Do not freeze into disabled; do not hide that it is temporary.</td>
+          <td class="tok">--mx-color-state-loadingSurface</td>
+        </tr>
+        <tr>
+          <td class="tok">empty</td>
+          <td>Valid state with no data yet — an invitation, not a fault.</td>
+          <td><code>MxEmptyState</code>: no decks, no due cards, no results.</td>
+          <td><b>empty ≠ error.</b> Never render empty in red or as a failure.</td>
+          <td class="tok">--mx-color-text-tertiary</td>
+        </tr>
+        <tr>
+          <td class="tok">error</td>
+          <td>Something failed and needs recovery.</td>
+          <td><code>MxErrorState</code>, failed load, invalid input — red feedback.</td>
+          <td>Not for "due", "wrong answer", or an empty list.</td>
+          <td class="tok">--mx-color-feedback-wrong</td>
+        </tr>
+        <tr>
+          <td class="tok">warning</td>
+          <td>Attention / caution — <b>amber</b>, not a failure.</td>
+          <td>Due badge, "cards waiting", non-blocking caution callout.</td>
+          <td><b>warning (amber) ≠ error (red).</b> Due is not danger.</td>
+          <td class="tok">--mx-color-feedback-warning</td>
+        </tr>
+        <tr>
+          <td class="tok">unavailable</td>
+          <td>Feature/entry not offered in this context (by design).</td>
+          <td>Locked setting, mode not applicable to this deck.</td>
+          <td><b>unavailable ≠ disabled ≠ broken.</b> Not a transient block, not a crash.</td>
+          <td class="tok">--mx-color-state-unavailableSurface</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="mx-spec">
+      <caption>Learning &amp; grading states</caption>
+      <thead><tr><th>State</th><th>Semantic meaning</th><th>Allowed usage</th><th>Forbidden usage</th><th>Key token</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tok">correct</td>
+          <td>Answer graded <b>right</b> — green feedback.</td>
+          <td>Post-grade answer option, match tile, study card result.</td>
+          <td>Never show before grading; correct is not "selected".</td>
+          <td class="tok">--mx-color-feedback-correct</td>
+        </tr>
+        <tr>
+          <td class="tok">wrong</td>
+          <td>Answer graded <b>incorrect</b> — red feedback.</td>
+          <td>Post-grade wrong option; the missed correct answer is still shown as correct.</td>
+          <td><b>wrong ≠ destructive.</b> A wrong answer deletes nothing.</td>
+          <td class="tok">--mx-color-feedback-wrong</td>
+        </tr>
+        <tr>
+          <td class="tok">completed</td>
+          <td>Item resolved and removed from play (matched / finished).</td>
+          <td>Matched pair fades to done; finished session item.</td>
+          <td>Not the same as correct; a completed pair is not "graded green" forever.</td>
+          <td class="tok">--mx-color-feedback-correct</td>
+        </tr>
+        <tr>
+          <td class="tok">revealed</td>
+          <td>Answer shown to the learner (self-graded flow).</td>
+          <td>Study card flipped to its meaning before self-rating.</td>
+          <td>Reveal is neutral — do not colour it correct/wrong pre-rating.</td>
+          <td class="tok">--mx-color-srs-active</td>
+        </tr>
+        <tr>
+          <td class="tok">forgotten</td>
+          <td>Recalled poorly → SRS lapse.</td>
+          <td>"Again" self-rating; lapse pill in review history.</td>
+          <td>Not destructive red; lapse is <code>srs-lapse</code> coral, not delete.</td>
+          <td class="tok">--mx-color-srs-lapse</td>
+        </tr>
+        <tr>
+          <td class="tok">remembered</td>
+          <td>Recalled well → interval advances.</td>
+          <td>"Good"/"Easy" self-rating; progress toward mastered.</td>
+          <td>Do not reuse the answer-correct token as an SRS lifecycle colour.</td>
+          <td class="tok">--mx-color-srs-active</td>
+        </tr>
+        <tr>
+          <td class="tok">no-due</td>
+          <td>Nothing due — a <b>calm, good</b> resting state.</td>
+          <td>"All caught up" badge / empty due-queue → <code>srs-noDue</code> green.</td>
+          <td><b>no-due ≠ error.</b> Zero due is success, never a red empty fault.</td>
+          <td class="tok">--mx-color-srs-noDue</td>
+        </tr>
+        <tr>
+          <td class="tok">destructive</td>
+          <td>Irreversible data loss — delete deck / reset progress.</td>
+          <td>Destructive <code>MxActionButton</code> + <code>MxConfirmDialog</code>.</td>
+          <td>Never style a normal primary as destructive; never for "wrong answer".</td>
+          <td class="tok">--mx-color-destructive-text</td>
+        </tr>
+        <tr>
+          <td class="tok">high-risk</td>
+          <td>Destructive <b>and</b> hard to undo — needs extra friction.</td>
+          <td>Reset all data: destructive styling + typed confirm / hold-to-confirm.</td>
+          <td>Do not gate everyday deletes behind high-risk friction (fatigue).</td>
+          <td class="tok">--mx-color-destructive-border</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Name the intent, then let the component resolve the token:
+        <code>selected</code> for a choice, <code>correct</code>/<code>wrong</code> only after grading,
+        <code>warning</code>/<code>srs-due</code> amber for "needs review", <code>destructive</code> only for
+        data loss.</div>
+      <div class="mx-dont"><b></b>Blur the dangerous pairs: green a mere selection (selected→correct), red a
+        wrong answer as if it deleted data (wrong→destructive), red a due badge or an empty list
+        (warning/no-due→error), or grey an unavailable feature as if it were broken.</div>
+    </div>
+  </section>
+
+  <!-- ============ PER-COMPONENT STATE MATRIX ============ -->
+  <section class="mx-section mx-anchor" id="components">
+    <h2>Per-component state matrix</h2>
+    <p>Each component renders only the states it can actually enter. The dark pane
+      (<code>MxDarkDefault</code>) and light pane (<code>MxLightDefault</code>) render identical markup — only
+      the theme scope differs, proving the same <code>state</code> prop resolves correctly in both.</p>
+
+    <!-- ---- MxActionButton ---- -->
+    <h3>MxActionButton</h3>
+    <p>States: default · pressed · disabled · loading · destructive. Destructive is a
+      <code>variant</code>, not a colour a screen paints on a normal button.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-stack">
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Start study</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">default · action-primary</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-action-primaryPressed);color:var(--mx-color-text-onAction);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Start study</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">pressed · primaryPressed</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-action-primaryDisabled);color:var(--mx-color-text-disabled);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Start study</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">disabled · primaryDisabled</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;gap:var(--mx-space-8);background:var(--mx-color-state-loadingSurface);color:var(--mx-color-text-secondary);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)"><span style="width:14px;height:14px;border-radius:var(--mx-radius-full);border:2px solid var(--mx-color-srs-active);border-right-color:transparent"></span>Starting…</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">loading · loadingSurface</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);color:var(--mx-color-destructive-text);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Delete deck</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">destructive · destructive-*</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-stack">
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Start study</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">default · action-primary</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-action-primaryPressed);color:var(--mx-color-text-onAction);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Start study</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">pressed · primaryPressed</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-action-primaryDisabled);color:var(--mx-color-text-disabled);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Start study</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">disabled · primaryDisabled</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;gap:var(--mx-space-8);background:var(--mx-color-state-loadingSurface);color:var(--mx-color-text-secondary);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)"><span style="width:14px;height:14px;border-radius:var(--mx-radius-full);border:2px solid var(--mx-color-srs-active);border-right-color:transparent"></span>Starting…</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">loading · loadingSurface</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--mx-space-6)">
+            <div style="height:48px;border-radius:var(--mx-radius-pill);display:flex;align-items:center;justify-content:center;background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);color:var(--mx-color-destructive-text);font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Delete deck</div>
+            <span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono)">destructive · destructive-*</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- MxCard ---- -->
+    <h3>MxCard</h3>
+    <p>States: default · selected · correct · wrong. Selection uses a 2px violet border;
+      correct/wrong appear only after grading. <b>selected ≠ correct.</b></p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-grid-2">
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-surface-card);border:var(--mx-border-default);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">default</div></div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div style="color:var(--mx-color-state-selected);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">selected · state-selected</div></div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-correct);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div style="color:var(--mx-color-feedback-correct);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">correct · feedback-correct</div></div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-feedback-wrongSurface);border:var(--mx-border-wrong);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div style="color:var(--mx-color-feedback-wrong);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">wrong · feedback-wrong</div></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-grid-2">
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-surface-card);border:var(--mx-border-default);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">default</div></div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div style="color:var(--mx-color-state-selected);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">selected · state-selected</div></div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-correct);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div style="color:var(--mx-color-feedback-correct);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">correct · feedback-correct</div></div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-feedback-wrongSurface);border:var(--mx-border-wrong);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Card<div style="color:var(--mx-color-feedback-wrong);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-top:var(--mx-space-8)">wrong · feedback-wrong</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- MxListRow ---- -->
+    <h3>MxListRow</h3>
+    <p>States: default · pressed · disabled. A list row never grades — it navigates or toggles.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-stack">
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:60px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-subtle)"><span style="width:36px;height:36px;border-radius:var(--mx-radius-full);background:var(--mx-color-surface-elevated)"></span><div style="flex:1"><div style="color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Korean Basics</div><div class="mx-muted" style="font-size:11px">default</div></div></div>
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:60px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-loadingSurface);border:var(--mx-border-subtle)"><span style="width:36px;height:36px;border-radius:var(--mx-radius-full);background:var(--mx-color-surface-elevated)"></span><div style="flex:1"><div style="color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Korean Basics</div><div class="mx-muted" style="font-size:11px">pressed · press-surface</div></div></div>
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:60px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle);opacity:1"><span style="width:36px;height:36px;border-radius:var(--mx-radius-full);background:var(--mx-color-state-disabledSurface)"></span><div style="flex:1"><div style="color:var(--mx-color-text-disabled);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Korean Basics</div><div class="mx-muted" style="font-size:11px">disabled · text-disabled</div></div></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-stack">
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:60px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-subtle)"><span style="width:36px;height:36px;border-radius:var(--mx-radius-full);background:var(--mx-color-surface-elevated)"></span><div style="flex:1"><div style="color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Korean Basics</div><div class="mx-muted" style="font-size:11px">default</div></div></div>
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:60px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-loadingSurface);border:var(--mx-border-subtle)"><span style="width:36px;height:36px;border-radius:var(--mx-radius-full);background:var(--mx-color-surface-elevated)"></span><div style="flex:1"><div style="color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Korean Basics</div><div class="mx-muted" style="font-size:11px">pressed · press-surface</div></div></div>
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:60px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle)"><span style="width:36px;height:36px;border-radius:var(--mx-radius-full);background:var(--mx-color-state-disabledSurface)"></span><div style="flex:1"><div style="color:var(--mx-color-text-disabled);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Korean Basics</div><div class="mx-muted" style="font-size:11px">disabled · text-disabled</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- MxAnswerOption ---- -->
+    <h3>MxAnswerOption</h3>
+    <p>States: default · selected · correct · wrong · disabled. Grading is the crux: a
+      <code>selected</code> option turns <code>correct</code> or <code>wrong</code> only after submit, and
+      the un-chosen options lock to <code>disabled</code>.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-stack">
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-default);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">사과 &nbsp;<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">default</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">사과 &nbsp;<span style="color:var(--mx-color-state-selected);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">selected</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-correct);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">사과 &nbsp;<span style="color:var(--mx-color-feedback-correct);font:var(--mx-weight-semibold) 11px var(--mx-font-mono);margin-left:auto">✓ correct</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-wrongSurface);border:var(--mx-border-wrong);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">배 &nbsp;<span style="color:var(--mx-color-feedback-wrong);font:var(--mx-weight-semibold) 11px var(--mx-font-mono);margin-left:auto">✕ wrong</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-disabled);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">포도 &nbsp;<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">disabled</span></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-stack">
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-default);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">사과 &nbsp;<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">default</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">사과 &nbsp;<span style="color:var(--mx-color-state-selected);font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">selected</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-correct);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">사과 &nbsp;<span style="color:var(--mx-color-feedback-correct);font:var(--mx-weight-semibold) 11px var(--mx-font-mono);margin-left:auto">✓ correct</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-wrongSurface);border:var(--mx-border-wrong);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">배 &nbsp;<span style="color:var(--mx-color-feedback-wrong);font:var(--mx-weight-semibold) 11px var(--mx-font-mono);margin-left:auto">✕ wrong</span></div>
+          <div style="min-height:48px;display:flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-disabled);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">포도 &nbsp;<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">disabled</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- MxMatchTile ---- -->
+    <h3>MxMatchTile</h3>
+    <p>States: default · selected · correct · wrong · completed. A matched pair goes
+      <code>completed</code> (resolved, removed from play) — distinct from a graded <code>correct</code>.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-grid-3">
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-default);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span class="mx-muted" style="font:var(--mx-weight-medium) 10px var(--mx-font-mono)">default</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span style="color:var(--mx-color-state-selected);font:var(--mx-weight-medium) 10px var(--mx-font-mono)">selected</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-correct);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span style="color:var(--mx-color-feedback-correct);font:var(--mx-weight-semibold) 10px var(--mx-font-mono)">correct</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-wrongSurface);border:var(--mx-border-wrong);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">pear<span style="color:var(--mx-color-feedback-wrong);font:var(--mx-weight-semibold) 10px var(--mx-font-mono)">wrong</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-tertiary);opacity:0.55;font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span style="font:var(--mx-weight-medium) 10px var(--mx-font-mono)">completed</span></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-grid-3">
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-default);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span class="mx-muted" style="font:var(--mx-weight-medium) 10px var(--mx-font-mono)">default</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span style="color:var(--mx-color-state-selected);font:var(--mx-weight-medium) 10px var(--mx-font-mono)">selected</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-correct);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span style="color:var(--mx-color-feedback-correct);font:var(--mx-weight-semibold) 10px var(--mx-font-mono)">correct</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-wrongSurface);border:var(--mx-border-wrong);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">pear<span style="color:var(--mx-color-feedback-wrong);font:var(--mx-weight-semibold) 10px var(--mx-font-mono)">wrong</span></div>
+          <div style="min-height:56px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--mx-space-4);border-radius:var(--mx-radius-md);background:var(--mx-color-feedback-correctSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-tertiary);opacity:0.55;font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">apple<span style="font:var(--mx-weight-medium) 10px var(--mx-font-mono)">completed</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- MxSettingsRow ---- -->
+    <h3>MxSettingsRow</h3>
+    <p>States: default · disabled · unavailable · high-risk. <code>unavailable</code> (not offered here)
+      reads differently from <code>disabled</code> (temporarily blocked); <code>high-risk</code> is the
+      destructive row that needs extra confirmation.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="MxDarkDefault">
+        <div class="mx-stack">
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-subtle);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Notifications<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">default</span></div>
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-disabled);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Sync (needs sign-in)<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">disabled</span></div>
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-unavailableSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-tertiary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Cloud backup (Pro)<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">unavailable</span></div>
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);color:var(--mx-color-destructive-text);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Reset all data<span style="color:var(--mx-color-destructive-text);font:var(--mx-weight-semibold) 11px var(--mx-font-mono);margin-left:auto">high-risk</span></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="MxLightDefault">
+        <div class="mx-stack">
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);border:var(--mx-border-subtle);color:var(--mx-color-text-primary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Notifications<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">default</span></div>
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-disabled);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Sync (needs sign-in)<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">disabled</span></div>
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-state-unavailableSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-tertiary);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Cloud backup (Pro)<span class="mx-muted" style="font:var(--mx-weight-medium) 11px var(--mx-font-mono);margin-left:auto">unavailable</span></div>
+          <div style="display:flex;align-items:center;min-height:56px;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-md);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);color:var(--mx-color-destructive-text);font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body)">Reset all data<span style="color:var(--mx-color-destructive-text);font:var(--mx-weight-semibold) 11px var(--mx-font-mono);margin-left:auto">high-risk</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONFUSIONS ============ -->
+  <section class="mx-section mx-anchor" id="confusions">
+    <h2>The confusions that break MemoX</h2>
+    <p>These four pairs share a hue or a feeling but carry opposite meaning. Getting them wrong teaches the
+      learner the wrong lesson or scares them off a safe action.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b><b>selected ≠ correct.</b> A chosen answer is violet
+        (<code>state-selected</code>). It only turns green (<code>feedback-correct</code>) after grading —
+        never pre-colour a selection as if it were right.</div>
+      <div class="mx-dont"><b></b>Paint a selected option green so the learner can guess the answer from the
+        colour before submitting.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b><b>wrong ≠ destructive.</b> A wrong answer is red
+        <code>feedback-wrong</code> and destroys nothing. Destructive red
+        (<code>destructive-*</code>) is reserved for delete / reset.</div>
+      <div class="mx-dont"><b></b>Reuse the destructive button style for a wrong answer, implying the mistake
+        cost the learner their data.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b><b>warning (amber / due) ≠ error (red).</b> Due cards use amber
+        <code>srs-due</code>/<code>feedback-warning</code> — a nudge, not a failure. Errors are red
+        <code>feedback-wrong</code>.</div>
+      <div class="mx-dont"><b></b>Render a due badge or "cards waiting" in red so a normal review queue looks
+        like something crashed.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b><b>no-due ≠ error</b> and <b>unavailable ≠ disabled ≠ broken.</b> "All caught
+        up" is green <code>srs-noDue</code> success; unavailable is a calm not-offered surface, disabled is a
+        transient block.</div>
+      <div class="mx-dont"><b></b>Show an empty due-queue as a red error, or grey an unavailable Pro feature so
+        it reads as a bug.</div>
+    </div>
+
+    <div class="mx-rn"><b>React Native</b> Every Mx component takes a <code>state</code> / <code>variant</code>
+      prop that resolves to tokens inside the component — e.g.
+      <code>&lt;MxAnswerOption state="correct" /&gt;</code>,
+      <code>&lt;MxActionButton variant="destructive" /&gt;</code>. Screens <b>never</b> branch raw colours per
+      state (<code>state === 'wrong' ? '#ff8a8a' : …</code>) and <b>never</b> invent a new state colour. If a
+      state has no token, add one to <code>tokens/colors.css</code> — do not hardcode.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav"><a href="index.html">‹ Index</a><a href="09-feedback-dialog-gallery.html">‹ 09 Feedback &amp; Dialog</a><a href="11-layout-template-gallery.html">11 Layout Templates ›</a></nav>
+</main>
+
+</body>
+</html>

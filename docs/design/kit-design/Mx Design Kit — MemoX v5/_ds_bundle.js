@@ -43,13 +43,13 @@ function MxActionButton({
     },
     secondary: {
       bg: "var(--mx-color-action-secondary)",
-      color: "var(--mx-color-action-primary)",
+      color: "var(--mx-color-action-onSecondary)",
       border: "1px solid transparent"
     },
     ghost: {
       bg: "var(--mx-color-action-ghost)",
-      color: "var(--mx-color-action-primary)",
-      border: "1px solid transparent"
+      color: "var(--mx-color-action-onSecondary)",
+      border: "1px solid var(--mx-color-border-default)"
     },
     destructive: {
       bg: "var(--mx-color-destructive-surface)",
