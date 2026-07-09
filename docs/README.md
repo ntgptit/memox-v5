@@ -20,6 +20,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [architecture/overview.md](architecture/overview.md) | Tổng quan kiến trúc, layer, data flow |
 | — | [architecture/folder-structure.md](architecture/folder-structure.md) | Vị trí đặt code (`src/`, `src/app`, features, shared) |
 | — | [architecture/dependency-boundaries.md](architecture/dependency-boundaries.md) | Luật import (được enforce) |
+| — | [decision-tables/phase-1-contracts.md](decision-tables/phase-1-contracts.md) | Quyết định Phase 1: due semantics, session persistence, starter template |
 | — | [project-management/wbs.md](project-management/wbs.md) | Work breakdown (foundation-first) |
 | — | [verification.md](verification.md) | Cách verify (`npm run check`) |
 

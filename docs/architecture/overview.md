@@ -73,9 +73,26 @@ Two import rules are **enforced** by `scripts/check-boundaries.mjs`:
 See [`dependency-boundaries.md`](dependency-boundaries.md) for the rationale and the allowed-import
 matrix, and [`folder-structure.md`](folder-structure.md) for where each kind of file goes.
 
+## Binding Phase 1 contracts
+
+Before implementation, three ambiguities are settled in
+[`../decision-tables/phase-1-contracts.md`](../decision-tables/phase-1-contracts.md):
+
+- **DT-1 Due semantics:** a card is due when `due_at <= now` (absolute instant); local day is used only
+  for the new-card-per-day counter.
+- **DT-2 Study session:** ephemeral state; durable progress lives only in `cards` + `card_reviews` (no
+  session tables in Phase 1).
+- **DT-3 Starter template:** kept until explicitly replaced/promoted; feature code must not depend on
+  starter demo components unless promoted to shared MemoX components.
+
 ## Status
 
 The repository is in the **foundation / documentation phase**. The starter dependencies are present,
 `src/app` contains the initial router setup, and the verification gate (`npm run check`) is green.
 **No product feature code (decks, cards, SRS, study modes) has been implemented yet** — see the
 [work breakdown](../project-management/wbs.md).
+
+The Expo starter template files are kept per DT-3. Note the recorded drift
+([DRIFT-001](folder-structure.md#drift-001--app-shell-depends-on-starter-components)): the app shell
+(`src/app/_layout.tsx`) currently imports starter components, to be promoted to shared MemoX components
+during Phase 1 FE work.

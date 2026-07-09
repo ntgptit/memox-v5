@@ -61,12 +61,41 @@ New dependencies need a clear justification and should not duplicate the above.
 
 ## 6. Verify before you claim done
 
-- Run **`npm run check`** (typecheck → Biome → Jest → boundary check). It must pass.
+- Run **`npm run check`** (typecheck → Biome → Jest → boundary check). It **must** pass — this is
+  mandatory, not optional.
+- **`--passWithNoTests` is a foundation-phase allowance only.** Do not use it to ship feature/domain
+  code without tests.
+- **A feature/BE row is not `Done` without a related, passing test.** If you deliberately skip a test,
+  record the reason in the WBS and keep the row **not** `Done`. No silent skips.
 - Do not claim completion if the gate was skipped or failed. Report which step failed and why.
-- More detail: [`docs/verification.md`](docs/verification.md).
+- More detail: [`docs/verification.md`](docs/verification.md) and the
+  [WBS evidence policy](docs/project-management/wbs.md#done-criteria--evidence-policy).
 
-## 7. This task's guardrails (documentation phase)
+## 7. Binding Phase 1 contracts (decision tables)
+
+These decisions are settled; implement to them, do not re-litigate. See
+[`docs/decision-tables/phase-1-contracts.md`](docs/decision-tables/phase-1-contracts.md).
+
+- **Due semantics (DT-1):** a card is due when `due_at <= now` (absolute instant). Local calendar day
+  is used **only** for the new-card-per-day counter, never for the due predicate.
+- **Study session (DT-2):** sessions are ephemeral state; durable progress lives only in `cards` and
+  `card_reviews`. Phase 1 adds **no** `study_sessions`/`study_session_items` tables.
+- **Starter template (DT-3):** see §9.
+
+## 8. Documentation-phase guardrails
 
 - **Do not implement product feature code** while the project is in the documentation phase.
 - Keep docs accurate to the repo. If you document a rule, it must match the code/config that
-  enforces it. On any docs-code mismatch: **stop and surface it.**
+  enforces it. On any docs-code mismatch: **stop and surface it** using the drift format in
+  [`docs/architecture/folder-structure.md`](docs/architecture/folder-structure.md#drift-log). Do not
+  silently guess.
+
+## 9. Starter template rule (DT-3)
+
+- The Expo **starter template files are kept until explicitly replaced/promoted** — not deleted
+  pre-emptively. Scope: `src/components/**`, `src/constants/theme.ts`, `src/hooks/**`,
+  `src/app/explore.tsx`.
+- **Feature implementation must not depend on starter demo screens/components** unless they are
+  explicitly promoted into shared MemoX components (e.g. `src/shared/ui`).
+- Known current drift: `src/app/_layout.tsx` imports starter components. Documented in the
+  [drift log](docs/architecture/folder-structure.md#drift-log).

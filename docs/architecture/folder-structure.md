@@ -14,9 +14,9 @@ memox-v5/
 │   │   ├── _layout.tsx       # root layout
 │   │   ├── index.tsx         # home route
 │   │   └── explore.tsx       # (starter reference screen)
-│   ├── components/           # starter template UI — reference only
-│   ├── constants/            # starter template — reference only (theme.ts)
-│   ├── hooks/                # starter template — reference only
+│   ├── components/           # Expo starter template UI — kept until replaced (DT-3)
+│   ├── constants/            # Expo starter template — kept until replaced (theme.ts, DT-3)
+│   ├── hooks/                # Expo starter template — kept until replaced (DT-3)
 │   ├── features/             # feature modules (see below); currently a placeholder
 │   ├── shared/               # cross-cutting code (see below)
 │   │   ├── lib/
@@ -31,8 +31,10 @@ memox-v5/
 └── ...config (biome.json, tsconfig.json, metro.config.js, babel.config.js, tailwind.config.js)
 ```
 
-> The `src/components`, `src/constants`, `src/hooks`, and `src/app/explore.tsx` files are **starter
-> template code kept as a screen-code reference**. Treat them as reference, not as MemoX feature code.
+> The `src/components`, `src/constants`, `src/hooks`, and `src/app/explore.tsx` files are **Expo
+> starter template code**. They are **kept until explicitly replaced/promoted** (decision
+> [DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling)); see
+> [Expo starter template](#expo-starter-template) below for the rule and current drift.
 
 ## `src/app` — routes only
 
@@ -99,3 +101,58 @@ As features are built (see [WBS](../project-management/wbs.md)), expect folders 
   `src/features/settings/` — feature slices.
 
 These are planned locations documented in [`docs/design/`](../design/); they do not exist as code yet.
+
+## Expo starter template
+
+**Decision (DT-3): keep starter files until explicitly replaced/promoted.** They are not deleted
+pre-emptively, and they are not merely "temporary reference" — the app shell currently depends on some
+of them (see the drift log below).
+
+Scope of starter files: `src/components/**`, `src/constants/theme.ts`, `src/hooks/**`,
+`src/app/explore.tsx`.
+
+Rules:
+
+- **Feature implementation must not depend on starter demo screens/components** unless those pieces are
+  **explicitly promoted** into shared MemoX components (e.g. moved/rewritten under `src/shared/ui`).
+- When a MemoX screen needs something a starter component provides, **promote** it (make it a proper
+  shared component with its own place and, where it carries logic, tests) rather than importing the
+  demo file directly.
+- A starter file may be deleted once nothing depends on it. Until then it stays — removing it while the
+  app shell imports it would break the build.
+
+Full decision table:
+[DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling).
+
+## Drift log
+
+When docs and source disagree, record it here (and stop rather than silently guessing), using this
+format:
+
+```
+DRIFT DETECTED
+File code:
+File doc:
+Mismatch:
+Suggested fix:
+```
+
+### DRIFT-001 — app shell depends on starter components
+
+```
+DRIFT DETECTED
+File code: src/app/_layout.tsx (imports @/components/app-tabs, @/components/animated-icon)
+File doc:  docs/decision-tables/phase-1-contracts.md DT-3 + this file (rule: feature/app code must
+           not depend on starter demo components unless promoted to shared MemoX components)
+Mismatch:  The live root layout (not a demo screen) renders via starter components AppTabs and
+           AnimatedSplashOverlay, so the current app shell already depends on starter code that the
+           DT-3 rule says non-promoted app code should not depend on.
+Suggested fix: During Phase 1 FE work (WBS P1-FE-*), promote the shell's navigation/splash into
+           shared MemoX components (e.g. src/shared/ui) or MemoX-owned route files, then drop the
+           starter imports from src/app/_layout.tsx. Until then, DT-3 governs: starter files stay,
+           and no NEW feature code may depend on them.
+```
+
+> Note: `src/app/index.tsx` is clean (imports only `react-native` primitives). Only `_layout.tsx` is
+> currently affected. This drift is documentation-only to record here; **no source is changed in the
+> docs-hardening task.**

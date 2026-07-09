@@ -9,6 +9,18 @@ npm run check
 Do not claim a change is complete unless `npm run check` passes. If it fails or you had to skip a
 step, say which step and why.
 
+## Mandatory rules
+
+1. **`npm run check` is mandatory.** No change is "done" until it passes locally and in CI.
+2. **`--passWithNoTests` is a foundation-phase allowance only.** It exists so an empty suite passes
+   while no product code exists. Once a unit ships, it must bring tests; the flag must **not** be used
+   to paper over missing tests for shipped feature/domain code.
+3. **A feature/BE row cannot be marked `Done` without a related test** that exists and passes. See the
+   [WBS evidence policy](project-management/wbs.md#done-criteria--evidence-policy).
+4. **Intentionally skipped tests must be recorded.** If a test is deliberately skipped, the relevant
+   WBS row must state the reason and its status **must not** be `Done` (use `In progress`/`Blocked`).
+   Silent skips are not allowed.
+
 ## What it runs
 
 `check` is a composite script (see `package.json`). It runs these in order and stops at the first
@@ -46,9 +58,10 @@ Formatting and lint. To auto-apply safe fixes: `npx biome check --write .`. Conf
 `coverage`, and `assets` are excluded from Biome.
 
 ### 3. Jest (`npm test`)
-Runs with `jest-expo`. `--passWithNoTests` means an empty/absent suite still passes — expected during
-the foundation phase. Co-locate tests in `__tests__/` next to the code they cover. **Pure domain logic
-(e.g. the SRS engine) must be unit-tested** when it lands.
+Runs with `jest-expo`. `--passWithNoTests` lets an empty/absent suite pass — a **foundation-phase
+allowance only** (see rule 2 above), not a way to skip tests for shipped code. Co-locate tests in
+`__tests__/` next to the code they cover. **Pure domain logic (e.g. the SRS engine) must be
+unit-tested** when it lands, and a feature/BE row is not `Done` without a passing related test.
 
 ### 4. Boundary check (`scripts/check-boundaries.mjs`)
 Fails if:
