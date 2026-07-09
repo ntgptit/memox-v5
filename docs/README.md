@@ -27,6 +27,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [decision-tables/session-result-decision-table.md](decision-tables/session-result-decision-table.md) | Session Result: khi nào hiện, counting, không mutate |
 | — | [decision-tables/settings-more-hub-decision-table.md](decision-tables/settings-more-hub-decision-table.md) | Settings / More Hub: chức năng hệ thống, destructive, import/export |
 | — | [decision-tables/statistics-decision-table.md](decision-tables/statistics-decision-table.md) | Statistics: tabs, scope, no-mutation, không bịa formula |
+| — | [decision-tables/appearance-theme-settings-decision-table.md](decision-tables/appearance-theme-settings-decision-table.md) | Chủ đề: auto dark, day/night theme, app icon, no-mutation |
 | — | [project-management/wbs.md](project-management/wbs.md) | Work breakdown (foundation-first) |
 | — | [verification.md](verification.md) | Cách verify (`npm run check`) |
 
@@ -49,6 +50,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [design/screens/session-result.md](design/screens/session-result.md) | Concept & nghiệp vụ màn Session Result (kết quả phiên) |
 | — | [design/screens/settings-more-hub.md](design/screens/settings-more-hub.md) | Chức năng hệ thống: Settings / More Hub (từ drawer mock) |
 | — | [design/screens/statistics.md](design/screens/statistics.md) | Concept & nghiệp vụ màn Statistics (Từ / Thời gian / Chất lượng) |
+| — | [design/screens/appearance-theme-settings.md](design/screens/appearance-theme-settings.md) | Concept & nghiệp vụ màn Chủ đề (theme, auto dark, app icon) |
 | — | [design/navigation.md](design/navigation.md) | Concept điều hướng: Settings/More Hub, drawer không bắt buộc |
 | — | [roadmap/11-phasing.md](roadmap/11-phasing.md) | Lộ trình Phase 1–4 |
 

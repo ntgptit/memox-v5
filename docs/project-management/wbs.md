@@ -223,7 +223,7 @@ Drawer-derived system functions, surfaced via a modern Settings / More Hub (draw
 | F1.DATA.IMPORT.1 | Import flow (validate before commit; local-first) | BE/FE | Future | [settings-more-hub.md → Group C](../design/screens/settings-more-hub.md#group-c--import--export-nhập--xuất); format not decided | TBD | TBD |
 | F1.DATA.EXPORT.1 | Export flow (no mutation; local-first) | BE/FE | Future | [settings-more-hub.md → Group C](../design/screens/settings-more-hub.md#group-c--import--export-nhập--xuất); format not decided | TBD | TBD |
 | _(Statistics)_ | Statistics has its **own section** — see [Statistics (F1.STATS)](#statistics-f1stats) | — | — | [settings-more-hub.md → Group D](../design/screens/settings-more-hub.md#group-d--statistics-thống-kê) | — | — |
-| F1.APPEARANCE.1 | Theme settings (theme/dark/light/system) | FE/Settings | Not started | [settings-more-hub.md → Group E](../design/screens/settings-more-hub.md#group-e--appearance--theme-chủ-đề), [09-settings.md](../design/09-settings.md) | TBD | TBD |
+| _(Appearance)_ | Appearance / Theme has its **own section** — see [Appearance / Theme Settings (F1.APPEARANCE)](#appearance--theme-settings-f1appearance) | — | — | [settings-more-hub.md → Group E](../design/screens/settings-more-hub.md#group-e--appearance--theme-chủ-đề) | — | — |
 | F1.SUPPORT.1 | FAQ and support contact entries (email / Telegram) | FE | Future | [settings-more-hub.md → Group G](../design/screens/settings-more-hub.md#group-g--help--support-trợ-giúp); links not decided | TBD | TBD |
 
 > `F1.SETTINGS.HUB.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash
@@ -255,6 +255,28 @@ Long-term statistics screen (opened from Settings / More Hub). Spec:
 > from Session Result (just-finished session) and Activity summary (today). **Aggregation formulas are
 > not decided** — the read-model rows (`F1.STATS.4/.5/.6`) must define them; docs **do not invent** them.
 > Opening Statistics **never mutates** learning data.
+
+---
+
+## Appearance / Theme Settings (F1.APPEARANCE)
+
+Theme/appearance configuration (opened from Settings / More Hub → Chủ đề). Spec:
+[`../design/screens/appearance-theme-settings.md`](../design/screens/appearance-theme-settings.md)
+([decision table](../decision-tables/appearance-theme-settings-decision-table.md)).
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.APPEARANCE.1 | Appearance / Theme Settings concept | Docs | In progress → `Done` after merge | [appearance-theme-settings.md](../design/screens/appearance-theme-settings.md); [memox-scope.md](../product/memox-scope.md) | `npm run check` / `git diff --check` | PR `docs/appearance-theme-settings-concept` (squash commit after merge) |
+| F1.APPEARANCE.2 | Appearance settings storage (persist theme/auto-dark/icon prefs; local settings) | BE/Settings | Not started | [appearance-theme-settings.md → Persistence](../design/screens/appearance-theme-settings.md#persistence-concept), [09-settings.md](../design/09-settings.md) | TBD | TBD |
+| F1.APPEARANCE.3 | Theme settings UI (auto dark mode; day/night theme presets; app icon) | FE | Not started | [appearance-theme-settings.md](../design/screens/appearance-theme-settings.md) | TBD | TBD |
+| F1.APPEARANCE.4 | Theme application runtime behavior (follow system / apply day-night themes) | FE | Not started | [appearance-theme-settings.md → Auto dark mode](../design/screens/appearance-theme-settings.md#auto-dark-mode-chế-độ-đêm-tự-động) | TBD | TBD |
+| F1.APPEARANCE.5 | App icon switching platform spike | Research/Foundation | Future | [appearance-theme-settings.md → Platform notes](../design/screens/appearance-theme-settings.md#platform-notes-for-app-icon); Expo/native support not verified | TBD | TBD |
+
+> `F1.APPEARANCE.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash
+> commit), per the [evidence policy](#done-criteria--evidence-policy). **Appearance settings never mutate
+> learning data.** **App icon switching is Future** — it needs verified platform support (spike) and can
+> remove Home-screen shortcuts. Theme token values, icon assets, dynamic-app-icon API, and persistence
+> schema are **not** decided here.
 
 ---
 
