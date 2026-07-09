@@ -258,6 +258,65 @@ resume do docs session/flow-state quyết định (ngoài phạm vi task này; x
 > [Bảng đối chiếu mode](#bảng-đối-chiếu-mode); vai trò/giai đoạn của các mode đang được ghi nhận drift ở
 > [New Learning Flow](#new-learning-flow) (Match từng được xếp Phase 3 / practice-only).
 
+### guessMode (mode thứ 3)
+
+**Purpose.** `guessMode` là **mode chọn đáp án** (multiple-choice) trong New Learning Flow — nhận diện
+answer/meaning đúng cho một prompt. Vẫn là **pha trước SRS**.
+
+**When it appears.** Ngay **sau khi `matchMode` hoàn thành**, flow **tự chuyển** sang `guessMode` (mode
+thứ 3/5). Hoàn thành `guessMode` → chuyển sang `recallMode`.
+
+**What user sees.** Một **prompt/front** chính + **nhiều option** answer/meaning. **Chỉ một** option
+đúng cho prompt hiện tại; các option sai là **distractor** từ card khác / pool phù hợp (thuật toán chọn
+distractor **không** chốt ở đây). Ví dụ hướng `KO → VI`:
+
+- prompt/front: `결제하다`
+- option đúng: `To pay / Thanh toán`
+- option sai (distractor): `Reporter / Nhà báo`, `Busy life / Cuộc sống bận rộn`, …
+
+**Expected user action.** Người dùng **chọn một option** để trả lời.
+
+**Correct feedback (chọn đúng).**
+
+- Option đúng hiển thị trạng thái **correct** (UI có thể dùng màu xanh / style correct tương đương).
+- Item được tính **hoàn thành** trong `guessMode`; có thể chuyển sang **item tiếp theo** (hoặc kết thúc
+  mode nếu batch đã xong).
+- Chọn đúng **không** đưa card vào **Box 1**, **không** tạo SRS due schedule.
+
+**Incorrect feedback (chọn sai).**
+
+- Option sai hiển thị trạng thái **incorrect** (UI có thể dùng màu đỏ / style incorrect tương đương);
+  hệ thống **phải** cho user biết lựa chọn đó sai.
+- Item **chưa** được tính hoàn thành; item được **xử lý để người dùng còn cơ hội học/trả lời lại** theo
+  rule của docs (timing retry **không** chốt ở đây — xem dưới).
+- Chọn sai **không** activate SRS, **không** đưa card vào **Box 1**, và **không** được làm **mất** item
+  khỏi learning flow khi item chưa hoàn thành.
+
+**Retry (future / implementation detail — không chốt timing).** Ví dụ cách retry có thể là: retry ngay
+trên cùng prompt; retry sau vài item; hoặc đưa item về cuối batch. **Rule bắt buộc:** item sai **chưa
+hoàn thành**, **không** SRS-active, **không** Box 1.
+
+**Completion rule.** `guessMode` kết thúc khi **mọi item trong batch** đã đúng/hoàn thành; khi đó flow
+**tự chuyển** sang **`recallMode`** (mode thứ 4).
+
+**What it must NOT do.**
+
+- Chọn đúng **một** item **không** đủ để card vào Box 1.
+- Hoàn thành **cả** `guessMode` **vẫn chưa** đủ — card **chỉ** SRS-active sau khi hoàn thành **đủ 5
+  mode** (review → match → guess → recall → fill).
+- **Không** coi feedback đúng/sai ở `guessMode` là **SRS review grading**.
+
+**Progress (concept).** Progress trong `guessMode` phản ánh tiến độ **New Learning Flow** (hoặc mode
+hiện tại) theo rule UI docs; **có thể tăng** khi một item đúng hoàn thành. Progress này **không** phải
+SRS box progress và **không** phải bằng chứng card đã SRS-active. **Không** chốt % cụ thể (ví dụ 40%/44%).
+
+**Thoát giữa chừng (concept).** Nếu thoát khi đang ở `guessMode`, các item **chưa** hoàn thành đủ 5 mode
+**vẫn** not SRS-active; **không** tự vào Box 1; **không** tạo SRS due schedule.
+
+> `guessMode` (bước học, pre-SRS) dùng cùng cơ chế trắc nghiệm như mode **Guess** trong
+> [Bảng đối chiếu mode](#bảng-đối-chiếu-mode); vai trò/giai đoạn đang được ghi nhận drift ở
+> [New Learning Flow](#new-learning-flow).
+
 ## SRS Repeat Flow
 
 **Lặp lại** (từ Play Menu) là **review SRS**.
