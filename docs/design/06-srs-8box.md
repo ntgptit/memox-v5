@@ -71,25 +71,30 @@ với `MS_PER_DAY = 86_400_000`. (Interval index 0-based: box `b` dùng `interva
 phiên học lần đầu, đặt `new_seen_on = ngày local hôm nay` (để đếm hạn mức thẻ mới). Sau lần chấm đầu,
 `due_at` được tính như trên.
 
-> **Quyết định thiết kế — mili-giây tuyệt đối:** interval cộng theo mili-giây tuyệt đối
-> (đơn giản, tránh lệ thuộc lịch). Việc xác định **đến hạn (due)** dùng mốc `now` tuyệt đối, **không**
-> dùng cửa sổ ngày lịch (xem "Ngữ nghĩa Due" ngay dưới). **Ngày địa phương** của thiết bị **chỉ** dùng
-> cho một việc duy nhất: đếm **hạn mức thẻ mới/ngày** (`new_seen_on`). Đây là đánh đổi có chủ đích: né
-> ca biên DST/timezone. Khi bật sync đa thiết bị (Phase 4) sẽ xem lại quy ước "ngày".
+> **Quyết định thiết kế — lưu trữ vs. eligibility:** `due_at` được **lưu** dưới dạng mốc tuyệt đối
+> (epoch ms; interval cộng theo mili-giây). Nhưng việc **xác định đến hạn (due)** thì **normalize về
+> ngày địa phương** trước khi so sánh (xem "Ngữ nghĩa Due (local-day)" ngay dưới) — **không** so trực
+> tiếp `due_at <= now`. Khi bật sync đa thiết bị (Phase 4) sẽ xem lại quy ước "ngày".
 
-## Ngữ nghĩa "đến hạn" (Due) — Option A
+## Ngữ nghĩa "đến hạn" (Due) — local-day
 
-> **Quyết định (DT-1):** một thẻ **đến hạn** khi `due_at <= now`.
-> Xem bảng quyết định: [decision-tables/phase-1-contracts.md#dt-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics).
+> **Quyết định (DT-1):** một thẻ **đến hạn** khi **ngày-địa-phương của `due_at` ≤ ngày-địa-phương của
+> hôm nay** trên thiết bị. Xem
+> [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day) và
+> [study-srs-decision-table](../decision-tables/study-srs-decision-table.md).
 
-- `now` là **mốc thời gian tuyệt đối** (epoch ms). "Due" được đánh giá **tại thời điểm truy vấn**,
-  **không** theo cửa sổ ngày lịch.
-- **Vị ngữ due chuẩn:** `deleted_at IS NULL AND due_at IS NOT NULL AND due_at <= now`.
-- **Thẻ mới** (`due_at IS NULL`) **không** tính là due — chúng là "new", gating bằng hạn mức/ngày
-  (qua `new_seen_on`, theo ngày địa phương). Đây là **chỗ duy nhất** dùng ngày địa phương.
-- Cùng một vị ngữ này dùng thống nhất cho: **Today session**, **Dashboard due count**, **Study
-  eligibility query**, và **Progress/statistics due count** — nên các nơi này không bao giờ lệch nhau.
-  Chi tiết tác động: [DT-1](../decision-tables/phase-1-contracts.md#impact--every-surface-uses-the-same-predicate).
+- **Quy tắc nguồn sự thật:** `localDay(due_at) <= localDay(today)`.
+- Thẻ đến hạn **muộn hơn trong hôm nay** vẫn tính là **due hôm nay** (không bị ẩn tới đúng mốc giờ).
+- Thẻ đến hạn **ngày mai** → **không** due hôm nay. Thẻ **hôm qua trở về trước** → luôn due.
+- **Thẻ mới** (`due_at IS NULL`) **không** tính là due — vào phiên qua hạn mức thẻ mới/ngày.
+- **Không** dùng trực tiếp `due_at <= now` cho query học/ngày nếu điều đó làm ẩn thẻ due-muộn-hôm-nay.
+- **Clock được inject / test-controlled**; **không** giấu `Date.now()` trong business logic khó test.
+  "Hôm nay" được **truyền vào** domain/use-case.
+- Storage **có thể** pre-filter bằng timestamp cho hiệu năng (ví dụ `due_at < đầu_ngày_mai`), nhưng
+  **quy tắc local-day ở domain/use-case là nguồn sự thật** và phải được áp lại.
+- Cùng quy tắc này dùng thống nhất cho: **Today session**, **Dashboard due count**, **Study
+  eligibility query**, **Progress/statistics due count**, và **mọi review-queue query sau này** — nên
+  các nơi này không bao giờ lệch nhau.
 
 ## Hợp đồng hàm engine
 
@@ -112,9 +117,12 @@ export interface ScheduleResult {
 
 export function schedule(input: ScheduleInput): ScheduleResult;
 
-// Kiểm tra đến hạn (thuần)
-export function isDue(card: { dueAt: number | null }, now: number): boolean;
-//   thẻ mới (dueAt === null) KHÔNG tính là "due" — nó là "new", xử lý qua hạn mức riêng.
+// Kiểm tra đến hạn (thuần) — theo local-day (DT-1), KHÔNG so trực tiếp dueAt <= now.
+// `today` là ngày-địa-phương được TRUYỀN VÀO (test-controlled), không đọc Date.now() bên trong.
+export function isDue(card: { dueAt: number | null }, today: LocalDay): boolean;
+//   dueAt === null (thẻ mới) → false (vào phiên qua hạn mức thẻ mới, không qua "due").
+//   ngược lại: localDay(dueAt) <= today.
+//   LocalDay: kiểu ngày-địa-phương đã chuẩn hóa (ví dụ 'YYYY-MM-DD' hoặc số ngày kể từ epoch-local).
 ```
 
 ## Ví dụ (dùng interval mặc định `[1,2,4,8,16,32,64,128]`)
@@ -135,7 +143,9 @@ Engine chỉ lo **một thẻ một lần chấm**. Việc **chọn tập thẻ*
 (xem [07-study-modes](07-study-modes.md)), theo thứ tự:
 
 1. Xác định **phạm vi deck** (một deck, hoặc đệ quy nếu công tắc "gồm deck con" bật).
-2. Lấy **thẻ đến hạn**: `due_at IS NOT NULL AND due_at <= now`, sắp theo `due_at` tăng dần.
+2. Lấy **thẻ đến hạn** theo **local-day** (DT-1): `localDay(due_at) <= localDay(today)`, sắp theo
+   `due_at` tăng dần. (Storage có thể pre-filter `due_at < đầu_ngày_mai` cho hiệu năng, nhưng quy tắc
+   local-day ở use-case là nguồn sự thật.)
 3. Bổ sung **thẻ mới** tới khi đạt hạn mức còn lại của ngày:
    `còn lại = max(0, newPerDay - đã_học_thẻ_mới_hôm_nay)`.
 4. (Tùy chọn) trộn ngẫu nhiên thứ tự trong phiên để tránh học vẹt theo thứ tự thẻ.
@@ -157,7 +167,10 @@ Bảng ca test tối thiểu:
 - wrong + reset: `5→1`, `1→1`.
 - wrong + stepDown: `5→4`, `1→1` (không dưới sàn).
 - `dueAt` = `now + intervals[box-1]*MS_PER_DAY` cho vài box đại diện.
-- `isDue`: đúng hạn (bằng), quá hạn, chưa hạn, và **thẻ mới `dueAt=null` → false**.
+- `isDue` (local-day, DT-1): due **muộn hơn trong hôm nay → true**; due **ngày mai → false**; due
+  **hôm qua → true**; **thẻ mới `dueAt=null` → false**. Truyền `today` vào (clock test-controlled).
+- Ca biên timezone: cùng `due_at` tuyệt đối nhưng `today` khác ngày-địa-phương cho kết quả `isDue`
+  khác nhau đúng như quy tắc local-day.
 - Tính tất định: cùng input → cùng output, không phụ thuộc thời điểm chạy test.
 - Interval tùy biến (ví dụ Fibonacci) cho ra due khác nhau đúng như cấu hình.
 

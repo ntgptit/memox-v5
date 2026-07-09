@@ -73,17 +73,40 @@ Two import rules are **enforced** by `scripts/check-boundaries.mjs`:
 See [`dependency-boundaries.md`](dependency-boundaries.md) for the rationale and the allowed-import
 matrix, and [`folder-structure.md`](folder-structure.md) for where each kind of file goes.
 
+Dependency policy (also enforced/holds by convention):
+
+- App routes in `src/app` only **compose** screens/feature entry points — **no heavy business logic**.
+- **Domain** does not depend on UI / router / storage implementation; **data layer** does not depend on
+  presentation.
+- **No new dependency** is added unless approved by a docs/WBS task. A new SQLite/storage dependency
+  needs its own WBS row/task before code.
+
+## Local-first storage contract
+
+- MemoX v5 is **local-first**; the **local SQLite DB is the source of truth** for
+  deck / card / study-session / review / settings.
+- UI / provider / state (zustand) must **not** be the only durable store — state is a projection of the
+  DB.
+- **Multi-table writes are transactional**; repositories return `Result`.
+- **Domain logic never reads storage, UI, route, `Date.now()`, or network directly** — time and I/O are
+  injected (testable).
+- Import / export / backup-restore is a later task if not in Phase 1, and must not break this contract.
+
+Full contract: [`../design/05-data-model.md`](../design/05-data-model.md#hợp-đồng-lưu-trữ-local-first).
+
 ## Binding Phase 1 contracts
 
 Before implementation, three ambiguities are settled in
 [`../decision-tables/phase-1-contracts.md`](../decision-tables/phase-1-contracts.md):
 
-- **DT-1 Due semantics:** a card is due when `due_at <= now` (absolute instant); local day is used only
-  for the new-card-per-day counter.
-- **DT-2 Study session:** ephemeral state; durable progress lives only in `cards` + `card_reviews` (no
-  session tables in Phase 1).
-- **DT-3 Starter template:** kept until explicitly replaced/promoted; feature code must not depend on
-  starter demo components unless promoted to shared MemoX components.
+- **DT-1 Due semantics (local-day):** a card is due when `localDay(due_at) <= localDay(today)`. A card
+  due later **today** still counts as due today; tomorrow does not. Eligibility normalizes to local-day
+  (not a raw `due_at <= now`); the clock is injected/test-controlled.
+- **DT-2 Study session (persisted):** sessions are persisted via `study_sessions` +
+  `study_session_items`; learning progress in `cards` + `card_reviews`. Requires a migration task
+  (`P1-BE-05`) before the Study UI.
+- **DT-3 Starter template (off production path):** starter demo code must not be on the MemoX
+  production path; it is removed/replaced in cleanup `F0.1`, and no feature may import it.
 
 ## Status
 
@@ -92,7 +115,7 @@ The repository is in the **foundation / documentation phase**. The starter depen
 **No product feature code (decks, cards, SRS, study modes) has been implemented yet** — see the
 [work breakdown](../project-management/wbs.md).
 
-The Expo starter template files are kept per DT-3. Note the recorded drift
+Per DT-3, starter files must be off the production path. Recorded drift
 ([DRIFT-001](folder-structure.md#drift-001--app-shell-depends-on-starter-components)): the app shell
-(`src/app/_layout.tsx`) currently imports starter components, to be promoted to shared MemoX components
-during Phase 1 FE work.
+(`src/app/_layout.tsx`) currently imports starter components; this must be removed/replaced in
+foundation cleanup `F0.1` before Phase 1 FE work. Source is not changed in the docs-only task.

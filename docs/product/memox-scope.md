@@ -18,12 +18,22 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   Algorithm details: [`../design/06-srs-8box.md`](../design/06-srs-8box.md).
 - **Study modes.** Multiple ways to study the same cards. Some modes update SRS state; one is
   practice-only. Details: [`../design/07-study-modes.md`](../design/07-study-modes.md).
+- **Persisted study sessions.** Study sessions are **durable**: Phase 1 includes `study_sessions` and
+  `study_session_items` in the storage contract so a session can be **resumed** after close/crash. This
+  requires a migration/backend task (`P1-BE-05`) **before** the Study UI. Learning progress lives in
+  `cards` + `card_reviews`; session progress in the session tables.
+  ([DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence-persisted))
+- **Due by local-day.** A card is due when its due local-day is on or before today's local-day
+  (a card due later today still counts as due today).
+  ([DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day))
 - **Settings.** User-configurable SRS intervals, lapse behavior, new-cards-per-day limit, and UI
   language. Details: [`../design/09-settings.md`](../design/09-settings.md).
 - **Internationalized UI (i18n).** The interface is translatable (starting with `vi` and `en`).
   Details: [`../design/08-i18n.md`](../design/08-i18n.md).
-- **Local-first persistence.** Works fully offline; data persists on-device. The data schema is
-  designed to be sync-ready. Details: [`../design/05-data-model.md`](../design/05-data-model.md).
+- **Local-first persistence.** Works fully offline; the **local SQLite DB is the source of truth** for
+  deck/card/study-session/review/settings. UI/state is only a projection of the DB; multi-table writes
+  are transactional. The schema is sync-ready.
+  Details: [`../design/05-data-model.md`](../design/05-data-model.md#hợp-đồng-lưu-trữ-local-first).
 - **Platforms.** iOS, Android, and Web via Expo.
 
 ## Out of scope (current phase)
@@ -34,6 +44,8 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
 - Localizing **card content** with source/target language metadata (only the **UI** is
   internationalized; card content is free Unicode).
 - AI card generation, OCR, bulk import.
+- **Import / export / backup-restore** — a later task (`FUT-01`), not Phase 1. When built it must not
+  break the local-first contract (DB is source of truth, via repository + transactions).
 - Text-to-speech / pronunciation.
 
 These reflect the documented product decisions; see [`01-vision.md`](01-vision.md) (goals & non-goals)
@@ -49,3 +61,9 @@ has been implemented yet — the repository is in the foundation/documentation p
 
 Product features are built as feature slices under `src/features/`, with anything cross-cutting in
 `src/shared/`, following the enforced [dependency boundaries](../architecture/dependency-boundaries.md).
+
+## Starter template
+
+Expo starter demo code is **not** part of MemoX and must **not** be on the production path. It is
+removed/replaced in foundation cleanup `F0.1` before real MemoX screens, and **no feature may depend on
+it** ([DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling-not-on-production-path)).

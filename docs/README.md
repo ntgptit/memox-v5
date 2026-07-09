@@ -20,7 +20,8 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [architecture/overview.md](architecture/overview.md) | Tổng quan kiến trúc, layer, data flow |
 | — | [architecture/folder-structure.md](architecture/folder-structure.md) | Vị trí đặt code (`src/`, `src/app`, features, shared) |
 | — | [architecture/dependency-boundaries.md](architecture/dependency-boundaries.md) | Luật import (được enforce) |
-| — | [decision-tables/phase-1-contracts.md](decision-tables/phase-1-contracts.md) | Quyết định Phase 1: due semantics, session persistence, starter template |
+| — | [decision-tables/phase-1-contracts.md](decision-tables/phase-1-contracts.md) | Quyết định Phase 1: due (local-day), session persistence, starter template |
+| — | [decision-tables/study-srs-decision-table.md](decision-tables/study-srs-decision-table.md) | Bảng tra nhanh: due eligibility + SRS box + session |
 | — | [project-management/wbs.md](project-management/wbs.md) | Work breakdown (foundation-first) |
 | — | [verification.md](verification.md) | Cách verify (`npm run check`) |
 
@@ -53,12 +54,14 @@ Bảng này là bản rút gọn để tra nhanh; chi tiết nằm trong từng 
 | Card | `term` + `meaning` (bắt buộc) + `note` (tùy chọn) |
 | Thuật toán | **8-box Leitner**, 8 khoảng ôn **cấu hình được** (mặc định nhân đôi 1·2·4·8·16·32·64·128 ngày) |
 | Chấm đúng/sai | Đúng → lên 1 box; Sai → **cấu hình** (về box 1 *hoặc* lùi 1 box) |
-| Đến hạn | `due` khi `now ≥ last_reviewed_at + interval(box)` |
+| Đến hạn | **local-day**: `localDay(due_at) ≤ localDay(today)` (due muộn hơn hôm nay vẫn tính; xem DT-1) |
 | Chế độ học | Review, Recall, Guess, Typing, Match (5) |
 | Mode ↔ SRS | Review, Recall, Guess, Typing **cập nhật** SRS; Match **không** (chỉ luyện tập) |
 | Typing | Hiện term → gõ meaning; so khớp **chặt tuyệt đối** |
 | Phạm vi deck cha | Đệ quy gồm deck con, có **công tắc** bật/tắt "gồm deck con" |
 | Giới hạn học | Có giới hạn **số thẻ mới / ngày** (cấu hình trong Settings) |
+| Phiên học | **Persist** (`study_sessions` + `study_session_items`), resume được; học lưu ở `cards`/`card_reviews` (DT-2) |
+| Starter template | Expo starter **off production path**; xóa/thay ở `F0.1`; feature không import (DT-3) |
 
 ## Kiến trúc ở mức cao
 

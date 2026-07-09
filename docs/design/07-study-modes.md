@@ -16,31 +16,40 @@ Chọn deck → chọn phạm vi (công tắc "gồm deck con") → chọn chế
 ```
 
 - **Dựng danh sách thẻ**: theo mục "Chọn thẻ cho một phiên học" trong [06-srs-8box](06-srs-8box.md).
-  Điều kiện due dùng vị ngữ `due_at <= now` (Option A — xem
-  [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics)).
-- **Lưu sau mỗi lần chấm**: cập nhật `cards.box/due_at/last_reviewed_at` + chèn `card_reviews`
-  (một transaction). Thẻ mới lần đầu: đặt `new_seen_on = hôm nay`.
+  Điều kiện due dùng quy tắc **local-day** (DT-1 — xem
+  [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)).
+- **Lưu sau mỗi lần chấm**: trong **một** transaction — cập nhật `cards.box/due_at/last_reviewed_at`,
+  chèn `card_reviews`, **và** cập nhật `study_session_items` (trạng thái item). Thẻ mới lần đầu: đặt
+  `new_seen_on = hôm nay`.
 - **Tóm tắt cuối phiên** (FR-M8): số đúng/sai, số thẻ lên/xuống box, thời lượng.
 
-## Persist phiên học — Option B (phiên là state tạm)
+## Persist phiên học — persisted (DT-2)
 
-> **Quyết định (DT-2):** phiên học là **state tạm** (UI/domain, in-memory). Tiến độ học **bền vững chỉ
-> nằm trong `cards` và `card_reviews`**. Phase 1 **không** tạo bảng `study_sessions` /
-> `study_session_items`. Xem [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence).
+> **Quyết định (DT-2):** phiên học **phải được persist**. Phase 1 storage contract có
+> **`study_sessions`** và **`study_session_items`**. Tiến độ **học** bền vững qua `cards`/`card_reviews`;
+> tiến độ **phiên** bền vững qua `study_sessions`/`study_session_items`. Xem
+> [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence-persisted) và
+> [05-data-model](05-data-model.md#study_sessions--study_session_items-persisted-session).
 
-Đây là lý do data model Phase 1 chỉ có 4 bảng (`decks`, `cards`, `card_reviews`, `app_meta`) — khớp với
-[05-data-model](05-data-model.md). Hợp đồng hành vi:
+Hợp đồng hành vi (bắt buộc):
 
 | Sự kiện | Hành vi |
 |---------|---------|
-| Chấm một thẻ | Persist **ngay** trong **một** transaction: cập nhật `cards` + chèn `card_reviews`. |
-| Kết thúc phiên | Hiện tóm tắt tính từ kết quả vừa lưu. **Không** ghi thêm bản ghi "session" nào. |
-| Resume | Phase 1 **không** có "mở lại đúng phiên cũ". Mở lại app = dựng lại danh sách đủ điều kiện (due + hạn mức thẻ mới). Thẻ đã chấm không còn due nên tự rơi ra. |
-| Crash / thoát giữa chừng | Mọi câu đã chấm đều đã bền vững. Chỉ mất thẻ đang dở (chưa chấm) và state UI tạm (thanh tiến độ, thứ tự). Không có state hỏng/nửa vời. |
-| Answered attempts lưu ở đâu | `card_reviews` (lịch sử) + trạng thái SRS hiện tại trên `cards`. |
-| Dữ liệu durable | `cards` (`box`, `due_at`, `last_reviewed_at`, `new_seen_on`) + `card_reviews`. |
+| Start session | Tạo `study_sessions` + các `study_session_items` trong **một** transaction. Fail → **không** để lại session/items nửa vời. |
+| Items | `study_session_items` lưu danh sách thẻ, **thứ tự học ổn định**, và trạng thái item đủ để **resume đúng vị trí**. |
+| Chấm một thẻ | Persist bền vững **trong một transaction**: `card_reviews` (+ SRS trên `cards`) **và** cập nhật item tương ứng. |
+| Không tạo trùng | Nếu đã có session `active` cùng **scope**, **không** âm thầm tạo session active thứ hai cùng scope. |
+| Resume | Sau khi đóng app/crash, **session active gần nhất** (chưa expired/cancelled/completed) có thể resume đúng vị trí. |
+| Read-only | Dashboard / màn hình resume-summary **không** được mutate session. |
+| Finish | Chuyển session sang `completed`/finalized theo lifecycle. Finalize fail → **không** đánh dấu `completed` sai. |
+| Dữ liệu durable | Học: `cards` + `card_reviews`. Phiên: `study_sessions` + `study_session_items`. |
 
-Persist phiên (mở lại đúng phiên, analytics theo phiên) là **hướng mở rộng ngoài Phase 1**.
+Lifecycle status tối thiểu: `active`, `completed`, `cancelled`, `expired` (thêm `failed_to_finalize`
+nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions--study_session_items-persisted-session).
+
+> **Foundation trước UI:** vì cần schema mới, phần **persistence phiên** là một task BE/migration
+> riêng (`P1-BE-05`) **phải xong trước** khi làm Study UI (`P1-FE-03`). Xem
+> [WBS](../project-management/wbs.md).
 
 ## 1. Typing — Phase 1 (mode nền tảng)
 
