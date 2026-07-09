@@ -48,8 +48,11 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
       **not** activate the card.
     - **Lặp lại** = **SRS review** for cards already learned (**Box 1+**). Shown when scope
       **progress > 0%**, but its count depends on what is **due now** and **may be 0** (progress > 0%
-      does not mean everything is due). A first-time / 0% scope does **not** show **Lặp lại**; tapping
-      Lặp lại with 0 due starts **no empty session**.
+      does not mean everything is due). Tapping **Lặp lại** does **not** jump into a default session — it
+      opens a **Repeat Mode Menu** where the user picks how to review: **Ghép đôi** (match), **Đoán**
+      (guess), **Nhớ lại** (recall), or **Điền** (fill); `reviewMode` is **not** in this menu (it belongs
+      to New Learning Flow). These repeat modes apply only to SRS-active due cards, and choosing one with
+      0 due starts **no empty session**. A first-time / 0% scope does **not** show **Lặp lại**.
     - **Xem lại các từ** = browse/review content mode (no forced session). **Một trò chơi** = game mode
       (may use new and/or review workload). **Trình phát** = player/listening concept — **Future** if
       not yet in scope (audio not decided).

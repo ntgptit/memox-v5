@@ -519,6 +519,46 @@ session/flow-state quyết định (ngoài phạm vi task này).
 - Nếu Repeat count = 0: **không** tạo review session **rỗng**; hiển thị trạng thái **không có từ đến
   hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).
 
+### Repeat Mode Menu
+
+Bấm **Lặp lại** (từ [Play Menu](screens/deck-management.md#play-menu)) **không** vào thẳng một review
+session mặc định — hệ thống **mở Repeat Mode Menu** để user **chọn cách ôn**. **Chỉ sau khi user chọn
+một mode** thì SRS Repeat Flow tương ứng mới bắt đầu.
+
+Menu gồm **4 repeat mode** (dùng cho card **SRS-active (Box 1+) đã due**):
+
+| Option (VI) | Repeat mode | Cơ chế |
+|-------------|-------------|--------|
+| **Ghép đôi** | match-style | ghép prompt/front ↔ answer/meaning |
+| **Đoán** | guess-style | chọn answer/meaning đúng trong nhiều lựa chọn |
+| **Nhớ lại** | recall-style | nhìn prompt/front, tự nhớ; có thể reveal/self-grade theo recall docs |
+| **Điền** | fill-style | nhìn meaning/answer, nhập lại prompt/front |
+
+- **`reviewMode` KHÔNG** thuộc Repeat Mode Menu — nó **chỉ** là mode đầu của New Learning Flow (khi bấm
+  **Học**).
+- Điều kiện mở menu: deck/subdeck có **`progress > 0%`** / có card SRS-active.
+- Nếu `reviewDueCount = 0` khi chọn một mode → **no-due state**, **không** tạo session rỗng, **không**
+  mutate SRS data, **không** mark session completed giả.
+- Kết quả repeat → [Session Result](screens/session-result.md) (SRS Repeat Result); **không** activate
+  card mới vào Box 1, **chỉ** xử lý card đã SRS-active. Kết quả ảnh hưởng SRS theo rule ở
+  [06-srs-8box](06-srs-8box.md) (promotion khi correct / demotion·reset theo `lapseRule`).
+
+### New Learning modes vs. Repeat modes — không nhầm lẫn
+
+**match / guess / recall / fill** xuất hiện ở **hai flow khác nhau**; cùng **cơ chế tương tác** nhưng
+khác **lifecycle** và **card eligibility**:
+
+| | New Learning Flow (Học) | SRS Repeat Flow (Lặp lại) |
+|--|-------------------------|---------------------------|
+| Card eligibility | card **mới**, **Box 0 / not SRS-active** | card **Box 1+ đã due** |
+| Vào flow qua | bấm **Học** → luôn bắt đầu `reviewMode` | bấm **Lặp lại** → **Repeat Mode Menu** (chọn 1 mode) |
+| Thứ tự mode | **bắt buộc** review → match → guess → recall → fill | user **tự chọn** 1 trong: match / guess / recall / fill |
+| `reviewMode` | có (mode 1) | **không** có |
+| Ý nghĩa SRS | **pre-SRS learning**; đủ 5 mode → activate Box 1 | **SRS review**; ảnh hưởng box theo SRS rule |
+
+> **Không được nhầm hai flow.** New Learning `match/guess/recall/fill` là **pre-SRS** (không đổi box/due);
+> Repeat `match/guess/recall/fill` là **SRS review** cho Box 1+ due cards.
+
 ## Session Result (cuối phiên)
 
 Khi một phiên **finalize thành công**, hệ thống hiển thị **[Session Result](screens/session-result.md)** —
