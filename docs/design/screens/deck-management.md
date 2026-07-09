@@ -168,7 +168,7 @@ Menu**, trừ khi người dùng đang chọn một **filtered scope rõ ràng**
 | Option (VI) | Ý nghĩa | Label phụ | Điều kiện hiển thị |
 |-------------|---------|-----------|--------------------|
 | **Học** | New Learning Flow cho card/từ **mới** (activate vào SRS). | Số từ mới, ví dụ `120 từ mới`. | `newCount > 0`. |
-| **Lặp lại** | SRS Repeat Flow cho card **Box 1+ đã đến hạn**. | Số cần lặp lại, ví dụ `Lặp lại 83 từ`; **`0`/no-due** nếu chưa đến hạn. | **Khi `progress > 0%`** (có card SRS-active). Count **có thể = 0**. |
+| **Lặp lại** | Mở **[Repeat Mode Menu](#repeat-mode-menu)** (chọn cách ôn: Ghép đôi / Đoán / Nhớ lại / Điền) cho card **Box 1+ đã đến hạn**. **Không** vào thẳng một session mặc định. | Số cần lặp lại, ví dụ `Lặp lại 83 từ`; **`0`/no-due** nếu chưa đến hạn. | **Khi `progress > 0%`** (có card SRS-active). Count **có thể = 0**. |
 | **Xem lại các từ** | Mở chế độ **browse/xem lại** danh sách từ trong scope ([Flashcard List](flashcard-list.md)). **Không** nhất thiết tạo study session. | — | Khi scope **có card** (không phụ thuộc count/due). |
 | **Một trò chơi** | Mở **game mode** nếu game nằm trong product scope. | Phản ánh workload hiện có (xem dưới). | Khi scope có nội dung phù hợp; **Future** nếu game chưa thuộc Phase 1. |
 | **Trình phát** | Mở **player/listening mode** nếu product scope cho phép. | — | Chỉ khi product scope cho phép player; **Future** nếu audio/player chưa thuộc Phase 1. |
@@ -219,9 +219,13 @@ hoặc có lịch sử học hợp lệ).
   feedback**, **không** phải **SRS review grading**. Đây là một phần của **New Learning Flow**, **không**
   phải SRS Repeat; bấm Học **không** activate ngay card vào **Box 1** — card chỉ vào Box 1 sau khi hoàn
   thành **đủ 5 mode**.
-- Bấm **Lặp lại** khi `reviewDueCount > 0` → bắt đầu **SRS Repeat Flow** (card Box 1+ đến hạn, local-day).
-- Bấm **Lặp lại** khi `reviewDueCount = 0` → **không** tạo **session rỗng**; hiển thị trạng thái **không
-  có từ đến hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).
+- Bấm **Lặp lại** → **không** vào thẳng review session mặc định; **mở [Repeat Mode Menu](#repeat-mode-menu)**
+  (Ghép đôi / Đoán / Nhớ lại / Điền — **không** có reviewMode). **Chỉ sau khi user chọn một mode** thì
+  **SRS Repeat Flow** tương ứng mới bắt đầu (card **Box 1+ đến hạn**, local-day).
+- Chọn một repeat mode khi `reviewDueCount > 0` → bắt đầu SRS Repeat session theo mode đã chọn.
+- Chọn một repeat mode khi `reviewDueCount = 0` → **không** tạo **session rỗng**; hiển thị **no-due
+  state** / thông báo không có từ cần lặp lại; **không** mutate SRS data, **không** mark session
+  completed giả.
 - Khi `newCount = 0` **và** `reviewDueCount = 0` → **không** bắt đầu study session trực tiếp; chỉ cho
   **Xem lại các từ** nếu scope có card. **Không** tạo session rỗng.
 - Bấm **Xem lại các từ** → mở **browse/xem lại** card trong scope (không bắt buộc tạo study session).
@@ -230,6 +234,27 @@ hoặc có lịch sử học hợp lệ).
 - **Mở menu không tự thay đổi dữ liệu học.** Chỉ khi người dùng **chọn một mode** thì flow tương ứng mới
   bắt đầu.
 - Mode nào **chưa** thuộc Phase 1 thì **mark Future**, **không** implement trong docs này.
+
+### Repeat Mode Menu
+
+Bấm **Lặp lại** mở **Repeat Mode Menu** — nơi user **chọn cách ôn** các card đã đến hạn, thay vì bị ép
+vào một mode duy nhất. Menu là **cổng vào SRS Repeat Flow** (chi tiết ở
+[07-study-modes → Repeat Mode Menu](../07-study-modes.md#repeat-mode-menu)).
+
+| Option (VI) | Cách ôn | Card dùng |
+|-------------|---------|-----------|
+| **Ghép đôi** | match-style repeat: ghép prompt/front ↔ answer/meaning | card **SRS-active (Box 1+) đã due** |
+| **Đoán** | guess-style repeat: chọn answer/meaning đúng trong nhiều lựa chọn | card SRS-active đã due |
+| **Nhớ lại** | recall-style repeat: nhìn prompt/front, tự nhớ; có thể reveal/self-grade theo recall docs | card SRS-active đã due |
+| **Điền** | fill-style repeat: nhìn meaning/answer, nhập lại prompt/front | card SRS-active đã due |
+
+- **Không có reviewMode** trong Repeat Mode Menu — `reviewMode` **chỉ** là mode đầu của New Learning Flow
+  (khi bấm **Học**).
+- Điều kiện hiển thị: deck/subdeck có **`progress > 0%`** hoặc có card SRS-active (theo docs hiện có).
+- **Chỉ sau khi user chọn một mode** thì SRS Repeat session tương ứng mới bắt đầu; nếu `reviewDueCount = 0`
+  → **no-due state**, **không** tạo session rỗng.
+- Kết quả repeat được tổng kết ở [Session Result](session-result.md) (SRS Repeat Result) — **không**
+  activate card mới vào Box 1, **chỉ** xử lý card đã SRS-active.
 
 ## Các state chính
 
@@ -263,7 +288,8 @@ Các state liên quan **Play Menu** (xem [Play Menu](#play-menu)):
 | `play menu closed` | Play Menu đang đóng (mặc định). |
 | `play menu open — variant A` | `progress = 0%` (chưa có card SRS-active): **không** có **Lặp lại**. |
 | `play menu open — variant B` | `progress > 0%`: **có** **Lặp lại** (count = `reviewDueCount`, **có thể = 0**). |
-| `repeat no-due` | Bấm **Lặp lại** khi `reviewDueCount = 0`: hiển thị no-due, **không** tạo session rỗng. |
+| `repeat mode menu open` | Bấm **Lặp lại** → mở **Repeat Mode Menu** (Ghép đôi / Đoán / Nhớ lại / Điền); **chưa** bắt đầu session. |
+| `repeat no-due` | Chọn một repeat mode khi `reviewDueCount = 0`: hiển thị no-due, **không** tạo session rỗng, **không** mutate SRS. |
 | `no studyable content in scope` | `newCount = 0` và `reviewDueCount = 0` — không bắt đầu session; chỉ cho **Xem lại các từ** nếu scope có card. |
 | `mode unavailable (future)` | Option map tới mode chưa thuộc Phase 1 (game/player) — hiển thị **Future** / không khả dụng. |
 

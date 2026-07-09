@@ -43,6 +43,10 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 - **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
 - **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate (kể cả đang
   ở `reviewMode`) **không** được đưa vào Repeat.
+- **SRS Repeat Flow bắt đầu từ Repeat Mode Menu.** Bấm **Lặp lại** mở
+  [Repeat Mode Menu](../07-study-modes.md#repeat-mode-menu); user **chọn 1 repeat mode** trong **match /
+  guess / recall / fill** (đây là **SRS review** cho card **Box 1+ đã due**). **`reviewMode` KHÔNG** dùng
+  cho SRS Repeat. Nếu **due count = 0**, **không** tạo SRS repeat session **rỗng**.
 - Card chưa hoàn thành đủ 5 mode → **vẫn Box 0 / not SRS-active** (tiến độ có thể phản ánh partial
   learning nếu docs progress cho phép, nhưng **không** phải SRS review).
 

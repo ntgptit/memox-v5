@@ -34,10 +34,18 @@ Quick-reference rules for the Deck/Subdeck **Play Menu**, **New Learning Flow** 
 | Action | Result |
 |--------|--------|
 | taps **Học** | start **New Learning Flow** with `reviewMode` first (review→match→guess→recall→fill) |
-| taps **Lặp lại**, `reviewDueCount > 0` | start **SRS Repeat Flow** (Box 1+ due cards) |
-| taps **Lặp lại**, `reviewDueCount = 0` | show **no-due** state, **no empty session** |
+| taps **Lặp lại** | open **Repeat Mode Menu** (do **not** start a default session) |
 | opens **Play Menu** | **no learning-data mutation** (menu only) |
 | taps **Xem lại các từ** | open **browse/review content** mode (not a mandatory study session) |
+
+## Repeat Mode Menu (after tapping Lặp lại)
+
+| Action | Result |
+|--------|--------|
+| Repeat Mode Menu opens | show **Ghép đôi / Đoán / Nhớ lại / Điền** (no `reviewMode`) for **Box 1+ due** cards |
+| user selects a repeat mode, `reviewDueCount > 0` | start **SRS Repeat Flow** in that mode (match/guess/recall/fill) |
+| user selects a repeat mode, `reviewDueCount = 0` | show **no-due** state; **no empty session**; **no** SRS mutation; **no** fake-complete |
+| any repeat mode result | **SRS review** of Box 1+ due cards; **does not** activate new cards into Box 1 |
 
 ## Notes
 
