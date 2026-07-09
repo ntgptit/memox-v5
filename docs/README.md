@@ -40,6 +40,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [design/09-settings.md](design/09-settings.md) | Mọi tùy chọn cấu hình + giá trị mặc định + validation |
 | — | [design/10-navigation-ux.md](design/10-navigation-ux.md) | Màn hình, cấu trúc expo-router, luồng người dùng |
 | — | [design/screens/deck-management.md](design/screens/deck-management.md) | Concept & nghiệp vụ màn Deck Management |
+| — | [design/screens/flashcard-list.md](design/screens/flashcard-list.md) | Concept & nghiệp vụ màn Flashcard List |
 | — | [roadmap/11-phasing.md](roadmap/11-phasing.md) | Lộ trình Phase 1–4 |
 
 ## Tóm tắt quyết định thiết kế (một chỗ)

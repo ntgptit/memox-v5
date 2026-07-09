@@ -133,6 +133,27 @@ Concept/business spec + its future implementation rows. Spec:
 
 ---
 
+## Flashcard List (F1.FL)
+
+Concept/business spec + its future implementation rows. Spec:
+[`../design/screens/flashcard-list.md`](../design/screens/flashcard-list.md).
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.FL.1 | Flashcard List concept and business spec | Docs | In progress → `Done` after merge | [`../design/screens/flashcard-list.md`](../design/screens/flashcard-list.md) | `npm run check` / `git diff --check` | PR `docs/flashcard-list-concept` (squash commit after merge) |
+| F1.FL.2 | Flashcard List read model (cards in scope, front/back per direction) | BE | Not started | [flashcard-list.md](../design/screens/flashcard-list.md), [05-data-model.md](../design/05-data-model.md) | TBD | TBD |
+| F1.FL.3 | Flashcard List UI skeleton (header, control area, card rows, bottom actions) | FE | Not started | [flashcard-list.md](../design/screens/flashcard-list.md) | TBD | TBD |
+| F1.FL.4 | Flashcard List states (loading / loaded / empty / search-empty / error / unavailable / creating) | FE | Not started | [flashcard-list.md states](../design/screens/flashcard-list.md#các-state-chính) | TBD | TBD |
+| F1.FL.5 | Add card entry action (create card in current scope, even under active search/filter) | FE/BE | Not started | [flashcard-list.md actions](../design/screens/flashcard-list.md#các-action-chính) | TBD | TBD |
+| F1.FL.6 | Open card detail/edit entry | FE | Not started | [flashcard-list.md actions](../design/screens/flashcard-list.md#các-action-chính) | TBD | TBD |
+
+> `F1.FL.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
+> per the [evidence policy](#done-criteria--evidence-policy). No TTS/audio / progress-indicator /
+> advanced-edit rows are added — those are not decided (see the spec's
+> [Open questions](../design/screens/flashcard-list.md#open-questions--cố-ý-không-chốt)).
+
+---
+
 ## 5. Later phases (NOT started)
 
 | ID | Deliverable | Status |

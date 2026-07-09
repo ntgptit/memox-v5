@@ -20,6 +20,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   to the bidirectional extension). Speaker/edit/hidden-suspended behaviors are **not** decided here.
 - **Cards.** A card has a `term` and a `meaning` (both required) and an optional `note`. Content is
   free-form Unicode.
+- **Flashcard List screen.** Browse and manage the flashcards inside a deck/section: quickly read each
+  card's **front** and **back/meaning** in the current study direction, **search / filter / sort** the
+  list (view-only; does not change learning data), **open a card to view or edit**, and **add a new
+  card** into the current scope. Concept spec:
+  [`../design/screens/flashcard-list.md`](../design/screens/flashcard-list.md). Shows the current study
+  direction (e.g. `KO → VI`) as a read-only indicator. TTS/audio, advanced edit (delete/reorder/
+  suspend), hidden/suspended, and any progress/mastery formula are **not** decided here.
 - **Spaced repetition — 8-box (Leitner).** Each card sits in a box (1–8); correct answers promote it,
   wrong answers demote it; each box maps to a review interval that determines when the card is due.
   Algorithm details: [`../design/06-srs-8box.md`](../design/06-srs-8box.md).
