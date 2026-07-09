@@ -1,0 +1,245 @@
+/* ============================================================================
+   Mx Color System — MemoX v5  (Bazar-style purple palette)
+   ----------------------------------------------------------------------------
+   Art direction: clean, light-first UI with a deep royal-purple brand, soft
+   lavender secondary surfaces, near-black titles and grey body — plus a
+   complete purple-tinted dark theme.
+
+   Two layers:
+   1. PRIMITIVES  (--mx-<hue>-<step>)  raw palette, theme-agnostic.
+   2. SEMANTIC    (--mx-color-<role>)  what components consume. DARK on :root,
+      LIGHT under [data-theme="light"]. Every role defines both.
+
+   Rule: screens use ONLY --mx-color-* semantic tokens. Correct(green) /
+   Wrong(red) / Due(amber) / Destructive(red) stay perceptually distinct in
+   both themes; colour is never the ONLY signal (pair with icon + label).
+   ============================================================================ */
+
+:root {
+  /* ---- PRIMITIVES : neutral (cool grey, faint purple cast) --------------- */
+  --mx-slate-0:   #ffffff;
+  --mx-slate-50:  #faf9fd;
+  --mx-slate-100: #f3f2f8;
+  --mx-slate-150: #ecebf3;
+  --mx-slate-200: #e1dfec;
+  --mx-slate-300: #c8c5d8;
+  --mx-slate-400: #9793a8;
+  --mx-slate-500: #6b6880;
+  --mx-slate-600: #4c4a5c;
+  --mx-slate-700: #343243;
+  --mx-slate-800: #262533;
+  --mx-slate-850: #1f1e2b;
+  --mx-slate-900: #17161f;
+  --mx-slate-950: #100f17;
+
+  /* ---- PRIMITIVES : purple (the brand + action colour) ------------------- */
+  --mx-purple-100: #eceaf7;
+  --mx-purple-200: #d6d1ee;
+  --mx-purple-300: #b4aadd;
+  --mx-purple-400: #8878c4;
+  --mx-purple-500: #4b3a8c;  /* Bazar brand purple */
+  --mx-purple-600: #3b2d72;
+  --mx-purple-700: #2c2157;
+  --mx-purple-light: #8a79e0; /* lifted purple for dark surfaces */
+
+  /* ---- PRIMITIVES : green (correct / positive) --------------------------- */
+  --mx-green-300: #7de9b4;
+  --mx-green-400: #4fd08f;
+  --mx-green-500: #22b573;
+  --mx-green-600: #159a5f;
+  --mx-green-700: #0e7a4b;
+
+  /* ---- PRIMITIVES : red (wrong / destructive) ---------------------------- */
+  --mx-red-300: #ffb0b0;
+  --mx-red-400: #ff8a8a;
+  --mx-red-500: #f0555a;
+  --mx-red-600: #db3e44;
+  --mx-red-700: #b62f35;
+
+  /* ---- PRIMITIVES : amber (warning / due — warm, attention not danger) --- */
+  --mx-amber-300: #ffd79a;
+  --mx-amber-400: #ffc76f;
+  --mx-amber-500: #f59e34;
+  --mx-amber-600: #c77b12;
+  --mx-amber-700: #a9631a;
+
+  /* ---- PRIMITIVES : blue (info / time metric) --------------------------- */
+  --mx-blue-300: #a6d4ff;
+  --mx-blue-400: #6fb4ff;
+  --mx-blue-500: #3d93f5;
+  --mx-blue-600: #2b79d6;
+
+  /* ---- PRIMITIVES : violet (mastered — brighter than brand) -------------- */
+  --mx-violet-300: #cbbbff;
+  --mx-violet-400: #a88fff;
+  --mx-violet-500: #8b6ef0;
+  --mx-violet-600: #7355d6;
+
+  /* ---- PRIMITIVES : coral (lapse / demotion — distinct from plain wrong) - */
+  --mx-coral-400: #f58c7a;
+  --mx-coral-500: #ec6a54;
+  --mx-coral-600: #d9553f;
+
+  /* ======================================================================= */
+  /*  SEMANTIC — DARK (MxDarkDefault). Purple-tinted deep aubergine.          */
+  /* ======================================================================= */
+
+  /* background & surface */
+  --mx-color-background-app: #141220;
+  --mx-color-background-screen: #141220;
+  --mx-color-surface-base: #1c1a2b;
+  --mx-color-surface-card: #252338;
+  --mx-color-surface-elevated: #302d46;
+  --mx-color-surface-modal: #252338;
+  --mx-color-overlay-scrim: rgba(8, 6, 16, 0.7);
+
+  /* text */
+  --mx-color-text-primary: #f4f2fb;
+  --mx-color-text-secondary: #bdb9d2;
+  --mx-color-text-tertiary: #8a86a3;
+  --mx-color-text-disabled: #5c5975;
+  --mx-color-text-inverse: #141220;
+  --mx-color-text-onAction: #ffffff;
+  --mx-color-text-onDestructive: #ffffff;
+
+  /* border & divider */
+  --mx-color-border-subtle: rgba(255, 255, 255, 0.07);
+  --mx-color-border-default: rgba(255, 255, 255, 0.13);
+  --mx-color-border-strong: rgba(255, 255, 255, 0.24);
+  --mx-color-divider-default: rgba(255, 255, 255, 0.1);
+
+  /* action */
+  --mx-color-action-primary: #4b3a8c;
+  --mx-color-action-primaryPressed: #3b2d72;
+  --mx-color-action-primaryDisabled: #322e4d;
+  --mx-color-action-secondary: #302d46;
+  --mx-color-action-ghost: transparent;
+  --mx-color-action-focusRing: #b4aadd;
+
+  /* state */
+  --mx-color-state-selected: #8a79e0;
+  --mx-color-state-selectedSurface: rgba(138, 121, 224, 0.22);
+  --mx-color-state-disabledSurface: rgba(255, 255, 255, 0.04);
+  --mx-color-state-loadingSurface: rgba(255, 255, 255, 0.06);
+  --mx-color-state-unavailableSurface: rgba(255, 255, 255, 0.03);
+
+  /* learning feedback */
+  --mx-color-feedback-correct: #4fd08f;
+  --mx-color-feedback-correctSurface: rgba(34, 181, 115, 0.16);
+  --mx-color-feedback-correctBorder: rgba(79, 208, 143, 0.5);
+  --mx-color-feedback-wrong: #ff8a8a;
+  --mx-color-feedback-wrongSurface: rgba(240, 85, 90, 0.16);
+  --mx-color-feedback-wrongBorder: rgba(255, 138, 138, 0.5);
+  --mx-color-feedback-warning: #ffc76f;
+  --mx-color-feedback-warningSurface: rgba(255, 199, 111, 0.2);
+  --mx-color-feedback-info: #8a79e0;
+  --mx-color-feedback-infoSurface: rgba(138, 121, 224, 0.18);
+
+  /* SRS box lifecycle */
+  --mx-color-srs-preSrs: #8a86a3;
+  --mx-color-srs-preSrsSurface: rgba(138, 134, 163, 0.16);
+  --mx-color-srs-active: #8a79e0;
+  --mx-color-srs-due: #ffc76f;
+  --mx-color-srs-noDue: #4fd08f;
+  --mx-color-srs-mastered: #a88fff;
+  --mx-color-srs-lapse: #f58c7a;
+
+  /* destructive */
+  --mx-color-destructive-text: #ff8a8a;
+  --mx-color-destructive-surface: rgba(240, 85, 90, 0.16);
+  --mx-color-destructive-border: rgba(240, 85, 90, 0.5);
+  --mx-color-destructive-pressed: #db3e44;
+
+  /* chart */
+  --mx-color-chart-wordMetric: #8a79e0;
+  --mx-color-chart-timeMetric: #6fb4ff;
+  --mx-color-chart-qualityCorrect: #4fd08f;
+  --mx-color-chart-qualityWrong: #ff8a8a;
+  --mx-color-chart-neutralTotal: #8a86a3;
+  --mx-color-chart-grid: rgba(255, 255, 255, 0.08);
+  --mx-color-chart-axis: #8a86a3;
+  --mx-color-chart-tooltip: #302d46;
+}
+
+/* ========================================================================= */
+/*  SEMANTIC — LIGHT (MxLightDefault). Bazar look: clean white surfaces,      */
+/*  deep-purple primary, lavender secondary, near-black titles, grey body.    */
+/* ========================================================================= */
+
+[data-theme="light"] {
+  /* background & surface */
+  --mx-color-background-app: #f6f5fc;
+  --mx-color-background-screen: #f6f5fc;
+  --mx-color-surface-base: #ffffff;
+  --mx-color-surface-card: #ffffff;
+  --mx-color-surface-elevated: #ffffff;
+  --mx-color-surface-modal: #ffffff;
+  --mx-color-overlay-scrim: rgba(28, 24, 45, 0.42);
+
+  /* text */
+  --mx-color-text-primary: #1b1a26;
+  --mx-color-text-secondary: #67647a;
+  --mx-color-text-tertiary: #9793a8;
+  --mx-color-text-disabled: #bebccb;
+  --mx-color-text-inverse: #ffffff;
+  --mx-color-text-onAction: #ffffff;
+  --mx-color-text-onDestructive: #ffffff;
+
+  /* border & divider */
+  --mx-color-border-subtle: rgba(28, 24, 45, 0.06);
+  --mx-color-border-default: rgba(28, 24, 45, 0.11);
+  --mx-color-border-strong: rgba(28, 24, 45, 0.22);
+  --mx-color-divider-default: rgba(28, 24, 45, 0.08);
+
+  /* action */
+  --mx-color-action-primary: #4b3a8c;
+  --mx-color-action-primaryPressed: #3b2d72;
+  --mx-color-action-primaryDisabled: #dad5ec;
+  --mx-color-action-secondary: #f1eff9;
+  --mx-color-action-ghost: transparent;
+  --mx-color-action-focusRing: #4b3a8c;
+
+  /* state */
+  --mx-color-state-selected: #4b3a8c;
+  --mx-color-state-selectedSurface: rgba(75, 58, 140, 0.1);
+  --mx-color-state-disabledSurface: rgba(28, 24, 45, 0.04);
+  --mx-color-state-loadingSurface: rgba(28, 24, 45, 0.05);
+  --mx-color-state-unavailableSurface: rgba(28, 24, 45, 0.03);
+
+  /* learning feedback */
+  --mx-color-feedback-correct: #159a5f;
+  --mx-color-feedback-correctSurface: rgba(21, 154, 95, 0.12);
+  --mx-color-feedback-correctBorder: rgba(21, 154, 95, 0.42);
+  --mx-color-feedback-wrong: #db3e44;
+  --mx-color-feedback-wrongSurface: rgba(219, 62, 68, 0.1);
+  --mx-color-feedback-wrongBorder: rgba(219, 62, 68, 0.42);
+  --mx-color-feedback-warning: #c77b12;
+  --mx-color-feedback-warningSurface: rgba(199, 123, 18, 0.12);
+  --mx-color-feedback-info: #4b3a8c;
+  --mx-color-feedback-infoSurface: rgba(75, 58, 140, 0.1);
+
+  /* SRS box lifecycle */
+  --mx-color-srs-preSrs: #67647a;
+  --mx-color-srs-preSrsSurface: rgba(103, 100, 122, 0.12);
+  --mx-color-srs-active: #4b3a8c;
+  --mx-color-srs-due: #c77b12;
+  --mx-color-srs-noDue: #159a5f;
+  --mx-color-srs-mastered: #7355d6;
+  --mx-color-srs-lapse: #d9553f;
+
+  /* destructive */
+  --mx-color-destructive-text: #db3e44;
+  --mx-color-destructive-surface: rgba(219, 62, 68, 0.1);
+  --mx-color-destructive-border: rgba(219, 62, 68, 0.42);
+  --mx-color-destructive-pressed: #b62f35;
+
+  /* chart */
+  --mx-color-chart-wordMetric: #4b3a8c;
+  --mx-color-chart-timeMetric: #2b79d6;
+  --mx-color-chart-qualityCorrect: #159a5f;
+  --mx-color-chart-qualityWrong: #db3e44;
+  --mx-color-chart-neutralTotal: #9793a8;
+  --mx-color-chart-grid: rgba(28, 24, 45, 0.08);
+  --mx-color-chart-axis: #9793a8;
+  --mx-color-chart-tooltip: #ffffff;
+}

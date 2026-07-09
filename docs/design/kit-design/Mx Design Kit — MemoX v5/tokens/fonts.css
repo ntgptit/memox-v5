@@ -1,0 +1,6 @@
+/* Mx Fonts — webfonts for the MemoX design kit.
+   Plus Jakarta Sans = display/UI + body (per design direction).
+   Noto Sans KR = Korean prompt text. JetBrains Mono = numbers/stats.
+   Loaded from Google Fonts; to self-host, drop the .ttf files in tokens/fonts/
+   and replace this @import with @font-face rules pointing at them. */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap');

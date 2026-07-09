@@ -1,0 +1,39 @@
+/* ============================================================================
+   Mx Radius, Border & Divider — MemoX v5
+   Corner radii, border widths (as tokens), and border/divider COLOURS resolve
+   to theme-aware --mx-color-border-*. Border colour tokens below bundle a
+   width + colour so states (selected/correct/wrong/destructive) read the same
+   across both themes.
+   ============================================================================ */
+
+:root {
+  /* ---- radius scale ------------------------------------------------------ */
+  --mx-radius-none: 0px;
+  --mx-radius-xs: 4px;
+  --mx-radius-sm: 8px;
+  --mx-radius-md: 12px;    /* default card / input */
+  --mx-radius-lg: 16px;    /* elevated card / sheet body */
+  --mx-radius-xl: 22px;    /* modal sheet top, study card */
+  --mx-radius-pill: 999px; /* chips, segmented control, pill buttons */
+  --mx-radius-full: 50%;   /* avatars, circular icon buttons */
+
+  /* ---- border widths ----------------------------------------------------- */
+  --mx-border-width-hairline: 1px;
+  --mx-border-width-default: 1px;
+  --mx-border-width-strong: 1.5px;
+  --mx-border-width-emphasis: 2px;   /* selected / correct / wrong outlines */
+
+  /* ---- composed border tokens (width + colour) --------------------------- */
+  --mx-border-subtle: 1px solid var(--mx-color-border-subtle);
+  --mx-border-default: 1px solid var(--mx-color-border-default);
+  --mx-border-strong: 1.5px solid var(--mx-color-border-strong);
+  --mx-border-selected: 2px solid var(--mx-color-state-selected);
+  --mx-border-correct: 2px solid var(--mx-color-feedback-correctBorder);
+  --mx-border-wrong: 2px solid var(--mx-color-feedback-wrongBorder);
+  --mx-border-destructive: 1.5px solid var(--mx-color-destructive-border);
+
+  /* ---- dividers (composed) ---------------------------------------------- */
+  --mx-divider-subtle: 1px solid var(--mx-color-border-subtle);
+  --mx-divider-default: 1px solid var(--mx-color-divider-default);
+  --mx-divider-strong: 1px solid var(--mx-color-border-strong);
+}

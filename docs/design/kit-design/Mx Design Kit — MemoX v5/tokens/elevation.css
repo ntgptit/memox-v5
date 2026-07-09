@@ -1,0 +1,26 @@
+/* ============================================================================
+   Mx Elevation & Shadow — MemoX v5
+   Dark mode leans on SURFACE CONTRAST + borders, not heavy shadow (shadows are
+   near-invisible on dark). Light mode uses soft, low-spread shadows — never
+   noisy. Each elevation token is theme-aware so a card looks right in both.
+   ============================================================================ */
+
+:root {
+  /* DARK — subtle shadow + rely on surface step; ambient ring for lift */
+  --mx-elevation-none: none;
+  --mx-elevation-low: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --mx-elevation-medium: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --mx-elevation-high: 0 12px 32px rgba(0, 0, 0, 0.55);
+  --mx-elevation-modal: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --mx-elevation-sheet: 0 -8px 32px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] {
+  /* LIGHT — soft neutral shadows, gentle spread */
+  --mx-elevation-none: none;
+  --mx-elevation-low: 0 1px 2px rgba(16, 22, 32, 0.06);
+  --mx-elevation-medium: 0 4px 14px rgba(16, 22, 32, 0.08);
+  --mx-elevation-high: 0 14px 34px rgba(16, 22, 32, 0.12);
+  --mx-elevation-modal: 0 18px 48px rgba(16, 22, 32, 0.16);
+  --mx-elevation-sheet: 0 -8px 30px rgba(16, 22, 32, 0.12);
+}

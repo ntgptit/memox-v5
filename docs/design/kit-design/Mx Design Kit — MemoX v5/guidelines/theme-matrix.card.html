@@ -1,0 +1,63 @@
+<!-- @dsCard group="Themes" viewport="700x680" name="Theme Token Matrix" subtitle="Every semantic role, dark vs light value — MxDarkDefault / MxLightDefault" -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px; background: #05070b; font-family: var(--mx-font-body); }
+  table { width: 100%; border-collapse: collapse; }
+  caption { text-align: left; font: 600 10px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: #6b7688; padding: 14px 0 6px; }
+  th { text-align: left; font: 600 10px var(--mx-font-display); letter-spacing: .08em; text-transform: uppercase; color: #6b7688; padding: 4px 8px; }
+  td { padding: 4px 8px; vertical-align: middle; }
+  .tok { font: 500 11px var(--mx-font-mono); color: #aeb8c6; }
+  .cell { display: flex; align-items: center; gap: 8px; }
+  .sw { width: 26px; height: 20px; border-radius: 5px; border: 1px solid rgba(128,128,128,0.3); flex: 0 0 auto; }
+  .dark td { background: #10141b; } .lightwrap { }
+  .hex { font: 500 10px var(--mx-font-mono); color: #7c8698; }
+</style></head>
+<body>
+<table>
+  <caption>Surfaces</caption>
+  <colgroup><col style="width:44%"/><col style="width:28%"/><col style="width:28%"/></colgroup>
+  <thead><tr><th>mx.color token</th><th>Dark</th><th>Light</th></tr></thead>
+  <tbody id="surfaces"></tbody>
+</table>
+<table>
+  <caption>Text &amp; action</caption>
+  <colgroup><col style="width:44%"/><col style="width:28%"/><col style="width:28%"/></colgroup>
+  <tbody id="text"></tbody>
+</table>
+<table>
+  <caption>Feedback &amp; SRS</caption>
+  <colgroup><col style="width:44%"/><col style="width:28%"/><col style="width:28%"/></colgroup>
+  <tbody id="fb"></tbody>
+</table>
+
+<!-- hidden probes to read resolved values in each theme -->
+<div id="probe-dark" style="position:absolute;visibility:hidden"></div>
+<div id="probe-light" data-theme="light" style="position:absolute;visibility:hidden"></div>
+
+<script>
+  const rows = {
+    surfaces: ["background-app","surface-base","surface-card","surface-elevated","surface-modal"],
+    text: ["text-primary","text-secondary","text-tertiary","action-primary","action-primaryPressed","action-secondary","state-selected"],
+    fb: ["feedback-correct","feedback-wrong","feedback-warning","feedback-info","srs-preSrs","srs-active","srs-due","srs-mastered","srs-lapse","destructive-text"],
+  };
+  const dP = getComputedStyle(document.getElementById('probe-dark'));
+  const lProbe = document.getElementById('probe-light');
+  function val(el, name){ return getComputedStyle(el).getPropertyValue('--mx-color-'+name).trim(); }
+  function swatch(color){ return `<span class="sw" style="background:${color}"></span><span class="hex">${color}</span>`; }
+  for (const [id, keys] of Object.entries(rows)) {
+    const tb = document.getElementById(id);
+    tb.innerHTML = keys.map(k => {
+      const d = val(document.getElementById('probe-dark'), k);
+      const l = val(lProbe, k);
+      return `<tr>
+        <td class="tok">--mx-color-${k}</td>
+        <td><span class="cell">${swatch(d)}</span></td>
+        <td><span class="cell">${swatch(l)}</span></td>
+      </tr>`;
+    }).join('');
+  }
+</script>
+</body>
+</html>

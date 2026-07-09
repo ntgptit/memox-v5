@@ -1,0 +1,876 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "components/core/**",
+              "components/data/**",
+              "components/feedback/**",
+              "components/learning/**",
+              "components/navigation/**",
+              "components/settings/**",
+              "guidelines/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Plus Jakarta Sans|Noto Sans KR|JetBrains Mono))/i]",
+        "message": "Font not provided by the design system. Available: Plus Jakarta Sans, Noto Sans KR, JetBrains Mono."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxActionButton'] > JSXAttribute > JSXIdentifier[name!=/^(?:children|variant|size|fullWidth|disabled|loading|leadingIcon|trailingIcon|onClick|type|style|key|ref|className|style|children)$/]",
+        "message": "<MxActionButton> doesn't accept that prop. Declared props: children, variant, size, fullWidth, disabled, loading, leadingIcon, trailingIcon, onClick, type, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxActionButton'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:primary|secondary|ghost|destructive)$/]",
+        "message": "<MxActionButton> variant must be one of 'primary' | 'secondary' | 'ghost' | 'destructive'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxActionButton'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:small|medium|bottom)$/]",
+        "message": "<MxActionButton> size must be one of 'small' | 'medium' | 'bottom'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxActionButton'] > JSXAttribute[name.name='type'] > Literal[value!=/^(?:button|submit|reset)$/]",
+        "message": "<MxActionButton> type must be one of 'button' | 'submit' | 'reset'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxAnswerOption'] > JSXAttribute > JSXIdentifier[name!=/^(?:children|state|onClick|style|key|ref|className|style|children)$/]",
+        "message": "<MxAnswerOption> doesn't accept that prop. Declared props: children, state, onClick, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxAnswerOption'] > JSXAttribute[name.name='state'] > Literal[value!=/^(?:default|selected|correct|wrong|disabled)$/]",
+        "message": "<MxAnswerOption> state must be one of 'default' | 'selected' | 'correct' | 'wrong' | 'disabled'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxAvatar'] > JSXAttribute > JSXIdentifier[name!=/^(?:src|name|size|style|key|ref|className|style|children)$/]",
+        "message": "<MxAvatar> doesn't accept that prop. Declared props: src, name, size, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxBadge'] > JSXAttribute > JSXIdentifier[name!=/^(?:children|tone|size|icon|style|key|ref|className|style|children)$/]",
+        "message": "<MxBadge> doesn't accept that prop. Declared props: children, tone, size, icon, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxBadge'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:neutral|preSrs|active|due|noDue|mastered|lapse|correct|wrong|info)$/]",
+        "message": "<MxBadge> tone must be one of 'neutral' | 'preSrs' | 'active' | 'due' | 'noDue' | 'mastered' | 'lapse' | 'correct' | 'wrong' | 'info'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxBadge'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:small|medium)$/]",
+        "message": "<MxBadge> size must be one of 'small' | 'medium'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxBottomNavItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:key|label|icon|key|ref|className|style|children)$/]",
+        "message": "<MxBottomNavItem> doesn't accept that prop. Declared props: key, label, icon."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxCallout'] > JSXAttribute > JSXIdentifier[name!=/^(?:tone|title|children|icon|style|key|ref|className|style|children)$/]",
+        "message": "<MxCallout> doesn't accept that prop. Declared props: tone, title, children, icon, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxCallout'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:info|warning|destructive|noDue|unavailable)$/]",
+        "message": "<MxCallout> tone must be one of 'info' | 'warning' | 'destructive' | 'noDue' | 'unavailable'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxCard'] > JSXAttribute > JSXIdentifier[name!=/^(?:children|variant|state|padding|onClick|style|key|ref|className|style|children)$/]",
+        "message": "<MxCard> doesn't accept that prop. Declared props: children, variant, state, padding, onClick, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxCard'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:default|elevated|interactive)$/]",
+        "message": "<MxCard> variant must be one of 'default' | 'elevated' | 'interactive'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxCard'] > JSXAttribute[name.name='state'] > Literal[value!=/^(?:none|selected|correct|wrong|disabled)$/]",
+        "message": "<MxCard> state must be one of 'none' | 'selected' | 'correct' | 'wrong' | 'disabled'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxConfirmDialog'] > JSXAttribute > JSXIdentifier[name!=/^(?:open|variant|title|message|warning|confirmLabel|cancelLabel|onConfirm|onCancel|style|key|ref|className|style|children)$/]",
+        "message": "<MxConfirmDialog> doesn't accept that prop. Declared props: open, variant, title, message, warning, confirmLabel, cancelLabel, onConfirm, onCancel, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxConfirmDialog'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:normal|destructive|highRisk)$/]",
+        "message": "<MxConfirmDialog> variant must be one of 'normal' | 'destructive' | 'highRisk'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxEmptyState'] > JSXAttribute > JSXIdentifier[name!=/^(?:icon|title|message|action|tone|style|key|ref|className|style|children)$/]",
+        "message": "<MxEmptyState> doesn't accept that prop. Declared props: icon, title, message, action, tone, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxEmptyState'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:neutral|positive|unavailable)$/]",
+        "message": "<MxEmptyState> tone must be one of 'neutral' | 'positive' | 'unavailable'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxErrorState'] > JSXAttribute > JSXIdentifier[name!=/^(?:icon|title|message|action|style|key|ref|className|style|children)$/]",
+        "message": "<MxErrorState> doesn't accept that prop. Declared props: icon, title, message, action, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxFillInputPanel'] > JSXAttribute > JSXIdentifier[name!=/^(?:value|onChange|state|expected|onHint|onCheck|onRetry|style|key|ref|className|style|children)$/]",
+        "message": "<MxFillInputPanel> doesn't accept that prop. Declared props: value, onChange, state, expected, onHint, onCheck, onRetry, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxFillInputPanel'] > JSXAttribute[name.name='state'] > Literal[value!=/^(?:idle|correct|wrong)$/]",
+        "message": "<MxFillInputPanel> state must be one of 'idle' | 'correct' | 'wrong'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxIconButton'] > JSXAttribute > JSXIdentifier[name!=/^(?:icon|label|variant|size|disabled|onClick|style|key|ref|className|style|children)$/]",
+        "message": "<MxIconButton> doesn't accept that prop. Declared props: icon, label, variant, size, disabled, onClick, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxIconButton'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:ghost|surface|destructive)$/]",
+        "message": "<MxIconButton> variant must be one of 'ghost' | 'surface' | 'destructive'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxIconButton'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:small|medium)$/]",
+        "message": "<MxIconButton> size must be one of 'small' | 'medium'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxLanguageRow'] > JSXAttribute > JSXIdentifier[name!=/^(?:nativeName|secondaryName|icon|selected|onClick|style|key|ref|className|style|children)$/]",
+        "message": "<MxLanguageRow> doesn't accept that prop. Declared props: nativeName, secondaryName, icon, selected, onClick, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxListRow'] > JSXAttribute > JSXIdentifier[name!=/^(?:title|subtitle|leading|trailing|variant|disabled|onClick|showChevron|style|key|ref|className|style|children)$/]",
+        "message": "<MxListRow> doesn't accept that prop. Declared props: title, subtitle, leading, trailing, variant, disabled, onClick, showChevron, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxListRow'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:default|error)$/]",
+        "message": "<MxListRow> variant must be one of 'default' | 'error'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxMatchTile'] > JSXAttribute > JSXIdentifier[name!=/^(?:children|side|state|onClick|style|key|ref|className|style|children)$/]",
+        "message": "<MxMatchTile> doesn't accept that prop. Declared props: children, side, state, onClick, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxMatchTile'] > JSXAttribute[name.name='side'] > Literal[value!=/^(?:prompt|meaning)$/]",
+        "message": "<MxMatchTile> side must be one of 'prompt' | 'meaning'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxMatchTile'] > JSXAttribute[name.name='state'] > Literal[value!=/^(?:default|selected|correct|wrong|completed)$/]",
+        "message": "<MxMatchTile> state must be one of 'default' | 'selected' | 'correct' | 'wrong' | 'completed'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxMetricCard'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|value|unit|delta|tone|style|key|ref|className|style|children)$/]",
+        "message": "<MxMetricCard> doesn't accept that prop. Declared props: label, value, unit, delta, tone, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxMetricCard'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:neutral|word|time|correct|wrong)$/]",
+        "message": "<MxMetricCard> tone must be one of 'neutral' | 'word' | 'time' | 'correct' | 'wrong'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxModalSheet'] > JSXAttribute > JSXIdentifier[name!=/^(?:open|title|onClose|children|actions|style|key|ref|className|style|children)$/]",
+        "message": "<MxModalSheet> doesn't accept that prop. Declared props: open, title, onClose, children, actions, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxRecallPanel'] > JSXAttribute > JSXIdentifier[name!=/^(?:phase|seconds|meaning|onReveal|onForgot|onRemembered|style|key|ref|className|style|children)$/]",
+        "message": "<MxRecallPanel> doesn't accept that prop. Declared props: phase, seconds, meaning, onReveal, onForgot, onRemembered, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxRecallPanel'] > JSXAttribute[name.name='phase'] > Literal[value!=/^(?:hidden|revealed)$/]",
+        "message": "<MxRecallPanel> phase must be one of 'hidden' | 'revealed'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxWeekday'] > JSXAttribute > JSXIdentifier[name!=/^(?:key|label|selected|key|ref|className|style|children)$/]",
+        "message": "<MxWeekday> doesn't accept that prop. Declared props: key, label, selected."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSectionHeader'] > JSXAttribute > JSXIdentifier[name!=/^(?:eyebrow|title|actionLabel|onAction|size|style|key|ref|className|style|children)$/]",
+        "message": "<MxSectionHeader> doesn't accept that prop. Declared props: eyebrow, title, actionLabel, onAction, size, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSectionHeader'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:default|hero)$/]",
+        "message": "<MxSectionHeader> size must be one of 'default' | 'hero'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSegmentedControl'] > JSXAttribute > JSXIdentifier[name!=/^(?:options|value|onChange|style|key|ref|className|style|children)$/]",
+        "message": "<MxSegmentedControl> doesn't accept that prop. Declared props: options, value, onChange, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxResultStat'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|value|tone|key|ref|className|style|children)$/]",
+        "message": "<MxResultStat> doesn't accept that prop. Declared props: label, value, tone."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxResultStat'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:correct|wrong|active|due)$/]",
+        "message": "<MxResultStat> tone must be one of 'correct' | 'wrong' | 'active' | 'due'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSettingsRow'] > JSXAttribute > JSXIdentifier[name!=/^(?:title|subtitle|leading|value|control|tone|disabled|unavailable|onClick|style|key|ref|className|style|children)$/]",
+        "message": "<MxSettingsRow> doesn't accept that prop. Declared props: title, subtitle, leading, value, control, tone, disabled, unavailable, onClick, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSettingsRow'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:default|destructive)$/]",
+        "message": "<MxSettingsRow> tone must be one of 'default' | 'destructive'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSettingsSection'] > JSXAttribute > JSXIdentifier[name!=/^(?:title|description|children|style|key|ref|className|style|children)$/]",
+        "message": "<MxSettingsSection> doesn't accept that prop. Declared props: title, description, children, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSnackbar'] > JSXAttribute > JSXIdentifier[name!=/^(?:tone|children|action|onAction|style|key|ref|className|style|children)$/]",
+        "message": "<MxSnackbar> doesn't accept that prop. Declared props: tone, children, action, onAction, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSnackbar'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:success|error|warning|info)$/]",
+        "message": "<MxSnackbar> tone must be one of 'success' | 'error' | 'warning' | 'info'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxChartSeries'] > JSXAttribute > JSXIdentifier[name!=/^(?:name|tone|points|key|ref|className|style|children)$/]",
+        "message": "<MxChartSeries> doesn't accept that prop. Declared props: name, tone, points."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxChartSeries'] > JSXAttribute[name.name='tone'] > Literal[value!=/^(?:word|time|correct|wrong|neutral)$/]",
+        "message": "<MxChartSeries> tone must be one of 'word' | 'time' | 'correct' | 'wrong' | 'neutral'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxStudyCard'] > JSXAttribute > JSXIdentifier[name!=/^(?:prompt|meaning|note|variant|onAudio|style|key|ref|className|style|children)$/]",
+        "message": "<MxStudyCard> doesn't accept that prop. Declared props: prompt, meaning, note, variant, onAudio, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxStudyCard'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:prompt|answer|both)$/]",
+        "message": "<MxStudyCard> variant must be one of 'prompt' | 'answer' | 'both'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxStudyProgressBar'] > JSXAttribute > JSXIdentifier[name!=/^(?:percent|stepLabel|modeLabel|style|key|ref|className|style|children)$/]",
+        "message": "<MxStudyProgressBar> doesn't accept that prop. Declared props: percent, stepLabel, modeLabel, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxSwitch'] > JSXAttribute > JSXIdentifier[name!=/^(?:checked|disabled|onChange|label|style|key|ref|className|style|children)$/]",
+        "message": "<MxSwitch> doesn't accept that prop. Declared props: checked, disabled, onChange, label, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxTabs'] > JSXAttribute > JSXIdentifier[name!=/^(?:options|value|onChange|style|key|ref|className|style|children)$/]",
+        "message": "<MxTabs> doesn't accept that prop. Declared props: options, value, onChange, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxThemePreview'] > JSXAttribute > JSXIdentifier[name!=/^(?:bg|surface|accent|key|ref|className|style|children)$/]",
+        "message": "<MxThemePreview> doesn't accept that prop. Declared props: bg, surface, accent."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxTopBar'] > JSXAttribute > JSXIdentifier[name!=/^(?:title|subtitle|leading|actions|variant|sticky|style|key|ref|className|style|children)$/]",
+        "message": "<MxTopBar> doesn't accept that prop. Declared props: title, subtitle, leading, actions, variant, sticky, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxTopBar'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:default|study|settings)$/]",
+        "message": "<MxTopBar> variant must be one of 'default' | 'study' | 'settings'."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MxWeekdayChip'] > JSXAttribute > JSXIdentifier[name!=/^(?:label|selected|disabled|onClick|style|key|ref|className|style|children)$/]",
+        "message": "<MxWeekdayChip> doesn't accept that prop. Declared props: label, selected, disabled, onClick, style."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {
+      "MxActionButton": {
+        "replaces": []
+      },
+      "MxAnswerOption": {
+        "replaces": []
+      },
+      "MxAvatar": {
+        "replaces": []
+      },
+      "MxBadge": {
+        "replaces": []
+      },
+      "MxBottomNavItem": {
+        "replaces": []
+      },
+      "MxCallout": {
+        "replaces": []
+      },
+      "MxCard": {
+        "replaces": []
+      },
+      "MxConfirmDialog": {
+        "replaces": []
+      },
+      "MxEmptyState": {
+        "replaces": []
+      },
+      "MxErrorState": {
+        "replaces": []
+      },
+      "MxFillInputPanel": {
+        "replaces": []
+      },
+      "MxIconButton": {
+        "replaces": []
+      },
+      "MxLanguageRow": {
+        "replaces": []
+      },
+      "MxListRow": {
+        "replaces": []
+      },
+      "MxMatchTile": {
+        "replaces": []
+      },
+      "MxMetricCard": {
+        "replaces": []
+      },
+      "MxModalSheet": {
+        "replaces": []
+      },
+      "MxRecallPanel": {
+        "replaces": []
+      },
+      "MxWeekday": {
+        "replaces": []
+      },
+      "MxSectionHeader": {
+        "replaces": []
+      },
+      "MxSegmentedControl": {
+        "replaces": []
+      },
+      "MxResultStat": {
+        "replaces": []
+      },
+      "MxSettingsRow": {
+        "replaces": []
+      },
+      "MxSettingsSection": {
+        "replaces": []
+      },
+      "MxSnackbar": {
+        "replaces": []
+      },
+      "MxChartSeries": {
+        "replaces": []
+      },
+      "MxStudyCard": {
+        "replaces": []
+      },
+      "MxStudyProgressBar": {
+        "replaces": []
+      },
+      "MxSwitch": {
+        "replaces": []
+      },
+      "MxTabs": {
+        "replaces": []
+      },
+      "MxThemePreview": {
+        "replaces": []
+      },
+      "MxTopBar": {
+        "replaces": []
+      },
+      "MxWeekdayChip": {
+        "replaces": []
+      }
+    },
+    "tokens": [
+      "--mx-amber-300",
+      "--mx-amber-400",
+      "--mx-amber-500",
+      "--mx-amber-600",
+      "--mx-amber-700",
+      "--mx-blue-300",
+      "--mx-blue-400",
+      "--mx-blue-500",
+      "--mx-blue-600",
+      "--mx-border-correct",
+      "--mx-border-default",
+      "--mx-border-destructive",
+      "--mx-border-selected",
+      "--mx-border-strong",
+      "--mx-border-subtle",
+      "--mx-border-width-default",
+      "--mx-border-width-emphasis",
+      "--mx-border-width-hairline",
+      "--mx-border-width-strong",
+      "--mx-border-wrong",
+      "--mx-color-action-focusRing",
+      "--mx-color-action-ghost",
+      "--mx-color-action-primary",
+      "--mx-color-action-primaryDisabled",
+      "--mx-color-action-primaryPressed",
+      "--mx-color-action-secondary",
+      "--mx-color-background-app",
+      "--mx-color-background-screen",
+      "--mx-color-border-default",
+      "--mx-color-border-strong",
+      "--mx-color-border-subtle",
+      "--mx-color-chart-axis",
+      "--mx-color-chart-grid",
+      "--mx-color-chart-neutralTotal",
+      "--mx-color-chart-qualityCorrect",
+      "--mx-color-chart-qualityWrong",
+      "--mx-color-chart-timeMetric",
+      "--mx-color-chart-tooltip",
+      "--mx-color-chart-wordMetric",
+      "--mx-color-destructive-border",
+      "--mx-color-destructive-pressed",
+      "--mx-color-destructive-surface",
+      "--mx-color-destructive-text",
+      "--mx-color-divider-default",
+      "--mx-color-feedback-correct",
+      "--mx-color-feedback-correctBorder",
+      "--mx-color-feedback-correctSurface",
+      "--mx-color-feedback-info",
+      "--mx-color-feedback-infoSurface",
+      "--mx-color-feedback-warning",
+      "--mx-color-feedback-warningSurface",
+      "--mx-color-feedback-wrong",
+      "--mx-color-feedback-wrongBorder",
+      "--mx-color-feedback-wrongSurface",
+      "--mx-color-overlay-scrim",
+      "--mx-color-srs-active",
+      "--mx-color-srs-due",
+      "--mx-color-srs-lapse",
+      "--mx-color-srs-mastered",
+      "--mx-color-srs-noDue",
+      "--mx-color-srs-preSrs",
+      "--mx-color-srs-preSrsSurface",
+      "--mx-color-state-disabledSurface",
+      "--mx-color-state-loadingSurface",
+      "--mx-color-state-selected",
+      "--mx-color-state-selectedSurface",
+      "--mx-color-state-unavailableSurface",
+      "--mx-color-surface-base",
+      "--mx-color-surface-card",
+      "--mx-color-surface-elevated",
+      "--mx-color-surface-modal",
+      "--mx-color-text-disabled",
+      "--mx-color-text-inverse",
+      "--mx-color-text-onAction",
+      "--mx-color-text-onDestructive",
+      "--mx-color-text-primary",
+      "--mx-color-text-secondary",
+      "--mx-color-text-tertiary",
+      "--mx-coral-400",
+      "--mx-coral-500",
+      "--mx-coral-600",
+      "--mx-divider-default",
+      "--mx-divider-strong",
+      "--mx-divider-subtle",
+      "--mx-ease-accelerate",
+      "--mx-ease-decelerate",
+      "--mx-ease-standard",
+      "--mx-elevation-high",
+      "--mx-elevation-low",
+      "--mx-elevation-medium",
+      "--mx-elevation-modal",
+      "--mx-elevation-none",
+      "--mx-elevation-sheet",
+      "--mx-font-body",
+      "--mx-font-display",
+      "--mx-font-korean",
+      "--mx-font-mono",
+      "--mx-green-300",
+      "--mx-green-400",
+      "--mx-green-500",
+      "--mx-green-600",
+      "--mx-green-700",
+      "--mx-layer-base",
+      "--mx-layer-dialog",
+      "--mx-layer-modal",
+      "--mx-layer-overlay",
+      "--mx-layer-sticky",
+      "--mx-layer-toast",
+      "--mx-layout-bottom-action-inset",
+      "--mx-layout-content-max-width",
+      "--mx-layout-screen-padding-x",
+      "--mx-layout-screen-padding-x-wide",
+      "--mx-layout-section-gap",
+      "--mx-motion-fast",
+      "--mx-motion-normal",
+      "--mx-motion-slow",
+      "--mx-purple-100",
+      "--mx-purple-200",
+      "--mx-purple-300",
+      "--mx-purple-400",
+      "--mx-purple-500",
+      "--mx-purple-600",
+      "--mx-purple-700",
+      "--mx-purple-light",
+      "--mx-radius-full",
+      "--mx-radius-lg",
+      "--mx-radius-md",
+      "--mx-radius-none",
+      "--mx-radius-pill",
+      "--mx-radius-sm",
+      "--mx-radius-xl",
+      "--mx-radius-xs",
+      "--mx-red-300",
+      "--mx-red-400",
+      "--mx-red-500",
+      "--mx-red-600",
+      "--mx-red-700",
+      "--mx-size-button-height",
+      "--mx-size-button-height-bottom",
+      "--mx-size-button-height-compact",
+      "--mx-size-card-min-height",
+      "--mx-size-chip-height",
+      "--mx-size-icon-lg",
+      "--mx-size-icon-md",
+      "--mx-size-icon-sm",
+      "--mx-size-input-height",
+      "--mx-size-list-row-height",
+      "--mx-size-list-row-height-two-line",
+      "--mx-size-modal-width",
+      "--mx-size-modal-width-min",
+      "--mx-size-settings-row-height",
+      "--mx-size-sheet-max-height",
+      "--mx-size-study-card-min-height",
+      "--mx-size-touch-target",
+      "--mx-slate-0",
+      "--mx-slate-100",
+      "--mx-slate-150",
+      "--mx-slate-200",
+      "--mx-slate-300",
+      "--mx-slate-400",
+      "--mx-slate-50",
+      "--mx-slate-500",
+      "--mx-slate-600",
+      "--mx-slate-700",
+      "--mx-slate-800",
+      "--mx-slate-850",
+      "--mx-slate-900",
+      "--mx-slate-950",
+      "--mx-space-0",
+      "--mx-space-12",
+      "--mx-space-16",
+      "--mx-space-2",
+      "--mx-space-20",
+      "--mx-space-24",
+      "--mx-space-32",
+      "--mx-space-4",
+      "--mx-space-40",
+      "--mx-space-48",
+      "--mx-space-6",
+      "--mx-space-64",
+      "--mx-space-8",
+      "--mx-text-body-large-line",
+      "--mx-text-body-large-size",
+      "--mx-text-body-large-weight",
+      "--mx-text-body-medium-line",
+      "--mx-text-body-medium-size",
+      "--mx-text-body-medium-weight",
+      "--mx-text-body-small-line",
+      "--mx-text-body-small-size",
+      "--mx-text-body-small-weight",
+      "--mx-text-button-line",
+      "--mx-text-button-size",
+      "--mx-text-button-tracking",
+      "--mx-text-button-weight",
+      "--mx-text-caption-line",
+      "--mx-text-caption-size",
+      "--mx-text-caption-tracking",
+      "--mx-text-caption-weight",
+      "--mx-text-display-large-line",
+      "--mx-text-display-large-size",
+      "--mx-text-display-large-tracking",
+      "--mx-text-display-large-weight",
+      "--mx-text-label-large-line",
+      "--mx-text-label-large-size",
+      "--mx-text-label-large-weight",
+      "--mx-text-label-medium-line",
+      "--mx-text-label-medium-size",
+      "--mx-text-label-medium-weight",
+      "--mx-text-stat-number-line",
+      "--mx-text-stat-number-size",
+      "--mx-text-stat-number-tracking",
+      "--mx-text-stat-number-weight",
+      "--mx-text-study-explanation-line",
+      "--mx-text-study-explanation-size",
+      "--mx-text-study-explanation-weight",
+      "--mx-text-study-korean-line",
+      "--mx-text-study-korean-size",
+      "--mx-text-study-korean-tracking",
+      "--mx-text-study-korean-weight",
+      "--mx-text-title-large-line",
+      "--mx-text-title-large-size",
+      "--mx-text-title-large-tracking",
+      "--mx-text-title-large-weight",
+      "--mx-text-title-medium-line",
+      "--mx-text-title-medium-size",
+      "--mx-text-title-medium-tracking",
+      "--mx-text-title-medium-weight",
+      "--mx-violet-300",
+      "--mx-violet-400",
+      "--mx-violet-500",
+      "--mx-violet-600",
+      "--mx-weight-bold",
+      "--mx-weight-medium",
+      "--mx-weight-regular",
+      "--mx-weight-semibold"
+    ],
+    "tokenKinds": {
+      "--mx-slate-0": "color",
+      "--mx-slate-50": "color",
+      "--mx-slate-100": "color",
+      "--mx-slate-150": "color",
+      "--mx-slate-200": "color",
+      "--mx-slate-300": "color",
+      "--mx-slate-400": "color",
+      "--mx-slate-500": "color",
+      "--mx-slate-600": "color",
+      "--mx-slate-700": "color",
+      "--mx-slate-800": "color",
+      "--mx-slate-850": "color",
+      "--mx-slate-900": "color",
+      "--mx-slate-950": "color",
+      "--mx-purple-100": "color",
+      "--mx-purple-200": "color",
+      "--mx-purple-300": "color",
+      "--mx-purple-400": "color",
+      "--mx-purple-500": "color",
+      "--mx-purple-600": "color",
+      "--mx-purple-700": "color",
+      "--mx-purple-light": "color",
+      "--mx-green-300": "color",
+      "--mx-green-400": "color",
+      "--mx-green-500": "color",
+      "--mx-green-600": "color",
+      "--mx-green-700": "color",
+      "--mx-red-300": "color",
+      "--mx-red-400": "color",
+      "--mx-red-500": "color",
+      "--mx-red-600": "color",
+      "--mx-red-700": "color",
+      "--mx-amber-300": "color",
+      "--mx-amber-400": "color",
+      "--mx-amber-500": "color",
+      "--mx-amber-600": "color",
+      "--mx-amber-700": "color",
+      "--mx-blue-300": "color",
+      "--mx-blue-400": "color",
+      "--mx-blue-500": "color",
+      "--mx-blue-600": "color",
+      "--mx-violet-300": "color",
+      "--mx-violet-400": "color",
+      "--mx-violet-500": "color",
+      "--mx-violet-600": "color",
+      "--mx-coral-400": "color",
+      "--mx-coral-500": "color",
+      "--mx-coral-600": "color",
+      "--mx-color-background-app": "color",
+      "--mx-color-background-screen": "color",
+      "--mx-color-surface-base": "color",
+      "--mx-color-surface-card": "color",
+      "--mx-color-surface-elevated": "color",
+      "--mx-color-surface-modal": "color",
+      "--mx-color-overlay-scrim": "color",
+      "--mx-color-text-primary": "font",
+      "--mx-color-text-secondary": "font",
+      "--mx-color-text-tertiary": "font",
+      "--mx-color-text-disabled": "font",
+      "--mx-color-text-inverse": "font",
+      "--mx-color-text-onAction": "font",
+      "--mx-color-text-onDestructive": "font",
+      "--mx-color-border-subtle": "color",
+      "--mx-color-border-default": "color",
+      "--mx-color-border-strong": "color",
+      "--mx-color-divider-default": "color",
+      "--mx-color-action-primary": "color",
+      "--mx-color-action-primaryPressed": "color",
+      "--mx-color-action-primaryDisabled": "color",
+      "--mx-color-action-secondary": "color",
+      "--mx-color-action-ghost": "color",
+      "--mx-color-action-focusRing": "color",
+      "--mx-color-state-selected": "color",
+      "--mx-color-state-selectedSurface": "color",
+      "--mx-color-state-disabledSurface": "color",
+      "--mx-color-state-loadingSurface": "color",
+      "--mx-color-state-unavailableSurface": "color",
+      "--mx-color-feedback-correct": "color",
+      "--mx-color-feedback-correctSurface": "color",
+      "--mx-color-feedback-correctBorder": "color",
+      "--mx-color-feedback-wrong": "color",
+      "--mx-color-feedback-wrongSurface": "color",
+      "--mx-color-feedback-wrongBorder": "color",
+      "--mx-color-feedback-warning": "color",
+      "--mx-color-feedback-warningSurface": "color",
+      "--mx-color-feedback-info": "color",
+      "--mx-color-feedback-infoSurface": "color",
+      "--mx-color-srs-preSrs": "color",
+      "--mx-color-srs-preSrsSurface": "color",
+      "--mx-color-srs-active": "color",
+      "--mx-color-srs-due": "color",
+      "--mx-color-srs-noDue": "color",
+      "--mx-color-srs-mastered": "color",
+      "--mx-color-srs-lapse": "color",
+      "--mx-color-destructive-text": "font",
+      "--mx-color-destructive-surface": "color",
+      "--mx-color-destructive-border": "color",
+      "--mx-color-destructive-pressed": "color",
+      "--mx-color-chart-wordMetric": "color",
+      "--mx-color-chart-timeMetric": "color",
+      "--mx-color-chart-qualityCorrect": "color",
+      "--mx-color-chart-qualityWrong": "color",
+      "--mx-color-chart-neutralTotal": "color",
+      "--mx-color-chart-grid": "color",
+      "--mx-color-chart-axis": "color",
+      "--mx-color-chart-tooltip": "color",
+      "--mx-font-display": "font",
+      "--mx-font-body": "font",
+      "--mx-font-korean": "font",
+      "--mx-font-mono": "font",
+      "--mx-weight-regular": "font",
+      "--mx-weight-medium": "font",
+      "--mx-weight-semibold": "font",
+      "--mx-weight-bold": "font",
+      "--mx-text-display-large-size": "font",
+      "--mx-text-display-large-line": "font",
+      "--mx-text-display-large-weight": "font",
+      "--mx-text-display-large-tracking": "font",
+      "--mx-text-title-large-size": "font",
+      "--mx-text-title-large-line": "font",
+      "--mx-text-title-large-weight": "font",
+      "--mx-text-title-large-tracking": "font",
+      "--mx-text-title-medium-size": "font",
+      "--mx-text-title-medium-line": "font",
+      "--mx-text-title-medium-weight": "font",
+      "--mx-text-title-medium-tracking": "font",
+      "--mx-text-body-large-size": "font",
+      "--mx-text-body-large-line": "font",
+      "--mx-text-body-large-weight": "font",
+      "--mx-text-body-medium-size": "font",
+      "--mx-text-body-medium-line": "font",
+      "--mx-text-body-medium-weight": "font",
+      "--mx-text-body-small-size": "font",
+      "--mx-text-body-small-line": "font",
+      "--mx-text-body-small-weight": "font",
+      "--mx-text-label-large-size": "font",
+      "--mx-text-label-large-line": "font",
+      "--mx-text-label-large-weight": "font",
+      "--mx-text-label-medium-size": "font",
+      "--mx-text-label-medium-line": "font",
+      "--mx-text-label-medium-weight": "font",
+      "--mx-text-caption-size": "font",
+      "--mx-text-caption-line": "font",
+      "--mx-text-caption-weight": "font",
+      "--mx-text-caption-tracking": "font",
+      "--mx-text-study-korean-size": "font",
+      "--mx-text-study-korean-line": "font",
+      "--mx-text-study-korean-weight": "font",
+      "--mx-text-study-korean-tracking": "font",
+      "--mx-text-study-explanation-size": "font",
+      "--mx-text-study-explanation-line": "font",
+      "--mx-text-study-explanation-weight": "font",
+      "--mx-text-stat-number-size": "font",
+      "--mx-text-stat-number-line": "font",
+      "--mx-text-stat-number-weight": "font",
+      "--mx-text-stat-number-tracking": "font",
+      "--mx-text-button-size": "font",
+      "--mx-text-button-line": "font",
+      "--mx-text-button-weight": "font",
+      "--mx-text-button-tracking": "font",
+      "--mx-space-0": "spacing",
+      "--mx-space-2": "spacing",
+      "--mx-space-4": "spacing",
+      "--mx-space-6": "spacing",
+      "--mx-space-8": "spacing",
+      "--mx-space-12": "spacing",
+      "--mx-space-16": "spacing",
+      "--mx-space-20": "spacing",
+      "--mx-space-24": "spacing",
+      "--mx-space-32": "spacing",
+      "--mx-space-40": "spacing",
+      "--mx-space-48": "spacing",
+      "--mx-space-64": "spacing",
+      "--mx-size-touch-target": "spacing",
+      "--mx-size-icon-sm": "spacing",
+      "--mx-size-icon-md": "spacing",
+      "--mx-size-icon-lg": "spacing",
+      "--mx-size-button-height": "spacing",
+      "--mx-size-button-height-compact": "spacing",
+      "--mx-size-button-height-bottom": "spacing",
+      "--mx-size-input-height": "spacing",
+      "--mx-size-chip-height": "spacing",
+      "--mx-size-card-min-height": "spacing",
+      "--mx-size-list-row-height": "spacing",
+      "--mx-size-list-row-height-two-line": "spacing",
+      "--mx-size-settings-row-height": "spacing",
+      "--mx-size-modal-width": "spacing",
+      "--mx-size-modal-width-min": "spacing",
+      "--mx-size-sheet-max-height": "spacing",
+      "--mx-size-study-card-min-height": "spacing",
+      "--mx-layout-screen-padding-x": "spacing",
+      "--mx-layout-screen-padding-x-wide": "spacing",
+      "--mx-layout-content-max-width": "spacing",
+      "--mx-layout-section-gap": "spacing",
+      "--mx-layout-bottom-action-inset": "spacing",
+      "--mx-radius-none": "radius",
+      "--mx-radius-xs": "radius",
+      "--mx-radius-sm": "radius",
+      "--mx-radius-md": "radius",
+      "--mx-radius-lg": "radius",
+      "--mx-radius-xl": "radius",
+      "--mx-radius-pill": "radius",
+      "--mx-radius-full": "radius",
+      "--mx-border-width-hairline": "spacing",
+      "--mx-border-width-default": "spacing",
+      "--mx-border-width-strong": "spacing",
+      "--mx-border-width-emphasis": "spacing",
+      "--mx-border-subtle": "color",
+      "--mx-border-default": "color",
+      "--mx-border-strong": "color",
+      "--mx-border-selected": "color",
+      "--mx-border-correct": "color",
+      "--mx-border-wrong": "color",
+      "--mx-border-destructive": "color",
+      "--mx-divider-subtle": "color",
+      "--mx-divider-default": "color",
+      "--mx-divider-strong": "color",
+      "--mx-elevation-none": "shadow",
+      "--mx-elevation-low": "shadow",
+      "--mx-elevation-medium": "shadow",
+      "--mx-elevation-high": "shadow",
+      "--mx-elevation-modal": "shadow",
+      "--mx-elevation-sheet": "shadow",
+      "--mx-motion-fast": "other",
+      "--mx-motion-normal": "other",
+      "--mx-motion-slow": "other",
+      "--mx-ease-standard": "other",
+      "--mx-ease-decelerate": "other",
+      "--mx-ease-accelerate": "other",
+      "--mx-layer-base": "other",
+      "--mx-layer-sticky": "other",
+      "--mx-layer-overlay": "other",
+      "--mx-layer-modal": "other",
+      "--mx-layer-dialog": "other",
+      "--mx-layer-toast": "other"
+    },
+    "fontFamilies": [
+      "JetBrains Mono",
+      "Noto Sans KR",
+      "Plus Jakarta Sans"
+    ]
+  }
+}

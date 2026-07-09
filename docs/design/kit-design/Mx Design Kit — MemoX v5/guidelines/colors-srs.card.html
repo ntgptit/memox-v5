@@ -1,0 +1,36 @@
+<!-- @dsCard group="Colors" viewport="700x230" name="SRS Lifecycle" subtitle="Box 0 → mastered → lapse. Due (amber) never reads as Wrong/Destructive (red)" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 18px; background: #05070b; font-family: var(--mx-font-body); }
+  .lab { font: 600 10px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 0 0 10px; }
+  .pane { border-radius: 12px; padding: 16px; margin-bottom: 12px; background: var(--mx-color-background-app); border: 1px solid rgba(128,128,128,0.15); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; flex-direction: column; gap: 3px; padding: 8px 12px; border-radius: 999px; }
+  .chip b { font: 700 12px var(--mx-font-display); }
+  .chip span { font: 500 9px var(--mx-font-mono); opacity:.75; }
+</style></head>
+<body>
+<div class="pane">
+  <p class="lab">SRS — dark</p>
+  <div class="chips">
+    <span class="chip" style="background:var(--mx-color-srs-preSrsSurface);color:var(--mx-color-srs-preSrs)"><b>Box 0 · pre-SRS</b></span>
+    <span class="chip" style="background:var(--mx-color-state-selectedSurface);color:var(--mx-color-srs-active)"><b>Learning · active</b></span>
+    <span class="chip" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-srs-due)"><b>Due</b></span>
+    <span class="chip" style="background:var(--mx-color-feedback-correctSurface);color:var(--mx-color-srs-noDue)"><b>Done · no-due</b></span>
+    <span class="chip" style="background:rgba(168,143,255,.16);color:var(--mx-color-srs-mastered)"><b>Box 8 · mastered</b></span>
+    <span class="chip" style="background:var(--mx-color-feedback-wrongSurface);color:var(--mx-color-srs-lapse)"><b>Lapse</b></span>
+  </div>
+</div>
+<div class="pane" data-theme="light">
+  <p class="lab">SRS — light</p>
+  <div class="chips">
+    <span class="chip" style="background:var(--mx-color-srs-preSrsSurface);color:var(--mx-color-srs-preSrs)"><b>Box 0 · pre-SRS</b></span>
+    <span class="chip" style="background:var(--mx-color-state-selectedSurface);color:var(--mx-color-srs-active)"><b>Learning · active</b></span>
+    <span class="chip" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-srs-due)"><b>Due</b></span>
+    <span class="chip" style="background:var(--mx-color-feedback-correctSurface);color:var(--mx-color-srs-noDue)"><b>Done · no-due</b></span>
+    <span class="chip" style="background:rgba(115,85,214,.14);color:var(--mx-color-srs-mastered)"><b>Box 8 · mastered</b></span>
+    <span class="chip" style="background:var(--mx-color-feedback-wrongSurface);color:var(--mx-color-srs-lapse)"><b>Lapse</b></span>
+  </div>
+</div>
+</body></html>

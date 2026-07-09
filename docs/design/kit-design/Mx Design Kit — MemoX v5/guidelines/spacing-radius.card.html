@@ -1,0 +1,20 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Radius Scale" subtitle="Corner radii — xs chips to xl sheets" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 22px; background: var(--mx-color-background-app); }
+  .grid { display:flex; flex-wrap:wrap; gap:14px; }
+  .b { width: 84px; }
+  .b .box { height: 60px; background: var(--mx-color-surface-elevated); border: 1.5px solid var(--mx-color-action-primary); }
+  .b .l { margin-top:6px; font: 500 10px var(--mx-font-mono); color: var(--mx-color-text-tertiary); }
+</style></head>
+<body>
+<div class="grid">
+  <div class="b"><div class="box" style="border-radius:var(--mx-radius-xs)"></div><div class="l">xs · 4</div></div>
+  <div class="b"><div class="box" style="border-radius:var(--mx-radius-sm)"></div><div class="l">sm · 8</div></div>
+  <div class="b"><div class="box" style="border-radius:var(--mx-radius-md)"></div><div class="l">md · 12</div></div>
+  <div class="b"><div class="box" style="border-radius:var(--mx-radius-lg)"></div><div class="l">lg · 16</div></div>
+  <div class="b"><div class="box" style="border-radius:var(--mx-radius-xl)"></div><div class="l">xl · 22</div></div>
+  <div class="b"><div class="box" style="border-radius:var(--mx-radius-pill)"></div><div class="l">pill</div></div>
+</div>
+</body></html>

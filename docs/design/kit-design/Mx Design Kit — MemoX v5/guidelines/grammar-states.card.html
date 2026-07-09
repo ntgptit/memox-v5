@@ -1,0 +1,28 @@
+<!-- @dsCard group="Composition" viewport="700x300" name="State Composition" subtitle="Every screen designs each applicable state — and never confuses them" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 22px; background: var(--mx-color-background-app); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .s { padding: 10px 12px; border-radius: 10px; font: 600 12px var(--mx-font-display); border: 1px solid; }
+  .rule { margin-top: 14px; display: flex; flex-direction: column; gap: 5px; }
+  .rule div { font: 500 12px var(--mx-font-body); color: var(--mx-color-text-secondary); }
+  .rule b { color: var(--mx-color-text-primary); }
+</style></head>
+<body data-theme="light">
+  <div class="grid">
+    <span class="s" style="color:var(--mx-color-text-secondary);background:var(--mx-color-state-loadingSurface);border-color:var(--mx-color-border-default)">loading</span>
+    <span class="s" style="color:var(--mx-color-text-primary);background:var(--mx-color-surface-card);border-color:var(--mx-color-border-default)">loaded</span>
+    <span class="s" style="color:var(--mx-color-srs-preSrs);background:var(--mx-color-srs-preSrsSurface);border-color:transparent">empty</span>
+    <span class="s" style="color:var(--mx-color-feedback-wrong);background:var(--mx-color-feedback-wrongSurface);border-color:var(--mx-color-feedback-wrongBorder)">error</span>
+    <span class="s" style="color:var(--mx-color-text-tertiary);background:var(--mx-color-state-unavailableSurface);border-color:var(--mx-color-border-default)">unavailable</span>
+    <span class="s" style="color:var(--mx-color-srs-noDue);background:var(--mx-color-feedback-correctSurface);border-color:transparent">no-due</span>
+    <span class="s" style="color:var(--mx-color-feedback-warning);background:var(--mx-color-feedback-warningSurface);border-color:transparent">finalize-failed</span>
+    <span class="s" style="color:var(--mx-color-destructive-text);background:var(--mx-color-destructive-surface);border-color:var(--mx-color-destructive-border)">destructive-confirm</span>
+  </div>
+  <div class="rule">
+    <div><b>empty ≠ error</b> · <b>no-due ≠ error</b> (positive/neutral) · <b>unavailable ≠ disabled</b></div>
+    <div><b>finalize-failed preserves user data</b> and offers retry · loading never shows fake data as real</div>
+    <div>a disabled action that blocks progress must explain why</div>
+  </div>
+</body></html>

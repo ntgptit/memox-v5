@@ -1,0 +1,28 @@
+/* Shared phone frame for MemoX sample screens.
+   Reference device: Samsung Galaxy S23 Ultra — 19.3:9 aspect (CSS 384×824).
+   Android-first: bottom actions respect gesture inset; targets ≥ 44px. */
+.mx-desk { margin: 0; padding: 22px; background: #05070b; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+.mx-phone {
+  position: relative;
+  width: 384px;
+  height: 824px;
+  display: flex;
+  flex-direction: column;
+  background: var(--mx-color-background-app);
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(128,128,128,0.18);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+.mx-status {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 22px 4px; height: 34px;
+  font: 600 14px var(--mx-font-display); color: var(--mx-color-text-primary);
+}
+.mx-scroll { flex: 1 1 auto; overflow-y: auto; }
+.mx-bottom {
+  display: flex; gap: 10px; padding: 12px 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: var(--mx-color-background-app);
+  border-top: 1px solid var(--mx-color-border-subtle);
+}

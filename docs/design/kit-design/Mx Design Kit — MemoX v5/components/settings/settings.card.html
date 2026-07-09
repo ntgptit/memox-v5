@@ -1,0 +1,64 @@
+<!-- @dsCard group="Components" viewport="700x1000" name="Mx Settings Components" subtitle="Settings rows, language & reminder rows, weekday chips, theme tiles — dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 20px; background: #05070b; }
+  .mx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mx-pane { border-radius: 20px; padding: 20px; background: var(--mx-color-background-app); border: 1px solid rgba(255,255,255,0.05); }
+  .mx-h { font: 600 11px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 22px 0 12px; }
+  .mx-h:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxSettingsSection, MxSettingsRow, MxSwitch, MxLanguageRow, MxReminderRow, MxThemePresetTile } = K;
+function Ic({ n }) { return <i data-lucide={n} style={{ width: 20, height: 20 }}></i>; }
+
+function Pane({ theme }) {
+  const [notif, setNotif] = React.useState(true);
+  return (
+    <div className="mx-pane" data-theme={theme === 'light' ? 'light' : undefined}>
+      <p className="mx-h">Settings section + rows</p>
+      <MxSettingsSection title="Settings" description="Opening this screen never changes learning data.">
+        <MxSettingsRow leading={<Ic n="globe" />} title="Native language" value="English" onClick={()=>{}} />
+        <MxSettingsRow leading={<Ic n="bell" />} title="SRS notifications" control={<MxSwitch checked={notif} onChange={setNotif} label="Notifications" />} />
+        <MxSettingsRow leading={<Ic n="cloud" />} title="Cloud sync" subtitle="Provider not selected" unavailable />
+        <MxSettingsRow leading={<Ic n="rotate-ccw" />} title="Restore data" subtitle="Overwrites current data" tone="destructive" onClick={()=>{}} />
+      </MxSettingsSection>
+
+      <p className="mx-h">Language rows</p>
+      <div style={{ background: 'var(--mx-color-surface-card)', border: 'var(--mx-border-default)', borderRadius: 'var(--mx-radius-lg)', overflow: 'hidden' }}>
+        <MxLanguageRow nativeName="English" secondaryName="English (US)" selected />
+        <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
+        <MxLanguageRow nativeName="Tiếng Việt" secondaryName="Vietnamese" />
+      </div>
+
+      <p className="mx-h">Reminder row</p>
+      <MxReminderRow time="13:00" enabled
+        weekdays={['T.2','T.3','T.4','T.5','T.6','T.7','CN'].map((l,i)=>({key:l,label:l,selected:i<5}))}
+        onToggleWeekday={()=>{}} onDelete={()=>{}} />
+
+      <p className="mx-h">Theme preset tiles</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <MxThemePresetTile name="Day" selected preview={{ bg: '#eef1f6', surface: '#ffffff', accent: '#4863e6' }} />
+        <MxThemePresetTile name="Night" preview={{ bg: '#0e1116', surface: '#232b37', accent: '#5b7cfa' }} />
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<div className="mx-grid"><Pane theme="dark"/><Pane theme="light"/></div>);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 60);
+</script>
+</body>
+</html>

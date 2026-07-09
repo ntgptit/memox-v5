@@ -1,0 +1,46 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Study Session — Fill" subtitle="Bazar-language study — progress, study card, fill panel, pill actions (light-first)" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxStudyProgressBar, MxStudyCard, MxFillInputPanel } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function App() {
+  const [val, setVal] = React.useState('결재하다');
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme="light">
+      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+      <MxTopBar variant="study"
+        leading={<MxIconButton icon={<Ic n="x" />} label="Exit" />}
+        title="Fill"
+        actions={<MxIconButton icon={<Ic n="volume-2" s={18} />} label="Play audio" />} />
+      <div style={{ padding: '0 20px' }}>
+        <MxStudyProgressBar percent={80} modeLabel="Fill · 5/5" stepLabel="9 / 12" />
+      </div>
+      <div className="mx-scroll" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 22 }}>
+        <MxStudyCard variant="answer" meaning="To pay" note="Type the Korean prompt" />
+        <MxFillInputPanel value={val} onChange={setVal} state="wrong" expected="결제하다" onHint={()=>{}} onCheck={()=>{}} onRetry={()=>{}} />
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>

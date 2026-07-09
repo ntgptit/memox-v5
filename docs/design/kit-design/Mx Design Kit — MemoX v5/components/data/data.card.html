@@ -1,0 +1,51 @@
+<!-- @dsCard group="Components" viewport="700x560" name="Mx Data & Chart Components" subtitle="Metric cards + statistics chart panel with empty state — dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 20px; background: #05070b; }
+  .mx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mx-pane { border-radius: 20px; padding: 20px; background: var(--mx-color-background-app); border: 1px solid rgba(255,255,255,0.05); }
+  .mx-h { font: 600 11px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 0 0 12px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxMetricCard, MxStatsChartPanel } = K;
+function Pane({ theme }) {
+  return (
+    <div className="mx-pane" data-theme={theme === 'light' ? 'light' : undefined}>
+      <p className="mx-h">Metric cards</p>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}>
+        <MxMetricCard label="Learned" value={128} tone="word" delta={12} />
+        <MxMetricCard label="Study time" value="14" unit="min" tone="time" />
+        <MxMetricCard label="Correct" value={342} tone="correct" />
+        <MxMetricCard label="Wrong" value={57} tone="wrong" delta={-4} />
+      </div>
+      <p className="mx-h">Statistics chart</p>
+      <MxStatsChartPanel title="Quality by day"
+        xLabels={["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]}
+        series={[
+          { name: "Correct", tone: "correct", points: [12,18,15,22,20,26,24] },
+          { name: "Wrong", tone: "wrong", points: [4,3,6,2,3,2,1] },
+        ]} />
+      <div style={{ height: 12 }} />
+      <MxStatsChartPanel title="Empty scope" empty height={120} />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<div className="mx-grid"><Pane theme="dark"/><Pane theme="light"/></div>);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 60);
+</script>
+</body>
+</html>

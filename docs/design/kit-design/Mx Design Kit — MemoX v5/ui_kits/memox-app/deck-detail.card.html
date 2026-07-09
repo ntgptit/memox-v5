@@ -1,0 +1,82 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Deck Detail" subtitle="Bazar-language detail — cover, meta stats, study modes, sticky pill actions (light-first)" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxListRow, MxSectionHeader } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function Meta({ value, label, ink }) {
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', padding: '12px 4px', background: 'var(--mx-color-surface-card)', border: 'var(--mx-border-default)', borderRadius: 'var(--mx-radius-md)' }}>
+      <span className="mx-tabular" style={{ font: '700 var(--mx-text-stat-number-size)/1 var(--mx-font-mono)', color: ink || 'var(--mx-color-text-primary)' }}>{value}</span>
+      <span style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{label}</span>
+    </div>
+  );
+}
+
+function App() {
+  const [fav, setFav] = React.useState(true);
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme="light">
+      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+      <MxTopBar
+        leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
+        title="Deck"
+        actions={<MxIconButton icon={<Ic n={fav ? 'heart' : 'heart'} s={20} />} label="Favorite" variant={fav ? 'destructive' : 'ghost'} onClick={() => setFav(!fav)} />} />
+      <div className="mx-scroll" style={{ padding: '4px 16px 12px' }}>
+        {/* Cover */}
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 20px' }}>
+          <div style={{ width: 132, height: 168, borderRadius: 20, background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--mx-elevation-medium)' }}>
+            <span className="mx-korean" style={{ font: '800 56px var(--mx-font-display)', color: 'var(--mx-color-action-primary)' }}>한</span>
+          </div>
+        </div>
+        {/* Title + direction */}
+        <div style={{ textAlign: 'center', marginBottom: 20 }}>
+          <h1 style={{ margin: '0 0 6px', font: '800 var(--mx-text-title-large-size)/1.15 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', letterSpacing: '-0.01em' }}>Korean TOPIK I</h1>
+          <div style={{ display: 'inline-flex' }}><MxBadge tone="active" icon={<i data-lucide="arrow-right" style={{width:13,height:13}}></i>}>KO → EN</MxBadge></div>
+        </div>
+        {/* Meta stats */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+          <Meta value="62%" label="Learned" ink="var(--mx-color-srs-active)" />
+          <Meta value="83" label="Due" ink="var(--mx-color-srs-due)" />
+          <Meta value="120" label="Words" />
+        </div>
+        {/* Study modes */}
+        <MxSectionHeader title="Study modes" style={{ marginBottom: 8 }} />
+        <MxCard padding="4" style={{ padding: 4 }}>
+          <MxListRow leading={<Ic n="graduation-cap" />} title="Learn" subtitle="12 new words" showChevron onClick={()=>{}} />
+          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
+          <MxListRow leading={<Ic n="repeat" />} title="Repeat" subtitle="83 words due" trailing={<MxBadge tone="due" size="small">83</MxBadge>} showChevron onClick={()=>{}} />
+          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
+          <MxListRow leading={<Ic n="book-open" />} title="Review words" subtitle="Browse (read-only)" showChevron onClick={()=>{}} />
+          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
+          <MxListRow leading={<Ic n="gamepad-2" />} title="A game" disabled trailing={<MxBadge tone="preSrs" size="small">Soon</MxBadge>} />
+        </MxCard>
+      </div>
+      <div className="mx-bottom">
+        <MxActionButton variant="secondary" leadingIcon={<Ic n="plus" s={18} />}>Add</MxActionButton>
+        <MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="play" s={18} />}>Start studying</MxActionButton>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>

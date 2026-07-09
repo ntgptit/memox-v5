@@ -1,0 +1,20 @@
+<!-- @dsCard group="Composition" viewport="700x300" name="Spacing Rhythm" subtitle="One rhythm from mx.space tokens — the only gaps a screen may use" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 22px; background: var(--mx-color-background-app); }
+  [data-theme] { }
+  .row { display: flex; align-items: center; gap: 14px; padding: 6px 0; }
+  .lab { width: 210px; flex: 0 0 210px; font: 500 12px var(--mx-font-body); color: var(--mx-color-text-secondary); }
+  .tok { font: 600 11px var(--mx-font-mono); color: var(--mx-color-action-primary); width: 96px; flex: 0 0 96px; }
+  .bar { height: 16px; border-radius: 5px; background: var(--mx-color-action-primary); }
+</style></head>
+<body data-theme="light">
+  <div class="row"><span class="lab">Screen horizontal padding</span><span class="tok">space.16</span><span class="bar" style="width:16px"></span></div>
+  <div class="row"><span class="lab">Section vertical gap</span><span class="tok">space.24</span><span class="bar" style="width:24px"></span></div>
+  <div class="row"><span class="lab">Item gap in a section</span><span class="tok">space.12</span><span class="bar" style="width:12px"></span></div>
+  <div class="row"><span class="lab">Compact row / icon↔text</span><span class="tok">space.8</span><span class="bar" style="width:8px"></span></div>
+  <div class="row"><span class="lab">Title ↔ subtitle</span><span class="tok">space.4</span><span class="bar" style="width:4px"></span></div>
+  <div class="row"><span class="lab">Bottom action top gap</span><span class="tok">space.16</span><span class="bar" style="width:16px"></span></div>
+  <div class="row" style="margin-top:8px;border-top:1px solid var(--mx-color-divider-default);padding-top:12px"><span class="lab" style="width:auto;flex:1;color:var(--mx-color-text-tertiary);font-size:11px">Allowed: 4 · 8 · 12 · 16 · 24 · 32 &nbsp;·&nbsp; Rare: 2, 40, 48, 64 (reason required) &nbsp;·&nbsp; Forbidden: arbitrary values</span></div>
+</body></html>
