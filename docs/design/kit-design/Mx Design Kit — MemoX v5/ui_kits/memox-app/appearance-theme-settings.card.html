@@ -16,7 +16,7 @@
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
-const { MxTopBar, MxIconButton, MxSettingsSection, MxThemePresetTile, MxBadge, MxCallout, MxErrorState, MxActionButton } = K;
+const { MxTopBar, MxIconButton, MxSettingsSection, MxSectionHeader, MxThemePresetTile, MxBadge, MxCallout, MxErrorState, MxActionButton } = K;
 function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
 
 /* Theme preview swatch — forces the previewed theme via data-theme so tokens
@@ -113,21 +113,21 @@ function LivePreviewPhone({ theme }) {
   return (
     <Shell theme={theme}>
       <ThemeGrid selected={theme === 'light' ? 'light' : 'dark'} />
-      <MxSettingsSection title="Live preview" description="How your decks look with this theme.">
-        <div style={{ borderRadius: 'var(--mx-radius-lg)', border: '1px solid var(--mx-color-border-default)', background: 'var(--mx-color-surface-card)', padding: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ width: 44, height: 44, flex: '0 0 auto', borderRadius: 12, background: 'var(--mx-color-state-selectedSurface)', color: 'var(--mx-color-action-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '800 20px var(--mx-font-display)' }} className="mx-korean">한</span>
-            <div style={{ flex: '1 1 auto', minWidth: 0 }}>
-              <div style={{ font: '700 var(--mx-text-body-large-size) var(--mx-font-display)', color: 'var(--mx-color-text-primary)' }}>Korean TOPIK I</div>
-              <div style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>120 words</div>
-            </div>
-            <MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>83</MxBadge>
+      {/* Live preview — a single deck card at the top level of the scroll (not nested inside a section card). */}
+      <MxSectionHeader title="Live preview" style={{ margin: '0 4px' }} />
+      <div style={{ borderRadius: 'var(--mx-radius-lg)', border: '1px solid var(--mx-color-border-default)', background: 'var(--mx-color-surface-card)', padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ width: 44, height: 44, flex: '0 0 auto', borderRadius: 12, background: 'var(--mx-color-state-selectedSurface)', color: 'var(--mx-color-action-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '700 20px var(--mx-font-display)' }} className="mx-korean">한</span>
+          <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+            <div style={{ font: '700 var(--mx-text-body-large-size) var(--mx-font-display)', color: 'var(--mx-color-text-primary)' }}>Korean TOPIK I</div>
+            <div style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>120 words</div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <MxBadge tone="active">Active</MxBadge><MxBadge tone="noDue" icon={<Ic n="check" s={12} />}>Done</MxBadge><MxBadge tone="preSrs">New</MxBadge>
-          </div>
+          <MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>83</MxBadge>
         </div>
-      </MxSettingsSection>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <MxBadge tone="active">Active</MxBadge><MxBadge tone="noDue" icon={<Ic n="check" s={12} />}>Done</MxBadge><MxBadge tone="preSrs">New</MxBadge>
+        </div>
+      </div>
     </Shell>
   );
 }

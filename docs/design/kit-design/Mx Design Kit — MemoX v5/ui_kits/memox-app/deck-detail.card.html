@@ -68,7 +68,7 @@ function Shell({ theme, children, bottom, overlay }) {
       <MxTopBar
         leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
         title="Deck"
-        actions={<MxIconButton icon={<Ic n="heart" s={20} />} label={fav ? 'Remove favorite' : 'Add favorite'} variant={fav ? 'destructive' : 'ghost'} onClick={() => setFav(!fav)} />} />
+        actions={<MxIconButton icon={<Ic n={fav ? 'star' : 'star'} s={20} />} label={fav ? 'Remove favorite' : 'Add favorite'} variant={fav ? 'surface' : 'ghost'} onClick={() => setFav(!fav)} />} />
       <div className="mx-scroll" style={{ padding: '4px 16px 12px' }}>{children}</div>
       {bottom !== null && <div className="mx-bottom">{bottom}</div>}
       {overlay}

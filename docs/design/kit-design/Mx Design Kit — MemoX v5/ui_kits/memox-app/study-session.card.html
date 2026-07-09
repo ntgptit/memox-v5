@@ -121,7 +121,7 @@ function WrongPhone({ theme }) {
     <StudyShell theme={theme} step="9 / 12" percent={75}>
       <Answer />
       <MxFillInputPanel value="결재하다" state="wrong" expected={ANSWER} onHint={() => {}} onCheck={() => {}} onRetry={() => {}} />
-      <MxCallout tone="warning" icon={<Ic n="x" s={16} />} title="Not quite">You wrote “결재하다”. The correct spelling is “결제하다” — try again.</MxCallout>
+      <MxCallout tone="destructive" icon={<Ic n="x" s={16} />} title="Not quite">You wrote “결재하다”. The correct spelling is “결제하다” — try again.</MxCallout>
     </StudyShell>
   );
 }
