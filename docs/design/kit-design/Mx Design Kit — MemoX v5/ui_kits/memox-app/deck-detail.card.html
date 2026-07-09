@@ -1,4 +1,4 @@
-<!-- @dsCard group="Sample Screens" viewport="430x900" name="Deck Detail" subtitle="Bazar-language detail — cover, meta stats, study modes, sticky pill actions (light-first)" -->
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Deck Detail" subtitle="Deck detail — cover, meta stats, study modes, sticky actions; loaded / loading / empty / error / modes availability / delete confirm, dark + light" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,66 +16,241 @@
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
-const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxListRow, MxSectionHeader } = K;
+const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxListRow, MxSectionHeader, MxEmptyState, MxErrorState, MxConfirmDialog } = K;
 function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+/* ---- screen-specific helpers (non-Mx, token-only) ---- */
 
 function Meta({ value, label, ink }) {
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', padding: '12px 4px', background: 'var(--mx-color-surface-card)', border: 'var(--mx-border-default)', borderRadius: 'var(--mx-radius-md)' }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', padding: '12px 4px', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)', borderRadius: 'var(--mx-radius-md)' }}>
       <span className="mx-tabular" style={{ font: '700 var(--mx-text-stat-number-size)/1 var(--mx-font-mono)', color: ink || 'var(--mx-color-text-primary)' }}>{value}</span>
       <span style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{label}</span>
     </div>
   );
 }
 
-function App() {
-  const [fav, setFav] = React.useState(true);
-  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+function Cover({ glyph }) {
   return (
-    <div className="mx-phone" data-theme="light">
-      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
-      <MxTopBar
-        leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
-        title="Deck"
-        actions={<MxIconButton icon={<Ic n={fav ? 'heart' : 'heart'} s={20} />} label="Favorite" variant={fav ? 'destructive' : 'ghost'} onClick={() => setFav(!fav)} />} />
-      <div className="mx-scroll" style={{ padding: '4px 16px 12px' }}>
-        {/* Cover */}
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 20px' }}>
-          <div style={{ width: 132, height: 168, borderRadius: 20, background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--mx-elevation-medium)' }}>
-            <span className="mx-korean" style={{ font: '800 56px var(--mx-font-display)', color: 'var(--mx-color-action-primary)' }}>한</span>
-          </div>
-        </div>
-        {/* Title + direction */}
-        <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <h1 style={{ margin: '0 0 6px', font: '800 var(--mx-text-title-large-size)/1.15 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', letterSpacing: '-0.01em' }}>Korean TOPIK I</h1>
-          <div style={{ display: 'inline-flex' }}><MxBadge tone="active" icon={<i data-lucide="arrow-right" style={{width:13,height:13}}></i>}>KO → EN</MxBadge></div>
-        </div>
-        {/* Meta stats */}
-        <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-          <Meta value="62%" label="Learned" ink="var(--mx-color-srs-active)" />
-          <Meta value="83" label="Due" ink="var(--mx-color-srs-due)" />
-          <Meta value="120" label="Words" />
-        </div>
-        {/* Study modes */}
-        <MxSectionHeader title="Study modes" style={{ marginBottom: 8 }} />
-        <MxCard padding="4" style={{ padding: 4 }}>
-          <MxListRow leading={<Ic n="graduation-cap" />} title="Learn" subtitle="12 new words" showChevron onClick={()=>{}} />
-          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
-          <MxListRow leading={<Ic n="repeat" />} title="Repeat" subtitle="83 words due" trailing={<MxBadge tone="due" size="small">83</MxBadge>} showChevron onClick={()=>{}} />
-          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
-          <MxListRow leading={<Ic n="book-open" />} title="Review words" subtitle="Browse (read-only)" showChevron onClick={()=>{}} />
-          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
-          <MxListRow leading={<Ic n="gamepad-2" />} title="A game" disabled trailing={<MxBadge tone="preSrs" size="small">Soon</MxBadge>} />
-        </MxCard>
-      </div>
-      <div className="mx-bottom">
-        <MxActionButton variant="secondary" leadingIcon={<Ic n="plus" s={18} />}>Add</MxActionButton>
-        <MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="play" s={18} />}>Start studying</MxActionButton>
+    <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 20px' }}>
+      <div style={{ width: 132, height: 168, borderRadius: 20, background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--mx-elevation-medium)' }}>
+        <span className="mx-korean" style={{ font: '800 56px var(--mx-font-display)', color: 'var(--mx-color-action-primary)' }}>{glyph}</span>
       </div>
     </div>
   );
 }
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+function TitleBlock() {
+  return (
+    <div style={{ textAlign: 'center', marginBottom: 20 }}>
+      <h1 style={{ margin: '0 0 6px', font: '800 var(--mx-text-title-large-size)/1.15 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', letterSpacing: '-0.01em' }}>Korean TOPIK I</h1>
+      <div style={{ display: 'inline-flex' }}><MxBadge tone="active" icon={<i data-lucide="arrow-right" style={{ width: 13, height: 13 }}></i>}>KO → EN</MxBadge></div>
+    </div>
+  );
+}
+
+function Divider() {
+  return <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>;
+}
+
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
+}
+
+/* ---- shared detail shell ---- */
+
+function Shell({ theme, children, bottom, overlay }) {
+  const [fav, setFav] = React.useState(true);
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar
+        leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
+        title="Deck"
+        actions={<MxIconButton icon={<Ic n="heart" s={20} />} label={fav ? 'Remove favorite' : 'Add favorite'} variant={fav ? 'destructive' : 'ghost'} onClick={() => setFav(!fav)} />} />
+      <div className="mx-scroll" style={{ padding: '4px 16px 12px' }}>{children}</div>
+      {bottom !== null && <div className="mx-bottom">{bottom}</div>}
+      {overlay}
+    </div>
+  );
+}
+
+const loadedBottom = (
+  <>
+    <MxActionButton variant="secondary" leadingIcon={<Ic n="plus" s={18} />}>Add</MxActionButton>
+    <MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="play" s={18} />}>Start studying</MxActionButton>
+  </>
+);
+
+/* ---- MX-03.1 Loaded (audited) ---- */
+function StudyModesAvailable() {
+  return (
+    <MxCard padding="4" style={{ padding: 4 }}>
+      <MxListRow leading={<Ic n="graduation-cap" />} title="Learn" subtitle="12 new words" showChevron onClick={() => {}} />
+      <Divider />
+      <MxListRow leading={<Ic n="repeat" />} title="Repeat" subtitle="83 words due" trailing={<MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>83</MxBadge>} showChevron onClick={() => {}} />
+      <Divider />
+      <MxListRow leading={<Ic n="book-open" />} title="Review words" subtitle="Browse (read-only)" showChevron onClick={() => {}} />
+      <Divider />
+      <MxListRow leading={<Ic n="gamepad-2" />} title="A game" disabled trailing={<MxBadge tone="preSrs" size="small">Soon</MxBadge>} />
+    </MxCard>
+  );
+}
+function LoadedPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={loadedBottom}>
+      <Cover glyph="한" />
+      <TitleBlock />
+      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+        <Meta value="62%" label="Learned" ink="var(--mx-color-srs-active)" />
+        <Meta value="83" label="Due" ink="var(--mx-color-srs-due)" />
+        <Meta value="120" label="Words" />
+      </div>
+      <MxSectionHeader title="Study modes" style={{ marginBottom: 8 }} />
+      <StudyModesAvailable />
+    </Shell>
+  );
+}
+
+/* ---- MX-03.2 Loading ---- */
+function LoadingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <Shell theme={theme} bottom={<Skel w="100%" h={52} r="var(--mx-radius-lg)" />}>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 20px' }}><Skel w={132} h={168} r="20px" /></div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+        <Skel w={180} h={26} r="var(--mx-radius-sm)" />
+        <Skel w={96} h={22} r="999px" />
+      </div>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+        {[0, 1, 2].map(i => <Skel key={i} w="100%" h={64} r="var(--mx-radius-md)" />)}
+      </div>
+      <Skel w={120} h={18} r="var(--mx-radius-sm)" />
+      <div style={{ height: 12 }} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {[0, 1, 2, 3].map(i => <Skel key={i} w="100%" h={56} r="var(--mx-radius-md)" />)}
+      </div>
+    </Shell>
+  );
+}
+
+/* ---- MX-03.3 Empty deck (no words) ---- */
+function EmptyPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />}>Add first card</MxActionButton>}>
+      <Cover glyph="한" />
+      <TitleBlock />
+      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+        <Meta value="0%" label="Learned" />
+        <Meta value="0" label="Due" />
+        <Meta value="0" label="Words" />
+      </div>
+      <MxEmptyState icon={<Ic n="book-open" s={40} />} title="No words in this deck yet"
+        message="Add cards to this deck to unlock Learn, Repeat and Review modes." />
+    </Shell>
+  );
+}
+
+/* ---- MX-03.4 Error ---- */
+function ErrorPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={null}>
+      <div style={{ minHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't load this deck"
+          message="Your words and learning progress are safe on this device. Check your connection and try again."
+          action={<MxActionButton variant="secondary" leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry</MxActionButton>} />
+      </div>
+    </Shell>
+  );
+}
+
+/* ---- MX-03.5 Study modes availability (unavailable / no-due / soon) ---- */
+function StudyModesConstrained() {
+  return (
+    <MxCard padding="4" style={{ padding: 4 }}>
+      <MxListRow leading={<Ic n="graduation-cap" />} title="Learn" subtitle="All words learned" disabled trailing={<MxBadge tone="neutral" size="small">0 new</MxBadge>} />
+      <Divider />
+      <MxListRow leading={<Ic n="repeat" />} title="Repeat" subtitle="Nothing due right now" trailing={<MxBadge tone="noDue" size="small" icon={<Ic n="check" s={12} />}>Up to date</MxBadge>} showChevron onClick={() => {}} />
+      <Divider />
+      <MxListRow leading={<Ic n="book-open" />} title="Review words" subtitle="Browse (read-only)" showChevron onClick={() => {}} />
+      <Divider />
+      <MxListRow leading={<Ic n="gamepad-2" />} title="A game" disabled trailing={<MxBadge tone="preSrs" size="small">Soon</MxBadge>} />
+      <Divider />
+      <MxListRow leading={<Ic n="headphones" />} title="Player" disabled trailing={<MxBadge tone="preSrs" size="small">Soon</MxBadge>} />
+    </MxCard>
+  );
+}
+function ModesPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={
+      <>
+        <MxActionButton variant="secondary" leadingIcon={<Ic n="plus" s={18} />}>Add</MxActionButton>
+        <MxActionButton variant="primary" fullWidth disabled leadingIcon={<Ic n="check" s={18} />}>All caught up</MxActionButton>
+      </>
+    }>
+      <Cover glyph="한" />
+      <TitleBlock />
+      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+        <Meta value="100%" label="Learned" ink="var(--mx-color-srs-mastered)" />
+        <Meta value="0" label="Due" ink="var(--mx-color-srs-noDue)" />
+        <Meta value="120" label="Words" />
+      </div>
+      <MxSectionHeader title="Study modes" style={{ marginBottom: 8 }} />
+      <StudyModesConstrained />
+    </Shell>
+  );
+}
+
+/* ---- MX-03.6 Delete deck confirm (high-risk destructive) ---- */
+function DeleteConfirmPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={loadedBottom}
+      overlay={
+        <MxConfirmDialog
+          open
+          variant="highRisk"
+          title="Delete “Korean TOPIK I”?"
+          message="This deck, its subdecks and all 120 words will be permanently removed from this device."
+          warning="Your other decks stay safe — but this deck and its learning history can’t be recovered."
+          confirmLabel="Delete deck"
+          cancelLabel="Keep deck"
+        />
+      }>
+      <Cover glyph="한" />
+      <TitleBlock />
+      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+        <Meta value="62%" label="Learned" ink="var(--mx-color-srs-active)" />
+        <Meta value="83" label="Due" ink="var(--mx-color-srs-due)" />
+        <Meta value="120" label="Words" />
+      </div>
+      <MxSectionHeader title="Study modes" style={{ marginBottom: 8 }} />
+      <StudyModesAvailable />
+    </Shell>
+  );
+}
+
+/* ---- desk grouping caption ---- */
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-03.1 · Loaded deck detail</DeskCaption>
+    <LoadedPhone theme="dark" /><LoadedPhone theme="light" />
+    <DeskCaption>MX-03.2 · Loading</DeskCaption>
+    <LoadingPhone theme="dark" /><LoadingPhone theme="light" />
+    <DeskCaption>MX-03.3 · Empty deck — no words</DeskCaption>
+    <EmptyPhone theme="dark" /><EmptyPhone theme="light" />
+    <DeskCaption>MX-03.4 · Load error</DeskCaption>
+    <ErrorPhone theme="dark" /><ErrorPhone theme="light" />
+    <DeskCaption>MX-03.5 · Study modes availability</DeskCaption>
+    <ModesPhone theme="dark" /><ModesPhone theme="light" />
+    <DeskCaption>MX-03.6 · Delete deck confirm (high-risk)</DeskCaption>
+    <DeleteConfirmPhone theme="dark" /><DeleteConfirmPhone theme="light" />
+  </>
+);
 setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
 </script>
 </body>
