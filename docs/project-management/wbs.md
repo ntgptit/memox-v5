@@ -57,14 +57,15 @@ Evidence rules (traceability):
 | F2.7 | Phase 1 decision tables | Done | PR #1 `0b0ed2c` |
 | F2.8 | Phase 1 hardening (local-day due, persisted sessions, starter-off-path, local-first, boundaries) | Done | PR #2 `9f1a4f2` |
 | F2.9 | Screen/flow concept docs (deck management, flashcard/subdeck list, play/repeat menus, 5-mode New Learning Flow, session result, statistics, settings hub, appearance, app settings) | Done | PRs #3–#20 — see [Traceability log](#traceability-log) |
-| F2.10 | Docs hygiene + SRS/study drift resolution + WBS traceability | In progress → `Done` after merge | This PR `docs/fix-hygiene-wbs-study-drift` (squash commit after merge) |
+| F2.10 | Docs hygiene + SRS/study drift resolution + WBS traceability | Done | PR #21 `10bb959` — docs: fix hygiene wbs and study drift |
 
 ## Traceability log
 
 Merged documentation work (newest first). Hashes are the actual squash commits on `main`.
 
-- 2026-07-09 — (this PR) — docs: fix hygiene, WBS, and study drift (Markdown hygiene verified, 07 rewrite
-  removing pre-SRS/SRS contradiction, Box 0 aligned across 05/02/scope, DRIFT resolved, WBS traceability).
+- 2026-07-09 — `10bb959` — PR #21 — docs: fix hygiene, WBS, and study drift (Markdown hygiene verified,
+  07 rewrite removing pre-SRS/SRS contradiction, Box 0 aligned across 05/02/scope, DRIFT resolved, WBS
+  traceability).
 - 2026-07-09 — `c78120f` — PR #20 — App Settings, Native Language Picker, Reminder Settings, Spaced
   Repetition Settings docs.
 - 2026-07-09 — `be8f426` — PR #19 — Appearance / Theme Settings docs.
