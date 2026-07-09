@@ -35,9 +35,9 @@ function Shell({ theme, children, bottom }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar leading={<MxIconButton icon={<Ic n="x" />} label="Close" />} title="Session result" />
-      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
+      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 24 }}>{children}</div>
       {bottom && <div className="mx-bottom">{bottom}</div>}
     </div>
   );
@@ -47,7 +47,7 @@ function Centered({ children }) {
 }
 function Metrics({ time, accuracy, accTone }) {
   return (
-    <div style={{ display: 'flex', gap: 10 }}>
+    <div style={{ display: 'flex', gap: 12 }}>
       <MxMetricCard label="Time" value={time} tone="time" style={{ flex: 1 }} />
       <MxMetricCard label="Accuracy" value={accuracy} unit="%" tone={accTone} style={{ flex: 1 }} />
     </div>
@@ -64,7 +64,7 @@ function FinalizingPhone({ theme }) {
           <Skel w={76} h={76} r="50%" />
           <Skel w={180} h={22} r="var(--mx-radius-sm)" />
           <Skel w={130} h={14} r="var(--mx-radius-sm)" />
-          <div style={{ display: 'flex', gap: 10, width: '100%', padding: '8px 0' }}>
+          <div style={{ display: 'flex', gap: 12, width: '100%', padding: '8px 0' }}>
             <Skel w="100%" h={72} r="var(--mx-radius-lg)" /><Skel w="100%" h={72} r="var(--mx-radius-lg)" />
           </div>
           <div style={{ font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>Saving your session…</div>

@@ -30,7 +30,7 @@ function Swatch({ mode }) {
     </div>
   );
   if (mode === 'system') {
-    return <div style={{ display: 'flex', gap: 3, width: '100%', height: 56 }}><Box theme="dark" /><Box theme="light" /></div>;
+    return <div style={{ display: 'flex', gap: 4, width: '100%', height: 56 }}><Box theme="dark" /><Box theme="light" /></div>;
   }
   return <div style={{ height: 56 }}><Box theme={mode} /></div>;
 }
@@ -47,9 +47,9 @@ function Shell({ theme, children }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Appearance" />
-      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
+      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 24 }}>{children}</div>
     </div>
   );
 }
@@ -57,7 +57,7 @@ function Shell({ theme, children }) {
 function ThemeGrid({ selected }) {
   return (
     <MxSettingsSection title="Theme">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
         <MxThemePresetTile name="System" preview={<Swatch mode="system" />} selected={selected === 'system'} onClick={() => {}} />
         <MxThemePresetTile name="Dark" preview={<Swatch mode="dark" />} selected={selected === 'dark'} onClick={() => {}} />
         <MxThemePresetTile name="Light" preview={<Swatch mode="light" />} selected={selected === 'light'} onClick={() => {}} />
@@ -69,7 +69,7 @@ function ThemeGrid({ selected }) {
 function IconGrid() {
   return (
     <MxSettingsSection title="App icon">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
         <MxThemePresetTile name="Classic" preview={<IconSwatch tint="var(--mx-color-action-primary)" ink="var(--mx-color-text-onAction)" glyph="brain" />} selected onClick={() => {}} />
         <MxThemePresetTile name="Mint" preview={<IconSwatch tint="var(--mx-color-feedback-correctSurface)" ink="var(--mx-color-srs-noDue)" glyph="brain" />} onClick={() => {}} />
         <MxThemePresetTile name="Sunset" preview={<IconSwatch tint="var(--mx-color-feedback-warningSurface)" ink="var(--mx-color-srs-due)" glyph="brain" />} unavailable />

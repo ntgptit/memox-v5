@@ -69,7 +69,7 @@ function Phone({ theme }) {
       />
       <div className="mx-scroll" style={{ paddingBottom: 12 }}>
         {/* Promo / daily goal banner */}
-        <div style={{ margin: '4px 16px 20px', borderRadius: 20, padding: '18px 20px', background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div style={{ margin: '4px 16px 20px', borderRadius: 20, padding: '18px 20px', background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ flex: '1 1 auto' }}>
             <div style={{ font: '600 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-action-primary)', marginBottom: 3 }}>Daily goal</div>
             <div style={{ font: '800 var(--mx-text-title-medium-size)/1.2 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', marginBottom: 12 }}>12 cards due today</div>
@@ -82,19 +82,19 @@ function Phone({ theme }) {
 
         {/* Continue studying — carousel */}
         <MxSectionHeader title="Continue studying" actionLabel="See all" onAction={()=>{}} style={{ margin: '0 16px 12px' }} />
-        <div style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '0 16px 6px', scrollbarWidth: 'none' }}>
+        <div style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '0 16px 6px', scrollbarWidth: 'none' }}>
           {decks.map((d, i) => <DeckTile key={i} d={d} onClick={() => setSheet(d)} />)}
         </div>
 
         {/* Your decks — list */}
         <MxSectionHeader title="Your decks" actionLabel="See all" onAction={()=>{}} style={{ margin: '24px 16px 12px' }} />
-        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
           {decks.slice(0, 2).map((d, i) => (
-            <MxCard key={i} variant="interactive" onClick={() => setSheet(d)} padding="12" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <MxCard key={i} variant="interactive" onClick={() => setSheet(d)} padding="12" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <Ring p={d.progress} />
               <div style={{ flex: '1 1 auto', minWidth: 0 }}>
                 <div style={{ font: '700 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.name}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 3 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 3 }}>
                   <span style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{d.words} words</span>
                   {d.due > 0 && <MxBadge tone="due" size="small">{d.due} due</MxBadge>}
                 </div>
@@ -139,7 +139,7 @@ function LoadingPhone({ theme }) {
       <div className="mx-scroll" style={{ paddingBottom: 12 }}>
         <div style={{ margin: '4px 16px 20px' }}><Skel w="100%" h={96} r="20px" /></div>
         <div style={{ margin: '0 16px 12px' }}><Skel w={150} h={18} r="var(--mx-radius-sm)" /></div>
-        <div style={{ display: 'flex', gap: 14, padding: '0 16px 6px' }}>
+        <div style={{ display: 'flex', gap: 16, padding: '0 16px 6px' }}>
           {[0, 1].map(i => (
             <div key={i} style={{ width: 150, flex: '0 0 auto' }}>
               <Skel w={150} h={104} r="18px" />
@@ -151,7 +151,7 @@ function LoadingPhone({ theme }) {
           ))}
         </div>
         <div style={{ margin: '24px 16px 12px' }}><Skel w={110} h={18} r="var(--mx-radius-sm)" /></div>
-        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
           {[0, 1].map(i => <Skel key={i} w="100%" h={72} r="var(--mx-radius-lg)" />)}
         </div>
       </div>

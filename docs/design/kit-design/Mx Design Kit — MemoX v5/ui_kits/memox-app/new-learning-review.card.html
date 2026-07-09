@@ -28,17 +28,17 @@ function StudyShell({ theme, step, percent, audioActive, children, bottom, overl
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="study"
         leading={<MxIconButton icon={<Ic n="x" />} label="Exit review" />}
         title="Review"
         actions={<MxIconButton icon={<Ic n={audioActive ? 'volume-2' : 'volume-2'} s={18} />} label="Play audio" variant={audioActive ? 'surface' : 'ghost'} />} />
       {typeof percent === 'number' && (
-        <div style={{ padding: '0 20px' }}>
+        <div style={{ padding: '0 16px' }}>
           <MxStudyProgressBar percent={percent} modeLabel="Review" stepLabel={step} />
         </div>
       )}
-      <div className="mx-scroll" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
+      <div className="mx-scroll" style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 24 }}>{children}</div>
       {bottom !== null && <div className="mx-bottom">{bottom}</div>}
       {overlay}
     </div>

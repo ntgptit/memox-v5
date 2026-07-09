@@ -46,7 +46,7 @@ function Flag({ f }) { return <span style={{ fontSize: 24, lineHeight: 1 }}>{f}<
 function SearchField({ value }) {
   const has = value && value.length > 0;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 44, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 44, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)' }}>
       <i data-lucide="search" style={{ width: 18, height: 18, color: 'var(--mx-color-text-tertiary)', flex: '0 0 auto' }}></i>
       <span style={{ flex: '1 1 auto', font: '500 var(--mx-text-body-medium-size) var(--mx-font-display)', color: has ? 'var(--mx-color-text-primary)' : 'var(--mx-color-text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{has ? value : 'Search languages'}</span>
       {has && <MxIconButton icon={<Ic n="x" s={16} />} label="Clear search" variant="ghost" size="small" />}
@@ -61,7 +61,7 @@ function Shell({ theme, query, children }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Native language" subtitle="Your answer / meaning language" />
       {query !== null && <div style={{ padding: '8px 16px 4px' }}><SearchField value={query} /></div>}
       <div className="mx-scroll" style={{ padding: '8px 16px 16px' }}>{children}</div>
@@ -70,7 +70,7 @@ function Shell({ theme, query, children }) {
 }
 function List({ items, selected }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {items.map((l, i) => <MxLanguageRow key={i} nativeName={l.native} secondaryName={l.en} icon={<Flag f={l.flag} />} selected={l.en === selected} onClick={() => {}} />)}
     </div>
   );
@@ -86,11 +86,11 @@ function LoadingPhone({ theme }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <Shell theme={theme} query="">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {[0, 1, 2, 3, 4, 5].map(i => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '10px 12px', border: '1px solid var(--mx-color-border-subtle)', borderRadius: 'var(--mx-radius-lg)' }}>
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '10px 12px', border: '1px solid var(--mx-color-border-subtle)', borderRadius: 'var(--mx-radius-lg)' }}>
             <Skel w={28} h={28} r="999px" />
-            <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: 6 }}><Skel w="45%" h={14} r="var(--mx-radius-sm)" /><Skel w="30%" h={11} r="var(--mx-radius-sm)" /></div>
+            <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: 8 }}><Skel w="45%" h={14} r="var(--mx-radius-sm)" /><Skel w="30%" h={11} r="var(--mx-radius-sm)" /></div>
           </div>
         ))}
       </div>
