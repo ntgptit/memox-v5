@@ -34,6 +34,15 @@ boundary with **SRS Repeat** and **browse**. Authoritative specs:
 | **recall success** | item **complete** in `recallMode`, **not SRS-active** yet |
 | **recall failure** | **not** recall-success; **not SRS-active** |
 | all required **recall items** processed | **transition to `fillMode`** |
+| **`fillMode`** shows meaning/answer | user **fills prompt/front** |
+| user taps **Trợ giúp** | show **hint**; item remains **incomplete** |
+| user taps **Kiểm tra** with **empty** input | show **validation/incorrect** state; item **incomplete** |
+| user taps **Kiểm tra** with **correct** input | show **correct** feedback; mark item **complete** in `fillMode` |
+| user taps **Kiểm tra** with **incorrect** input | show **incorrect** feedback; keep item **incomplete** |
+| **`fillMode` incorrect** | **allow Thử lại** |
+| **`fillMode` correct** after review + match + guess + recall completed | move card to **Box 1** and **enable SRS** |
+| **`fillMode` incomplete** | card remains **not SRS-active** |
+| **manual accept** ("Đúng") after incorrect answer | **not specified** unless future docs define it |
 | card completed **review only** | **not SRS-active** |
 | card completed **review + match only** | **not SRS-active** |
 | card completed **review + match + guess only** | **not SRS-active** |
@@ -43,6 +52,7 @@ boundary with **SRS Repeat** and **browse**. Authoritative specs:
 | user **exits during `matchMode`** | card remains **not SRS-active** unless all five modes already completed |
 | user **exits during `guessMode`** | unfinished cards remain **not SRS-active** |
 | user **exits during `recallMode`** | unfinished cards remain **not SRS-active** |
+| user **exits during `fillMode`** | unfinished cards remain **not SRS-active** |
 
 ## Repeat vs. browse boundaries
 

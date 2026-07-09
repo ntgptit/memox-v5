@@ -209,12 +209,16 @@ hoặc có lịch sử học hợp lệ).
   ở `reviewMode`, hoàn thành → `matchMode`, rồi **`guessMode`** (mode thứ 3), `recallMode`, `fillMode`
   ([07-study-modes → matchMode](../07-study-modes.md#matchmode-mode-thứ-2),
   [guessMode](../07-study-modes.md#guessmode-mode-thứ-3),
-  [recallMode](../07-study-modes.md#recallmode-mode-thứ-4)). `matchMode` và `guessMode` có **feedback
-  đúng/sai** (correct/incorrect): correct dùng **trạng thái xanh**, incorrect dùng **trạng thái đỏ**.
-  `recallMode` (mode thứ 4) có **nút Hiển thị kèm timer 20 giây**: hết 20s mà chưa bấm Hiển thị thì
-  tính là **Đã quên**. Đây là **learning feedback**, **không** phải **SRS review grading**. Đây là một
-  phần của **New Learning Flow**, **không** phải SRS Repeat; bấm Học **không** activate ngay card vào
-  **Box 1** — card chỉ vào Box 1 sau khi hoàn thành **đủ 5 mode**.
+  [recallMode](../07-study-modes.md#recallmode-mode-thứ-4),
+  [fillMode](../07-study-modes.md#fillmode-mode-thứ-5--cổng-activate-srs)). `matchMode` và `guessMode`
+  có **feedback đúng/sai** (correct/incorrect): correct dùng **trạng thái xanh**, incorrect dùng
+  **trạng thái đỏ**. `recallMode` (mode thứ 4) có **nút Hiển thị kèm timer 20 giây**: hết 20s mà chưa
+  bấm Hiển thị thì tính là **Đã quên**. `fillMode` (mode thứ 5, **cuối**) yêu cầu **điền lại
+  prompt/front** với nút **Trợ giúp** và **Kiểm tra**; **chỉ sau khi `fillMode` completed** (Kiểm tra
+  đúng, khi 4 mode trước đã xong) thì card **mới** có thể vào **Box 1**. Mọi feedback trên là **learning
+  feedback**, **không** phải **SRS review grading**. Đây là một phần của **New Learning Flow**, **không**
+  phải SRS Repeat; bấm Học **không** activate ngay card vào **Box 1** — card chỉ vào Box 1 sau khi hoàn
+  thành **đủ 5 mode**.
 - Bấm **Lặp lại** khi `reviewDueCount > 0` → bắt đầu **SRS Repeat Flow** (card Box 1+ đến hạn, local-day).
 - Bấm **Lặp lại** khi `reviewDueCount = 0` → **không** tạo **session rỗng**; hiển thị trạng thái **không
   có từ đến hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).
