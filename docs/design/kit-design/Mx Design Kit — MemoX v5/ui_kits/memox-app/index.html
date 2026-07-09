@@ -127,7 +127,44 @@ function Phone({ theme }) {
     </div>
   );
 }
-ReactDOM.createRoot(document.getElementById('root')).render(<><Phone theme="dark" /><Phone theme="light" /></>);
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)' }} />;
+}
+function LoadingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined} aria-busy="true">
+      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="signal" style={{width:15,height:15}}></i><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+      <MxTopBar leading={<MxIconButton icon={<Ic n="search" s={20} />} label="Search" />} title="MemoX" actions={<MxIconButton icon={<Ic n="bell" s={20} />} label="Notifications" />} />
+      <div className="mx-scroll" style={{ paddingBottom: 12 }}>
+        <div style={{ margin: '4px 16px 20px' }}><Skel w="100%" h={96} r="20px" /></div>
+        <div style={{ margin: '0 16px 12px' }}><Skel w={150} h={18} r="var(--mx-radius-sm)" /></div>
+        <div style={{ display: 'flex', gap: 14, padding: '0 16px 6px' }}>
+          {[0, 1].map(i => (
+            <div key={i} style={{ width: 150, flex: '0 0 auto' }}>
+              <Skel w={150} h={104} r="18px" />
+              <div style={{ height: 8 }} />
+              <Skel w={120} h={13} r="var(--mx-radius-sm)" />
+              <div style={{ height: 6 }} />
+              <Skel w={90} h={11} r="var(--mx-radius-sm)" />
+            </div>
+          ))}
+        </div>
+        <div style={{ margin: '24px 16px 12px' }}><Skel w={110} h={18} r="var(--mx-radius-sm)" /></div>
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {[0, 1].map(i => <Skel key={i} w="100%" h={72} r="var(--mx-radius-lg)" />)}
+        </div>
+      </div>
+      <MxBottomNav value="home" onChange={() => {}} items={[
+        { key: 'home', label: 'Home', icon: 'house' },
+        { key: 'decks', label: 'Decks', icon: 'layers' },
+        { key: 'stats', label: 'Stats', icon: 'bar-chart-3' },
+        { key: 'more', label: 'More', icon: 'menu' },
+      ]} />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<><Phone theme="dark" /><Phone theme="light" /><LoadingPhone theme="dark" /><LoadingPhone theme="light" /></>);
 setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
 </script>
 </body>
