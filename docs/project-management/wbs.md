@@ -126,11 +126,14 @@ Concept/business spec (incl. the **Subdeck List variant**) + its future implemen
 | F1.DM.4 | Deck/Subdeck list states (loading / loaded / empty / search-empty / error / no-studyable / creating) | FE | Not started | [deck-management.md states](../design/screens/deck-management.md#các-state-chính) | TBD | TBD |
 | F1.DM.5 | Add deck/section/card entry actions (create child deck/section, add card) | FE/BE | Not started | [deck-management.md actions](../design/screens/deck-management.md#các-action-chính) | TBD | TBD |
 | F1.DM.6 | Start study from deck/subdeck row (honors study rules + local-day due; disabled when no studyable content) | FE/BE | Not started | [deck-management.md](../design/screens/deck-management.md), [07-study-modes.md](../design/07-study-modes.md) | TBD | TBD |
+| F1.DM.SORT.1 | Deck/Subdeck Sort Menu concept spec | Docs | In progress → `Done` after merge | [deck-management.md → Sort Menu](../design/screens/deck-management.md#sort-menu) | `npm run check` / `git diff --check` | PR `docs/deck-sort-menu-concept` (squash commit after merge) |
+| F1.DM.SORT.2 | Deck/Subdeck sort behavior implementation (name / created / recently-studied; presentation-only; never-studied ordering; stable tie-break) | FE/BE | Not started | [deck-management.md → Sort Menu](../design/screens/deck-management.md#sort-menu) | TBD | TBD |
 
-> `F1.DM.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
-> per the [evidence policy](#done-criteria--evidence-policy). Subdeck List is a **variant** of Deck
-> Management, not a separate screen — no separate `F1.SD.*` rows are created. No TTS / advanced-edit /
-> hidden-suspended rows are added — those are not decided (see the spec's
+> `F1.DM.1` and `F1.DM.SORT.1` are docs rows: they flip to `Done` once this PR is **merged** (evidence =
+> squash commit), per the [evidence policy](#done-criteria--evidence-policy). The **Sort Menu** is part
+> of the Deck Management / Subdeck List spec — not a separate feature. Subdeck List is a **variant** of
+> Deck Management, not a separate screen — no separate `F1.SD.*` rows are created. No TTS / advanced-edit
+> / hidden-suspended rows are added — those are not decided (see the spec's
 > [Open questions](../design/screens/deck-management.md#open-questions--cố-ý-không-chốt)).
 
 ---

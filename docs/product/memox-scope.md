@@ -15,7 +15,9 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   structure**: browse the direct **child decks/sections** in the current deck, see each one's **content
   count**, **overall learning-progress indicator**, and (if any) **due/review workload indicator**,
   **start studying** a deck/section, **add a child deck/section**, **add a card/word**, and
-  **search / filter / sort** the list (view-only; does not change learning data). **Subdeck List** is a
+  **search / filter / sort** the list (view-only; does not change learning data). Sorting can order
+  deck/section rows by **name**, **created date**, or **most-recently-studied** (each with two
+  directions); it only changes display order, never the learning data. **Subdeck List** is a
   **variant/state** of this screen (when the current scope has child sections/subdecks), **not** a
   separate product module. Concept spec:
   [`../design/screens/deck-management.md`](../design/screens/deck-management.md) (see the
