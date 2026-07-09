@@ -1,0 +1,168 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Session Result" subtitle="End-of-session summary (read-only): finalizing / New Learning success / SRS Repeat success / finalize-failed / empty-invalid, dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxSessionResultSummary, MxMetricCard, MxActionButton, MxBadge, MxCallout, MxErrorState, MxEmptyState } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
+}
+
+function Hero({ icon, tint, ink }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 4px' }}>
+      <span style={{ width: 76, height: 76, borderRadius: '50%', background: tint, color: ink, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Ic n={icon} s={36} /></span>
+    </div>
+  );
+}
+
+function Shell({ theme, children, bottom }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar leading={<MxIconButton icon={<Ic n="x" />} label="Close" />} title="Session result" />
+      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
+      {bottom && <div className="mx-bottom">{bottom}</div>}
+    </div>
+  );
+}
+function Centered({ children }) {
+  return <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{children}</div>;
+}
+function Metrics({ time, accuracy, accTone }) {
+  return (
+    <div style={{ display: 'flex', gap: 10 }}>
+      <MxMetricCard label="Time" value={time} tone="time" style={{ flex: 1 }} />
+      <MxMetricCard label="Accuracy" value={accuracy} unit="%" tone={accTone} style={{ flex: 1 }} />
+    </div>
+  );
+}
+
+/* ---- MX-13.1 Finalizing ---- */
+function FinalizingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <Shell theme={theme}>
+      <Centered>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, width: '100%' }}>
+          <Skel w={76} h={76} r="50%" />
+          <Skel w={180} h={22} r="var(--mx-radius-sm)" />
+          <Skel w={130} h={14} r="var(--mx-radius-sm)" />
+          <div style={{ display: 'flex', gap: 10, width: '100%', padding: '8px 0' }}>
+            <Skel w="100%" h={72} r="var(--mx-radius-lg)" /><Skel w="100%" h={72} r="var(--mx-radius-lg)" />
+          </div>
+          <div style={{ font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>Saving your session…</div>
+        </div>
+      </Centered>
+    </Shell>
+  );
+}
+
+/* ---- MX-13.2 New Learning success ---- */
+function NewLearningPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={
+      <>
+        <MxActionButton variant="secondary" leadingIcon={<Ic n="check" s={18} />}>Done</MxActionButton>
+        <MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="graduation-cap" s={18} />}>Study more</MxActionButton>
+      </>
+    }>
+      <Hero icon="party-popper" tint="var(--mx-color-feedback-correctSurface)" ink="var(--mx-color-srs-noDue)" />
+      <MxSessionResultSummary type="newLearning" headline="Nice work!" subhead="New Learning · Korean TOPIK I"
+        stats={[
+          { label: 'Words learned', value: '12', tone: 'active' },
+          { label: 'Activated to Box 1', value: '12', tone: 'correct' },
+          { label: 'Match misses', value: '2', tone: 'wrong' },
+          { label: 'Fill retries', value: '1', tone: 'wrong' },
+        ]} />
+      <Metrics time="6:12" accuracy="90" accTone="correct" />
+      <MxActionButton variant="ghost" fullWidth trailingIcon={<Ic n="arrow-right" s={16} />}>View statistics</MxActionButton>
+    </Shell>
+  );
+}
+
+/* ---- MX-13.3 SRS Repeat success ---- */
+function SrsRepeatPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={
+      <>
+        <MxActionButton variant="secondary" leadingIcon={<Ic n="check" s={18} />}>Done</MxActionButton>
+        <MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="repeat" s={18} />}>Repeat more</MxActionButton>
+      </>
+    }>
+      <Hero icon="trophy" tint="var(--mx-color-state-selectedSurface)" ink="var(--mx-color-srs-active)" />
+      <MxSessionResultSummary type="srsRepeat" headline="Reviewed!" subhead="SRS Repeat · Korean TOPIK I"
+        stats={[
+          { label: 'Cards reviewed', value: '24', tone: 'active' },
+          { label: 'Remembered', value: '19', tone: 'correct' },
+          { label: 'Forgot', value: '5', tone: 'wrong' },
+          { label: 'Moved up a box', value: '19', tone: 'active' },
+        ]} />
+      <Metrics time="8:40" accuracy="79" accTone="correct" />
+      <MxCallout tone="info" icon={<Ic n="info" s={16} />}>Lapsed cards reset to Box 1 (never lower) and return later today.</MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-13.4 Finalize failed ---- */
+function FinalizeFailedPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry saving</MxActionButton>}>
+      <Centered>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't save your results"
+          message="Your answers from this session are safe on this device — we just couldn't finish saving. Retry to record the result." />
+      </Centered>
+    </Shell>
+  );
+}
+
+/* ---- MX-13.5 Empty / invalid ---- */
+function EmptyPhone({ theme }) {
+  return (
+    <Shell theme={theme} bottom={<MxActionButton variant="secondary" fullWidth leadingIcon={<Ic n="chevron-left" s={18} />}>Back to deck</MxActionButton>}>
+      <Centered>
+        <MxEmptyState icon={<Ic n="inbox" s={40} />} title="Nothing to summarize"
+          message="This session had no completed items, so there’s no result to show. Start a session and finish at least one word." />
+      </Centered>
+    </Shell>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-13.1 · Finalizing</DeskCaption>
+    <FinalizingPhone theme="dark" /><FinalizingPhone theme="light" />
+    <DeskCaption>MX-13.2 · New Learning success</DeskCaption>
+    <NewLearningPhone theme="dark" /><NewLearningPhone theme="light" />
+    <DeskCaption>MX-13.3 · SRS Repeat success</DeskCaption>
+    <SrsRepeatPhone theme="dark" /><SrsRepeatPhone theme="light" />
+    <DeskCaption>MX-13.4 · Finalize failed (data safe)</DeskCaption>
+    <FinalizeFailedPhone theme="dark" /><FinalizeFailedPhone theme="light" />
+    <DeskCaption>MX-13.5 · Empty / invalid</DeskCaption>
+    <EmptyPhone theme="dark" /><EmptyPhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
