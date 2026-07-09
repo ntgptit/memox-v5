@@ -133,8 +133,11 @@ Concept/business spec (incl. the **Subdeck List variant**) + its future implemen
 | F1.DM.PLAY.3 | Play Menu UI behavior (variant A/B by progress; Học/Lặp lại/Xem lại/Một trò chơi/Trình phát; no empty session) | FE | Not started | [deck-management.md → Play Menu](../design/screens/deck-management.md#play-menu) | TBD | TBD |
 | F1.STUDY.NEW.1 | New Learning Flow (review → match → guess → recall → fill; activate Box 0 → Box 1) | BE/FE | Not started | [07-study-modes.md → New Learning Flow](../design/07-study-modes.md#new-learning-flow), [06-srs-8box.md](../design/06-srs-8box.md#kích-hoạt-srs-box-0--box-1) | TBD | TBD |
 | F1.STUDY.SRS.1 | SRS Repeat Flow from Play Menu (Box 1+ due only; no empty session on 0 due) | BE/FE | Not started | [07-study-modes.md → SRS Repeat Flow](../design/07-study-modes.md#srs-repeat-flow), [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day) | TBD | TBD |
+| F1.STUDY.NEW.REVIEW.1 | reviewMode concept for New Learning Flow | Docs | In progress → `Done` after merge | [07-study-modes.md → reviewMode](../design/07-study-modes.md#reviewmode-mode-đầu-tiên); [06-srs-8box.md](../design/06-srs-8box.md#kích-hoạt-srs-box-0--box-1); [deck-management.md → Play Menu](../design/screens/deck-management.md#play-menu); [new-learning-flow-decision-table.md](../decision-tables/new-learning-flow-decision-table.md) | `npm run check` / `git diff --check` | PR `docs/review-mode-concept` (squash commit after merge) |
+| F1.STUDY.NEW.REVIEW.2 | reviewMode read model and flow state (Box 0 card; step-1 completion; not SRS-active) | BE | Not started | [07-study-modes.md → reviewMode](../design/07-study-modes.md#reviewmode-mode-đầu-tiên) | TBD | TBD |
+| F1.STUDY.NEW.REVIEW.3 | reviewMode UI screen (header / progress / card review area; optional audio & edit) | FE | Not started | [07-study-modes.md → reviewMode](../design/07-study-modes.md#reviewmode-mode-đầu-tiên) | TBD | TBD |
 
-> `F1.DM.1`, `F1.DM.SORT.1`, and `F1.DM.PLAY.1` are docs rows: they flip to `Done` once this PR is
+> `F1.DM.1`, `F1.DM.SORT.1`, `F1.DM.PLAY.1`, and `F1.STUDY.NEW.REVIEW.1` are docs rows: they flip to `Done` once this PR is
 > **merged** (evidence = squash commit), per the [evidence policy](#done-criteria--evidence-policy). The
 > **Sort Menu** and **Play Menu** are parts of the Deck Management / Subdeck List spec — not separate
 > features. Subdeck List is a **variant** of Deck Management, not a separate screen — no separate
