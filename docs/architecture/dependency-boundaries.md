@@ -65,3 +65,25 @@ exits non-zero.
   move to `src/shared`, or the boundary between A and B is wrong. Reconsider the split rather than
   bypassing the rule.
 - Routes in `src/app` may compose multiple features, but keep them thin — no business logic.
+
+## Layering & dependency policy
+
+Beyond the two enforced rules, these hold by convention and review:
+
+- **`src/features/<A>` must not import another feature `<B>`** (enforced).
+- **`src/shared` must not import `src/features`** (enforced).
+- **App routes in `src/app` only compose** screens / feature entry points — **no heavy business logic**
+  in routes.
+- **Domain does not depend on UI, router, or storage implementation.** It is pure and takes inputs
+  (state, `now`, config); it never reads storage/route/`Date.now()`/network directly.
+- **Data layer does not depend on presentation.** Repositories map storage ↔ domain and return
+  `Result`; they know nothing about screens or stores.
+- **No starter demo dependency:** no feature may import Expo starter demo screens/components
+  ([DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling-not-on-production-path)).
+
+## Adding dependencies
+
+- **Do not add a new dependency unless a docs/WBS task approves it.** Prefer the existing foundation
+  libraries (see [`../../AGENTS.md`](../../AGENTS.md) §4).
+- A new **SQLite/storage** dependency (or any infra library) must have its **own WBS row/task**
+  documented **before** code is written — it is not an ad-hoc import.

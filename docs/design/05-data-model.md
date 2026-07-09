@@ -3,6 +3,24 @@
 Local-first bằng **`expo-sqlite`** (SDK 57, async API). Schema thiết kế **sync-ready** ngay từ đầu
 để Phase 4 bật đồng bộ không phải migrate phá vỡ.
 
+## Hợp đồng lưu trữ local-first
+
+Ràng buộc bắt buộc cho toàn bộ tầng dữ liệu:
+
+- **MemoX v5 là local-first.** **SQLite (local DB) là nguồn sự thật (source of truth)** cho
+  deck / card / study session / review / settings.
+- **UI / provider / state library (zustand) KHÔNG** được là nơi lưu bền vững **duy nhất**. State chỉ
+  là bản chiếu (projection) của DB; đóng app không được mất dữ liệu đã ghi.
+- **Ghi nhiều bảng phải nằm trong một transaction** (ví dụ: chấm một thẻ ghi `cards` + `card_reviews`
+  + `study_session_items`; tạo session ghi `study_sessions` + items).
+- **Repository trả `Result`** (neverthrow) hoặc error-object theo convention hiện có — không ném lỗi
+  ẩn qua tầng data.
+- **Domain logic không đọc trực tiếp** storage, UI, route, `Date.now()`, hay network. Thời gian và I/O
+  được **truyền vào** (inject) để test được.
+- **Import / export / backup-restore** là task sau nếu chưa nằm trong Phase 1, nhưng **không được phá
+  vỡ** hợp đồng local-first (vẫn qua repository + transaction + DB là nguồn sự thật). Xem
+  [memox-scope](../product/memox-scope.md) và [overview](../architecture/overview.md).
+
 ## Nguyên tắc sync-ready
 
 Mọi bảng dữ liệu người dùng đều có:
@@ -106,20 +124,78 @@ CREATE TABLE app_meta (
 
 Ghi chú thiết kế:
 
-- **`box` + `due_at` nằm trên `cards`**: truy vấn "thẻ đến hạn" chỉ cần `WHERE due_at <= now`
-  (có index) — không phải join lịch sử. `due_at` tính lại mỗi lần chấm =
-  `last_reviewed_at + interval(box) * 1 ngày`.
+- **`box` + `due_at` nằm trên `cards`**: `due_at` lưu **mốc tuyệt đối** (epoch ms), tính lại mỗi lần
+  chấm = `last_reviewed_at + interval(box) * 1 ngày`. **Eligibility "đến hạn" theo local-day** (DT-1),
+  **không** so trực tiếp `due_at <= now`; storage có thể pre-filter timestamp cho hiệu năng nhưng
+  use-case áp local-day làm nguồn sự thật.
 - **`new_seen_on`** giúp áp **hạn mức thẻ mới/ngày** (FR-S7) mà không cần bảng riêng: đếm số thẻ có
   `new_seen_on = hôm nay`.
 - **`ON DELETE CASCADE`** ở FK là cho **hard-delete** (ví dụ dọn rác). Trong luồng thường ta dùng
   **soft-delete** (đặt `deleted_at`) và cascade soft-delete ở tầng repository.
 - **Settings** lưu trong `app_meta` dạng JSON (một dòng `key='settings'`). Đơn giản, đủ cho cấu hình
   đơn người dùng; xem [09-settings](09-settings.md).
-- **Không có bảng phiên học (session).** Phase 1 chỉ có 4 bảng trên. Phiên học là **state tạm**; tiến
-  độ bền vững chỉ nằm trong `cards` + `card_reviews` (Option B — xem
-  [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence) và
-  [07-study-modes](07-study-modes.md#persist-phiên-học--option-b-phiên-là-state-tạm)). **Không** tạo
-  `study_sessions` / `study_session_items` ở Phase 1.
+- **Phiên học được persist (DT-2).** Phase 1 storage contract **bắt buộc** có `study_sessions` +
+  `study_session_items` (định nghĩa ngay dưới). Tiến độ **học** bền vững qua `cards`/`card_reviews`;
+  tiến độ **phiên** bền vững qua `study_sessions`/`study_session_items`. Đây là **task
+  BE/migration riêng** (`P1-BE-05`) phải xong trước Study UI.
+
+## `study_sessions` / `study_session_items` (persisted session)
+
+Persist phiên học (DT-2). Cùng nguyên tắc sync-ready (`id` client, `created_at`/`updated_at`,
+`deleted_at`). Đây là **contract Phase 1**; cần **migration riêng** (`P1-BE-05`) trước Study UI.
+
+```sql
+-- study_sessions: một phiên học
+CREATE TABLE study_sessions (
+  id            TEXT PRIMARY KEY,
+  scope_deck_id TEXT NOT NULL REFERENCES decks(id) ON DELETE CASCADE,
+  include_subdecks INTEGER NOT NULL DEFAULT 1,     -- 0/1: có gồm deck con không
+  mode          TEXT NOT NULL,                     -- 'typing' (Phase 1) | 'review'|'recall'|'guess'|'match'
+  status        TEXT NOT NULL DEFAULT 'active'
+                CHECK (status IN ('active','completed','cancelled','expired','failed_to_finalize')),
+  total_items   INTEGER NOT NULL DEFAULT 0,
+  answered_count INTEGER NOT NULL DEFAULT 0,
+  started_at    INTEGER NOT NULL,
+  finished_at   INTEGER,                           -- set khi completed/cancelled/expired
+  created_at    INTEGER NOT NULL,
+  updated_at    INTEGER NOT NULL,
+  deleted_at    INTEGER
+);
+-- Chặn 2 session 'active' cùng scope (deck + include_subdecks): partial unique index.
+CREATE UNIQUE INDEX uidx_active_session_scope
+  ON study_sessions(scope_deck_id, include_subdecks)
+  WHERE status = 'active' AND deleted_at IS NULL;
+
+-- study_session_items: các thẻ trong phiên, thứ tự ổn định + trạng thái để resume
+CREATE TABLE study_session_items (
+  id           TEXT PRIMARY KEY,
+  session_id   TEXT NOT NULL REFERENCES study_sessions(id) ON DELETE CASCADE,
+  card_id      TEXT NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
+  position     INTEGER NOT NULL,                   -- thứ tự học ổn định trong phiên
+  item_status  TEXT NOT NULL DEFAULT 'pending'
+               CHECK (item_status IN ('pending','answered','skipped')),
+  grade        TEXT CHECK (grade IN ('correct','wrong')),  -- NULL tới khi answered
+  answered_at  INTEGER,
+  created_at   INTEGER NOT NULL,
+  updated_at   INTEGER NOT NULL
+);
+CREATE UNIQUE INDEX uidx_session_item_pos ON study_session_items(session_id, position);
+CREATE INDEX idx_session_items_session ON study_session_items(session_id);
+```
+
+Ghi chú:
+
+- **Nguồn sự thật tiến độ học** vẫn là `cards` + `card_reviews`. `study_session_items` giữ **tiến độ
+  phiên** (vị trí, item nào đã trả lời) để **resume**; nó **không** thay thế `card_reviews`.
+- **Resume**: mở lại → tìm `study_sessions` `status='active'` gần nhất cho scope → tiếp tục từ item
+  `position` nhỏ nhất còn `pending`.
+- **Không trùng active**: `uidx_active_session_scope` đảm bảo mỗi scope chỉ một session `active`.
+- **Atomic**: tạo session + toàn bộ items trong **một** transaction; lỗi → rollback (không partial).
+  Chấm một thẻ: cập nhật `cards` + chèn `card_reviews` + cập nhật item — **một** transaction.
+- **Finish**: đặt `status='completed'`, `finished_at=now`. Nếu finalize lỗi → giữ `active` hoặc
+  `failed_to_finalize`, **không** đánh dấu `completed` sai.
+- Hành vi đầy đủ: [07-study-modes](07-study-modes.md#persist-phiên-học--persisted-dt-2),
+  [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence-persisted).
 
 ## Kiểu domain (TypeScript)
 
@@ -158,6 +234,37 @@ export interface SrsState {
   box: Box;
   lastReviewedAt: number | null;
 }
+
+export type StudyMode = 'typing' | 'review' | 'recall' | 'guess' | 'match';
+export type SessionStatus =
+  | 'active' | 'completed' | 'cancelled' | 'expired' | 'failed_to_finalize';
+export type SessionItemStatus = 'pending' | 'answered' | 'skipped';
+
+export interface StudySession {
+  id: ID;
+  scopeDeckId: ID;
+  includeSubdecks: boolean;
+  mode: StudyMode;
+  status: SessionStatus;
+  totalItems: number;
+  answeredCount: number;
+  startedAt: number;
+  finishedAt: number | null;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface StudySessionItem {
+  id: ID;
+  sessionId: ID;
+  cardId: ID;
+  position: number;                 // thứ tự học ổn định
+  itemStatus: SessionItemStatus;
+  grade: 'correct' | 'wrong' | null;
+  answeredAt: number | null;
+  createdAt: number;
+  updatedAt: number;
+}
 ```
 
 ## Truy vấn chủ đạo
@@ -182,20 +289,25 @@ SELECT id FROM subtree;
 ```
 Dùng khi công tắc **"gồm deck con"** bật (FR-M6). Khi tắt: chỉ lấy `deck_id = ?`.
 
-### Thẻ đến hạn trong phạm vi
+### Thẻ đến hạn trong phạm vi (local-day, DT-1)
 ```sql
+-- Pre-filter ở storage cho hiệu năng: lấy mọi thẻ có due_at TRƯỚC đầu ngày-mai-địa-phương.
+-- ? = epoch ms của "đầu ngày mai theo giờ địa phương" (startOfTomorrowLocal).
 SELECT * FROM cards
 WHERE deleted_at IS NULL
   AND deck_id IN (/* danh sách id từ subtree hoặc chỉ 1 deck */)
   AND due_at IS NOT NULL
-  AND due_at <= ?           -- ? = now (epoch ms) — Option A, xem DT-1
+  AND due_at < ?            -- < đầu ngày mai (local) → gồm cả thẻ due muộn hơn HÔM NAY
 ORDER BY due_at ASC;
 ```
 
-> **Ngữ nghĩa Due (Option A):** đây là **vị ngữ due chuẩn** dùng thống nhất cho Today session,
-> Dashboard due count, Study eligibility query, và Progress/statistics. Xem
-> [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics). Ngày địa phương **chỉ** dùng
-> cho hạn mức thẻ mới (`new_seen_on`), **không** dùng cho due.
+> **Ngữ nghĩa Due (local-day — DT-1):** nguồn sự thật là `localDay(due_at) <= localDay(today)`. Câu
+> SQL trên chỉ là **pre-filter hiệu năng** (dùng mốc "đầu ngày mai local" nên bao gồm thẻ due muộn hơn
+> trong hôm nay); **use-case/domain vẫn áp lại quy tắc local-day**. **Không** dùng `due_at <= now` cho
+> query học/ngày vì sẽ ẩn thẻ due-muộn-hôm-nay. Cùng quy tắc cho Today session, Dashboard due count,
+> Study eligibility, Progress/statistics, và mọi review-queue sau này. Xem
+> [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day). "Hôm nay" là
+> clock **inject/test-controlled**, không đọc `Date.now()` ẩn trong domain.
 
 ### Thẻ mới trong phạm vi (áp hạn mức/ngày)
 ```sql

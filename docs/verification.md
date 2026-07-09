@@ -20,6 +20,13 @@ step, say which step and why.
 4. **Intentionally skipped tests must be recorded.** If a test is deliberately skipped, the relevant
    WBS row must state the reason and its status **must not** be `Done` (use `In progress`/`Blocked`).
    Silent skips are not allowed.
+5. **Feature implementation must add or update the corresponding test(s).** Shipping feature/domain
+   code without touching tests is not acceptable.
+6. **Docs-only tasks** may add no tests, but **must still run `npm run check`** if the repo allows it,
+   and report the result.
+7. **Pre-existing, unrelated failures:** if `npm run check` fails because a docs-only change surfaced a
+   pre-existing error unrelated to the change, **report the exact failing path** and **do not** fix
+   source outside the task scope. State clearly that the failure is pre-existing and out of scope.
 
 ## What it runs
 

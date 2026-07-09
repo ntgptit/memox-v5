@@ -14,9 +14,9 @@ memox-v5/
 │   │   ├── _layout.tsx       # root layout
 │   │   ├── index.tsx         # home route
 │   │   └── explore.tsx       # (starter reference screen)
-│   ├── components/           # Expo starter template UI — kept until replaced (DT-3)
-│   ├── constants/            # Expo starter template — kept until replaced (theme.ts, DT-3)
-│   ├── hooks/                # Expo starter template — kept until replaced (DT-3)
+│   ├── components/           # Expo starter UI — OFF production path; remove/replace in F0.1 (DT-3)
+│   ├── constants/            # Expo starter — OFF production path; remove/replace in F0.1 (theme.ts, DT-3)
+│   ├── hooks/                # Expo starter — OFF production path; remove/replace in F0.1 (DT-3)
 │   ├── features/             # feature modules (see below); currently a placeholder
 │   ├── shared/               # cross-cutting code (see below)
 │   │   ├── lib/
@@ -32,9 +32,10 @@ memox-v5/
 ```
 
 > The `src/components`, `src/constants`, `src/hooks`, and `src/app/explore.tsx` files are **Expo
-> starter template code**. They are **kept until explicitly replaced/promoted** (decision
-> [DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling)); see
-> [Expo starter template](#expo-starter-template) below for the rule and current drift.
+> starter template code**. They are **not allowed on the MemoX production path** and must be
+> **removed or replaced** in foundation cleanup `F0.1` (decision
+> [DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling-not-on-production-path));
+> see [Expo starter template](#expo-starter-template) below for the rule and current drift.
 
 ## `src/app` — routes only
 
@@ -104,25 +105,24 @@ These are planned locations documented in [`docs/design/`](../design/); they do 
 
 ## Expo starter template
 
-**Decision (DT-3): keep starter files until explicitly replaced/promoted.** They are not deleted
-pre-emptively, and they are not merely "temporary reference" — the app shell currently depends on some
-of them (see the drift log below).
+**Decision (DT-3): Expo starter demo code must not be on the MemoX production path.** It is removed or
+replaced in foundation cleanup `F0.1` **before** real MemoX screens are implemented.
 
 Scope of starter files: `src/components/**`, `src/constants/theme.ts`, `src/hooks/**`,
-`src/app/explore.tsx`.
+`src/app/explore.tsx`, and any starter `src/app` demo routes.
 
 Rules:
 
-- **Feature implementation must not depend on starter demo screens/components** unless those pieces are
-  **explicitly promoted** into shared MemoX components (e.g. moved/rewritten under `src/shared/ui`).
-- When a MemoX screen needs something a starter component provides, **promote** it (make it a proper
-  shared component with its own place and, where it carries logic, tests) rather than importing the
-  demo file directly.
-- A starter file may be deleted once nothing depends on it. Until then it stays — removing it while the
-  app shell imports it would break the build.
+- `src/app` starter demo routes must be **removed or replaced** before real MemoX screen work.
+- **No feature may import starter demo screens/components.**
+- `src/components` starter UI must **not** be implicitly promoted into MemoX shared components. Any
+  shared component must be **intentionally created** under the documented shared structure
+  (`src/shared/ui`, …), with its own place and, where it carries logic, tests.
+- If starter files remain **temporarily** before `F0.1`, they are **marked temporary and blocked from
+  feature dependency** — nothing new may import them.
 
 Full decision table:
-[DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling).
+[DT-3](../decision-tables/phase-1-contracts.md#dt-3--expo-starter-template-handling-not-on-production-path).
 
 ## Drift log
 
@@ -145,12 +145,13 @@ File code: src/app/_layout.tsx (imports @/components/app-tabs, @/components/anim
 File doc:  docs/decision-tables/phase-1-contracts.md DT-3 + this file (rule: feature/app code must
            not depend on starter demo components unless promoted to shared MemoX components)
 Mismatch:  The live root layout (not a demo screen) renders via starter components AppTabs and
-           AnimatedSplashOverlay, so the current app shell already depends on starter code that the
-           DT-3 rule says non-promoted app code should not depend on.
-Suggested fix: During Phase 1 FE work (WBS P1-FE-*), promote the shell's navigation/splash into
-           shared MemoX components (e.g. src/shared/ui) or MemoX-owned route files, then drop the
-           starter imports from src/app/_layout.tsx. Until then, DT-3 governs: starter files stay,
-           and no NEW feature code may depend on them.
+           AnimatedSplashOverlay, so the MemoX production path already depends on starter code —
+           which DT-3 forbids (starter demo code must be off the production path).
+Suggested fix: In foundation cleanup WBS F0.1 (before P1-FE-*), remove/replace the starter shell —
+           create MemoX-owned navigation/splash under the documented shared structure
+           (e.g. src/shared/ui) or MemoX route files, then drop the starter imports from
+           src/app/_layout.tsx. Until F0.1 lands, no NEW feature code may import starter code, and
+           the starter files are treated as temporary and blocked from feature dependency.
 ```
 
 > Note: `src/app/index.tsx` is clean (imports only `react-native` primitives). Only `_layout.tsx` is

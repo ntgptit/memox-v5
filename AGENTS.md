@@ -76,26 +76,57 @@ New dependencies need a clear justification and should not duplicate the above.
 These decisions are settled; implement to them, do not re-litigate. See
 [`docs/decision-tables/phase-1-contracts.md`](docs/decision-tables/phase-1-contracts.md).
 
-- **Due semantics (DT-1):** a card is due when `due_at <= now` (absolute instant). Local calendar day
-  is used **only** for the new-card-per-day counter, never for the due predicate.
-- **Study session (DT-2):** sessions are ephemeral state; durable progress lives only in `cards` and
-  `card_reviews`. Phase 1 adds **no** `study_sessions`/`study_session_items` tables.
-- **Starter template (DT-3):** see §9.
+- **Due semantics (DT-1) — local-day:** a card is due when `localDay(due_at) <= localDay(today)`. A card
+  due later **today** still counts as due today; a card due tomorrow does not. Eligibility **normalizes
+  to local-day** — do **not** compare `due_at <= now` for study/day queries (it would hide
+  due-later-today cards). The clock ("today") is **injected/test-controlled**; never hide `Date.now()`
+  in business logic. Storage may pre-filter by timestamp, but the local-day rule is the source of truth.
+- **Study session (DT-2) — persisted:** sessions are **persisted** via `study_sessions` +
+  `study_session_items` (Phase 1 storage contract). Learning progress lives in `cards` + `card_reviews`;
+  session progress in the session tables. Start/answer writes are transactional; sessions are resumable;
+  lifecycle `active`/`completed`/`cancelled`/`expired`. This needs a migration task (`P1-BE-05`) before
+  the Study UI.
+- **Starter template (DT-3) — off production path:** see §9.
 
-## 8. Documentation-phase guardrails
+## 8. Dependency & layering policy
 
-- **Do not implement product feature code** while the project is in the documentation phase.
-- Keep docs accurate to the repo. If you document a rule, it must match the code/config that
-  enforces it. On any docs-code mismatch: **stop and surface it** using the drift format in
-  [`docs/architecture/folder-structure.md`](docs/architecture/folder-structure.md#drift-log). Do not
-  silently guess.
+- **`src/features/<A>` must not import another feature `<B>`** (enforced by `check-boundaries.mjs`).
+- **`src/shared` must not import `src/features`** (enforced).
+- **App routes in `src/app` only compose** screens/feature entries — no heavy business logic.
+- **Domain** does not depend on UI/router/storage; **data layer** does not depend on presentation.
+- **No new dependency** unless approved by a docs/WBS task. A new **SQLite/storage** dependency needs
+  its **own WBS row/task** before code. Details:
+  [`docs/architecture/dependency-boundaries.md`](docs/architecture/dependency-boundaries.md).
 
 ## 9. Starter template rule (DT-3)
 
-- The Expo **starter template files are kept until explicitly replaced/promoted** — not deleted
-  pre-emptively. Scope: `src/components/**`, `src/constants/theme.ts`, `src/hooks/**`,
-  `src/app/explore.tsx`.
-- **Feature implementation must not depend on starter demo screens/components** unless they are
-  explicitly promoted into shared MemoX components (e.g. `src/shared/ui`).
-- Known current drift: `src/app/_layout.tsx` imports starter components. Documented in the
+- Expo **starter demo code must not be on the MemoX production path.** It is **removed or replaced** in
+  foundation cleanup `F0.1` before real MemoX screens. Scope: `src/components/**`,
+  `src/constants/theme.ts`, `src/hooks/**`, `src/app/explore.tsx`, and starter `src/app` demo routes.
+- **No feature may import starter demo screens/components.** Shared components are **intentionally
+  created** under the documented shared structure (`src/shared/ui`, …), never implicit promotion of
+  starter UI.
+- If starter files remain temporarily before `F0.1`, they are **marked temporary and blocked from
+  feature dependency**.
+- Known current drift: `src/app/_layout.tsx` imports starter components — see
+  [DRIFT-001](docs/architecture/folder-structure.md#drift-001--app-shell-depends-on-starter-components),
+  to be fixed by `F0.1`.
+
+## 10. Documentation-phase guardrails & drift rule
+
+- **Do not implement product feature code** while the project is in the documentation phase.
+- Keep docs accurate to the repo. **If docs and source conflict, stop. Do not guess behavior.**
+- Report a conflict using this exact format:
+
+  ```
+  DRIFT DETECTED
+  File code:
+  File doc:
+  Mismatch:
+  Suggested fix:
+  ```
+
+- Only fix drift if the task scope allows it.
+- **Do not mark a WBS row `Done` while docs / source / test do not match.**
+- Record drifts in the
   [drift log](docs/architecture/folder-structure.md#drift-log).
