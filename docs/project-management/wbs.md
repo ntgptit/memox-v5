@@ -162,6 +162,27 @@ Concept/business spec (incl. the **Subdeck List variant**) + its future implemen
 
 ---
 
+## Session Result (F1.RESULT)
+
+Concept/business spec + its future implementation rows. Spec:
+[`../design/screens/session-result.md`](../design/screens/session-result.md)
+([decision table](../decision-tables/session-result-decision-table.md)).
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.RESULT.1 | Session Result concept for learning and SRS review | Docs | In progress → `Done` after merge | [session-result.md](../design/screens/session-result.md); [07-study-modes.md → Session Result](../design/07-study-modes.md#session-result-cuối-phiên); [06-srs-8box.md](../design/06-srs-8box.md#kích-hoạt-srs-box-0--box-1) | `npm run check` / `git diff --check` | PR `docs/session-result-concept` (squash commit after merge) |
+| F1.RESULT.2 | Session Result read model (finalized session/attempt summary; New Learning vs SRS Repeat metrics) | BE | Not started | [session-result.md](../design/screens/session-result.md), [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence-persisted) | TBD | TBD |
+| F1.RESULT.3 | New Learning Result UI (learned / activated Box 1 / not activated / per-mode failures) | FE | Not started | [session-result.md](../design/screens/session-result.md) | TBD | TBD |
+| F1.RESULT.4 | SRS Repeat Result UI (reviewed / remembered / forgotten / promotion·demotion) | FE | Not started | [session-result.md](../design/screens/session-result.md) | TBD | TBD |
+
+> `F1.RESULT.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
+> per the [evidence policy](#done-criteria--evidence-policy). Session Result reflects **only the
+> just-finished session** and does **not** replace Dashboard/Progress; activation happens in the flow,
+> not on Result. Progress/Dashboard and Review-mistakes are separate screens, **not** created here. Game
+> session result is **Future**.
+
+---
+
 ## Flashcard List (F1.FL)
 
 Concept/business spec + its future implementation rows. Spec:

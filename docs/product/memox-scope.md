@@ -58,6 +58,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
     [`../design/screens/deck-management.md`](../design/screens/deck-management.md#play-menu);
     decision table:
     [`../decision-tables/play-menu-decision-table.md`](../decision-tables/play-menu-decision-table.md).
+- **Session Result screen.** After a completed learning or SRS-review session, MemoX shows a **Session
+  Result** summarizing **only that session** — for New Learning Flow (new cards learned, cards activated
+  into Box 1 / not activated, per-mode failures) or SRS Repeat Flow (reviewed, remembered/forgotten,
+  box promotion/demotion). It appears only when the session **finalizes successfully**, helps the user
+  understand how the session went, and is **separate** from the long-term **Dashboard/Progress** (which
+  it does not replace). Concept spec:
+  [`../design/screens/session-result.md`](../design/screens/session-result.md).
 - **Cards.** A card has a `term` and a `meaning` (both required) and an optional `note`. Content is
   free-form Unicode.
 - **Flashcard List screen.** Browse and manage the flashcards inside a deck/section: quickly read each

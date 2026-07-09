@@ -519,6 +519,22 @@ session/flow-state quyết định (ngoài phạm vi task này).
 - Nếu Repeat count = 0: **không** tạo review session **rỗng**; hiển thị trạng thái **không có từ đến
   hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).
 
+## Session Result (cuối phiên)
+
+Khi một phiên **finalize thành công**, hệ thống hiển thị **[Session Result](screens/session-result.md)** —
+màn thống kê **phiên vừa hoàn thành** (chi tiết metrics/actions ở screen spec).
+
+- **New Learning Flow** kết thúc bằng Session Result **sau khi `fillMode` hoàn thành** và session
+  **finalize thành công**. Result thống kê new-cards-learned, số card **activated vào Box 1**, số card
+  chưa hoàn thành, và per-mode failure (match/guess/recall/fill) nếu có.
+- **SRS Repeat Flow** kết thúc bằng Session Result **sau khi due review session finalize thành công**.
+  Result thống kê reviewed / remembered / forgotten và promotion/demotion nếu SRS rule có.
+- **Result KHÔNG bật SRS thay cho `fillMode`.** Activation **chỉ** xảy ra theo rule New Learning Flow
+  (hoàn thành đủ 5 mode). Result chỉ **đọc** summary đã finalize, **không** mutate learning data.
+- **Result KHÔNG thay thế Progress/Dashboard** dài hạn; chỉ phản ánh **phiên vừa rồi**.
+- Nếu **finalize thất bại** / session **rỗng** / user **thoát chưa finalize** → **không** hiển thị
+  Result như đã hoàn thành. Xem [Session Result → Empty/failure](screens/session-result.md#empty--failure-states).
+
 ## Play Menu entry points mapping
 
 Màn [Deck Management / Subdeck List](screens/deck-management.md#play-menu) mở **Play Menu** khi bấm
