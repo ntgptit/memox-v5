@@ -1,0 +1,755 @@
+<!-- @dsCard group="Kit Screens" viewport="1240x4200" name="11 · Mx Layout Template Gallery" subtitle="9 named templates — anatomy, spacing, slots, scroll/safe-area/keyboard, RN primitive map" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>11 · Mx Layout Template Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 11 Layout Templates</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="10-state-gallery.html">‹ Prev</a>
+    <a href="12-composition-recipe-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page mx-page-wide">
+  <p class="mx-kicker">Mx Kit Screens · 11</p>
+  <h1 class="mx-title">Mx Layout Template Gallery</h1>
+  <p class="mx-lead">
+    The nine named layout templates every MemoX screen is built from. A template is a
+    <b>region skeleton</b> — a composition of Mx shells + slots + token spacing — not a new component
+    and not a final product screen. Each template below renders its regions in <b>dark</b> and
+    <b>light</b> on a phone frame, with anatomy and spacing labels, plus a spec for slots, scroll,
+    safe-area, keyboard, and allowed action placement. Screens fill the slots with Mx components and
+    <b>never re-implement the shell</b>.
+  </p>
+  <div class="mx-note"><b>These are templates, not screens</b> The skeletons show region contracts:
+    top bar, scroll body, sticky bottom action, section rhythm. Real screens (golden references,
+    embedded at the end) fill each region with concrete Mx components. Reference device is the
+    <b>Samsung Galaxy S23 Ultra</b> (19.3:9, CSS 384×824, Android-first).</div>
+
+  <div class="mx-legend">
+    <span class="mx-tag">region</span>
+    <span class="mx-tag">slot</span>
+    <span class="mx-tag space">mx-space-16 gutter</span>
+    <span class="mx-tag space">mx-space-24 section</span>
+    <span class="mx-tag space">safe-area inset</span>
+  </div>
+
+  <!-- ============ 1 · MxListScreenTemplate ============ -->
+  <section class="mx-section mx-anchor" id="list">
+    <h2>1 · MxListScreenTemplate</h2>
+    <p>The default entry template: a sticky <code>MxTopBar</code>, a direction/summary strip, a
+      scrollable list of <code>MxListRow</code>s, and a bottom add-action area. Home, deck lists, and
+      any list-first screen mimic this.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">MxTopBar</span>
+      <span class="mx-tag">summary strip</span>
+      <span class="mx-tag">FlatList body</span>
+      <span class="mx-tag">MxListRow ×N</span>
+      <span class="mx-tag">bottom add action</span>
+      <span class="mx-tag space">mx-space-16 gutter</span>
+      <span class="mx-tag space">mx-space-24 section</span>
+      <span class="mx-tag space">mx-space-12 row gap</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div class="ph-status" aria-hidden="true"><span>9:41</span><span>MxTopBar region</span></div>
+        <div class="ph-status" style="justify-content:space-between;height:auto;padding-top:0">
+          <span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Decks</span>
+          <span class="mx-tag">+ slot</span>
+        </div>
+        <div class="ph-scroll">
+          <div style="display:flex;gap:var(--mx-space-8);padding:var(--mx-space-12) 0 var(--mx-space-16)">
+            <span class="mx-tag">summary · 42 due</span>
+            <span class="mx-tag space">mx-space-24 section</span>
+          </div>
+          <div class="mx-stack" style="gap:var(--mx-space-12)">
+            <div style="height:var(--mx-size-list-row-height-two-line);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)">
+              <span style="width:36px;height:36px;border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);flex:0 0 auto"></span>
+              <span style="flex:1 1 auto"><b style="display:block;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">MxListRow</b><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">title / subtitle slot</span></span>
+              <span class="mx-tag">→</span>
+            </div>
+            <div style="height:var(--mx-size-list-row-height-two-line);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)">
+              <span style="width:36px;height:36px;border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);flex:0 0 auto"></span>
+              <span style="flex:1 1 auto"><b style="display:block;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">MxListRow</b><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">trailing due badge</span></span>
+              <span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning)">12 due</span>
+            </div>
+            <div style="height:var(--mx-size-list-row-height-two-line);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)">
+              <span style="width:36px;height:36px;border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);flex:0 0 auto"></span>
+              <span style="flex:1 1 auto"><b style="display:block;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">MxListRow</b><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">scrolls in FlatList</span></span>
+              <span class="mx-tag">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · New deck</span>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div class="ph-status" aria-hidden="true"><span>9:41</span><span>MxTopBar region</span></div>
+        <div class="ph-status" style="justify-content:space-between;height:auto;padding-top:0">
+          <span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Decks</span>
+          <span class="mx-tag">+ slot</span>
+        </div>
+        <div class="ph-scroll">
+          <div style="display:flex;gap:var(--mx-space-8);padding:var(--mx-space-12) 0 var(--mx-space-16)">
+            <span class="mx-tag">summary · 42 due</span>
+            <span class="mx-tag space">mx-space-24 section</span>
+          </div>
+          <div class="mx-stack" style="gap:var(--mx-space-12)">
+            <div style="height:var(--mx-size-list-row-height-two-line);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)">
+              <span style="width:36px;height:36px;border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);flex:0 0 auto"></span>
+              <span style="flex:1 1 auto"><b style="display:block;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">MxListRow</b><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">title / subtitle slot</span></span>
+              <span class="mx-tag">→</span>
+            </div>
+            <div style="height:var(--mx-size-list-row-height-two-line);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)">
+              <span style="width:36px;height:36px;border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);flex:0 0 auto"></span>
+              <span style="flex:1 1 auto"><b style="display:block;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">MxListRow</b><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">trailing due badge</span></span>
+              <span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning)">12 due</span>
+            </div>
+            <div style="height:var(--mx-size-list-row-height-two-line);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)">
+              <span style="width:36px;height:36px;border-radius:var(--mx-radius-md);background:var(--mx-color-state-selectedSurface);flex:0 0 auto"></span>
+              <span style="flex:1 1 auto"><b style="display:block;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">MxListRow</b><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">scrolls in FlatList</span></span>
+              <span class="mx-tag">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · New deck</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxListScreenTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Top bar</td><td class="tok">MxTopBar</td><td>Sticky (<code>layer=sticky</code>). Title + trailing add/menu slot.</td></tr>
+        <tr><td>Summary strip</td><td class="tok">MxBadge / MxCallout</td><td>Non-sticky; scrolls with body. Due/streak summary.</td></tr>
+        <tr><td>List body</td><td class="tok">MxListRow ×N</td><td>Scrolls in a <code>FlatList</code>; 12px row gap, 16px gutter.</td></tr>
+        <tr><td>Bottom action</td><td class="tok">MxActionButton</td><td>Sticky; ≤1 primary; respects safe-area inset.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: only the list body scrolls; top bar + bottom action stay
+        fixed. Safe-area: bottom action pads by <code>safe-area-inset-bottom</code>. Keyboard: n/a
+        (no inputs). Actions: one primary (New deck) near the bottom; secondary/ghost inline in rows.</div>
+      <div class="mx-dont"><b></b>Put a second primary in the top bar, or let the add action scroll
+        away with the list — it must stay reachable above the gesture bar.</div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · MxDetailListTemplate ============ -->
+  <section class="mx-section mx-anchor" id="detail">
+    <h2>2 · MxDetailListTemplate</h2>
+    <p>The subdeck / drill-in variant of the list template. A back-titled <code>MxTopBar</code> names
+      the parent, nested <code>MxListRow</code>s (Subdeck List variant) fill the body, and bottom
+      actions offer study / add.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">MxTopBar · back + parent name</span>
+      <span class="mx-tag">nested MxListRow</span>
+      <span class="mx-tag">bottom actions ×2</span>
+      <span class="mx-tag space">mx-space-16 gutter</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div class="ph-status" aria-hidden="true"><span>9:41</span><span>back · parent name</span></div>
+        <div class="ph-status" style="justify-content:flex-start;gap:var(--mx-space-12);height:auto;padding-top:0">
+          <span class="mx-tag">‹ back</span>
+          <span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Korean · TOPIK I</span>
+        </div>
+        <div class="ph-scroll">
+          <div style="padding:var(--mx-space-16) 0 var(--mx-space-8)"><span class="mx-tag">nested subdeck rows</span></div>
+          <div class="mx-stack" style="gap:var(--mx-space-8)">
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Unit 1 · Greetings</span><span class="mx-tag">24</span></div>
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Unit 2 · Numbers</span><span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning)">8 due</span></div>
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Unit 3 · Food</span><span class="mx-tag">31</span></div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:0 0 auto;width:54px;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-secondary);color:var(--mx-color-text-primary);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">+</span>
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Study all</span>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div class="ph-status" aria-hidden="true"><span>9:41</span><span>back · parent name</span></div>
+        <div class="ph-status" style="justify-content:flex-start;gap:var(--mx-space-12);height:auto;padding-top:0">
+          <span class="mx-tag">‹ back</span>
+          <span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Korean · TOPIK I</span>
+        </div>
+        <div class="ph-scroll">
+          <div style="padding:var(--mx-space-16) 0 var(--mx-space-8)"><span class="mx-tag">nested subdeck rows</span></div>
+          <div class="mx-stack" style="gap:var(--mx-space-8)">
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Unit 1 · Greetings</span><span class="mx-tag">24</span></div>
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Unit 2 · Numbers</span><span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning)">8 due</span></div>
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Unit 3 · Food</span><span class="mx-tag">31</span></div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:0 0 auto;width:54px;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-secondary);color:var(--mx-color-text-primary);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">+</span>
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Study all</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxDetailListTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Top bar</td><td class="tok">MxTopBar (back)</td><td>Back control + truncating parent name; sticky.</td></tr>
+        <tr><td>List body</td><td class="tok">MxListRow (subdeck)</td><td>Nested rows, 8px gap; scrolls in <code>FlatList</code>.</td></tr>
+        <tr><td>Bottom action</td><td class="tok">MxActionButton ×2</td><td>Secondary (+ add) + one primary (Study all); sticky.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: body only. Safe-area: bottom row insets. Keyboard: n/a.
+        Actions: exactly one primary (Study all) at the bottom-right; the secondary add sits left of it.</div>
+      <div class="mx-dont"><b></b>Style the add action as a second primary, or let the parent name push
+        the back control off-screen — truncate the name instead.</div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · MxStudySessionTemplate ============ -->
+  <section class="mx-section mx-anchor" id="study">
+    <h2>3 · MxStudySessionTemplate</h2>
+    <p>The focused study template. A centred study <code>MxTopBar</code> (close + audio), an
+      <code>MxStudyProgressBar</code>, the mode area (<code>MxStudyCard</code> + mode primitive), and
+      inline/bottom answer actions. This is the only template that wraps in <code>MxStudyShell</code>.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">study MxTopBar · close + audio</span>
+      <span class="mx-tag">MxStudyProgressBar</span>
+      <span class="mx-tag">mode area</span>
+      <span class="mx-tag">answer / reveal action</span>
+      <span class="mx-tag space">keyboard-aware (fill mode)</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div class="ph-status" style="justify-content:space-between;height:auto;padding:var(--mx-space-12) var(--mx-space-16) var(--mx-space-4)">
+          <span class="mx-tag">✕ close</span>
+          <span style="color:var(--mx-color-text-tertiary);font:var(--mx-weight-semibold) 12px var(--mx-font-mono)">7 / 20</span>
+          <span class="mx-tag">♪ audio</span>
+        </div>
+        <div style="padding:0 var(--mx-space-16) var(--mx-space-12)"><div style="height:6px;border-radius:var(--mx-radius-pill);background:var(--mx-color-state-loadingSurface)"><div style="width:35%;height:100%;border-radius:var(--mx-radius-pill);background:var(--mx-color-srs-active)"></div></div></div>
+        <div class="ph-scroll">
+          <div style="min-height:var(--mx-size-study-card-min-height);border:var(--mx-border-default);border-radius:var(--mx-radius-xl);background:var(--mx-color-surface-card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--mx-space-12);padding:var(--mx-space-24);margin-top:var(--mx-space-8)">
+            <span class="mx-korean" style="font:var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size) var(--mx-font-korean);color:var(--mx-color-text-primary)">안녕하세요</span>
+            <span class="mx-tag">MxStudyCard prompt</span>
+          </div>
+          <div style="margin-top:var(--mx-space-16)"><span class="mx-tag">fill input slot</span></div>
+          <div style="height:var(--mx-size-input-height);border:var(--mx-border-default);border-radius:var(--mx-radius-sm);background:var(--mx-color-surface-base);margin-top:var(--mx-space-8);display:flex;align-items:center;padding:0 var(--mx-space-16);color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-medium-size)">Type the meaning…</div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Check</span>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div class="ph-status" style="justify-content:space-between;height:auto;padding:var(--mx-space-12) var(--mx-space-16) var(--mx-space-4)">
+          <span class="mx-tag">✕ close</span>
+          <span style="color:var(--mx-color-text-tertiary);font:var(--mx-weight-semibold) 12px var(--mx-font-mono)">7 / 20</span>
+          <span class="mx-tag">♪ audio</span>
+        </div>
+        <div style="padding:0 var(--mx-space-16) var(--mx-space-12)"><div style="height:6px;border-radius:var(--mx-radius-pill);background:var(--mx-color-state-loadingSurface)"><div style="width:35%;height:100%;border-radius:var(--mx-radius-pill);background:var(--mx-color-srs-active)"></div></div></div>
+        <div class="ph-scroll">
+          <div style="min-height:var(--mx-size-study-card-min-height);border:var(--mx-border-default);border-radius:var(--mx-radius-xl);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--mx-space-12);padding:var(--mx-space-24);margin-top:var(--mx-space-8)">
+            <span class="mx-korean" style="font:var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size) var(--mx-font-korean);color:var(--mx-color-text-primary)">안녕하세요</span>
+            <span class="mx-tag">MxStudyCard prompt</span>
+          </div>
+          <div style="margin-top:var(--mx-space-16)"><span class="mx-tag">fill input slot</span></div>
+          <div style="height:var(--mx-size-input-height);border:var(--mx-border-default);border-radius:var(--mx-radius-sm);background:var(--mx-color-surface-base);margin-top:var(--mx-space-8);display:flex;align-items:center;padding:0 var(--mx-space-16);color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-medium-size)">Type the meaning…</div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Check</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxStudySessionTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Study top bar</td><td class="tok">MxTopBar (study)</td><td>Centred count; close (left) + audio (right); sticky.</td></tr>
+        <tr><td>Progress</td><td class="tok">MxStudyProgressBar</td><td>Directly under bar; non-scrolling.</td></tr>
+        <tr><td>Mode area</td><td class="tok">MxStudyCard + MxFillInputPanel / MxAnswerOption / MxMatchTile / MxRecallPanel</td><td>Prompt + one mode primitive; scrolls if content overflows.</td></tr>
+        <tr><td>Answer action</td><td class="tok">MxActionButton</td><td>Check / Reveal; sticky above keyboard in fill mode.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: prompt area scrolls if a Korean/Vietnamese answer wraps.
+        Safe-area: bottom action insets. Keyboard: fill mode wraps in <code>KeyboardAvoidingView</code>
+        so the input + Check stay above the keyboard. Actions: one primary (Check/Reveal) per step.</div>
+      <div class="mx-dont"><b></b>Shrink the Korean prompt below 34px to avoid scroll, or let the keyboard
+        cover the input / Check action.</div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · MxModalMenuTemplate ============ -->
+  <section class="mx-section mx-anchor" id="modal">
+    <h2>4 · MxModalMenuTemplate</h2>
+    <p>A scrim + bottom <code>MxModalSheet</code>: grab handle, title, a list of <code>MxListRow</code>
+      option rows, and an optional action row. The Play Menu uses this.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">scrim</span>
+      <span class="mx-tag">MxModalSheet · grab handle</span>
+      <span class="mx-tag">option MxListRow ×N</span>
+      <span class="mx-tag">optional action row</span>
+      <span class="mx-tag space">safe-area inset bottom</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div style="position:absolute;inset:0;background:var(--mx-color-overlay-scrim)"></div>
+        <div style="margin-top:auto;position:relative;background:var(--mx-color-surface-modal);border-top-left-radius:var(--mx-radius-xl);border-top-right-radius:var(--mx-radius-xl);box-shadow:var(--mx-elevation-sheet);padding:var(--mx-space-12) var(--mx-space-16) var(--mx-space-24)">
+          <div style="width:36px;height:4px;border-radius:var(--mx-radius-pill);background:var(--mx-color-border-strong);margin:0 auto var(--mx-space-16)"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--mx-space-12)"><span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Play menu</span><span class="mx-tag">title slot</span></div>
+          <div class="mx-stack" style="gap:var(--mx-space-8)">
+            <div style="height:var(--mx-size-list-row-height);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Flashcards<span class="mx-tag" style="margin-left:auto">option</span></div>
+            <div style="height:var(--mx-size-list-row-height);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Fill in blank<span class="mx-tag" style="margin-left:auto">option</span></div>
+            <div style="height:var(--mx-size-list-row-height);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Multiple choice<span class="mx-tag" style="margin-left:auto">option</span></div>
+          </div>
+          <div style="margin-top:var(--mx-space-16)"><span style="display:flex;height:var(--mx-size-button-height);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Start</span></div>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div style="position:absolute;inset:0;background:var(--mx-color-overlay-scrim)"></div>
+        <div style="margin-top:auto;position:relative;background:var(--mx-color-surface-modal);border-top-left-radius:var(--mx-radius-xl);border-top-right-radius:var(--mx-radius-xl);box-shadow:var(--mx-elevation-sheet);padding:var(--mx-space-12) var(--mx-space-16) var(--mx-space-24)">
+          <div style="width:36px;height:4px;border-radius:var(--mx-radius-pill);background:var(--mx-color-border-strong);margin:0 auto var(--mx-space-16)"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--mx-space-12)"><span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Play menu</span><span class="mx-tag">title slot</span></div>
+          <div class="mx-stack" style="gap:var(--mx-space-8)">
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-subtle);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Flashcards<span class="mx-tag" style="margin-left:auto">option</span></div>
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-subtle);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Fill in blank<span class="mx-tag" style="margin-left:auto">option</span></div>
+            <div style="height:var(--mx-size-list-row-height);border:var(--mx-border-subtle);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);color:var(--mx-color-text-primary);font:var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display)">Multiple choice<span class="mx-tag" style="margin-left:auto">option</span></div>
+          </div>
+          <div style="margin-top:var(--mx-space-16)"><span style="display:flex;height:var(--mx-size-button-height);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Start</span></div>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxModalMenuTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Scrim</td><td class="tok">overlay-scrim</td><td>Tap-to-dismiss; <code>layer=overlay</code>.</td></tr>
+        <tr><td>Sheet</td><td class="tok">MxModalSheet</td><td>Grab handle + title; anchored bottom, max-height 88vh.</td></tr>
+        <tr><td>Options</td><td class="tok">MxListRow ×N</td><td>Scrolls inside sheet if tall; 8px gap.</td></tr>
+        <tr><td>Action row</td><td class="tok">MxActionButton</td><td>Optional single primary; insets by safe-area.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: options scroll inside the sheet, not the page behind. Safe-area:
+        sheet padding respects bottom inset. Keyboard: n/a (menu). Actions: at most one primary in the
+        action row; option rows are neutral, not primary.</div>
+      <div class="mx-dont"><b></b>Stack two primaries, or make the whole page scroll behind the scrim —
+        the sheet owns its own scroll.</div>
+    </div>
+  </section>
+
+  <!-- ============ 5 · MxSettingsScreenTemplate ============ -->
+  <section class="mx-section mx-anchor" id="settings">
+    <h2>5 · MxSettingsScreenTemplate</h2>
+    <p>Grouped settings: a settings <code>MxTopBar</code> and stacked
+      <code>MxSettingsSection</code> + <code>MxSettingsRow</code> groups. Scrolls as one list; no sticky
+      bottom action.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">settings MxTopBar</span>
+      <span class="mx-tag">MxSettingsSection ×N</span>
+      <span class="mx-tag">MxSettingsRow · value / switch</span>
+      <span class="mx-tag space">mx-space-24 section</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div class="ph-status" style="justify-content:flex-start;height:auto;padding-top:0"><span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Settings</span></div>
+        <div class="ph-scroll">
+          <div style="padding:var(--mx-space-16) 0 var(--mx-space-8)"><span class="mx-h" style="margin:0">Study</span></div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);overflow:hidden">
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);border-bottom:var(--mx-border-subtle)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Daily goal</span><span class="mx-tag">20 · value</span></div>
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Sound</span><span style="width:40px;height:24px;border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);position:relative"><span style="position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:var(--mx-radius-full);background:var(--mx-color-text-onAction)"></span></span></div>
+          </div>
+          <div style="padding:var(--mx-space-24) 0 var(--mx-space-8)"><span class="mx-h" style="margin:0">Account</span></div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);overflow:hidden">
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);border-bottom:var(--mx-border-subtle)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Native language</span><span class="mx-tag">→</span></div>
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-destructive-text);font-size:var(--mx-text-body-medium-size)">Delete all data</span><span class="mx-tag" style="background:var(--mx-color-destructive-surface);color:var(--mx-color-destructive-text)">destructive</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div class="ph-status" style="justify-content:flex-start;height:auto;padding-top:0"><span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Settings</span></div>
+        <div class="ph-scroll">
+          <div style="padding:var(--mx-space-16) 0 var(--mx-space-8)"><span class="mx-h" style="margin:0">Study</span></div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);overflow:hidden">
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);border-bottom:var(--mx-border-subtle)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Daily goal</span><span class="mx-tag">20 · value</span></div>
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Sound</span><span style="width:40px;height:24px;border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);position:relative"><span style="position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:var(--mx-radius-full);background:var(--mx-color-text-onAction)"></span></span></div>
+          </div>
+          <div style="padding:var(--mx-space-24) 0 var(--mx-space-8)"><span class="mx-h" style="margin:0">Account</span></div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);overflow:hidden">
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16);border-bottom:var(--mx-border-subtle)"><span style="flex:1 1 auto;color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Native language</span><span class="mx-tag">→</span></div>
+            <div style="height:var(--mx-size-settings-row-height);display:flex;align-items:center;gap:var(--mx-space-12);padding:0 var(--mx-space-16)"><span style="flex:1 1 auto;color:var(--mx-color-destructive-text);font-size:var(--mx-text-body-medium-size)">Delete all data</span><span class="mx-tag" style="background:var(--mx-color-destructive-surface);color:var(--mx-color-destructive-text)">destructive</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxSettingsScreenTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Top bar</td><td class="tok">MxTopBar</td><td>Screen title; sticky.</td></tr>
+        <tr><td>Section</td><td class="tok">MxSettingsSection</td><td>Header + grouped card; 24px gap between sections.</td></tr>
+        <tr><td>Rows</td><td class="tok">MxSettingsRow / MxSwitch</td><td>Value, chevron, switch, or destructive; scrolls in <code>SectionList</code>.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: whole grouped list scrolls (<code>SectionList</code>). Safe-area:
+        top inset under status bar. Keyboard: only if a row opens an inline editor — then it wraps in
+        <code>KeyboardAvoidingView</code>. Actions: destructive rows use destructive styling, never a
+        page-level primary here.</div>
+      <div class="mx-dont"><b></b>Add a sticky bottom primary to a settings list, or style
+        "Delete all data" as a normal row — destructive intent must read as destructive.</div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · MxNestedSettingsScreenTemplate ============ -->
+  <section class="mx-section mx-anchor" id="nested">
+    <h2>6 · MxNestedSettingsScreenTemplate</h2>
+    <p>A single-topic settings sub-screen reached from the settings list: a back
+      <code>MxTopBar</code> and one focused group — reminder rows, language rows, or SRS rows. Reminder
+      &amp; Native Language flows use this.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">back MxTopBar</span>
+      <span class="mx-tag">single-topic content</span>
+      <span class="mx-tag">MxReminderRow / MxLanguageRow / MxWeekdayChip</span>
+      <span class="mx-tag space">mx-space-16 gutter</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div class="ph-status" style="justify-content:flex-start;gap:var(--mx-space-12);height:auto;padding-top:0"><span class="mx-tag">‹ back</span><span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Reminders</span></div>
+        <div class="ph-scroll">
+          <div style="padding:var(--mx-space-16) 0 var(--mx-space-8)"><span class="mx-tag">single topic · reminder</span></div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);padding:var(--mx-space-16)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--mx-space-16)"><span style="color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Daily reminder</span><span style="width:40px;height:24px;border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);position:relative"><span style="position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:var(--mx-radius-full);background:var(--mx-color-text-onAction)"></span></span></div>
+            <div style="display:flex;gap:var(--mx-space-8);flex-wrap:wrap"><span class="mx-tag">M</span><span class="mx-tag">T</span><span class="mx-tag" style="background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction)">W</span><span class="mx-tag">T</span><span class="mx-tag">F</span><span class="mx-tag">S</span><span class="mx-tag">S</span></div>
+            <div style="margin-top:var(--mx-space-16);padding-top:var(--mx-space-16);border-top:var(--mx-border-subtle);display:flex;justify-content:space-between;align-items:center"><span style="color:var(--mx-color-text-secondary);font-size:var(--mx-text-body-small-size)">Time</span><span class="mx-tabular" style="color:var(--mx-color-text-primary)">08:30</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div class="ph-status" style="justify-content:flex-start;gap:var(--mx-space-12);height:auto;padding-top:0"><span class="mx-tag">‹ back</span><span style="font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Reminders</span></div>
+        <div class="ph-scroll">
+          <div style="padding:var(--mx-space-16) 0 var(--mx-space-8)"><span class="mx-tag">single topic · reminder</span></div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-16)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--mx-space-16)"><span style="color:var(--mx-color-text-primary);font-size:var(--mx-text-body-medium-size)">Daily reminder</span><span style="width:40px;height:24px;border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);position:relative"><span style="position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:var(--mx-radius-full);background:var(--mx-color-text-onAction)"></span></span></div>
+            <div style="display:flex;gap:var(--mx-space-8);flex-wrap:wrap"><span class="mx-tag">M</span><span class="mx-tag">T</span><span class="mx-tag" style="background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction)">W</span><span class="mx-tag">T</span><span class="mx-tag">F</span><span class="mx-tag">S</span><span class="mx-tag">S</span></div>
+            <div style="margin-top:var(--mx-space-16);padding-top:var(--mx-space-16);border-top:var(--mx-border-subtle);display:flex;justify-content:space-between;align-items:center"><span style="color:var(--mx-color-text-secondary);font-size:var(--mx-text-body-small-size)">Time</span><span class="mx-tabular" style="color:var(--mx-color-text-primary)">08:30</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxNestedSettingsScreenTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Top bar</td><td class="tok">MxTopBar (back)</td><td>Back + topic title; sticky.</td></tr>
+        <tr><td>Content</td><td class="tok">MxReminderRow / MxLanguageRow / MxWeekdayChip / MxThemePresetTile</td><td>One focused topic; scrolls in <code>ScrollView</code>.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: single-column <code>ScrollView</code>. Safe-area: top inset.
+        Keyboard: time/label editors wrap in <code>KeyboardAvoidingView</code>. Actions: changes
+        auto-save; no page primary — a confirm only appears for a destructive sub-action.</div>
+      <div class="mx-dont"><b></b>Mix unrelated topics into one nested screen, or add a Save primary when
+        the pattern is auto-save.</div>
+    </div>
+  </section>
+
+  <!-- ============ 7 · MxStatisticsScreenTemplate ============ -->
+  <section class="mx-section mx-anchor" id="stats">
+    <h2>7 · MxStatisticsScreenTemplate</h2>
+    <p>Data screen: a <code>MxTopBar</code> + scope, a <code>MxSegmentedControl</code> tab row, a
+      <code>MxMetricCard</code> grid, and a <code>MxStatsChartPanel</code>. Scrolls as one column.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">MxTopBar + scope</span>
+      <span class="mx-tag">MxSegmentedControl</span>
+      <span class="mx-tag">MxMetricCard grid</span>
+      <span class="mx-tag">MxStatsChartPanel</span>
+      <span class="mx-tag space">mx-space-12 tile gap</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div class="ph-status" style="justify-content:flex-start;height:auto;padding-top:0"><span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Statistics</span></div>
+        <div class="ph-scroll">
+          <div style="display:flex;gap:var(--mx-space-4);background:var(--mx-color-surface-base);border-radius:var(--mx-radius-pill);padding:var(--mx-space-4);margin:var(--mx-space-16) 0"><span style="flex:1;text-align:center;border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);padding:var(--mx-space-6) 0;font-size:var(--mx-text-label-medium-size)">Week</span><span style="flex:1;text-align:center;color:var(--mx-color-text-secondary);padding:var(--mx-space-6) 0;font-size:var(--mx-text-label-medium-size)">Month</span><span style="flex:1;text-align:center;color:var(--mx-color-text-secondary);padding:var(--mx-space-6) 0;font-size:var(--mx-text-label-medium-size)">All</span></div>
+          <div class="mx-grid-2" style="gap:var(--mx-space-12)">
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);padding:var(--mx-space-16)"><span class="mx-tabular" style="display:block;font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-text-primary)">148</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">words</span></div>
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);padding:var(--mx-space-16)"><span class="mx-tabular" style="display:block;font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-text-primary)">92%</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">accuracy</span></div>
+          </div>
+          <div style="margin-top:var(--mx-space-16);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);padding:var(--mx-space-16);height:150px;display:flex;align-items:flex-end;gap:var(--mx-space-8)">
+            <span style="flex:1;height:40%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:70%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:55%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:85%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:60%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div class="ph-status" style="justify-content:flex-start;height:auto;padding-top:0"><span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Statistics</span></div>
+        <div class="ph-scroll">
+          <div style="display:flex;gap:var(--mx-space-4);background:var(--mx-color-surface-base);border:var(--mx-border-subtle);border-radius:var(--mx-radius-pill);padding:var(--mx-space-4);margin:var(--mx-space-16) 0"><span style="flex:1;text-align:center;border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);padding:var(--mx-space-6) 0;font-size:var(--mx-text-label-medium-size)">Week</span><span style="flex:1;text-align:center;color:var(--mx-color-text-secondary);padding:var(--mx-space-6) 0;font-size:var(--mx-text-label-medium-size)">Month</span><span style="flex:1;text-align:center;color:var(--mx-color-text-secondary);padding:var(--mx-space-6) 0;font-size:var(--mx-text-label-medium-size)">All</span></div>
+          <div class="mx-grid-2" style="gap:var(--mx-space-12)">
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-16)"><span class="mx-tabular" style="display:block;font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-text-primary)">148</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">words</span></div>
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-16)"><span class="mx-tabular" style="display:block;font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono);color:var(--mx-color-text-primary)">92%</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">accuracy</span></div>
+          </div>
+          <div style="margin-top:var(--mx-space-16);border:var(--mx-border-default);border-radius:var(--mx-radius-lg);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-16);height:150px;display:flex;align-items:flex-end;gap:var(--mx-space-8)">
+            <span style="flex:1;height:40%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:70%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:55%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:85%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+            <span style="flex:1;height:60%;border-radius:var(--mx-radius-xs);background:var(--mx-color-chart-wordMetric)"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxStatisticsScreenTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Top bar + scope</td><td class="tok">MxTopBar</td><td>Title + scope label; sticky.</td></tr>
+        <tr><td>Tabs</td><td class="tok">MxSegmentedControl</td><td>Week / Month / All; switches data in place.</td></tr>
+        <tr><td>Metric grid</td><td class="tok">MxMetricCard ×N</td><td>2-up grid, 12px gap; tabular numbers.</td></tr>
+        <tr><td>Chart</td><td class="tok">MxStatsChartPanel</td><td>Scrolls in a <code>ScrollView</code>; has its own empty state.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: whole column scrolls. Safe-area: top inset. Keyboard: n/a.
+        Actions: no primary — this is a read screen; scope changes happen via the segmented control.
+        Empty data renders the chart's empty state, never a broken axis.</div>
+      <div class="mx-dont"><b></b>Add a sticky CTA to a stats screen, or hide the tabs behind a menu —
+        scope must be one tap.</div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · MxResultScreenTemplate ============ -->
+  <section class="mx-section mx-anchor" id="result">
+    <h2>8 · MxResultScreenTemplate</h2>
+    <p>End-of-session summary: a study <code>MxTopBar</code>, a <code>MxSessionResultSummary</code>
+      (score + breakdown), and bottom CTAs (Done / Study more).</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">study MxTopBar</span>
+      <span class="mx-tag">MxSessionResultSummary</span>
+      <span class="mx-tag">bottom CTAs ×2</span>
+      <span class="mx-tag space">safe-area inset bottom</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · default</span>
+        <div class="ph-status" style="justify-content:center;height:auto;padding-top:var(--mx-space-12)"><span style="color:var(--mx-color-text-primary);font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display)">Session complete</span></div>
+        <div class="ph-scroll">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:var(--mx-space-8);padding:var(--mx-space-32) 0 var(--mx-space-24)">
+            <span class="mx-tabular" style="font:var(--mx-weight-bold) 56px var(--mx-font-mono);color:var(--mx-color-feedback-correct)">92%</span>
+            <span class="mx-tag">MxSessionResultSummary</span>
+          </div>
+          <div class="mx-grid-2" style="gap:var(--mx-space-12)">
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);padding:var(--mx-space-16);text-align:center"><span class="mx-tabular" style="display:block;color:var(--mx-color-feedback-correct);font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono)">23</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">correct</span></div>
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);padding:var(--mx-space-16);text-align:center"><span class="mx-tabular" style="display:block;color:var(--mx-color-feedback-wrong);font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono)">2</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">wrong</span></div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);border:var(--mx-border-strong);color:var(--mx-color-text-primary);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Done</span>
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Study more</span>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · parity</span>
+        <div class="ph-status" style="justify-content:center;height:auto;padding-top:var(--mx-space-12)"><span style="color:var(--mx-color-text-primary);font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display)">Session complete</span></div>
+        <div class="ph-scroll">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:var(--mx-space-8);padding:var(--mx-space-32) 0 var(--mx-space-24)">
+            <span class="mx-tabular" style="font:var(--mx-weight-bold) 56px var(--mx-font-mono);color:var(--mx-color-feedback-correct)">92%</span>
+            <span class="mx-tag">MxSessionResultSummary</span>
+          </div>
+          <div class="mx-grid-2" style="gap:var(--mx-space-12)">
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-16);text-align:center"><span class="mx-tabular" style="display:block;color:var(--mx-color-feedback-correct);font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono)">23</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">correct</span></div>
+            <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-md);background:var(--mx-color-surface-card);box-shadow:var(--mx-elevation-low);padding:var(--mx-space-16);text-align:center"><span class="mx-tabular" style="display:block;color:var(--mx-color-feedback-wrong);font:var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size) var(--mx-font-mono)">2</span><span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size)">wrong</span></div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);border:var(--mx-border-strong);color:var(--mx-color-text-primary);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Done</span>
+          <span style="flex:1 1 auto;height:var(--mx-size-button-height-bottom);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;justify-content:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · Study more</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxResultScreenTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Top bar</td><td class="tok">MxTopBar (study)</td><td>Centred "complete" title; no close (session ended).</td></tr>
+        <tr><td>Summary</td><td class="tok">MxSessionResultSummary</td><td>Score + correct/wrong breakdown; scrolls if long.</td></tr>
+        <tr><td>Bottom CTAs</td><td class="tok">MxActionButton ×2</td><td>Secondary (Done) + one primary (Study more); insets.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: summary scrolls if the breakdown is long. Safe-area: CTA row
+        insets. Keyboard: n/a. Actions: exactly one primary (Study more); Done is the secondary escape.</div>
+      <div class="mx-dont"><b></b>Make both CTAs primary, or use wrong-red for the score — correct-green /
+        amber express performance, red is reserved for errors.</div>
+    </div>
+  </section>
+
+  <!-- ============ 9 · MxEmptyErrorScreenTemplate ============ -->
+  <section class="mx-section mx-anchor" id="empty">
+    <h2>9 · MxEmptyErrorScreenTemplate</h2>
+    <p>The zero/failure template: a <code>MxTopBar</code> and a centred <code>MxEmptyState</code>
+      <b>or</b> <code>MxErrorState</code> — never confused. Empty = nothing yet (neutral, inviting);
+      Error = something failed (retry).</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag">MxTopBar</span>
+      <span class="mx-tag">centred MxEmptyState</span>
+      <span class="mx-tag">or MxErrorState</span>
+      <span class="mx-tag">single recovery action</span>
+      <span class="mx-tag space">mx-space-48 breathing room</span>
+    </div>
+
+    <div class="mx-phones">
+      <div class="mx-phone">
+        <span class="ph-cap">Dark · empty</span>
+        <div class="ph-status" style="justify-content:flex-start;height:auto;padding-top:0"><span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Decks</span></div>
+        <div class="ph-scroll" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:var(--mx-space-16);padding-top:var(--mx-space-48)">
+          <span style="width:64px;height:64px;border-radius:var(--mx-radius-full);background:var(--mx-color-state-selectedSurface)"></span>
+          <span style="color:var(--mx-color-text-primary);font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display)">No decks yet</span>
+          <span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-medium-size);max-width:24ch">Create your first deck to start learning.</span>
+          <span style="height:var(--mx-size-button-height);padding:0 var(--mx-space-24);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);display:flex;align-items:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Primary · New deck</span>
+          <span class="mx-tag">MxEmptyState</span>
+        </div>
+      </div>
+
+      <div class="mx-phone" data-theme="light">
+        <span class="ph-cap">Light · error</span>
+        <div class="ph-status" style="justify-content:flex-start;height:auto;padding-top:0"><span style="font:var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display);color:var(--mx-color-text-primary)">Decks</span></div>
+        <div class="ph-scroll" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:var(--mx-space-16);padding-top:var(--mx-space-48)">
+          <span style="width:64px;height:64px;border-radius:var(--mx-radius-full);background:var(--mx-color-feedback-wrongSurface)"></span>
+          <span style="color:var(--mx-color-text-primary);font:var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size) var(--mx-font-display)">Couldn't load</span>
+          <span style="color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-medium-size);max-width:24ch">Something went wrong reading your data.</span>
+          <span style="height:var(--mx-size-button-height);padding:0 var(--mx-space-24);border-radius:var(--mx-radius-pill);border:var(--mx-border-strong);color:var(--mx-color-text-primary);display:flex;align-items:center;font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display)">Retry</span>
+          <span class="mx-tag" style="background:var(--mx-color-feedback-wrongSurface);color:var(--mx-color-feedback-wrong)">MxErrorState</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxEmptyErrorScreenTemplate · region spec</caption>
+      <thead><tr><th>Region</th><th>Component slot</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Top bar</td><td class="tok">MxTopBar</td><td>Same bar as the populated screen; sticky.</td></tr>
+        <tr><td>Empty</td><td class="tok">MxEmptyState</td><td>Neutral illustration + invite + one primary; centred.</td></tr>
+        <tr><td>Error</td><td class="tok">MxErrorState</td><td>Wrong-tinted glyph + cause + Retry (secondary); centred.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Scroll: content is centred and fits; scrolls only if long. Safe-area: top
+        inset. Keyboard: n/a. Actions: empty offers one primary (create); error offers one recovery
+        (Retry). The two states are distinct — never one styled as the other.</div>
+      <div class="mx-dont"><b></b>Use wrong-red for an empty state, or show a raw stack trace — error
+        copy names the cause in one line.</div>
+    </div>
+  </section>
+
+  <!-- ============ RN PRIMITIVE MAPPING ============ -->
+  <section class="mx-section mx-anchor" id="rn-map">
+    <h2>React Native primitive mapping</h2>
+    <p>Each region concept above maps to a fixed React Native primitive and a fixed Mx shell/component
+      that wraps it. Templates never re-declare these — they compose the shells and fill the slots.</p>
+
+    <table class="mx-spec">
+      <caption>Region concept → RN primitive → Mx wrapper</caption>
+      <thead><tr><th>Region concept</th><th>RN primitive</th><th>Mx shell / component</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Safe-area root</td><td class="tok">SafeAreaView</td><td class="tok">MxSafeAreaShell / MxAppShell</td><td>Applies top + bottom insets; every screen roots here.</td></tr>
+        <tr><td>Screen frame</td><td class="tok">View</td><td class="tok">MxScreen</td><td>App background token + section rhythm.</td></tr>
+        <tr><td>Top bar</td><td class="tok">View + Pressable</td><td class="tok">MxTopBar</td><td>Sticky at <code>layer=sticky</code>; title + icon slots.</td></tr>
+        <tr><td>Text / label</td><td class="tok">Text</td><td class="tok">MxText (role)</td><td>Role, never raw <code>fontSize</code>.</td></tr>
+        <tr><td>Tap target</td><td class="tok">Pressable</td><td class="tok">MxActionButton / MxIconButton</td><td>44px min touch target.</td></tr>
+        <tr><td>Scroll body (freeform)</td><td class="tok">ScrollView</td><td class="tok">MxContentShell</td><td>Settings sub-screens, stats, result summary.</td></tr>
+        <tr><td>Long list</td><td class="tok">FlatList</td><td class="tok">MxContentShell</td><td>Deck / subdeck lists — virtualised rows.</td></tr>
+        <tr><td>Grouped list</td><td class="tok">SectionList</td><td class="tok">MxContentShell</td><td>Settings sections with headers.</td></tr>
+        <tr><td>Modal / sheet</td><td class="tok">Modal</td><td class="tok">MxModalSheet</td><td>Scrim + bottom sheet; owns its own scroll.</td></tr>
+        <tr><td>Text input</td><td class="tok">TextInput</td><td class="tok">MxFillInputPanel</td><td>Wrapped in <code>KeyboardAvoidingView</code>.</td></tr>
+        <tr><td>Study frame</td><td class="tok">View</td><td class="tok">MxStudyShell</td><td>Study bar + progress + mode area + answer action.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="mx-rn"><b>React Native handoff</b> Templates are the <b>region contract</b>: a screen picks
+      a template, fills each slot with Mx components, and <b>never re-implements the shell</b>. Bottom
+      actions respect <code>SafeAreaView</code> insets (<code>--mx-layout-bottom-action-inset</code>);
+      any form (Study fill, Settings editors) wraps its inputs in <code>KeyboardAvoidingView</code> so
+      the field and its primary action stay above the keyboard. One primary per region, placed near the
+      bottom; destructive uses destructive tokens, never a normal primary.</div>
+  </section>
+
+  <!-- ============ GOLDEN REFERENCES ============ -->
+  <section class="mx-section mx-anchor" id="golden">
+    <h2>Golden references — templates filled with real Mx components</h2>
+    <p>The abstract skeletons above become these when a screen fills every slot. Each golden card renders
+      in dark and light and is the mimic target for its template family.</p>
+
+    <figure class="mx-embed"><figcaption>Golden · Deck / Home — MxListScreenTemplate <span class="path">guidelines/golden-deck.card.html</span></figcaption>
+      <iframe src="../guidelines/golden-deck.card.html" height="900" loading="lazy" title="Golden deck / home screen"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Golden · Study Session — MxStudySessionTemplate <span class="path">guidelines/golden-study.card.html</span></figcaption>
+      <iframe src="../guidelines/golden-study.card.html" height="900" loading="lazy" title="Golden study session screen"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Golden · Settings — MxSettingsScreenTemplate <span class="path">guidelines/golden-settings.card.html</span></figcaption>
+      <iframe src="../guidelines/golden-settings.card.html" height="900" loading="lazy" title="Golden settings screen"></iframe></figure>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav"><a href="index.html">‹ Index</a><a href="10-state-gallery.html">‹ 10 State Gallery</a><a href="12-composition-recipe-gallery.html">12 Composition Recipes ›</a></nav>
+</main>
+
+</body>
+</html>

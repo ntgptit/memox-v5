@@ -33,7 +33,7 @@ A future screen is **not done** until every applicable item passes.
 - [ ] Statistics is long-term analytics, not a Session Result.
 - [ ] High-risk data actions have confirmation / policy state.
 
-## Flutter handoff
+## React Native handoff
 - [ ] Component-mapping table complete.
 - [ ] State list complete.
 - [ ] Data dependencies listed; mutation actions listed.

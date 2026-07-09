@@ -1,0 +1,119 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x2800" name="15 · Mx Kit QA Checklist" subtitle="Naming, parity, components, composition, states, RN handoff, quality bar — before product design" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>15 · Mx Kit QA Checklist</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 15 QA Checklist</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="14-react-native-handoff-gallery.html">‹ Prev</a>
+    <a href="index.html">Index ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 15</p>
+  <h1 class="mx-title">Mx Kit QA Checklist</h1>
+  <p class="mx-lead">
+    Run this before any MemoX product screen is designed on top of the kit. It validates that the kit is
+    complete enough to design and implement from — naming, dark/light parity, component coverage,
+    composition, states, and React Native handoff. Boxes are for a single review pass (state is not saved).
+  </p>
+  <div class="mx-note"><b>Quality bar</b> The kit passes only when a future designer can build screens using
+    <b>only</b> these pages, an RN agent can implement the shared components from them, and both themes plus
+    all non-happy states are documented and unambiguous.</div>
+
+  <section class="mx-section mx-anchor" id="naming">
+    <h2>Naming</h2>
+    <ul class="mx-check">
+      <li><input type="checkbox" id="n1"><label for="n1">All reusable components use the <code>Mx</code> PascalCase prefix (<code>MxCard</code>, <code>MxActionButton</code>, <code>MxSettingsRow</code>).</label></li>
+      <li><input type="checkbox" id="n2"><label for="n2">All tokens use the <code>mx</code> lowercase prefix (<code>--mx-color-*</code>, <code>--mx-space-*</code>, <code>--mx-radius-*</code>).</label></li>
+      <li><input type="checkbox" id="n3"><label for="n3">No generic component names anywhere (no <code>Card</code>, <code>Button</code>, <code>Row</code>, <code>Modal</code>).</label></li>
+      <li><input type="checkbox" id="n4"><label for="n4">Screen-specific components stay unprefixed until promoted into the kit.</label></li>
+    </ul>
+  </section>
+
+  <section class="mx-section mx-anchor" id="darklight">
+    <h2>Dark / light</h2>
+    <ul class="mx-check">
+      <li><input type="checkbox" id="d1"><label for="d1">Every semantic token defines a dark <b>and</b> a light value.</label></li>
+      <li><input type="checkbox" id="d2"><label for="d2">Every component has documented dark and light behaviour (via the duo pattern, one component, theme tokens).</label></li>
+      <li><input type="checkbox" id="d3"><label for="d3">Every state is distinguishable in both themes.</label></li>
+      <li><input type="checkbox" id="d4"><label for="d4">Light is production-ready, not a mechanical inversion; no <code>MxDarkCard</code>/<code>MxLightCard</code> duplicates.</label></li>
+    </ul>
+  </section>
+
+  <section class="mx-section mx-anchor" id="components">
+    <h2>Components</h2>
+    <ul class="mx-check">
+      <li><input type="checkbox" id="c1"><label for="c1">Every component documents its variants and states.</label></li>
+      <li><input type="checkbox" id="c2"><label for="c2">Every component names its token usage.</label></li>
+      <li><input type="checkbox" id="c3"><label for="c3">Every component has accessibility notes (touch target, label, colour-plus-glyph).</label></li>
+      <li><input type="checkbox" id="c4"><label for="c4">Every component has a React Native handoff name (built or clearly marked contract).</label></li>
+    </ul>
+  </section>
+
+  <section class="mx-section mx-anchor" id="composition">
+    <h2>Composition</h2>
+    <ul class="mx-check">
+      <li><input type="checkbox" id="p1"><label for="p1">Spacing rules are visible (one rhythm from <code>mx.space</code> tokens).</label></li>
+      <li><input type="checkbox" id="p2"><label for="p2">Typography hierarchy is visible (one dominant task per screen).</label></li>
+      <li><input type="checkbox" id="p3"><label for="p3">Action hierarchy is visible (≤1 primary per region; destructive never styled as normal primary).</label></li>
+      <li><input type="checkbox" id="p4"><label for="p4">No card-in-card patterns.</label></li>
+      <li><input type="checkbox" id="p5"><label for="p5">No random spacing; no border/divider overuse.</label></li>
+    </ul>
+  </section>
+
+  <section class="mx-section mx-anchor" id="states">
+    <h2>States</h2>
+    <ul class="mx-check">
+      <li><input type="checkbox" id="s1"><label for="s1">Loading / empty / error / unavailable / no-due / finalize-failed are all covered.</label></li>
+      <li><input type="checkbox" id="s2"><label for="s2">Destructive / high-risk states are covered and visually stronger than a normal confirm.</label></li>
+      <li><input type="checkbox" id="s3"><label for="s3">Long Korean / Vietnamese content is covered (wraps or truncates per role; never shrinks below readable size).</label></li>
+      <li><input type="checkbox" id="s4"><label for="s4">The dangerous confusions are visually separated: selected≠correct, wrong≠destructive, due(amber)≠error(red), no-due≠error.</label></li>
+    </ul>
+  </section>
+
+  <section class="mx-section mx-anchor" id="rn">
+    <h2>React Native handoff</h2>
+    <ul class="mx-check">
+      <li><input type="checkbox" id="r1"><label for="r1">All key components map to Mx shared component names.</label></li>
+      <li><input type="checkbox" id="r2"><label for="r2">Guard rules are documented (no raw colour/spacing/type; no one-off StyleSheet duplicating kit components).</label></li>
+      <li><input type="checkbox" id="r3"><label for="r3">No raw styles are required to implement the examples.</label></li>
+      <li><input type="checkbox" id="r4"><label for="r4">Safe-area strategy is documented (in <code>MxAppShell</code>/<code>MxScreen</code>).</label></li>
+      <li><input type="checkbox" id="r5"><label for="r5">Keyboard-avoidance strategy is documented (fill/input/settings forms).</label></li>
+      <li><input type="checkbox" id="r6"><label for="r6">Dark/light theme resolver is documented (<code>MxThemeProvider</code>/<code>MxThemeResolver</code>/<code>useMxTheme</code>); no raw <code>useColorScheme</code> branching in screens.</label></li>
+    </ul>
+  </section>
+
+  <section class="mx-section mx-anchor" id="quality">
+    <h2>Quality bar</h2>
+    <ul class="mx-check">
+      <li><input type="checkbox" id="q1"><label for="q1">Future product screens can be designed using only these kit screens.</label></li>
+      <li><input type="checkbox" id="q2"><label for="q2">Future React Native agents can implement shared components from these pages.</label></li>
+      <li><input type="checkbox" id="q3"><label for="q3">Dark and light are equally documented.</label></li>
+      <li><input type="checkbox" id="q4"><label for="q4">Component states are visible and unambiguous.</label></li>
+      <li><input type="checkbox" id="q5"><label for="q5">Composition rules are demonstrated visually, not only described.</label></li>
+      <li><input type="checkbox" id="q6"><label for="q6">Korean/Vietnamese long content is tested in examples.</label></li>
+      <li><input type="checkbox" id="q7"><label for="q7">The kit screens make style drift obvious.</label></li>
+    </ul>
+  </section>
+
+  <hr class="mx-rule" />
+  <p class="mx-muted" style="font-size:13px">Related base-kit sources:
+    <a href="../guidelines/ui-definition-of-done.md">ui-definition-of-done.md</a> ·
+    <a href="../guidelines/visual-review-checklist.md">visual-review-checklist.md</a>. This checklist
+    consolidates them for the kit-screens layer with the React Native handoff added.</p>
+  <nav class="mx-doc-nav"><a href="14-react-native-handoff-gallery.html">‹ 14 RN Handoff</a><a href="index.html">00 Index ›</a></nav>
+</main>
+
+</body>
+</html>

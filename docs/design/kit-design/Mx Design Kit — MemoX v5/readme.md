@@ -3,7 +3,7 @@
 The living design foundation (**Mx Base Mobile Design Kit**) for **MemoX v5**, a local-first mobile
 flashcard / spaced-repetition (SRS) learning app. This kit is the **single source of truth** for design
 tokens, dark/light themes, layout, typography, colour roles, component primitives, interaction states,
-accessibility, Flutter handoff, and governance. It is a **foundation**, not a set of finished product
+accessibility, React Native handoff, and governance. It is a **foundation**, not a set of finished product
 screens — future screen designs must be built from these tokens and components.
 
 > **Prefix contract.** Every reusable kit asset is prefixed **`Mx`** (components: `MxCard`) or
@@ -107,8 +107,8 @@ See the **Design System tab** for live specimen cards (Colors, Type, Spacing, Br
 - **App source:** MemoX declares **`expo-symbols`** (Apple **SF Symbols**) in `package.json` and ships
   no custom icon set. SF Symbols are iOS-only and not usable in cross-platform web mocks.
 - **Kit substitution (flagged):** this kit uses **Lucide** (`lucide@0.454.0` via CDN) — a calm, 2px
-  rounded-stroke set that closely matches the SF Symbols feel. **This is a substitution**; for Flutter/RN
-  production, map to the platform SF Symbols / a Material equivalent with the same names. See
+  rounded-stroke set that closely matches the SF Symbols feel. **This is a substitution**; for React
+  Native production, map to the platform SF Symbols / a Material equivalent with the same names. See
   [Open questions](#open-questions).
 - **Rules (from the specs):** icons are **secondary to labels** for critical actions; every icon-only
   action needs a semantic label (enforced by `MxIconButton`'s required `label`). Destructive icons use the
@@ -173,13 +173,15 @@ additional scopes without new components. There are **no** theme-specific duplic
 
 ---
 
-## Flutter handoff (summary)
+## React Native handoff (summary)
 
-Design names map **1:1** to shared Flutter widgets/token classes. Full mapping in
-[`guidelines/flutter-handoff.md`](guidelines/flutter-handoff.md). Rules: no raw colours/spacing/type; one
-`MxThemeResolver`; widgets consume `Mx` semantic tokens; no per-screen brightness checks; study progress
-always via `MxStudyProgressBar`; settings rows via `MxSettingsRow`; charts via `MxStatsChartPanel`/chart
-tokens; destructive actions via destructive token + confirm pattern.
+The app target is **Expo SDK 57 · React Native · TypeScript · NativeWind**. Design names map **1:1** to
+shared React Native components / token modules. Full mapping in the **React Native Handoff Gallery**
+([`kit-screens/14-react-native-handoff-gallery.html`](kit-screens/14-react-native-handoff-gallery.html)).
+Rules: no raw colours/spacing/type; one `MxThemeProvider` / `MxThemeResolver` (read via `useMxTheme()`);
+components consume `Mx` semantic tokens; no per-screen `useColorScheme` branching; study progress always via
+`MxStudyProgressBar`; settings rows via `MxSettingsRow`; charts via `MxStatsChartPanel`/chart tokens;
+destructive actions via destructive token + confirm pattern.
 
 ---
 
@@ -205,7 +207,7 @@ references:
   Settings) with component-mapping + annotations; live in `ui_kits/memox-app/`.
 - [`guidelines/ui-definition-of-done.md`](guidelines/ui-definition-of-done.md) — the per-screen DoD checklist.
 - [`guidelines/visual-review-checklist.md`](guidelines/visual-review-checklist.md) — design-review agent checklist + bug format.
-- [`guidelines/flutter-composition-guard.md`](guidelines/flutter-composition-guard.md) — Flutter guard/lint rules.
+- [`kit-screens/14-react-native-handoff-gallery.html`](kit-screens/14-react-native-handoff-gallery.html) — React Native guard/lint rules.
 - [`guidelines/screenshot-review-loop.md`](guidelines/screenshot-review-loop.md) — the visual-verification loop.
 - [`guidelines/composition-governance.md`](guidelines/composition-governance.md) — how the layers fit + change flow.
 
@@ -241,11 +243,12 @@ guidelines/
   state-gallery-{dark,light}.card.html + state-gallery.jsx  → every state, both themes
   layout-templates.md      → the 9 named Mx layout templates + regions
   governance.md            → full governance rules + Do/Don't
-  flutter-handoff.md       → token/widget/theme mapping for Flutter
   — UI Composition Grammar —
   composition-grammar.md · screen-recipes.md · golden-screens.md
   ui-definition-of-done.md · visual-review-checklist.md
-  flutter-composition-guard.md · screenshot-review-loop.md · composition-governance.md
+  screenshot-review-loop.md · composition-governance.md
+kit-screens/
+  index.html + 01..15      → Mx Kit Screens (galleries + React Native handoff, page 14)
   grammar-*.card.html      → Composition cards (spacing, hierarchy, actions, states)
   golden-*.card.html       → Golden Screens cards (embed live screens)
 ui_kits/memox-app/

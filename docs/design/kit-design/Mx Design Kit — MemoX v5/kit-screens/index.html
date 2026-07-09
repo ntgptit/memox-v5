@@ -1,0 +1,165 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x2400" name="00 · Mx Kit Index" subtitle="What the kit is, how to use it, naming + parity + no-raw rules, and links to every page" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>00 · Mx Kit Index</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 00 Index</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="#pages">Pages</a>
+    <a href="01-token-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">MemoX v5 · Mx Base Mobile Design Kit</p>
+  <h1 class="mx-title">Mx Design Kit Screens</h1>
+  <p class="mx-lead">
+    The internal design-kit screens that <b>document, demonstrate, and validate</b> the Mx Base Mobile
+    Design Kit — the visual source of truth for every future MemoX product screen and its React Native
+    implementation. Every page here composes the real <span class="tok">mx</span> tokens and
+    <span class="tok">Mx</span> components already in this kit; nothing is a second, parallel kit.
+  </p>
+
+  <div class="mx-callouts">
+    <div class="mx-do"><b></b>Use these pages to design new screens from existing tokens, components,
+      layout templates, and composition recipes. Map every design decision to an <span class="tok">Mx</span>
+      component and <span class="tok">mx</span> token before drawing anything custom.</div>
+    <div class="mx-dont"><b></b>Treat these as final product screens, invent new business behavior,
+      hardcode a colour/spacing/font, or create a screen-specific reusable component. Sample frames exist
+      only to demonstrate the kit.</div>
+  </div>
+
+  <!-- ============ WHAT IT IS / IS NOT ============ -->
+  <section class="mx-section mx-anchor" id="about">
+    <h2>What the kit is — and is not</h2>
+    <div class="mx-grid-2">
+      <div class="mx-panel">
+        <p class="mx-h">The kit is</p>
+        <ul style="margin:0;padding-left:18px;color:var(--mx-color-text-secondary);line-height:1.7;font-size:15px">
+          <li>The single source of truth for tokens, themes, type, spacing, components, states.</li>
+          <li>A foundation — vocabulary (tokens + components) plus grammar (composition rules).</li>
+          <li>Dark-first, light production-ready — <b>both</b> documented equally.</li>
+          <li>A React Native handoff contract for implementation agents.</li>
+        </ul>
+      </div>
+      <div class="mx-panel">
+        <p class="mx-h">The kit is not</p>
+        <ul style="margin:0;padding-left:18px;color:var(--mx-color-text-secondary);line-height:1.7;font-size:15px">
+          <li>Final Deck / Study / Settings / Statistics product screens.</li>
+          <li>A place to invent business rules (Box 0 activation, 5-mode flow, read-only Review Words).</li>
+          <li>A second design kit — it references the base kit, never duplicates it.</li>
+          <li>A React Native implementation — it is the design + handoff, not the app.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW TO USE ============ -->
+  <section class="mx-section mx-anchor" id="how">
+    <h2>How to use these screens</h2>
+    <h3>If you design future product screens</h3>
+    <p>Start at the layout template that matches your screen (<a href="11-layout-template-gallery.html">Page 11</a>),
+      copy its region structure, then fill regions with <span class="tok">Mx</span> components from the
+      component galleries (<a href="05-core-component-gallery.html">05</a>–<a href="09-feedback-dialog-gallery.html">09</a>).
+      Check spacing/typography/action hierarchy against the composition recipes
+      (<a href="12-composition-recipe-gallery.html">Page 12</a>) and the mini golden samples
+      (<a href="13-mini-golden-samples.html">Page 13</a>). Design every applicable state from the
+      State Gallery (<a href="10-state-gallery.html">Page 10</a>). Validate against the QA checklist
+      (<a href="15-kit-qa-checklist.html">Page 15</a>) before handing off.</p>
+    <h3>If you implement in React Native</h3>
+    <p>Read the React Native Handoff Gallery (<a href="14-react-native-handoff-gallery.html">Page 14</a>)
+      first: it maps every kit name to a shared RN component, RN primitive, and token module, and lists
+      the guard rules. Resolve tokens through one <code>MxThemeProvider</code> / <code>MxThemeResolver</code>;
+      never branch on <code>useColorScheme</code> into raw colours inside a screen.</p>
+  </section>
+
+  <!-- ============ NAMING ============ -->
+  <section class="mx-section mx-anchor" id="naming">
+    <h2>Naming convention</h2>
+    <table class="mx-spec">
+      <thead><tr><th>Rule</th><th>Convention</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Reusable component</td><td><code>Mx</code> PascalCase prefix</td><td><code>MxCard</code>, <code>MxActionButton</code>, <code>MxListRow</code>, <code>MxModalSheet</code>, <code>MxSettingsRow</code></td></tr>
+        <tr><td>Design token</td><td><code>mx</code> lowercase prefix</td><td><code>--mx-color-surface-card</code>, <code>--mx-space-16</code>, <code>--mx-radius-lg</code></td></tr>
+        <tr><td>Generic names</td><td>forbidden</td><td>never <code>Card</code>, <code>Button</code>, <code>Row</code>, <code>Modal</code></td></tr>
+        <tr><td>Screen-specific component</td><td>stays <b>unprefixed</b> until promoted into the kit</td><td>a one-off <code>DeckHeroBanner</code> — not <code>MxDeckHeroBanner</code> — until it enters the kit</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ PARITY + NO RAW ============ -->
+  <section class="mx-section mx-anchor" id="rules">
+    <h2>Two rules every page enforces</h2>
+    <div class="mx-grid-2">
+      <div class="mx-panel">
+        <p class="mx-h">Dark / light parity</p>
+        <p style="margin:0;color:var(--mx-color-text-secondary);font-size:15px;line-height:1.6">Every semantic
+          token defines a dark <b>and</b> a light value; every component works in both. There is exactly one
+          <span class="tok">MxCard</span> — never <code>MxDarkCard</code>/<code>MxLightCard</code>. Switching
+          theme is a visual preference only; it never mutates learning data. These pages show both themes
+          side by side (the <b>duo</b> pattern) so parity is provable, not assumed.</p>
+      </div>
+      <div class="mx-panel">
+        <p class="mx-h">No raw styles</p>
+        <p style="margin:0;color:var(--mx-color-text-secondary);font-size:15px;line-height:1.6">No raw colours,
+          no raw spacing, no arbitrary typography. Every visual value resolves to an <span class="tok">mx</span>
+          token. If a value you need isn't a token, the fix is to add a token to the kit — not to hardcode it
+          in a screen. This page's own chrome obeys the rule.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GOVERNANCE ============ -->
+  <section class="mx-section mx-anchor" id="governance">
+    <h2>Governance summary</h2>
+    <p>This kit is the living source of truth. New screen style requires <b>updating the kit first</b>.
+      New reusable components enter the kit <b>before</b> screen use. Screen-specific components stay
+      unprefixed until promoted. Full rules in
+      <a href="../guidelines/governance.md">guidelines/governance.md</a> and the change-flow in
+      <a href="../guidelines/composition-governance.md">composition-governance.md</a>.</p>
+    <div class="mx-rn"><b>React Native target note</b>
+      The real repo is Expo SDK 57 · React Native · TypeScript · NativeWind. The React Native handoff on
+      <a href="14-react-native-handoff-gallery.html">Page 14</a> is the single authoritative handoff for
+      implementation. The base kit's earlier Flutter handoff docs have been removed and every reference
+      repointed here (see <code>DRIFT-002 — RESOLVED</code> in the repo drift log).</div>
+  </section>
+
+  <!-- ============ PAGES ============ -->
+  <section class="mx-section mx-anchor" id="pages">
+    <h2>The 16 kit screens</h2>
+    <div class="mx-nav-grid">
+      <a class="mx-nav-card" href="01-token-gallery.html"><span class="num">01</span><span class="nm">Mx Token Gallery</span><span class="sub">Colour, type, spacing, radius, border, elevation, motion tokens — value, usage, do/don't, RN mapping.</span></a>
+      <a class="mx-nav-card" href="02-theme-gallery.html"><span class="num">02</span><span class="nm">Mx Theme Gallery</span><span class="sub">MxDarkDefault / MxLightDefault, token matrix, dark/light comparison, RN theme resolver.</span></a>
+      <a class="mx-nav-card" href="03-typography-gallery.html"><span class="num">03</span><span class="nm">Mx Typography Gallery</span><span class="sub">Korean prompts, Vietnamese explanations, long content, numerics — wrap/truncate + RN Text.</span></a>
+      <a class="mx-nav-card" href="04-spacing-layout-gallery.html"><span class="num">04</span><span class="nm">Mx Spacing &amp; Layout Gallery</span><span class="sub">Screen/section/item rhythm, safe area, keyboard, device sizes — with do/don't.</span></a>
+      <a class="mx-nav-card" href="05-core-component-gallery.html"><span class="num">05</span><span class="nm">Mx Core Component Gallery</span><span class="sub">Shell, top bar, card, list row, buttons, segmented, modal, empty/error — anatomy + states.</span></a>
+      <a class="mx-nav-card" href="06-learning-component-gallery.html"><span class="num">06</span><span class="nm">Mx Learning Component Gallery</span><span class="sub">Study shell, progress, study card, answer/match/recall/fill — pre-SRS vs SRS, correct/wrong.</span></a>
+      <a class="mx-nav-card" href="07-settings-component-gallery.html"><span class="num">07</span><span class="nm">Mx Settings Component Gallery</span><span class="sub">Sections, rows, language, reminder, weekday chips, theme tiles — high-risk + unavailable.</span></a>
+      <a class="mx-nav-card" href="08-data-statistics-gallery.html"><span class="num">08</span><span class="nm">Mx Data &amp; Statistics Gallery</span><span class="sub">Metric cards, chart panel, session result — empty / no-data / read-model-needed states.</span></a>
+      <a class="mx-nav-card" href="09-feedback-dialog-gallery.html"><span class="num">09</span><span class="nm">Mx Feedback &amp; Dialog Gallery</span><span class="sub">Snackbar, callout, confirm dialog — info/success/warning/error, no-due, finalize/restore failed.</span></a>
+      <a class="mx-nav-card" href="10-state-gallery.html"><span class="num">10</span><span class="nm">Mx State Gallery</span><span class="sub">Full state matrix × dark/light × component × semantic meaning × allowed/forbidden usage.</span></a>
+      <a class="mx-nav-card" href="11-layout-template-gallery.html"><span class="num">11</span><span class="nm">Mx Layout Template Gallery</span><span class="sub">9 named templates — anatomy, spacing, slots, scroll/safe-area/keyboard, RN primitive map.</span></a>
+      <a class="mx-nav-card" href="12-composition-recipe-gallery.html"><span class="num">12</span><span class="nm">Mx Composition Recipe Gallery</span><span class="sub">Good vs bad examples with rule annotations for list/study/settings/modal/result/stats/empty.</span></a>
+      <a class="mx-nav-card" href="13-mini-golden-samples.html"><span class="num">13</span><span class="nm">Mx Mini Golden Samples</span><span class="sub">5 composition exemplars — list, study, settings, modal, statistics — dark+light+non-happy.</span></a>
+      <a class="mx-nav-card" href="14-react-native-handoff-gallery.html"><span class="num">14</span><span class="nm">Mx React Native Handoff Gallery</span><span class="sub">Token/theme/component module maps, RN primitives, NativeWind vs StyleSheet guard rules.</span></a>
+      <a class="mx-nav-card" href="15-kit-qa-checklist.html"><span class="num">15</span><span class="nm">Mx Kit QA Checklist</span><span class="sub">Naming, parity, components, composition, states, RN handoff, quality bar — before product design.</span></a>
+    </div>
+  </section>
+
+  <hr class="mx-rule" />
+  <p class="mx-muted" style="font-size:13px">Base kit: <code>docs/design/kit-design/Mx Design Kit — MemoX v5/</code> ·
+    tokens in <code>tokens/*.css</code> · components in <code>components/*/</code> ·
+    guidelines in <code>guidelines/</code>. These kit screens compose those files and never redefine them.</p>
+</main>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ A UI screen is **not done** without screenshot review.
 
 ## Process
 1. Implement the screen using the Mx kit + a [screen recipe](screen-recipes.md).
-2. Run the app or a widget harness.
+2. Run the app or a component harness.
 3. Capture screenshots for: dark loaded · light loaded · loading · empty · error · relevant special states.
 4. Compare against the matching [golden screen](golden-screens.md) / recipe.
 5. A design-review agent reviews the shots with the [Visual Review Checklist](visual-review-checklist.md).
@@ -25,8 +25,8 @@ A UI screen is **not done** without screenshot review.
 <screen>__light__special-state
 ```
 
-## Tooling preference (MemoX / Flutter)
-- Prefer a Flutter golden / widget screenshot harness if available.
+## Tooling preference (MemoX / React Native)
+- Prefer a React Native screenshot / snapshot harness (e.g. Expo preview, Storybook) if available.
 - Else the project `golden_diff` tool if available.
 - Manual screenshot only as a fallback.
 

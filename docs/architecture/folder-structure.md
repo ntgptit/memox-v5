@@ -157,3 +157,24 @@ Suggested fix: In foundation cleanup WBS F0.1 (before P1-FE-*), remove/replace t
 > Note: `src/app/index.tsx` is clean (imports only `react-native` primitives). Only `_layout.tsx` is
 > currently affected. This drift is documentation-only to record here; **no source is changed in the
 > docs-hardening task.**
+
+### DRIFT-002 — design-kit handoff docs targeted Flutter, repo is React Native — RESOLVED
+
+```
+DRIFT DETECTED (RESOLVED 2026-07-10)
+File code: package.json / AGENTS.md — repo stack is Expo SDK 57 · React Native · TypeScript ·
+           NativeWind (Expo Router, Zustand, Zod, neverthrow). No Flutter/Dart anywhere.
+File doc:  (removed) docs/design/kit-design/Mx Design Kit — MemoX v5/guidelines/flutter-handoff.md +
+           flutter-composition-guard.md — documented the design system's implementation handoff in
+           Flutter terms (widgets, ThemeData-style theming), conflicting with the React Native stack.
+Mismatch:  The kit's implementation-handoff layer was written for Flutter, but MemoX v5 ships on React
+           Native — a React Native implementer would have mapped to the wrong primitives/theming model.
+Resolution: The two Flutter guideline files were DELETED and every reference repointed to the
+           authoritative React Native handoff — kit-screens Page 14
+           (docs/design/kit-design/Mx Design Kit — MemoX v5/kit-screens/14-react-native-handoff-gallery.html):
+           RN primitives, MxThemeProvider/MxThemeResolver/MxThemeMode/useMxTheme, NativeWind vs
+           StyleSheet guards. Updated referrers: that kit's readme.md, SKILL.md,
+           guidelines/composition-governance.md, guidelines/ui-definition-of-done.md. No Flutter
+           handoff docs remain; no broken links.
+```
+

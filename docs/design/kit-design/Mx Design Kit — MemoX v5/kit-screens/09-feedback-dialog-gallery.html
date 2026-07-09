@@ -1,0 +1,438 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x2800" name="09 · Mx Feedback & Dialog Gallery" subtitle="Snackbar, callout, confirm dialog — info/success/warning/error, no-due, finalize/restore failed + RN" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>09 · Mx Feedback &amp; Dialog Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 09 Feedback &amp; Dialogs</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="08-data-statistics-gallery.html">‹ Prev</a>
+    <a href="10-state-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 09</p>
+  <h1 class="mx-title">Mx Feedback &amp; Dialog Gallery</h1>
+  <p class="mx-lead">
+    How MemoX speaks back to the learner — a quiet line of context (<b>MxCallout</b>), a transient
+    confirmation (<b>MxSnackbar</b>), and a deliberate stop for risky actions (<b>MxConfirmDialog</b>).
+    The through-line is calm: feedback names the intent with a semantic role, reassures rather than
+    alarms, and reserves visual weight for the one place it matters — data that could be lost. Each
+    block below shows purpose, anatomy, states, the tokens in play, accessibility, and the
+    <b>React Native</b> component it hands off to, dark <b>and</b> light.
+  </p>
+  <div class="mx-note"><b>Reassurance over alarm</b> Colour signals intent, never volume. A card being
+    due is amber, not red; nothing due is a calm positive; a failed finalize keeps the learner's data
+    and offers a retry. Only real data loss earns destructive red. If copy needs an exclamation mark to
+    land, the copy is wrong — rewrite it calm.</div>
+
+  <!-- ============ LIVE GALLERY ============ -->
+  <section class="mx-section mx-anchor" id="live">
+    <h2>Live gallery</h2>
+    <p>The base kit's own feedback specimen card, embedded unchanged — callouts, snackbars, and confirm
+      dialogs (normal / destructive / high-risk) rendered dark <b>and</b> light from the same tokens
+      the specs below reference.</p>
+    <figure class="mx-embed"><figcaption>Feedback &amp; dialogs <span class="path">components/feedback/feedback.card.html</span></figcaption>
+      <iframe src="../components/feedback/feedback.card.html" height="620" loading="lazy" title="Callouts, snackbars and confirm dialogs, dark and light"></iframe></figure>
+  </section>
+
+  <!-- ============ MxSnackbar ============ -->
+  <section class="mx-section mx-anchor" id="snackbar">
+    <h2>MxSnackbar</h2>
+    <p><b>Purpose.</b> A transient bottom toast that confirms a completed action or reports a quick
+      outcome, with at most one inline action (typically <code>Undo</code>). It auto-dismisses and never
+      blocks the task — for anything the learner must decide, use <b>MxConfirmDialog</b> instead.</p>
+
+    <table class="mx-spec">
+      <caption>Anatomy · states · tokens</caption>
+      <thead><tr><th>Aspect</th><th>Detail</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>Anatomy</td><td>Pill surface · optional leading tone glyph · message · optional single action</td><td class="tok">--mx-radius-pill · --mx-space-12</td></tr>
+        <tr><td>Surface</td><td>Elevated toast above content, near the bottom safe area</td><td class="tok">--mx-color-surface-elevated · --mx-elevation-high</td></tr>
+        <tr><td>tone="success"</td><td>Action completed (e.g. "Deleted deck")</td><td class="tok">--mx-color-feedback-correct</td></tr>
+        <tr><td>tone="info"</td><td>Neutral notice, no evaluation</td><td class="tok">--mx-color-feedback-info</td></tr>
+        <tr><td>tone="warning"</td><td>Completed but with a caveat</td><td class="tok">--mx-color-feedback-warning</td></tr>
+        <tr><td>tone="error"</td><td>Quick failure; pair with a retry path when data is at stake</td><td class="tok">--mx-color-feedback-wrong</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep it to one line and one action; auto-dismiss; use <code>tone="success"</code>
+        with an <code>Undo</code> action for reversible deletes.</div>
+      <div class="mx-dont"><b></b>Stack multiple snackbars, put two actions in one, or use a snackbar to ask
+        a destructive question — that is a dialog, not a toast.</div>
+    </div>
+    <div class="mx-note"><b>Accessibility</b> Announce via <code>aria-live="polite"</code> (assertive only
+      for errors). Icon is decorative — tone must also read from text. Dismiss timing respects reduced
+      motion; the message never depends on colour alone.</div>
+    <div class="mx-rn"><b>React Native handoff</b> <code>&lt;MxSnackbar tone="success" action="Undo"
+      onAction={undo}&gt;Deleted deck&lt;/MxSnackbar&gt;</code>. Props: <code>tone</code>
+      (<code>success | error | warning | info</code>), <code>children</code>, <code>action</code>,
+      <code>onAction</code>. Auto-dismisses; announced via the RN accessibility live region; anchored
+      inside <code>SafeAreaView</code> bottom inset.</div>
+  </section>
+
+  <!-- ============ MxCallout ============ -->
+  <section class="mx-section mx-anchor" id="callout">
+    <h2>MxCallout</h2>
+    <p><b>Purpose.</b> An inline context banner that stays in the layout to explain a condition — an
+      informational note, a caution before a settings change, an inline destructive warning, a calm
+      "nothing due", or an unavailable/coming-soon area. It informs; it does not interrupt.</p>
+
+    <table class="mx-spec">
+      <caption>tone → role → token</caption>
+      <thead><tr><th>tone</th><th>Meaning</th><th>Surface / border token</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">info</td><td>Neutral context or tip</td><td class="tok">--mx-color-feedback-infoSurface · --mx-color-feedback-info</td></tr>
+        <tr><td class="tok">warning</td><td>Proceed-with-care caution</td><td class="tok">--mx-color-feedback-warningSurface · --mx-color-feedback-warning</td></tr>
+        <tr><td class="tok">destructive</td><td>Inline data-loss warning — visually stronger</td><td class="tok">--mx-color-destructive-surface · --mx-color-destructive-border</td></tr>
+        <tr><td class="tok">noDue</td><td>Calm / positive — nothing due, reassuring</td><td class="tok">--mx-color-srs-noDue</td></tr>
+        <tr><td class="tok">unavailable</td><td>Dimmed, feature not available yet</td><td class="tok">--mx-color-state-unavailableSurface</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Use <code>tone="noDue"</code> with reassuring copy ("Nothing due — you've
+        reviewed everything today"); use <code>warning</code> before a reversible settings change.</div>
+      <div class="mx-dont"><b></b>Style <code>noDue</code> like an error, or use <code>destructive</code>
+        for a mere caution — destructive tone is reserved for actual data loss.</div>
+    </div>
+    <div class="mx-note"><b>Accessibility</b> Title + body carry the meaning; the tone glyph is decorative.
+      Contrast holds in both themes. A callout is static context, not a live announcement, so it needs no
+      <code>aria-live</code> — but destructive callouts should sit next to the control they warn about.</div>
+    <div class="mx-rn"><b>React Native handoff</b> <code>&lt;MxCallout tone="noDue" title="Nothing due"&gt;You've
+      reviewed everything today.&lt;/MxCallout&gt;</code>. Props: <code>tone</code>
+      (<code>info | warning | destructive | noDue | unavailable</code>), <code>title</code>,
+      <code>children</code>, <code>icon</code>. Renders in-flow inside <code>MxScreen</code> — no overlay,
+      no scrim.</div>
+  </section>
+
+  <!-- ============ MxConfirmDialog ============ -->
+  <section class="mx-section mx-anchor" id="confirm">
+    <h2>MxConfirmDialog</h2>
+    <p><b>Purpose.</b> A modal that stops the flow and asks the learner to confirm before an action that
+      is hard or impossible to undo. The <code>variant</code> scales the risk signal so a routine confirm,
+      a destructive delete, and a high-risk overwrite never look the same.</p>
+
+    <table class="mx-spec">
+      <caption>variant · anatomy · token</caption>
+      <thead><tr><th>variant</th><th>Signal</th><th>Confirm-button / border token</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">normal</td><td>Routine confirm — primary action styling</td><td class="tok">--mx-color-action-primary</td></tr>
+        <tr><td class="tok">destructive</td><td>Data loss (delete deck/cards) — destructive red, stronger</td><td class="tok">--mx-color-destructive-text · --mx-border-destructive</td></tr>
+        <tr><td class="tok">highRisk</td><td>Overwrite / restore — strongest; auto-shows <code>warning</code> line</td><td class="tok">--mx-color-destructive-border · --mx-color-feedback-warning</td></tr>
+      </tbody>
+    </table>
+    <p>Anatomy: scrim (<code>--mx-color-overlay-scrim</code>) → modal card
+      (<code>--mx-color-surface-modal</code>, <code>--mx-radius-xl</code>, <code>--mx-elevation-modal</code>)
+      → title → message → optional warning line → cancel + confirm. Cancel is always the safe default; the
+      confirm label is a verb ("Delete", "Restore"), never "OK".</p>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Use <code>variant="destructive"</code> for deletes and
+        <code>variant="highRisk"</code> for restore / cloud overwrite; label confirm with the verb; keep
+        cancel prominent.</div>
+      <div class="mx-dont"><b></b>Style a destructive or high-risk confirm like a normal primary, or use a
+        raw platform <code>Alert</code> for data-loss actions.</div>
+    </div>
+    <div class="mx-note"><b>Accessibility</b> Focus traps inside the dialog; initial focus lands on the safe
+      (cancel) action. Role <code>dialog</code>, labelled by the title, described by the message + warning.
+      Scrim tap and hardware back both cancel — they never confirm.</div>
+    <div class="mx-rn"><b>React Native handoff</b> <code>&lt;MxConfirmDialog variant="destructive"
+      title="Delete this deck?" message="All cards in the deck will be deleted." confirmLabel="Delete"
+      onConfirm={del} onCancel={close} /&gt;</code>. Props: <code>open</code>, <code>variant</code>
+      (<code>normal | destructive | highRisk</code>), <code>title</code>, <code>message</code>,
+      <code>warning</code>, <code>confirmLabel</code>, <code>cancelLabel</code>, <code>onConfirm</code>,
+      <code>onCancel</code>. Rendered in an RN <code>Modal</code> over a scrim, centred within safe-area
+      insets.</div>
+  </section>
+
+  <!-- ============ MxFailureMessage (handoff contract) ============ -->
+  <section class="mx-section mx-anchor" id="failure">
+    <h2>MxFailureMessage <span class="mx-tag">handoff contract</span></h2>
+    <p><b>Purpose.</b> A reassuring, recoverable failure surface for boundary operations — most importantly
+      <b>finalize-failed</b> and <b>restore-failed</b>. Per the
+      <a href="../../screens/session-result.md">Session Result</a> contract, a failed finalize must
+      <b>never</b> be shown as a completed result and must <b>never</b> silently mark the session complete:
+      the learner's data is preserved and a retry path is offered. This is a <b>handoff contract</b> — the
+      RN component is specified here; its final implementation lands with the feature.</p>
+
+    <table class="mx-spec">
+      <caption>state · copy intent · token</caption>
+      <thead><tr><th>State</th><th>Copy intent (calm, no alarm)</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>finalize-failed</td><td>"Your learning data is safe. We couldn't save this session yet — retry."</td><td class="tok">--mx-color-feedback-warningSurface · --mx-color-feedback-warning</td></tr>
+        <tr><td>restore-failed</td><td>"Restore didn't complete. Your current data is unchanged — retry."</td><td class="tok">--mx-color-destructive-surface · --mx-color-destructive-border</td></tr>
+        <tr><td>action</td><td>Primary <b>Retry</b> + secondary dismiss / go back</td><td class="tok">--mx-color-action-primary</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Preserve data on failure and lead with the reassurance ("Your learning data
+        is safe. Retry."); keep the failed session out of the completed-result view.</div>
+      <div class="mx-dont"><b></b>Discard progress, silently mark the session completed, or present a bare
+        stack trace / "Error 500" with no recovery path.</div>
+    </div>
+    <div class="mx-note"><b>Accessibility</b> Announced <code>aria-live="assertive"</code> when it appears;
+      the Retry control is the focused, primary target. Warning tone (finalize) and destructive tone
+      (restore) read from text, not colour alone.</div>
+    <div class="mx-rn"><b>React Native handoff</b> <code>MxFailureMessage</code> — props (proposed):
+      <code>kind</code> (<code>finalizeFailed | restoreFailed | generic</code>), <code>title</code>,
+      <code>message</code>, <code>onRetry</code>, <code>onDismiss</code>. Composes an inline surface or an
+      <code>MxModalSheet</code>; data safety is guaranteed by the feature layer, not the component.</div>
+  </section>
+
+  <!-- ============ MxNoDueState (handoff contract) ============ -->
+  <section class="mx-section mx-anchor" id="nodue">
+    <h2>MxNoDueState <span class="mx-tag">handoff contract</span></h2>
+    <p><b>Purpose.</b> The calm "nothing due" surface for when a deck or the day's queue has no cards to
+      review right now. It is <b>neutral / positive</b>, conceptually a variant of
+      <a href="../core/MxEmptyState.d.ts"><code>MxEmptyState</code></a>
+      (<code>tone="positive"</code>) — <b>distinct from an error state</b>. Nothing is wrong; the learner
+      is simply caught up. This is a <b>handoff contract</b> paired with the <code>noDue</code> callout tone.</p>
+
+    <table class="mx-spec">
+      <caption>anatomy · tone · token</caption>
+      <thead><tr><th>Aspect</th><th>Detail</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>Tone</td><td>Positive / reassuring — never an error</td><td class="tok">--mx-color-srs-noDue</td></tr>
+        <tr><td>Anatomy</td><td>Calm glyph · title ("Nothing due") · reassuring line · optional gentle CTA</td><td class="tok">--mx-space-48 · --mx-space-16</td></tr>
+        <tr><td>Copy</td><td>"You've reviewed everything today. Come back tomorrow, or study ahead."</td><td class="tok">--mx-color-text-secondary</td></tr>
+        <tr><td>Relation</td><td>MxEmptyState <code>tone="positive"</code> — not MxErrorState</td><td class="tok">--mx-color-feedback-correctSurface</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Present no-due as an achievement — calm, positive, with reassuring copy;
+        offer an optional "study ahead" CTA, not a demand.</div>
+      <div class="mx-dont"><b></b>Style no-due with warning amber or destructive red, or word it as though the
+        learner failed or something broke.</div>
+    </div>
+    <div class="mx-note"><b>Accessibility</b> Static content (not a live announcement); positive tone reads
+      from the copy, not colour. Contrast holds in both themes; the optional CTA meets the 44px touch
+      target.</div>
+    <div class="mx-rn"><b>React Native handoff</b> <code>MxNoDueState</code> — realised as
+      <code>&lt;MxEmptyState tone="positive" title="Nothing due" message="You've reviewed everything today."
+      action={…} /&gt;</code>. Props inherit <code>MxEmptyStateProps</code>: <code>icon</code>,
+      <code>title</code>, <code>message</code>, <code>action</code>, <code>tone</code>
+      (<code>neutral | positive | unavailable</code>). Never routed to <code>MxErrorState</code>.</div>
+  </section>
+
+  <!-- ============ STATE DEMOS — DARK + LIGHT ============ -->
+  <section class="mx-section mx-anchor" id="states">
+    <h2>State demos — dark + light</h2>
+    <p>Coverage is the point: every feedback variant, rendered from tokens in both themes. Each
+      <code>.mx-duo</code> pairs a dark pane with a <code>data-theme="light"</code> pane so the role
+      reads correctly on both. Roles: info = <code>feedback-info</code>, success = <code>feedback-correct</code>,
+      warning = <code>feedback-warning</code>, error = <code>feedback-wrong</code>, destructive =
+      <code>destructive-*</code>, no-due = <code>srs-noDue</code>.</p>
+
+    <!-- INFO -->
+    <h3>Info · Success · Warning · Error callouts</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-infoSurface);border:1px solid var(--mx-color-feedback-info);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-info);">Info</b> · Audio plays automatically in study mode.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:1px solid var(--mx-color-feedback-correctBorder);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-correct);">Success</b> · Deck saved.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-warning);">Warning</b> · Changing the app icon may remove home-screen shortcuts.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-wrongSurface);border:1px solid var(--mx-color-feedback-wrongBorder);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-wrong);">Error</b> · Couldn't reach audio. Text is still shown.</div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-infoSurface);border:1px solid var(--mx-color-feedback-info);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-info);">Info</b> · Audio plays automatically in study mode.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:1px solid var(--mx-color-feedback-correctBorder);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-correct);">Success</b> · Deck saved.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-warning);">Warning</b> · Changing the app icon may remove home-screen shortcuts.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-wrongSurface);border:1px solid var(--mx-color-feedback-wrongBorder);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-wrong);">Error</b> · Couldn't reach audio. Text is still shown.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NO-DUE + UNAVAILABLE -->
+    <h3>No-due (positive) · Unavailable</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:1px solid var(--mx-color-srs-noDue);color:var(--mx-color-text-primary);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-srs-noDue);">Nothing due</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin-top:var(--mx-space-4);">You've reviewed everything today. Come back tomorrow, or study ahead.</div>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-state-unavailableSurface);border:1px solid var(--mx-color-border-subtle);color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-text-tertiary);">Unavailable</b> · Games arrive in a later release.</div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-16);background:var(--mx-color-feedback-correctSurface);border:1px solid var(--mx-color-srs-noDue);color:var(--mx-color-text-primary);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-srs-noDue);">Nothing due</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin-top:var(--mx-space-4);">You've reviewed everything today. Come back tomorrow, or study ahead.</div>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-state-unavailableSurface);border:1px solid var(--mx-color-border-subtle);color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-text-tertiary);">Unavailable</b> · Games arrive in a later release.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESTRUCTIVE CONFIRM -->
+    <h3>Destructive confirm · Restore (high-risk) confirm</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-surface-modal);border:var(--mx-border-destructive);box-shadow:var(--mx-elevation-modal);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);">Delete this deck?</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-12);">All cards in the deck will be deleted.</div>
+            <div class="mx-row" style="justify-content:flex-end;">
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);border:1px solid var(--mx-color-border-strong);color:var(--mx-color-text-secondary);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">Cancel</span>
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-destructive-surface);border:1px solid var(--mx-color-destructive-border);color:var(--mx-color-destructive-text);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Delete</span>
+            </div>
+          </div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-surface-modal);border:2px solid var(--mx-color-destructive-border);box-shadow:var(--mx-elevation-modal);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);">Restore data?</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-8);">This backup will overwrite current data.</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-feedback-warning);font-weight:var(--mx-weight-semibold);margin-bottom:var(--mx-space-12);">This can't be undone. Make sure this is the right backup.</div>
+            <div class="mx-row" style="justify-content:flex-end;">
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);border:1px solid var(--mx-color-border-strong);color:var(--mx-color-text-secondary);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">Cancel</span>
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-destructive-surface);border:2px solid var(--mx-color-destructive-border);color:var(--mx-color-destructive-text);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Restore</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-surface-modal);border:var(--mx-border-destructive);box-shadow:var(--mx-elevation-modal);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);">Delete this deck?</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-12);">All cards in the deck will be deleted.</div>
+            <div class="mx-row" style="justify-content:flex-end;">
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);border:1px solid var(--mx-color-border-strong);color:var(--mx-color-text-secondary);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">Cancel</span>
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-destructive-surface);border:1px solid var(--mx-color-destructive-border);color:var(--mx-color-destructive-text);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Delete</span>
+            </div>
+          </div>
+          <div style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-16);background:var(--mx-color-surface-modal);border:2px solid var(--mx-color-destructive-border);box-shadow:var(--mx-elevation-modal);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-title-medium-size) var(--mx-font-display);color:var(--mx-color-text-primary);">Restore data?</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-8);">This backup will overwrite current data.</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-feedback-warning);font-weight:var(--mx-weight-semibold);margin-bottom:var(--mx-space-12);">This can't be undone. Make sure this is the right backup.</div>
+            <div class="mx-row" style="justify-content:flex-end;">
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);border:1px solid var(--mx-color-border-strong);color:var(--mx-color-text-secondary);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">Cancel</span>
+              <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-destructive-surface);border:2px solid var(--mx-color-destructive-border);color:var(--mx-color-destructive-text);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Restore</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINALIZE / RESTORE FAILED -->
+    <h3>Finalize-failed · Restore-failed (data safe + retry)</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-text-primary);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-feedback-warning);">Couldn't save this session</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-12);">Your learning data is safe. We'll keep it and you can try again.</div>
+            <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Retry</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-16);background:var(--mx-color-destructive-surface);border:1px solid var(--mx-color-destructive-border);color:var(--mx-color-text-primary);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-destructive-text);">Restore didn't complete</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-12);">Your current data is unchanged. Try the restore again.</div>
+            <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Retry</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-text-primary);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-feedback-warning);">Couldn't save this session</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-12);">Your learning data is safe. We'll keep it and you can try again.</div>
+            <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Retry</span>
+          </div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-16);background:var(--mx-color-destructive-surface);border:1px solid var(--mx-color-destructive-border);color:var(--mx-color-text-primary);">
+            <div style="font:var(--mx-weight-bold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-destructive-text);">Restore didn't complete</div>
+            <div style="font-size:var(--mx-text-body-small-size);color:var(--mx-color-text-secondary);margin:var(--mx-space-4) 0 var(--mx-space-12);">Your current data is unchanged. Try the restore again.</div>
+            <span style="height:36px;display:inline-flex;align-items:center;padding:0 var(--mx-space-16);border-radius:var(--mx-radius-pill);background:var(--mx-color-action-primary);color:var(--mx-color-text-onAction);font:var(--mx-weight-bold) var(--mx-text-label-medium-size) var(--mx-font-display);">Retry</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLOUD SYNC -->
+    <h3>Cloud sync — blocked (Future)</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-warning);">Sync paused</b> · You're offline. Changes are saved locally and will sync later.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-state-unavailableSurface);border:1px solid var(--mx-color-border-subtle);color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-text-tertiary);">Cloud sync</b> · Coming in a later release. MemoX is local-first today.</div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-feedback-warning);">Sync paused</b> · You're offline. Changes are saved locally and will sync later.</div>
+          <div style="border-radius:var(--mx-radius-md);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-state-unavailableSurface);border:1px solid var(--mx-color-border-subtle);color:var(--mx-color-text-tertiary);font-size:var(--mx-text-body-small-size);"><b style="color:var(--mx-color-text-tertiary);">Cloud sync</b> · Coming in a later release. MemoX is local-first today.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNACKBAR TONES -->
+    <h3>Snackbar tones</h3>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-pill);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-elevated);box-shadow:var(--mx-elevation-high);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);display:flex;align-items:center;gap:var(--mx-space-12);"><span style="width:8px;height:8px;border-radius:var(--mx-radius-full);background:var(--mx-color-feedback-correct);flex:0 0 auto;"></span><span style="flex:1;">Deleted deck</span><span style="color:var(--mx-color-srs-active);font-weight:var(--mx-weight-bold);">Undo</span></div>
+          <div style="border-radius:var(--mx-radius-pill);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-elevated);box-shadow:var(--mx-elevation-high);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);display:flex;align-items:center;gap:var(--mx-space-12);"><span style="width:8px;height:8px;border-radius:var(--mx-radius-full);background:var(--mx-color-feedback-wrong);flex:0 0 auto;"></span><span style="flex:1;">Couldn't reach audio</span><span style="color:var(--mx-color-srs-active);font-weight:var(--mx-weight-bold);">Retry</span></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-stack">
+          <div style="border-radius:var(--mx-radius-pill);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-elevated);box-shadow:var(--mx-elevation-high);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);display:flex;align-items:center;gap:var(--mx-space-12);"><span style="width:8px;height:8px;border-radius:var(--mx-radius-full);background:var(--mx-color-feedback-correct);flex:0 0 auto;"></span><span style="flex:1;">Deleted deck</span><span style="color:var(--mx-color-srs-active);font-weight:var(--mx-weight-bold);">Undo</span></div>
+          <div style="border-radius:var(--mx-radius-pill);padding:var(--mx-space-12) var(--mx-space-16);background:var(--mx-color-surface-elevated);box-shadow:var(--mx-elevation-high);color:var(--mx-color-text-primary);font-size:var(--mx-text-body-small-size);display:flex;align-items:center;gap:var(--mx-space-12);"><span style="width:8px;height:8px;border-radius:var(--mx-radius-full);background:var(--mx-color-feedback-wrong);flex:0 0 auto;"></span><span style="flex:1;">Couldn't reach audio</span><span style="color:var(--mx-color-srs-active);font-weight:var(--mx-weight-bold);">Retry</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RULES ============ -->
+  <section class="mx-section mx-anchor" id="rules">
+    <h2>Rules</h2>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Present <b>no-due</b> as neutral / positive — "Nothing due", reassuring copy,
+        never an error colour or tone.</div>
+      <div class="mx-dont"><b></b>Dress no-due in warning amber or destructive red, or imply the learner did
+        something wrong by being caught up.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Make <b>destructive</b> and <b>restore</b> warnings visually stronger than a
+        normal confirm — destructive surface/border, a warning line for high-risk.</div>
+      <div class="mx-dont"><b></b>Style a delete or restore confirm like a routine primary button, so risk
+        and routine look identical.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>On <b>finalize-failed</b>, preserve the learner's data and show a retry path —
+        "Your learning data is safe. Retry."</div>
+      <div class="mx-dont"><b></b>Discard progress, silently mark the session completed, or show a failed
+        finalize as a completed result.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Reserve destructive red for real data loss; use amber for caution and
+        feedback-info for neutral notices.</div>
+      <div class="mx-dont"><b></b>Reuse answer <code>wrong</code> red as destructive intent, or lean on
+        colour alone to carry the message.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Confirm and destructive flows use <code>MxConfirmDialog</code> over a
+      scrim (<code>--mx-color-overlay-scrim</code>) — never a raw <code>Alert</code> for destructive actions.
+      Transient feedback uses <code>MxSnackbar</code> (auto-dismiss, announced via <code>aria-live</code>).
+      <code>MxModalSheet</code> / dialog surfaces respect <code>SafeAreaView</code> insets so nothing hides
+      under the home indicator or notch; the bottom sheet honours the bottom inset and
+      <code>--mx-size-sheet-max-height</code>.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="08-data-statistics-gallery.html">‹ 08 Data &amp; Statistics</a>
+    <a href="10-state-gallery.html">10 State Gallery ›</a>
+  </nav>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3400" name="06 · Mx Learning Component Gallery" subtitle="Study shell, progress, study card, answer/match/recall/fill — pre-SRS vs SRS, correct/wrong + RN" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>06 · Mx Learning Component Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 06 Learning Components</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="05-core-component-gallery.html">‹ Prev</a>
+    <a href="07-settings-component-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 06</p>
+  <h1 class="mx-title">Mx Learning Component Gallery</h1>
+  <p class="mx-lead">
+    Every study surface in MemoX is one of a small set of <b>Mx</b> learning primitives. The same five
+    mode-mechanics — <b>review, match, guess, recall, fill</b> — appear in <b>two flows that share
+    interaction but differ in lifecycle</b>. <b>New Learning</b> (pre-SRS, Box 0) runs the mandatory
+    sequence <code>review → match → guess → recall → fill</code>; completing <code>fill</code> after the
+    prior four <b>activates the card into Box 1</b>. <b>SRS Repeat</b> (Box 1+ due cards only) starts from
+    a mode menu and offers <code>match / guess / recall / fill</code> — <b>no review</b> — and is the only
+    flow that grades and reschedules SRS. Feedback in New Learning is <b>pre-SRS learning</b>, never SRS
+    grading. Sources: <code>docs/design/07-study-modes.md</code>, <code>docs/design/06-srs-8box.md</code>.
+  </p>
+  <div class="mx-note"><b>Two flows, never confused</b> <code>reviewMode</code> is <b>only</b> the first
+    step of New Learning — it is <b>not</b> in the Repeat Mode Menu. New Learning <code>match/guess/recall/fill</code>
+    is pre-SRS (no box/due change); Repeat <code>match/guess/recall/fill</code> is SRS review for Box 1+
+    due cards. Correct/wrong feedback and the recall 20s timer are learning signals; SRS scheduling
+    happens only in Repeat, per <code>06-srs-8box.md</code>.</div>
+
+  <!-- ============ LIVE GALLERY ============ -->
+  <section class="mx-section mx-anchor" id="live">
+    <h2>Live learning gallery</h2>
+    <p>The built learning components — study card, the five mode primitives, mode progress, and session
+      result — rendered in <b>dark</b> and <b>light</b> from the kit's own specimen. Everything below
+      annotates this same source of truth; it is embedded unchanged.</p>
+    <figure class="mx-embed">
+      <figcaption>Mx Learning Components <span class="path">components/learning/learning.card.html</span></figcaption>
+      <iframe src="../components/learning/learning.card.html" height="1200" loading="lazy" title="Mx learning components — study card, 5-mode primitives, progress, session result, dark and light"></iframe>
+    </figure>
+    <div class="mx-rn"><b>React Native</b> Study progress is <b>always</b> <code>MxStudyProgressBar</code> —
+      never a hand-rolled <code>&lt;View&gt;</code> bar. Answer choices are <b>always</b>
+      <code>MxAnswerOption</code> with a <code>state</code> prop — never a per-screen colour branch on
+      correct/wrong. Colours resolve from <code>MxTheme</code> via <code>useMxTheme()</code>, not a
+      <code>useColorScheme()</code> branch inside a mode screen.</div>
+  </section>
+
+  <!-- ============ MxStudyShell (RN contract) ============ -->
+  <section class="mx-section mx-anchor" id="study-shell">
+    <h2>MxStudyShell <span class="mx-muted" style="font: var(--mx-weight-semibold) 13px var(--mx-font-mono);">— RN handoff contract</span></h2>
+    <div class="mx-rn"><b>Not yet a kit component.</b> <code>MxStudyShell</code> is a React Native handoff
+      contract, <b>not</b> a built specimen in this kit. It describes the session frame (<code>SessionShell</code>
+      in <code>07-study-modes.md</code>) that hosts every mode. Do not claim a kit component exists for it.</div>
+    <p><b>Purpose.</b> The persistent session frame shared by all five modes in both flows: top bar with
+      exit, the mode progress region, the swappable mode body, and the sticky bottom action zone. It owns
+      session I/O and (in Repeat only) the SRS engine call; modes never query the DB.</p>
+    <p><b>Anatomy.</b> Top bar (back / exit + mode title) → <code>MxStudyProgressBar</code> → mode body
+      (<code>MxStudyCard</code> + one mode primitive) → sticky bottom actions. <b>Variants:</b>
+      <code>flow="newLearning" | "srsRepeat"</code>. <b>States:</b> active, paused/resumable, completed,
+      cancelled, expired, no-due (Repeat with 0 due cards → shows a no-due state, never an empty session).</p>
+    <table class="mx-spec">
+      <caption>MxStudyShell — proposed RN contract (not a .d.ts yet)</caption>
+      <thead><tr><th>Prop (proposed)</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">flow</td><td><code>"newLearning" | "srsRepeat"</code></td><td>Selects lifecycle; New Learning forces the 5-mode order, Repeat is user-chosen.</td></tr>
+        <tr><td class="tok">mode</td><td><code>"review" | "match" | "guess" | "recall" | "fill"</code></td><td><code>review</code> only valid when <code>flow="newLearning"</code>.</td></tr>
+        <tr><td class="tok">progress</td><td><code>{ percent; stepLabel; modeLabel }</code></td><td>Passed straight to <code>MxStudyProgressBar</code>.</td></tr>
+        <tr><td class="tok">onExit / onResult</td><td><code>() =&gt; void</code></td><td><code>onResult(cardId, result)</code> is the mode → session bridge; SRS engine called in Repeat only.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-note"><b>Session persistence (DT-2)</b> Sessions are persisted via <code>study_sessions</code>
+      + <code>study_session_items</code>; resumable; lifecycle <code>active/completed/cancelled/expired</code>.
+      The shell reads/writes these; the dashboard/resume-summary is <b>read-only</b> and must not mutate
+      the session.</div>
+  </section>
+
+  <!-- ============ MxStudyProgressBar ============ -->
+  <section class="mx-section mx-anchor" id="progress-bar">
+    <h2>MxStudyProgressBar</h2>
+    <p><b>Purpose.</b> Shows progress <b>through the current mode / session</b> — labelled as mode progress,
+      <b>never</b> SRS box mastery. <b>Anatomy:</b> a filled track + a step label (e.g. <code>3 / 12</code>)
+      and a mode label (e.g. <code>Fill</code>). <b>States:</b> 0% start, mid-progress, complete. It carries
+      no correct/wrong colour — advancing is neutral, driven by items done.</p>
+    <table class="mx-spec">
+      <caption>MxStudyProgressBar — props (from MxStudyProgressBar.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">percent</td><td><code>number</code></td><td>0–100 fill of the track.</td></tr>
+        <tr><td class="tok">stepLabel</td><td><code>React.ReactNode</code></td><td>e.g. <code>"3 / 12"</code>.</td></tr>
+        <tr><td class="tok">modeLabel</td><td><code>React.ReactNode</code></td><td>e.g. <code>"Fill"</code>.</td></tr>
+        <tr><td class="tok">style</td><td><code>React.CSSProperties</code></td><td>Layout override only — no colour.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <p class="mx-h">Mode progress · fill 80%</p>
+        <div style="display:flex; align-items:center; gap:var(--mx-space-8); margin-bottom:var(--mx-space-8);">
+          <span class="mx-tag">Fill</span>
+          <span class="mx-tabular mx-muted" style="font-size:var(--mx-text-body-small-size);">4 / 5</span>
+        </div>
+        <div style="height:8px; border-radius:var(--mx-radius-pill); background:var(--mx-color-surface-base); overflow:hidden;">
+          <div style="width:80%; height:100%; background:var(--mx-color-srs-active);"></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <p class="mx-h">Mode progress · fill 80%</p>
+        <div style="display:flex; align-items:center; gap:var(--mx-space-8); margin-bottom:var(--mx-space-8);">
+          <span class="mx-tag">Fill</span>
+          <span class="mx-tabular mx-muted" style="font-size:var(--mx-text-body-small-size);">4 / 5</span>
+        </div>
+        <div style="height:8px; border-radius:var(--mx-radius-pill); background:var(--mx-color-surface-base); overflow:hidden;">
+          <div style="width:80%; height:100%; background:var(--mx-color-srs-active);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Label the bar as <b>mode/session progress</b> and fill it with the neutral
+        <code>srs-active</code> track colour. It measures items done, nothing more.</div>
+      <div class="mx-dont"><b></b>Present it as <b>SRS mastery</b> or colour it correct-green/wrong-red —
+        progress is not box progress unless a screen explicitly shows box state.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Every mode renders progress through <code>MxStudyProgressBar</code>
+      with <code>percent</code> / <code>stepLabel</code> / <code>modeLabel</code>. Never re-implement a
+      progress bar per screen.</div>
+  </section>
+
+  <!-- ============ MxStudyCard ============ -->
+  <section class="mx-section mx-anchor" id="study-card">
+    <h2>MxStudyCard</h2>
+    <p><b>Purpose.</b> The central prompt/answer surface — Korean prompt + Vietnamese meaning — used across
+      every mode. <b>Anatomy:</b> prompt (term, Noto Sans KR at study-korean size), meaning (explanation,
+      wraps), optional note, optional labelled audio button. <b>Variants:</b> <code>prompt</code> (front only),
+      <code>answer</code> (meaning only), <code>both</code> (review — front + back together). <b>States:</b>
+      the card itself is content-neutral; correct/wrong/selected live on the mode primitive, not the card.
+      Sample direction KO→EN: <code>사과</code> → <code>apple</code>.</p>
+    <table class="mx-spec">
+      <caption>MxStudyCard — props (from MxStudyCard.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">prompt</td><td><code>React.ReactNode</code></td><td>Term / front (Korean font).</td></tr>
+        <tr><td class="tok">meaning</td><td><code>React.ReactNode</code></td><td>Meaning / back — wraps, never clipped.</td></tr>
+        <tr><td class="tok">note</td><td><code>React.ReactNode</code></td><td>Optional supporting note.</td></tr>
+        <tr><td class="tok">variant</td><td><code>"prompt" | "answer" | "both"</code></td><td><code>both</code> = review mode (front + back shown).</td></tr>
+        <tr><td class="tok">onAudio</td><td><code>() =&gt; void</code></td><td>When set, renders a labelled speaker button.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <p class="mx-h">variant="both" · review</p>
+        <div class="mx-panel" style="border-radius:var(--mx-radius-xl); min-height:var(--mx-size-study-card-min-height); display:flex; flex-direction:column; justify-content:center; gap:var(--mx-space-12);">
+          <span class="mx-korean" style="font:var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size)/var(--mx-text-study-korean-line) var(--mx-font-korean); color:var(--mx-color-text-primary);">사과</span>
+          <span style="font:var(--mx-text-study-explanation-weight) var(--mx-text-study-explanation-size)/var(--mx-text-study-explanation-line) var(--mx-font-body); color:var(--mx-color-text-secondary);">apple — the fruit</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <p class="mx-h">variant="both" · review</p>
+        <div class="mx-panel" style="border-radius:var(--mx-radius-xl); min-height:var(--mx-size-study-card-min-height); display:flex; flex-direction:column; justify-content:center; gap:var(--mx-space-12);">
+          <span class="mx-korean" style="font:var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size)/var(--mx-text-study-korean-line) var(--mx-font-korean); color:var(--mx-color-text-primary);">사과</span>
+          <span style="font:var(--mx-text-study-explanation-weight) var(--mx-text-study-explanation-size)/var(--mx-text-study-explanation-line) var(--mx-font-body); color:var(--mx-color-text-secondary);">apple — the fruit</span>
+        </div>
+      </div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Prompt uses the Korean font token at min 34; meaning uses the
+      explanation token and <b>wraps</b> in a scroll area — never shrink below the token to fit.</div>
+  </section>
+
+  <!-- ============ MxMatchTile ============ -->
+  <section class="mx-section mx-anchor" id="match-tile">
+    <h2>MxMatchTile</h2>
+    <p><b>Purpose.</b> A tile in <code>matchMode</code> — pair a prompt (front) with its meaning. The system
+      evaluates <b>only when two tiles are selected</b>: same card → correct, different cards → wrong + retry.
+      <b>Anatomy:</b> a tappable tile; <code>side="prompt"</code> tiles use the Korean font. <b>States:</b>
+      <code>default</code>, <code>selected</code>, <code>correct</code> (green), <code>wrong</code> (red, retry),
+      <code>completed</code> (matched pair locked/hidden). In New Learning it is pre-SRS learning; in SRS
+      Repeat the same mechanic grades a Box 1+ due card.</p>
+    <table class="mx-spec">
+      <caption>MxMatchTile — props (from MxMatchTile.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">children</td><td><code>React.ReactNode</code></td><td>Tile text (term or meaning).</td></tr>
+        <tr><td class="tok">side</td><td><code>"prompt" | "meaning"</code></td><td><code>prompt</code> picks the Korean font.</td></tr>
+        <tr><td class="tok">state</td><td><code>"default" | "selected" | "correct" | "wrong" | "completed"</code></td><td>Drives colour + glyph.</td></tr>
+        <tr><td class="tok">onClick</td><td><code>() =&gt; void</code></td><td>Select this tile.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <p class="mx-h">completed pair (locked)</p>
+        <div class="mx-row">
+          <span class="mx-korean" style="padding:var(--mx-space-8) var(--mx-space-12); border-radius:var(--mx-radius-sm); background:var(--mx-color-feedback-correctSurface); border:var(--mx-border-correct); color:var(--mx-color-feedback-correct); font-family:var(--mx-font-korean);">사과 ✓</span>
+          <span style="padding:var(--mx-space-8) var(--mx-space-12); border-radius:var(--mx-radius-sm); background:var(--mx-color-feedback-correctSurface); border:var(--mx-border-correct); color:var(--mx-color-feedback-correct);">apple ✓</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <p class="mx-h">completed pair (locked)</p>
+        <div class="mx-row">
+          <span class="mx-korean" style="padding:var(--mx-space-8) var(--mx-space-12); border-radius:var(--mx-radius-sm); background:var(--mx-color-feedback-correctSurface); border:var(--mx-border-correct); color:var(--mx-color-feedback-correct); font-family:var(--mx-font-korean);">사과 ✓</span>
+          <span style="padding:var(--mx-space-8) var(--mx-space-12); border-radius:var(--mx-radius-sm); background:var(--mx-color-feedback-correctSurface); border:var(--mx-border-correct); color:var(--mx-color-feedback-correct);">apple ✓</span>
+        </div>
+      </div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Accessibility: a wrong pair announces "incorrect, try again";
+      correct announces "matched". State is a prop — never colour-branch per screen.</div>
+  </section>
+
+  <!-- ============ MxAnswerOption ============ -->
+  <section class="mx-section mx-anchor" id="answer-option">
+    <h2>MxAnswerOption</h2>
+    <p><b>Purpose.</b> A choice in <code>guessMode</code> — pick the one correct meaning for a prompt among
+      distractors. <b>Anatomy:</b> a full-width option row with label + status glyph. <b>States:</b>
+      <code>default</code>, <code>selected</code> (chosen, not yet judged — violet), <code>correct</code>
+      (green + check), <code>wrong</code> (red + cross), <code>disabled</code>. The critical distinction:
+      <b>selected is not correct</b>, and <b>wrong is not destructive</b>. Same mechanic in both flows —
+      pre-SRS learning in New Learning, SRS grading in Repeat.</p>
+    <table class="mx-spec">
+      <caption>MxAnswerOption — props (from MxAnswerOption.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">children</td><td><code>React.ReactNode</code></td><td>Option label.</td></tr>
+        <tr><td class="tok">state</td><td><code>"default" | "selected" | "correct" | "wrong" | "disabled"</code></td><td>Drives border + surface + glyph.</td></tr>
+        <tr><td class="tok">onClick</td><td><code>() =&gt; void</code></td><td>Choose this option.</td></tr>
+      </tbody>
+    </table>
+    <p class="mx-muted" style="font-size:var(--mx-text-body-small-size); margin-top:var(--mx-space-16);">
+      Selected vs correct vs wrong — three distinct token treatments, side by side, dark and light:</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <p class="mx-h">guess · state comparison</p>
+        <div class="mx-stack">
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-state-selectedSurface); border:var(--mx-border-selected); color:var(--mx-color-text-primary); display:flex; justify-content:space-between;"><span>apple</span><span style="color:var(--mx-color-state-selected);">selected</span></div>
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-feedback-correctSurface); border:var(--mx-border-correct); color:var(--mx-color-text-primary); display:flex; justify-content:space-between;"><span>apple</span><span style="color:var(--mx-color-feedback-correct);">✓ correct</span></div>
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-feedback-wrongSurface); border:var(--mx-border-wrong); color:var(--mx-color-text-primary); display:flex; justify-content:space-between;"><span>reporter</span><span style="color:var(--mx-color-feedback-wrong);">✕ wrong</span></div>
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-state-disabledSurface); border:var(--mx-border-default); color:var(--mx-color-text-disabled); display:flex; justify-content:space-between;"><span>busy life</span><span>disabled</span></div>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <p class="mx-h">guess · state comparison</p>
+        <div class="mx-stack">
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-state-selectedSurface); border:var(--mx-border-selected); color:var(--mx-color-text-primary); display:flex; justify-content:space-between;"><span>apple</span><span style="color:var(--mx-color-state-selected);">selected</span></div>
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-feedback-correctSurface); border:var(--mx-border-correct); color:var(--mx-color-text-primary); display:flex; justify-content:space-between;"><span>apple</span><span style="color:var(--mx-color-feedback-correct);">✓ correct</span></div>
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-feedback-wrongSurface); border:var(--mx-border-wrong); color:var(--mx-color-text-primary); display:flex; justify-content:space-between;"><span>reporter</span><span style="color:var(--mx-color-feedback-wrong);">✕ wrong</span></div>
+          <div style="padding:var(--mx-space-12) var(--mx-space-16); border-radius:var(--mx-radius-md); background:var(--mx-color-state-disabledSurface); border:var(--mx-border-default); color:var(--mx-color-text-disabled); display:flex; justify-content:space-between;"><span>busy life</span><span>disabled</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Use <code>state="selected"</code> (violet) for a pending choice and
+        <code>correct</code>/<code>wrong</code> only after judging. Wrong uses <b>feedback-wrong</b>.</div>
+      <div class="mx-dont"><b></b>Style <code>wrong</code> with <b>destructive</b> tokens, or read
+        <code>selected</code> as <code>correct</code> — a pending pick has not been graded.</div>
+    </div>
+    <div class="mx-rn"><b>React Native</b> Options are <code>MxAnswerOption</code> with a <code>state</code>
+      prop — never per-screen colour branching. <code>wrong</code> maps to <code>feedback-wrong</code>,
+      distinct from <code>destructive-*</code> even though both hues are red.</div>
+  </section>
+
+  <!-- ============ MxRecallPanel ============ -->
+  <section class="mx-section mx-anchor" id="recall-panel">
+    <h2>MxRecallPanel</h2>
+    <p><b>Purpose.</b> The <code>recallMode</code> body: show the prompt, hide the meaning, run a 20s reveal
+      countdown, then let the learner self-grade. <b>Anatomy:</b> a <b>Show</b> button carrying the live
+      countdown → on reveal, the meaning + <b>Forgot</b> / <b>Remembered</b> buttons. <b>Phases/states:</b>
+      <code>hidden</code> (countdown running) → <code>revealed</code> (self-grade). Timeout without pressing
+      Show counts as <b>Forgot</b>; Remembered is only valid if Show was pressed before timeout.</p>
+    <table class="mx-spec">
+      <caption>MxRecallPanel — props (from MxRecallPanel.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">phase</td><td><code>"hidden" | "revealed"</code></td><td>Before vs after reveal.</td></tr>
+        <tr><td class="tok">seconds</td><td><code>number</code></td><td>Live countdown on the reveal button.</td></tr>
+        <tr><td class="tok">meaning</td><td><code>React.ReactNode</code></td><td>Revealed answer.</td></tr>
+        <tr><td class="tok">onReveal / onForgot / onRemembered</td><td><code>() =&gt; void</code></td><td>Reveal, then self-grade.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <p class="mx-h">phase="hidden" · 12s left</p>
+        <span class="mx-korean" style="display:block; font:var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size)/var(--mx-text-study-korean-line) var(--mx-font-korean); color:var(--mx-color-text-primary); margin-bottom:var(--mx-space-12);">사과</span>
+        <div style="height:var(--mx-size-button-height); border-radius:var(--mx-radius-pill); background:var(--mx-color-action-primary); color:var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; gap:var(--mx-space-8); font:var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Show <span class="mx-tabular">(12s)</span></div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <p class="mx-h">phase="revealed" · self-grade</p>
+        <span style="display:block; font:var(--mx-text-study-explanation-weight) var(--mx-text-study-explanation-size)/var(--mx-text-study-explanation-line) var(--mx-font-body); color:var(--mx-color-text-primary); margin-bottom:var(--mx-space-12);">apple — the fruit</span>
+        <div class="mx-row" style="gap:var(--mx-space-8);">
+          <span style="flex:1; text-align:center; padding:var(--mx-space-12); border-radius:var(--mx-radius-pill); background:var(--mx-color-feedback-wrongSurface); border:1px solid var(--mx-color-feedback-wrongBorder); color:var(--mx-color-feedback-wrong);">Forgot</span>
+          <span style="flex:1; text-align:center; padding:var(--mx-space-12); border-radius:var(--mx-radius-pill); background:var(--mx-color-feedback-correctSurface); border:1px solid var(--mx-color-feedback-correctBorder); color:var(--mx-color-feedback-correct);">Remembered</span>
+        </div>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Show the 20s countdown on the reveal button; treat a timeout as Forgot.
+        Forgot uses <b>feedback-wrong</b>, Remembered uses <b>feedback-correct</b>.</div>
+      <div class="mx-dont"><b></b>Allow <b>Remembered</b> before Show was pressed, or style Forgot as a
+        destructive action — it is a learning outcome, not data loss.</div>
+    </div>
+  </section>
+
+  <!-- ============ MxFillInputPanel ============ -->
+  <section class="mx-section mx-anchor" id="fill-panel">
+    <h2>MxFillInputPanel</h2>
+    <p><b>Purpose.</b> The <code>fillMode</code> body — the strongest test and, in New Learning, the
+      <b>SRS activation gate</b>: show the meaning, type the prompt back, <b>Hint</b> + <b>Check</b>.
+      <b>Anatomy:</b> a text input + Hint + Check; on wrong, the expected answer is shown and Retry appears.
+      <b>States:</b> <code>idle</code>, <code>correct</code> (green), <code>wrong</code> (red, shows
+      <code>expected</code> + Retry). A correct check <b>after the prior four modes</b> activates Box 0 → Box 1;
+      a wrong check never activates.</p>
+    <table class="mx-spec">
+      <caption>MxFillInputPanel — props (from MxFillInputPanel.d.ts)</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">value / onChange</td><td><code>string / (v) =&gt; void</code></td><td>Controlled input.</td></tr>
+        <tr><td class="tok">state</td><td><code>"idle" | "correct" | "wrong"</code></td><td>Drives border + feedback surface.</td></tr>
+        <tr><td class="tok">expected</td><td><code>React.ReactNode</code></td><td>Correct answer, shown on wrong to explain the difference.</td></tr>
+        <tr><td class="tok">onHint / onCheck / onRetry</td><td><code>() =&gt; void</code></td><td>Hint, submit, retry after wrong.</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <p class="mx-h">state="wrong" · shows expected</p>
+        <div style="height:var(--mx-size-input-height); border-radius:var(--mx-radius-sm); border:var(--mx-border-wrong); background:var(--mx-color-feedback-wrongSurface); display:flex; align-items:center; padding:0 var(--mx-space-12); color:var(--mx-color-text-primary);">사가</div>
+        <p style="font-size:var(--mx-text-body-small-size); color:var(--mx-color-feedback-wrong); margin:var(--mx-space-8) 0 0;">Expected: <span class="mx-korean" style="font-family:var(--mx-font-korean);">사과</span></p>
+        <div class="mx-row" style="gap:var(--mx-space-8); margin-top:var(--mx-space-12);">
+          <span style="padding:var(--mx-space-8) var(--mx-space-16); border-radius:var(--mx-radius-pill); border:var(--mx-border-default); color:var(--mx-color-text-secondary);">Hint</span>
+          <span style="padding:var(--mx-space-8) var(--mx-space-16); border-radius:var(--mx-radius-pill); background:var(--mx-color-action-secondary); color:var(--mx-color-text-primary);">Retry</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <p class="mx-h">state="correct" · activation gate</p>
+        <div style="height:var(--mx-size-input-height); border-radius:var(--mx-radius-sm); border:var(--mx-border-correct); background:var(--mx-color-feedback-correctSurface); display:flex; align-items:center; justify-content:space-between; padding:0 var(--mx-space-12); color:var(--mx-color-text-primary);"><span class="mx-korean" style="font-family:var(--mx-font-korean);">사과</span><span style="color:var(--mx-color-feedback-correct);">✓</span></div>
+        <p style="font-size:var(--mx-text-body-small-size); color:var(--mx-color-feedback-correct); margin:var(--mx-space-8) 0 0;">Correct — completes fill; if last mode, activates Box 1.</p>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>On wrong, show <code>expected</code> and offer Retry; only a correct Check
+        after the prior four modes activates the card into Box 1.</div>
+      <div class="mx-dont"><b></b>Activate SRS on Hint alone, on a wrong check, or before the four earlier
+        modes are done — <code>fill</code> is the gate, not any earlier mode.</div>
+    </div>
+    <div class="mx-note"><b>Normalization is a later task</b> Exact input matching (whitespace, casing,
+      valid answer variants, Korean spacing) is not settled here — do not invent a rule. This panel shows
+      state; the comparison rule lands in a separate task per <code>07-study-modes.md</code>.</div>
+  </section>
+
+  <!-- ============ MxPlayMenu (RN contract) ============ -->
+  <section class="mx-section mx-anchor" id="play-menu">
+    <h2>MxPlayMenu <span class="mx-muted" style="font: var(--mx-weight-semibold) 13px var(--mx-font-mono);">— RN handoff contract</span></h2>
+    <div class="mx-rn"><b>Not yet a kit component.</b> <code>MxPlayMenu</code> is a React Native handoff
+      contract, not a built specimen. It maps the deck/subdeck Play Menu entry points to flows.</div>
+    <p><b>Purpose.</b> Opened from a deck/subdeck Play action; presents the product-level entry points.
+      <b>Anatomy:</b> a list/sheet of options. <b>Learn</b> → New Learning Flow (always starts
+      <code>reviewMode</code>); <b>Repeat</b> → opens <code>MxRepeatModeMenu</code> (below); <b>Review Words</b>
+      → browse (no session); Game / Player are Future. <b>States:</b> per-option availability from counts —
+      e.g. Repeat shows a due count that <b>may be 0</b> (progress &gt; 0% does not imply due cards).</p>
+    <table class="mx-spec">
+      <caption>Play Menu → flow mapping (from 07-study-modes.md)</caption>
+      <thead><tr><th>Option</th><th>Maps to</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">Learn</td><td>New Learning Flow (Box 0, pre-SRS)</td><td>New cards run review → match → guess → recall → fill.</td></tr>
+        <tr><td class="tok">Repeat</td><td>SRS Repeat Flow (Box 1+ due)</td><td>Opens the Repeat Mode Menu; due count may be 0.</td></tr>
+        <tr><td class="tok">Review Words</td><td>Browse / content mode</td><td>No study session; never activates SRS.</td></tr>
+        <tr><td class="tok">Game / Player</td><td>Future</td><td>Out of Phase 1 scope.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ MxRepeatModeMenu (RN contract) ============ -->
+  <section class="mx-section mx-anchor" id="repeat-menu">
+    <h2>MxRepeatModeMenu <span class="mx-muted" style="font: var(--mx-weight-semibold) 13px var(--mx-font-mono);">— RN handoff contract</span></h2>
+    <div class="mx-rn"><b>Not yet a kit component.</b> <code>MxRepeatModeMenu</code> is a React Native handoff
+      contract, not a built specimen. Tapping <b>Repeat</b> opens it; SRS Repeat starts only after the user
+      picks a mode.</div>
+    <p><b>Purpose.</b> Let the user choose how to review Box 1+ due cards. <b>Anatomy:</b> four mode choices
+      — <b>Match / Guess / Recall / Fill</b>. <b>Crucially, <code>reviewMode</code> is NOT here</b> — it is
+      only the first step of New Learning. <b>States:</b> a mode is chosen → the SRS Repeat session begins;
+      if due count = 0, a <b>no-due</b> state is shown (no empty session, no SRS mutation).</p>
+    <p class="mx-muted" style="font-size:var(--mx-text-body-small-size); margin-top:var(--mx-space-16);">
+      Repeat Mode Menu (Box 1+ due) — four modes, no review; plus the no-due state, dark and light:</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <p class="mx-h">repeat modes · SRS review</p>
+        <div class="mx-grid-2">
+          <span style="padding:var(--mx-space-12); text-align:center; border-radius:var(--mx-radius-md); background:var(--mx-color-surface-card); border:var(--mx-border-default); color:var(--mx-color-text-primary);">Match</span>
+          <span style="padding:var(--mx-space-12); text-align:center; border-radius:var(--mx-radius-md); background:var(--mx-color-surface-card); border:var(--mx-border-default); color:var(--mx-color-text-primary);">Guess</span>
+          <span style="padding:var(--mx-space-12); text-align:center; border-radius:var(--mx-radius-md); background:var(--mx-color-surface-card); border:var(--mx-border-default); color:var(--mx-color-text-primary);">Recall</span>
+          <span style="padding:var(--mx-space-12); text-align:center; border-radius:var(--mx-radius-md); background:var(--mx-color-surface-card); border:var(--mx-border-default); color:var(--mx-color-text-primary);">Fill</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light">
+        <p class="mx-h">no-due state · not an error</p>
+        <div style="padding:var(--mx-space-20); text-align:center; border-radius:var(--mx-radius-md); background:var(--mx-color-srs-preSrsSurface); border:1px solid var(--mx-color-srs-noDue); color:var(--mx-color-text-primary);">
+          <div style="font:var(--mx-weight-semibold) 15px var(--mx-font-display); color:var(--mx-color-srs-noDue); margin-bottom:var(--mx-space-4);">All caught up</div>
+          <div style="font-size:var(--mx-text-body-small-size); color:var(--mx-color-text-secondary);">No cards due today — nothing to repeat. Come back later.</div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Offer exactly Match / Guess / Recall / Fill for Repeat, and show a neutral,
+        positive <b>no-due</b> state (<code>srs-noDue</code> green) when due count = 0.</div>
+      <div class="mx-dont"><b></b>Put <code>reviewMode</code> in the Repeat menu, treat <b>no-due</b> as an
+        error (red / destructive), or create an empty Repeat session.</div>
+    </div>
+  </section>
+
+  <!-- ============ BUSINESS VISUAL RULES ============ -->
+  <section class="mx-section mx-anchor" id="rules">
+    <h2>Business visual rules</h2>
+    <p>These learning-specific rules are binding. They keep interaction states, flows, and SRS meaning from
+      collapsing into each other. Grounded in <code>06-srs-8box.md</code> and <code>07-study-modes.md</code>.</p>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b><b>Selected</b> is a pending, ungraded pick — <code>state-selected</code>
+        (violet). It is <b>not</b> correct.</div>
+      <div class="mx-dont"><b></b>Render <b>selected</b> in correct-green, implying the answer was already
+        judged right.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b><b>Wrong</b> uses <code>feedback-wrong</code> — a learning outcome the user
+        can retry.</div>
+      <div class="mx-dont"><b></b>Style <b>wrong</b> with <code>destructive-*</code> — a wrong answer is not
+        data loss.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep <b>pre-SRS</b> (Box 0, New Learning) visually distinct — no box/due,
+        feedback is learning only. <code>fill</code>-correct after 4 modes activates Box 1.</div>
+      <div class="mx-dont"><b></b>Confuse <b>pre-SRS</b> New Learning with <b>SRS Repeat</b> — only Repeat
+        grades and reschedules Box 1+ due cards.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Show only Match / Guess / Recall / Fill in the Repeat Mode Menu.</div>
+      <div class="mx-dont"><b></b>Put <code>reviewMode</code> in the Repeat Mode Menu — review is New
+        Learning's first step only.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Treat <b>no-due</b> as neutral/positive (<code>srs-noDue</code> green) — the
+        user is caught up.</div>
+      <div class="mx-dont"><b></b>Show <b>no-due</b> as an error state or auto-create an empty session.</div>
+    </div>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Label the progress bar as <b>mode/session progress</b>.</div>
+      <div class="mx-dont"><b></b>Present progress as <b>SRS mastery</b> unless a screen explicitly shows box
+        state.</div>
+    </div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="05-core-component-gallery.html">‹ 05 Core Components</a>
+    <a href="07-settings-component-gallery.html">07 Settings Components ›</a>
+  </nav>
+</main>
+
+</body>
+</html>

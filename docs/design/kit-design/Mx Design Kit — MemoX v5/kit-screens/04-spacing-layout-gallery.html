@@ -1,0 +1,440 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3000" name="04 · Mx Spacing & Layout Gallery" subtitle="Screen/section/item rhythm, safe area, keyboard, device sizes — with do/don't" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>04 · Mx Spacing &amp; Layout Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 04 Spacing &amp; Layout</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="03-typography-gallery.html">‹ Prev</a>
+    <a href="05-core-component-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 04</p>
+  <h1 class="mx-title">Mx Spacing &amp; Layout Gallery</h1>
+  <p class="mx-lead">
+    Every MemoX screen breathes on <b>one rhythm</b>. The gaps are not chosen per screen — they are
+    <code>--mx-space-*</code> and <code>--mx-layout-*</code> tokens on a 4px grid, applied the same way
+    at every altitude: screen gutter, section gap, item gap, compact row gap, and the small insets inside a
+    row. This page fixes the measured value for each relationship, shows it on the same simple screen across
+    three device widths so the rhythm reads identically, and states the React Native layout rules that keep
+    it consistent — safe area, keyboard, and flex over absolute positioning.
+  </p>
+  <div class="mx-note"><b>Source of truth</b> The measured gaps below resolve from
+    <code>tokens/spacing.css</code> (<code>--mx-space-*</code>, <code>--mx-size-*</code>,
+    <code>--mx-layout-*</code>). A screen never invents a gap — if a needed value is missing, add a token,
+    never a raw pixel.</div>
+
+  <!-- ============ EMBEDDED SPECIMENS ============ -->
+  <section class="mx-section mx-anchor" id="specimens">
+    <h2>Live specimens</h2>
+    <p>The base kit's own spacing cards, embedded unchanged: the raw 4px scale, and the composition rule
+      for how those steps become a single screen rhythm.</p>
+
+    <figure class="mx-embed"><figcaption>Spacing scale <span class="path">guidelines/spacing-scale.card.html</span></figcaption>
+      <iframe src="../guidelines/spacing-scale.card.html" height="210" loading="lazy" title="Spacing scale"></iframe></figure>
+    <figure class="mx-embed"><figcaption>Spacing rhythm (grammar) <span class="path">guidelines/grammar-spacing.card.html</span></figcaption>
+      <iframe src="../guidelines/grammar-spacing.card.html" height="300" loading="lazy" title="Spacing rhythm grammar"></iframe></figure>
+  </section>
+
+  <!-- ============ LAYOUT RHYTHM RULES ============ -->
+  <section class="mx-section mx-anchor" id="rhythm">
+    <h2>Layout rhythm rules</h2>
+    <p>Each relationship in a screen has <b>one</b> gap. These are the only values a MemoX layout uses for
+      screen, section, item, and intra-row spacing.</p>
+
+    <table class="mx-spec">
+      <caption>Layout relationship → token → React Native</caption>
+      <thead><tr><th>Relationship</th><th>Token</th><th>Value</th><th>React Native</th></tr></thead>
+      <tbody>
+        <tr><td>Screen horizontal padding (gutter)</td><td class="tok">--mx-layout-screen-padding-x</td><td>16px</td><td><code>paddingHorizontal: 16</code> on <code>MxScreen</code></td></tr>
+        <tr><td>Section gap (block → block)</td><td class="tok">--mx-space-24</td><td>24px</td><td><code>gap: 24</code> / <code>marginTop: 24</code> between sections</td></tr>
+        <tr><td>Item gap (row → row in a list)</td><td class="tok">--mx-space-12</td><td>12px</td><td><code>gap: 12</code> in the list column</td></tr>
+        <tr><td>Compact row internal gap</td><td class="tok">--mx-space-8</td><td>8px</td><td><code>gap: 8</code> inside a dense row</td></tr>
+        <tr><td>Icon → text gap</td><td class="tok">--mx-space-8</td><td>8px</td><td><code>gap: 8</code> between leading glyph and label</td></tr>
+        <tr><td>Title → subtitle gap</td><td class="tok">--mx-space-4</td><td>4px</td><td><code>gap: 4</code> in a two-line stack</td></tr>
+        <tr><td>Card internal padding</td><td class="tok">--mx-space-20</td><td>20px</td><td><code>padding: 20</code> on <code>MxCard</code></td></tr>
+        <tr><td>Modal / sheet padding</td><td class="tok">--mx-space-20</td><td>20px</td><td><code>padding: 20</code> on <code>MxModalSheet</code></td></tr>
+        <tr><td>Bottom action → content (top gap)</td><td class="tok">--mx-space-16</td><td>16px</td><td><code>paddingTop: 16</code> above the sticky action</td></tr>
+        <tr><td>Bottom action inset (base)</td><td class="tok">--mx-layout-bottom-action-inset</td><td>12px</td><td><code>paddingBottom: 12 + safeAreaInset.bottom</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Measured gaps — visual</h3>
+    <p>The same relationships, shown on a stub of the study/list surface. Amber
+      <span class="mx-tag space">--mx-space-*</span> tags mark the measured gap; purple
+      <span class="mx-tag">--mx-layout-*</span> tags mark a layout token.</p>
+
+    <div class="mx-legend">
+      <span class="mx-tag space">--mx-space-24 · section</span>
+      <span class="mx-tag space">--mx-space-12 · item</span>
+      <span class="mx-tag space">--mx-space-8 · compact / icon↔text</span>
+      <span class="mx-tag space">--mx-space-4 · title↔subtitle</span>
+      <span class="mx-tag">--mx-layout-screen-padding-x · 16 gutter</span>
+      <span class="mx-tag">--mx-space-20 · card padding</span>
+    </div>
+
+    <div class="mx-panel" style="margin-top: var(--mx-space-16); padding: var(--mx-space-16);">
+      <!-- Screen gutter demo: the panel padding stands in for the 16 gutter -->
+      <div style="display:flex; align-items:center; gap: var(--mx-space-8); margin-bottom: var(--mx-space-8);">
+        <span class="mx-tag">gutter · --mx-layout-screen-padding-x · 16</span>
+      </div>
+
+      <!-- SECTION A -->
+      <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+        <!-- item = card with 20 internal padding, 4 title/subtitle, 8 icon/text -->
+        <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+          <div style="display:flex; align-items:center; gap: var(--mx-space-8);">
+            <span style="width: var(--mx-size-icon-md); height: var(--mx-size-icon-md); border-radius: var(--mx-radius-sm); background: var(--mx-color-state-selectedSurface); flex: 0 0 auto;"></span>
+            <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+              <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Korean Basics</span>
+              <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Due 83 · 4px title→subtitle</span>
+            </div>
+            <span class="mx-spacer" style="flex:1 1 auto;"></span>
+            <span class="mx-tag">card pad · --mx-space-20</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap: var(--mx-space-8);"><span class="mx-tag space">↕ --mx-space-12 · item gap</span></div>
+        <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+          <div style="display:flex; align-items:center; gap: var(--mx-space-8);">
+            <span style="width: var(--mx-size-icon-md); height: var(--mx-size-icon-md); border-radius: var(--mx-radius-sm); background: var(--mx-color-state-selectedSurface); flex: 0 0 auto;"></span>
+            <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+              <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Travel Words</span>
+              <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">120 new words</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap: var(--mx-space-8); margin: var(--mx-space-24) 0;"><span class="mx-tag space">↕ --mx-space-24 · section gap</span></div>
+
+      <!-- SECTION B: a compact row -->
+      <div class="mx-panel" style="padding: var(--mx-space-12) var(--mx-space-16); box-shadow: none;">
+        <div style="display:flex; align-items:center; gap: var(--mx-space-8);">
+          <span style="width: var(--mx-size-icon-sm); height: var(--mx-size-icon-sm); border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated); flex: 0 0 auto;"></span>
+          <span style="font-size: var(--mx-text-body-medium-size); color: var(--mx-color-text-secondary);">Compact row · internal gap</span>
+          <span class="mx-spacer" style="flex:1 1 auto;"></span>
+          <span class="mx-tag space">--mx-space-8</span>
+        </div>
+      </div>
+
+      <!-- Bottom action top gap -->
+      <div style="display:flex; align-items:center; gap: var(--mx-space-8); margin: var(--mx-space-16) 0 var(--mx-space-8);"><span class="mx-tag space">↕ --mx-space-16 · bottom action top gap</span></div>
+      <div style="display:flex; gap: var(--mx-space-8);">
+        <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Start studying</div>
+      </div>
+    </div>
+
+    <div class="mx-rn"><b>React Native</b> Express each relationship with a flex <code>gap</code> from
+      <code>MxSpacing</code> — section columns get <code>gap: 24</code>, list columns <code>gap: 12</code>,
+      row internals <code>gap: 8</code>, two-line stacks <code>gap: 4</code>. Screen gutter is
+      <code>paddingHorizontal: MxLayout.screenPaddingX</code>. No raw numbers, no ad-hoc margins.</div>
+  </section>
+
+  <!-- ============ SAFE AREA + KEYBOARD ============ -->
+  <section class="mx-section mx-anchor" id="safe-keyboard">
+    <h2>Safe area &amp; keyboard</h2>
+    <p>The bottom action and any scrollable content stop short of the system inset; forms lift above the
+      keyboard. These are layout tokens plus the runtime inset — never a hardcoded gap.</p>
+
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Safe area">
+        <p class="mx-h">Bottom action · safe-area inset</p>
+        <div style="border: var(--mx-border-default); border-radius: var(--mx-radius-lg); overflow: hidden; background: var(--mx-color-background-app);">
+          <div style="padding: var(--mx-space-16); font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">…scrollable content…</div>
+          <div style="border-top: var(--mx-border-subtle); padding: var(--mx-space-12) var(--mx-space-16) var(--mx-space-8);">
+            <div style="height: var(--mx-size-button-height-bottom); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Check</div>
+          </div>
+          <!-- safe-area band -->
+          <div style="height: var(--mx-space-24); background: var(--mx-color-state-selectedSurface); display:flex; align-items:center; justify-content:center;">
+            <span class="mx-tag">safe-area inset · + --mx-layout-bottom-action-inset (12)</span>
+          </div>
+        </div>
+        <p style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); margin: var(--mx-space-12) 0 0;">
+          Bottom padding = <code>12 + safeAreaInset.bottom</code>. The action never sits on the gesture bar.</p>
+      </div>
+
+      <div class="mx-pane" data-label="Keyboard">
+        <p class="mx-h">Fill / input · keyboard-safe</p>
+        <div style="border: var(--mx-border-default); border-radius: var(--mx-radius-lg); overflow: hidden; background: var(--mx-color-background-app);">
+          <div style="padding: var(--mx-space-16); display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">사과 · apple</div>
+            <div style="height: var(--mx-size-input-height); border-radius: var(--mx-radius-md); border: var(--mx-border-selected); background: var(--mx-color-surface-card); display:flex; align-items:center; padding: 0 var(--mx-space-16); font-size: var(--mx-text-body-medium-size); color: var(--mx-color-text-secondary);">Type the meaning…</div>
+          </div>
+          <div style="border-top: var(--mx-border-subtle); padding: var(--mx-space-12) var(--mx-space-16); display:flex; align-items:center; gap: var(--mx-space-8);">
+            <span class="mx-tag">KeyboardAvoidingView lifts content</span>
+          </div>
+          <div style="height: 64px; background: var(--mx-color-surface-elevated); border-top: var(--mx-border-subtle); display:flex; align-items:center; justify-content:center;">
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">▢ system keyboard</span>
+          </div>
+        </div>
+        <p style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); margin: var(--mx-space-12) 0 0;">
+          Input + action lift above the keyboard so the field is never covered.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEVICE SAMPLES ============ -->
+  <section class="mx-section mx-anchor" id="devices">
+    <h2>Device samples</h2>
+    <p>The <b>same</b> screen — top bar, two cards, sticky bottom action — at three device widths. The
+      gutter, section, and item gaps are token-driven, so the rhythm reads identically; only the content
+      column reflows.</p>
+    <div class="mx-note"><b>Device width exception</b> The three frame widths below are set with inline
+      <code>px</code> on the <code>.mx-phone</code> outer frame only. A physical device width is a
+      <b>hardware fact</b>, not a design token — so it is the one place raw px is allowed. Everything
+      <i>inside</i> the frame stays on <code>--mx-*</code> tokens.</div>
+
+    <div class="mx-phones">
+      <!-- COMPACT PHONE -->
+      <div class="mx-phone" style="width: 300px; height: 600px;">
+        <span class="ph-cap">compact · 300px frame</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-8);">
+            <span style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Today</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+              <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Korean Basics</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Due 83</span>
+              </div>
+            </div>
+            <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+              <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Travel Words</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Nothing due</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Start studying</div>
+        </div>
+      </div>
+
+      <!-- NORMAL PHONE -->
+      <div class="mx-phone" style="width: 340px; height: 640px;">
+        <span class="ph-cap">normal · 340px frame</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-8);">
+            <span style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Today</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+              <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Korean Basics</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Due 83</span>
+              </div>
+            </div>
+            <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+              <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Travel Words</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Nothing due</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Start studying</div>
+        </div>
+      </div>
+
+      <!-- LARGE PHONE -->
+      <div class="mx-phone" style="width: 384px; height: 680px;">
+        <span class="ph-cap">large · 384px frame (S23 Ultra)</span>
+        <div class="ph-status"><span>9:41</span><span>▮▮▮</span></div>
+        <div class="ph-scroll">
+          <div style="padding: var(--mx-space-16) 0 var(--mx-space-8);">
+            <span style="font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Today</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+              <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Korean Basics</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Due 83</span>
+              </div>
+            </div>
+            <div class="mx-panel" style="padding: var(--mx-space-20); box-shadow: none;">
+              <div style="display:flex; flex-direction:column; gap: var(--mx-space-4);">
+                <span style="font: var(--mx-text-label-large-weight) var(--mx-text-label-large-size) var(--mx-font-display); color: var(--mx-color-text-primary);">Travel Words</span>
+                <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-tertiary);">Nothing due</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ph-bottom">
+          <div style="flex:1 1 auto; height: var(--mx-size-button-height); border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); display:flex; align-items:center; justify-content:center; font: var(--mx-text-button-weight) var(--mx-text-button-size) var(--mx-font-display);">Start studying</div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top: var(--mx-space-16);">The gutter (<code>--mx-layout-screen-padding-x</code>), item
+      gap (<code>--mx-space-12</code>), and card padding (<code>--mx-space-20</code>) are identical across
+      all three; the content column simply narrows. At tablet width, content caps at
+      <code>--mx-layout-content-max-width</code> (520px) and centres rather than stretching.</p>
+  </section>
+
+  <!-- ============ REACT NATIVE LAYOUT NOTES ============ -->
+  <section class="mx-section mx-anchor" id="rn-notes">
+    <h2>React Native layout notes</h2>
+    <p>The rhythm above is enforced by a few structural rules. These are handoff contracts, not
+      suggestions — a screen that breaks them will drift off the grid.</p>
+
+    <div class="mx-rn"><b>Safe area lives in the shell</b> The <code>SafeAreaView</code> /
+      safe-area wrapper belongs in <code>MxAppShell</code> / <code>MxScreen</code> — <b>not</b> in every
+      screen. Screens receive already-inset content and never re-apply top/bottom insets themselves.</div>
+
+    <div class="mx-rn"><b>One scroll owner per screen</b> Do not nest a <code>ScrollView</code> or
+      <code>FlatList</code> inside another scroller. Pick one scroll container; sticky regions (top bar,
+      bottom action) sit outside it, not inside a second scroll view.</div>
+
+    <div class="mx-rn"><b>Bottom action respects the inset</b> The sticky action band pads with
+      <code>paddingBottom: 16 + safeAreaInset.bottom</code> (the 16 is
+      <code>--mx-space-16</code>; the inset comes from <code>useSafeAreaInsets()</code>). It must never
+      overlap the Android gesture bar or the iOS home indicator.</div>
+
+    <div class="mx-rn"><b>Keyboard-aware forms are required</b> Fill / input / settings forms wrap in
+      <code>KeyboardAvoidingView</code> (behavior <code>padding</code> on iOS, <code>height</code> on
+      Android) so the focused field and its action lift above the keyboard. Never leave an input hidden
+      behind the keyboard.</div>
+
+    <div class="mx-rn"><b>Flex, not absolute</b> Compose with flex (<code>flexDirection</code>,
+      <code>gap</code>, <code>flex: 1</code>) consistently. Avoid <code>position: 'absolute'</code> unless a
+      specific recipe requires it (e.g. an overlaid badge). Absolute positioning breaks the shared rhythm
+      and reflow.</div>
+
+    <div class="mx-code"><span class="c">// MxScreen: the shell owns safe area + gutter; screens just fill it</span>
+&lt;SafeAreaView edges={['top','bottom']} style={{ flex: 1, backgroundColor: theme.color.background.app }}&gt;
+  &lt;View style={{ flex: 1, paddingHorizontal: <span class="k">MxLayout.screenPaddingX</span> }}&gt;
+    &lt;FlatList <span class="c">/* the ONE scroll owner */</span>
+      contentContainerStyle={{ gap: <span class="k">MxSpacing.s12</span> }} <span class="c">// item gap</span>
+      ListHeaderComponent={&lt;SectionBlock /&gt;} <span class="c">// sections use gap: MxSpacing.s24</span>
+    /&gt;
+  &lt;/View&gt;
+  &lt;View style={{ paddingTop: <span class="k">MxSpacing.s16</span>,
+                 paddingBottom: <span class="k">MxLayout.bottomActionInset</span> + insets.bottom }}&gt;
+    &lt;MxActionButton label=<span class="k">"Start studying"</span> /&gt;
+  &lt;/View&gt;
+&lt;/SafeAreaView&gt;</div>
+  </section>
+
+  <!-- ============ DO / DON'T ============ -->
+  <section class="mx-section mx-anchor" id="do-dont">
+    <h2>Do &amp; don't</h2>
+    <p>The most common ways a screen falls off the rhythm — each bad example is labelled
+      <code>.mx-dont</code> with a matching visual.</p>
+
+    <!-- 1. section rhythm -->
+    <h3>Section rhythm</h3>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Give sections room: <code>--mx-space-24</code> between blocks, items inside
+        at <code>--mx-space-12</code>. The eye groups by the larger gap.
+        <div style="margin-top: var(--mx-space-12); background: var(--mx-color-background-app); border: var(--mx-border-subtle); border-radius: var(--mx-radius-md); padding: var(--mx-space-12);">
+          <div style="height: 22px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated); margin-bottom: var(--mx-space-12);"></div>
+          <div style="height: 22px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated); margin-bottom: var(--mx-space-24);"></div>
+          <div style="height: 22px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated);"></div>
+        </div>
+      </div>
+      <div class="mx-dont"><b></b>Cram sections at the same gap as items — the screen reads as one
+        undifferentiated pile with no grouping.
+        <div style="margin-top: var(--mx-space-12); background: var(--mx-color-background-app); border: var(--mx-border-subtle); border-radius: var(--mx-radius-md); padding: var(--mx-space-12);">
+          <div style="height: 22px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated); margin-bottom: var(--mx-space-4);"></div>
+          <div style="height: 22px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated); margin-bottom: var(--mx-space-4);"></div>
+          <div style="height: 22px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. random spacing -->
+    <h3>Consistent vs random spacing</h3>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Every gap is a token step (12 / 12 / 12). One rhythm repeats down the list.
+        <div style="margin-top: var(--mx-space-12); display:flex; flex-direction:column; gap: var(--mx-space-12);">
+          <div style="height: 20px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated);"></div>
+          <div style="height: 20px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated);"></div>
+          <div style="height: 20px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated);"></div>
+        </div>
+      </div>
+      <div class="mx-dont"><b></b>Eyeballed, off-grid gaps (4 / 20 / 8). The list looks broken even though
+        each row is fine.
+        <div style="margin-top: var(--mx-space-12); display:flex; flex-direction:column;">
+          <div style="height: 20px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated); margin-bottom: var(--mx-space-4);"></div>
+          <div style="height: 20px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated); margin-bottom: var(--mx-space-20);"></div>
+          <div style="height: 20px; border-radius: var(--mx-radius-xs); background: var(--mx-color-surface-elevated);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. card in card -->
+    <h3>Nesting</h3>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Keep one card level. Group inside a card with spacing and a hairline
+        divider, not a second bordered card.
+        <div style="margin-top: var(--mx-space-12);">
+          <div class="mx-panel" style="padding: var(--mx-space-16); box-shadow: none;">
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); padding-bottom: var(--mx-space-12); border-bottom: var(--mx-divider-subtle);">Row one</div>
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); padding-top: var(--mx-space-12);">Row two</div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-dont"><b></b>Card-in-card: a bordered card nested inside another card. Double borders
+        and double padding waste space and muddy hierarchy.
+        <div style="margin-top: var(--mx-space-12);">
+          <div class="mx-panel" style="padding: var(--mx-space-16); box-shadow: none;">
+            <div style="border: var(--mx-border-default); border-radius: var(--mx-radius-md); padding: var(--mx-space-16); font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary);">
+              <div style="border: var(--mx-border-default); border-radius: var(--mx-radius-sm); padding: var(--mx-space-12);">Nested card</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. divider overuse + spacing+divider -->
+    <h3>Dividers</h3>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Separate with spacing first. Use at most one hairline divider where a real
+        grouping boundary exists.
+        <div style="margin-top: var(--mx-space-12);">
+          <div class="mx-panel" style="padding: var(--mx-space-16); box-shadow: none; display:flex; flex-direction:column; gap: var(--mx-space-12);">
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary);">Item</span>
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary);">Item</span>
+            <span style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary);">Item</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-dont"><b></b>A divider between every row <i>and</i> generous gaps — the double
+        separation is noisy and fights the calm surface.
+        <div style="margin-top: var(--mx-space-12);">
+          <div class="mx-panel" style="padding: var(--mx-space-16); box-shadow: none;">
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); padding: var(--mx-space-8) 0; border-bottom: var(--mx-divider-default);">Item</div>
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); padding: var(--mx-space-8) 0; border-bottom: var(--mx-divider-default);">Item</div>
+            <div style="font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); padding: var(--mx-space-8) 0; border-bottom: var(--mx-divider-default);">Item</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-note"><b>One rule of thumb</b> Reach for <b>spacing</b> before a divider, and a
+      <b>divider</b> before a nested card. If you need a border to separate two things, they probably just
+      need more <code>--mx-space-*</code>.</div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav"><a href="03-typography-gallery.html">‹ 03 Typography</a><a href="05-core-component-gallery.html">05 Core Components ›</a></nav>
+</main>
+
+</body>
+</html>

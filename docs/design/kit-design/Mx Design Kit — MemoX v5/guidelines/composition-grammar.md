@@ -6,7 +6,7 @@ guard — no vague words ("clean", "modern", "simple"). A screen can be **token-
 composition-wrong**; this document exists to make that impossible.
 
 Source-of-truth order: product docs (behavior) → Mx Base Kit (vocabulary) → **this grammar (composition)**
-→ screen specs → Flutter implementation.
+→ screen specs → React Native implementation.
 
 ---
 

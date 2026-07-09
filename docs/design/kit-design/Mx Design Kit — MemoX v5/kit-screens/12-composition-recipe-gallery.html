@@ -1,0 +1,583 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x4000" name="12 · Mx Composition Recipe Gallery" subtitle="Good vs bad examples with rule annotations — list/study/settings/modal/result/stats/empty" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>12 · Mx Composition Recipe Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+<style>
+  /* Local mock helpers — structural only. All colour/type/spacing pull var(--mx-*). */
+  .mx-mock {
+    background: var(--mx-color-background-app);
+    border-radius: var(--mx-radius-lg);
+    padding: var(--mx-space-16);
+    display: flex; flex-direction: column; gap: var(--mx-space-16);
+  }
+  .mx-mock--bad { gap: var(--mx-space-8); }
+  .mx-frame { margin-top: var(--mx-space-12); }
+  .mx-frame > .mx-mock { margin-top: var(--mx-space-12); }
+  .mx-cap {
+    font: var(--mx-weight-semibold) 10px var(--mx-font-mono);
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--mx-color-text-tertiary);
+  }
+  /* mock top bar */
+  .mk-topbar { display: flex; align-items: center; justify-content: space-between; }
+  .mk-title-lg { font: var(--mx-text-title-large-weight) var(--mx-text-title-large-size)/var(--mx-text-title-large-line) var(--mx-font-display); color: var(--mx-color-text-primary); margin: 0; }
+  .mk-title-md { font: var(--mx-text-title-medium-weight) var(--mx-text-title-medium-size)/var(--mx-text-title-medium-line) var(--mx-font-display); color: var(--mx-color-text-primary); margin: 0; }
+  .mk-sub { font: var(--mx-text-body-small-weight) var(--mx-text-body-small-size)/var(--mx-text-body-small-line) var(--mx-font-body); color: var(--mx-color-text-secondary); margin: 0; }
+  .mk-body { font: var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size)/var(--mx-text-body-medium-line) var(--mx-font-body); color: var(--mx-color-text-secondary); margin: 0; }
+  /* mock card / row */
+  .mk-card { background: var(--mx-color-surface-card); border: 1px solid var(--mx-color-border-default); border-radius: var(--mx-radius-lg); padding: var(--mx-space-16); box-shadow: var(--mx-elevation-low); }
+  .mk-card--nested { background: var(--mx-color-surface-elevated); border: 1px solid var(--mx-color-border-strong); border-radius: var(--mx-radius-md); padding: var(--mx-space-12); }
+  .mk-row { display: flex; align-items: center; gap: var(--mx-space-12); }
+  .mk-row-list { display: flex; flex-direction: column; gap: var(--mx-space-12); }
+  .mk-row-list--bad > * { border-bottom: 1px solid var(--mx-color-border-strong); }
+  .mk-lead { width: 40px; height: 40px; flex: 0 0 auto; border-radius: var(--mx-radius-md); background: var(--mx-color-state-selectedSurface); display: flex; align-items: center; justify-content: center; color: var(--mx-color-srs-active); font: var(--mx-weight-bold) 16px var(--mx-font-display); }
+  .mk-grow { flex: 1 1 auto; min-width: 0; }
+  /* mock badge / chip */
+  .mk-badge { display: inline-flex; align-items: center; height: 22px; padding: 0 var(--mx-space-8); border-radius: var(--mx-radius-pill); font: var(--mx-weight-semibold) 11px var(--mx-font-display); }
+  .mk-badge--due { background: var(--mx-color-feedback-warningSurface); color: var(--mx-color-feedback-warning); }
+  .mk-badge--new { background: var(--mx-color-state-selectedSurface); color: var(--mx-color-srs-active); }
+  .mk-badge--mastered { background: var(--mx-color-state-selectedSurface); color: var(--mx-color-srs-mastered); }
+  .mk-badge--wrong { background: var(--mx-color-feedback-wrongSurface); color: var(--mx-color-feedback-wrong); }
+  /* mock buttons */
+  .mk-btn { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 var(--mx-space-20); border-radius: var(--mx-radius-pill); font: var(--mx-text-button-weight) var(--mx-text-button-size)/var(--mx-text-button-line) var(--mx-font-display); border: 1px solid transparent; }
+  .mk-btn--primary { background: var(--mx-color-action-primary); color: var(--mx-color-text-onAction); }
+  .mk-btn--secondary { background: var(--mx-color-action-secondary); color: var(--mx-color-text-primary); border-color: var(--mx-color-border-default); }
+  .mk-btn--ghost { background: var(--mx-color-action-ghost); color: var(--mx-color-text-secondary); border-color: var(--mx-color-border-default); }
+  .mk-btn--destructive { background: var(--mx-color-destructive-surface); color: var(--mx-color-destructive-text); border: var(--mx-border-destructive); }
+  .mk-btn--block { width: 100%; }
+  .mk-actions { display: flex; gap: var(--mx-space-8); }
+  /* mock progress */
+  .mk-prog { height: 6px; border-radius: var(--mx-radius-pill); background: var(--mx-color-state-loadingSurface); overflow: hidden; }
+  .mk-prog > i { display: block; height: 100%; border-radius: var(--mx-radius-pill); background: var(--mx-color-srs-active); }
+  /* mock study card */
+  .mk-study { background: var(--mx-color-surface-card); border: 1px solid var(--mx-color-border-default); border-radius: var(--mx-radius-xl); padding: var(--mx-space-24); display: flex; flex-direction: column; gap: var(--mx-space-8); align-items: center; text-align: center; }
+  .mk-korean { font: var(--mx-text-study-korean-weight) var(--mx-text-study-korean-size)/var(--mx-text-study-korean-line) var(--mx-font-korean); color: var(--mx-color-text-primary); }
+  /* mock answer option */
+  .mk-opt { display: flex; align-items: center; gap: var(--mx-space-12); padding: var(--mx-space-12) var(--mx-space-16); border-radius: var(--mx-radius-md); border: 1px solid var(--mx-color-border-default); background: var(--mx-color-surface-card); color: var(--mx-color-text-primary); font: var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body); }
+  .mk-opt--selected { border: var(--mx-border-selected); background: var(--mx-color-state-selectedSurface); }
+  .mk-opt--correct { border: var(--mx-border-correct); background: var(--mx-color-feedback-correctSurface); }
+  .mk-opt--wrong { border: var(--mx-border-wrong); background: var(--mx-color-feedback-wrongSurface); }
+  /* mock settings row */
+  .mk-set-group { background: var(--mx-color-surface-card); border: 1px solid var(--mx-color-border-default); border-radius: var(--mx-radius-lg); overflow: hidden; }
+  .mk-set-row { display: flex; align-items: center; justify-content: space-between; gap: var(--mx-space-12); padding: var(--mx-space-16); min-height: var(--mx-size-settings-row-height); }
+  .mk-set-row + .mk-set-row { border-top: 1px solid var(--mx-color-divider-default); }
+  .mk-set-label { font: var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body); color: var(--mx-color-text-primary); }
+  .mk-set-value { font: var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body); color: var(--mx-color-text-tertiary); }
+  .mk-switch { width: 40px; height: 24px; border-radius: var(--mx-radius-pill); background: var(--mx-color-action-primary); position: relative; flex: 0 0 auto; }
+  .mk-switch::after { content: ""; position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: var(--mx-radius-full); background: var(--mx-color-text-onAction); }
+  .mk-switch--off { background: var(--mx-color-state-disabledSurface); border: 1px solid var(--mx-color-border-strong); }
+  .mk-switch--off::after { left: 2px; right: auto; background: var(--mx-color-text-tertiary); }
+  /* mock metric tile */
+  .mk-metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--mx-space-12); }
+  .mk-metric { background: var(--mx-color-surface-card); border: 1px solid var(--mx-color-border-default); border-radius: var(--mx-radius-md); padding: var(--mx-space-16); display: flex; flex-direction: column; gap: var(--mx-space-4); }
+  .mk-metric .num { font: var(--mx-text-stat-number-weight) var(--mx-text-stat-number-size)/var(--mx-text-stat-number-line) var(--mx-font-mono); color: var(--mx-color-text-primary); font-variant-numeric: tabular-nums; }
+  .mk-metric .lbl { font: var(--mx-weight-medium) 11px var(--mx-font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--mx-color-text-tertiary); }
+  /* mock modal sheet */
+  .mk-sheet { background: var(--mx-color-surface-modal); border: 1px solid var(--mx-color-border-default); border-radius: var(--mx-radius-xl); padding: var(--mx-space-20); box-shadow: var(--mx-elevation-modal); display: flex; flex-direction: column; gap: var(--mx-space-12); }
+  .mk-handle { width: 36px; height: 4px; border-radius: var(--mx-radius-pill); background: var(--mx-color-border-strong); align-self: center; }
+  /* mock tabs */
+  .mk-tabs { display: flex; gap: var(--mx-space-16); border-bottom: 1px solid var(--mx-color-border-subtle); }
+  .mk-tab { padding: var(--mx-space-8) 0; font: var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display); color: var(--mx-color-text-tertiary); border-bottom: 2px solid transparent; }
+  .mk-tab--active { color: var(--mx-color-text-primary); border-bottom-color: var(--mx-color-srs-active); }
+  /* mock chart */
+  .mk-chart { display: flex; align-items: flex-end; gap: var(--mx-space-8); height: 96px; padding: var(--mx-space-12); background: var(--mx-color-surface-card); border: 1px solid var(--mx-color-border-default); border-radius: var(--mx-radius-md); }
+  .mk-bar { flex: 1 1 0; border-radius: var(--mx-radius-xs) var(--mx-radius-xs) 0 0; background: var(--mx-color-chart-wordMetric); }
+  /* mock empty state */
+  .mk-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--mx-space-12); padding: var(--mx-space-48) var(--mx-space-24); }
+  .mk-empty .glyph { width: 56px; height: 56px; border-radius: var(--mx-radius-full); display: flex; align-items: center; justify-content: center; font-size: 26px; }
+  .mk-empty .glyph--positive { background: var(--mx-color-feedback-correctSurface); color: var(--mx-color-feedback-correct); }
+  .mk-empty .glyph--error { background: var(--mx-color-feedback-wrongSurface); color: var(--mx-color-feedback-wrong); }
+  .mk-mistakes { margin: var(--mx-space-12) 0 0; padding-left: var(--mx-space-20); }
+  .mk-mistakes li { font-size: var(--mx-text-body-small-size); color: var(--mx-color-text-secondary); line-height: 1.6; }
+  .mk-mistakes li::marker { color: var(--mx-color-feedback-wrong); }
+</style>
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 12 Composition Recipes</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="11-layout-template-gallery.html">‹ Prev</a>
+    <a href="13-mini-golden-samples.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 12</p>
+  <h1 class="mx-title">Mx Composition Recipe Gallery</h1>
+  <p class="mx-lead">
+    Tokens make a screen <b>consistent</b>; composition makes it <b>correct</b>. A screen can use every
+    <code>--mx-*</code> token perfectly and still be wrong — two primary actions, a card nested in a card,
+    or a due amber shown as error red. Each recipe below pairs a <b>good</b> Mx composition against a
+    concrete <b>bad</b> one, annotates the spacing rhythm, typography hierarchy, and action hierarchy at
+    play, and lists the common mistakes it guards against. All mocks are token-styled; where useful a
+    <code>data-theme="light"</code> pane shows the same rule holds in both themes.
+  </p>
+  <div class="mx-note"><b>How to read this</b> The <b>DO</b> pane is a real Mx composition built from
+    <code>MxCard</code>, <code>MxActionButton</code>, <code>MxListRow</code>, etc. The <b>DON'T</b> pane is
+    the same content composed wrong. The mistake is in the <i>arrangement</i>, not the tokens — both panes
+    draw from the same palette.</div>
+
+  <!-- ============ 1. LIST SCREEN ============ -->
+  <section class="mx-section mx-anchor" id="list">
+    <h2>1 · List screen</h2>
+    <p><code>MxListScreenRecipe</code> — Deck / Flashcard / Language lists. TopBar → optional filter strip →
+      list section → sticky bottom action. <b>One</b> primary (Add / Start); rows share one style; due is
+      amber, new is violet — never confused.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do">
+        <b></b>
+        <span class="mx-cap">MxListScreenRecipe · good</span>
+        <div class="mx-mock">
+          <div class="mk-topbar">
+            <h3 class="mk-title-lg">Decks</h3>
+            <span class="mk-badge mk-badge--new">+ Add</span>
+          </div>
+          <div class="mk-row-list">
+            <div class="mk-card mk-row">
+              <span class="mk-lead">한</span>
+              <div class="mk-grow"><p class="mk-title-md">Korean · TOPIK I</p><p class="mk-sub">128 cards</p></div>
+              <span class="mk-badge mk-badge--due">12 due</span>
+            </div>
+            <div class="mk-card mk-row">
+              <span class="mk-lead">한</span>
+              <div class="mk-grow"><p class="mk-title-md">Everyday phrases</p><p class="mk-sub">64 cards</p></div>
+              <span class="mk-badge mk-badge--new">8 new</span>
+            </div>
+          </div>
+          <button class="mk-btn mk-btn--primary mk-btn--block">Start study</button>
+        </div>
+      </div>
+      <div class="mx-dont">
+        <b></b>
+        <span class="mx-cap">two primaries · mixed rows · wrong colour</span>
+        <div class="mx-mock mx-mock--bad">
+          <div class="mk-topbar">
+            <h3 class="mk-title-lg">Decks</h3>
+            <button class="mk-btn mk-btn--primary" style="height:34px;padding:0 var(--mx-space-12)">Add deck</button>
+          </div>
+          <div class="mk-row-list">
+            <div class="mk-card mk-row" style="padding:var(--mx-space-8)">
+              <span class="mk-lead">한</span>
+              <div class="mk-grow"><p class="mk-title-md">Korean · TOPIK I</p></div>
+              <span class="mk-badge mk-badge--wrong">12 due</span>
+            </div>
+            <div class="mk-card mk-row" style="border-radius:var(--mx-radius-xs);padding:var(--mx-space-20);gap:var(--mx-space-4)">
+              <div class="mk-grow"><p class="mk-sub" style="color:var(--mx-color-text-primary)">Everyday phrases — 64 cards, 8 new, last studied Tuesday, streak 4</p></div>
+            </div>
+          </div>
+          <button class="mk-btn mk-btn--primary mk-btn--block">Start study</button>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note">
+      <b>Spacing rhythm</b> good: gutter 16 · item gap 12 · row internal 12. bad: random 8 / 4 / 20 padding
+      per row, no shared rhythm.<br>
+      <b>Typography</b> good: title-medium + body-small subtitle. bad: everything body-small, no hierarchy.<br>
+      <b>Action hierarchy</b> good: one primary (Start), Add is a ghost affordance. bad: two solid primaries
+      compete.<br>
+      <b>Colour</b> good: due = <code>srs-due</code> amber. bad: due painted with <code>feedback-wrong</code>
+      red — "needs review" reads as "error".
+    </div>
+    <ul class="mk-mistakes">
+      <li>Mixed row styles / radii in one list.</li>
+      <li>Two solid primaries in the top region.</li>
+      <li>Row height that clips long deck names (single line, no wrap).</li>
+      <li>Due badge in wrong-red instead of due-amber.</li>
+    </ul>
+  </section>
+
+  <!-- ============ 2. STUDY SCREEN ============ -->
+  <section class="mx-section mx-anchor" id="study">
+    <h2>2 · Study screen</h2>
+    <p><code>MxStudyScreenRecipe</code> — the active study content is the focus. TopBar → progress bar →
+      MxStudyCard → answer options → one bottom action. Progress ≠ mastery; <b>selected</b> (violet) must not
+      look like <b>correct</b> (green).</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do">
+        <b></b>
+        <span class="mx-cap">MxStudyScreenRecipe · good</span>
+        <div class="mx-mock">
+          <div class="mk-prog"><i style="width:45%"></i></div>
+          <div class="mk-study">
+            <span class="mk-cap">Prompt</span>
+            <p class="mk-korean">사과</p>
+          </div>
+          <div class="mk-row-list">
+            <div class="mk-opt mk-opt--selected">Apple</div>
+            <div class="mk-opt">Pear</div>
+            <div class="mk-opt">Grape</div>
+          </div>
+          <button class="mk-btn mk-btn--primary mk-btn--block">Check answer</button>
+        </div>
+      </div>
+      <div class="mx-dont">
+        <b></b>
+        <span class="mx-cap">selected shown as correct · cramped · two primaries</span>
+        <div class="mx-mock mx-mock--bad">
+          <div class="mk-prog" style="height:14px"><i style="width:45%;background:var(--mx-color-feedback-correct)"></i></div>
+          <div class="mk-study" style="padding:var(--mx-space-8);gap:var(--mx-space-2)">
+            <p class="mk-korean" style="font-size:22px">사과</p>
+          </div>
+          <div class="mk-row-list" style="gap:var(--mx-space-4)">
+            <div class="mk-opt mk-opt--correct">Apple</div>
+            <div class="mk-opt">Pear</div>
+          </div>
+          <div class="mk-actions">
+            <button class="mk-btn mk-btn--primary mk-btn--block">Check</button>
+            <button class="mk-btn mk-btn--primary mk-btn--block">Skip</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note">
+      <b>Spacing rhythm</b> good: progress→content 16 · options gap 12 · action top 16. bad: 2–4px crush, no
+      breathing room around the prompt.<br>
+      <b>Typography</b> good: Korean prompt at full study size (34). bad: shrunk to 22 to fit — a hard no.<br>
+      <b>Action hierarchy</b> good: one primary (Check); Skip would be ghost. bad: two solid primaries.<br>
+      <b>Colour / state</b> good: user's pick uses <code>state-selected</code> violet (pre-grade). bad:
+      selection painted <code>feedback-correct</code> green + a green progress fill — reads as "graded
+      correct" before the user has checked; progress bar masquerades as mastery.
+    </div>
+    <ul class="mk-mistakes">
+      <li>Progress bar read as SRS mastery (never colour it feedback-green).</li>
+      <li>Selected option styled as correct/graded.</li>
+      <li>Cramped answer area; prompt shrunk below the study token size.</li>
+      <li>Two primaries (Check + Skip both solid).</li>
+    </ul>
+  </section>
+
+  <!-- ============ 3. SETTINGS SCREEN ============ -->
+  <section class="mx-section mx-anchor" id="settings">
+    <h2>3 · Settings screen</h2>
+    <p><code>MxSettingsScreenRecipe</code> — grouped <code>MxSettingsSection</code> → rows. Either divider
+      rows with <b>0</b> gap <b>or</b> card rows with 8/12 gap — <b>never both</b>. High-risk rows are a
+      separated destructive section; opening settings never mutates state.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do">
+        <b></b>
+        <span class="mx-cap">MxSettingsScreenRecipe · good</span>
+        <div class="mx-mock">
+          <div class="mk-set-group">
+            <div class="mk-set-row"><span class="mk-set-label">Appearance</span><span class="mk-set-value">System</span></div>
+            <div class="mk-set-row"><span class="mk-set-label">Daily reminder</span><span class="mk-switch"></span></div>
+            <div class="mk-set-row"><span class="mk-set-label">Sound effects</span><span class="mk-switch mk-switch--off"></span></div>
+          </div>
+          <div class="mk-set-group">
+            <div class="mk-set-row"><span class="mk-set-label" style="color:var(--mx-color-destructive-text)">Reset all progress</span><span class="mk-badge" style="background:var(--mx-color-destructive-surface);color:var(--mx-color-destructive-text)">High-risk</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-dont">
+        <b></b>
+        <span class="mx-cap">dividers AND gaps · destructive as normal row</span>
+        <div class="mx-mock mx-mock--bad">
+          <div class="mk-row-list" style="gap:var(--mx-space-16)">
+            <div class="mk-set-group"><div class="mk-set-row" style="border-bottom:1px solid var(--mx-color-border-strong)"><span class="mk-set-label">Appearance</span><span class="mk-set-value">System</span></div></div>
+            <div class="mk-set-group"><div class="mk-set-row" style="border-bottom:1px solid var(--mx-color-border-strong)"><span class="mk-set-label">Daily reminder</span><span class="mk-switch"></span></div></div>
+            <div class="mk-set-group"><div class="mk-set-row"><span class="mk-set-label">Reset all progress</span><span class="mk-set-value">Tap</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note">
+      <b>Spacing rhythm</b> good: one system — divider rows, 0 gap inside a group, 16 between groups. bad:
+      heavy strong-borders <i>and</i> 16px gaps between every row — double rhythm, visually noisy.<br>
+      <b>Typography</b> good: body-medium label + body-small value. bad: same.<br>
+      <b>Action hierarchy</b> good: destructive isolated in its own group with destructive grammar. bad:
+      "Reset all progress" styled exactly like a benign navigation row — nothing warns the user.<br>
+      <b>State</b> good: switches show on/off distinctly. bad: destructive row indistinguishable from safe rows.
+    </div>
+    <ul class="mk-mistakes">
+      <li>Heavy dividers <b>and</b> big gaps (pick one rhythm).</li>
+      <li>Destructive / restore styled like a normal row.</li>
+      <li>Opening settings mutating state.</li>
+      <li>Card-in-card: a group inside a group.</li>
+    </ul>
+  </section>
+
+  <!-- ============ 4. MODAL SHEET ============ -->
+  <section class="mx-section mx-anchor" id="modal">
+    <h2>4 · Modal sheet</h2>
+    <p><code>MxModalSheetRecipe</code> — grab handle → title → action rows → close. Task-focused, tappable
+      rows, destructive option separated, no card-in-card. Same rule holds in light — parity shown below.</p>
+
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark · good">
+        <span class="mx-cap">MxModalSheetRecipe · good</span>
+        <div class="mk-sheet" style="margin-top:var(--mx-space-12)">
+          <span class="mk-handle"></span>
+          <h3 class="mk-title-md">Play mode</h3>
+          <div class="mk-row-list">
+            <div class="mk-opt">Flashcards</div>
+            <div class="mk-opt">Multiple choice</div>
+            <div class="mk-opt">Fill in the blank</div>
+          </div>
+          <button class="mk-btn mk-btn--ghost mk-btn--block">Cancel</button>
+        </div>
+      </div>
+      <div class="mx-pane" data-theme="light" data-label="Light · good">
+        <span class="mx-cap">same recipe · light theme</span>
+        <div class="mk-sheet" style="margin-top:var(--mx-space-12)">
+          <span class="mk-handle"></span>
+          <h3 class="mk-title-md">Play mode</h3>
+          <div class="mk-row-list">
+            <div class="mk-opt">Flashcards</div>
+            <div class="mk-opt">Multiple choice</div>
+            <div class="mk-opt">Fill in the blank</div>
+          </div>
+          <button class="mk-btn mk-btn--ghost mk-btn--block">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mx-callouts">
+      <div class="mx-dont">
+        <b></b>
+        <span class="mx-cap">card-in-card · destructive inline · no handle</span>
+        <div class="mx-mock mx-mock--bad">
+          <div class="mk-sheet" style="gap:var(--mx-space-8)">
+            <h3 class="mk-title-md">Play mode</h3>
+            <div class="mk-card">
+              <div class="mk-card mk-card--nested" style="margin-bottom:var(--mx-space-8)">Flashcards</div>
+              <div class="mk-card mk-card--nested" style="margin-bottom:var(--mx-space-8)">Multiple choice</div>
+              <div class="mk-card mk-card--nested" style="color:var(--mx-color-destructive-text)">Delete deck</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-do">
+        <b></b>
+        <span class="mx-cap">why the good one works</span>
+        <div class="mk-body" style="padding:var(--mx-space-4) 0">
+          <p class="mk-body">Flat option rows, one radius level, a grab handle to signal the sheet, and no
+          destructive action buried among navigation choices. A "Delete deck" would live in its own
+          separated destructive variant — never mixed into the play list.</p>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note">
+      <b>Spacing rhythm</b> good: sheet padding 20 · option gap 12 · handle→title 12. bad: nested paddings
+      stack (16 outer + 12 inner) with no consistent gap.<br>
+      <b>Typography</b> good: title-medium heading, body option rows. <b>Action hierarchy</b> good: cancel is
+      ghost, no competing primary; bad: a destructive row sits inline with benign options.<br>
+      <b>Nesting</b> good: flat rows on the sheet surface. bad: <code>MxCard</code> inside <code>MxCard</code>
+      inside the sheet — three stacked surfaces, muddy depth.
+    </div>
+    <ul class="mk-mistakes">
+      <li>Card-in-card nesting on the sheet.</li>
+      <li>Destructive option inline with normal options.</li>
+      <li>Missing grab handle / title.</li>
+      <li>Rows too small to tap (below 44 target).</li>
+    </ul>
+  </section>
+
+  <!-- ============ 5. RESULT SCREEN ============ -->
+  <section class="mx-section mx-anchor" id="result">
+    <h2>5 · Result screen</h2>
+    <p><code>MxResultScreenRecipe</code> — summary hero → key metrics → next actions. Result <b>is not
+      statistics</b>: one headline metric first, one primary next action, no overwhelming charts.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do">
+        <b></b>
+        <span class="mx-cap">MxResultScreenRecipe · good</span>
+        <div class="mx-mock">
+          <div class="mk-study" style="border-radius:var(--mx-radius-lg);padding:var(--mx-space-20)">
+            <span class="mk-cap">Session complete</span>
+            <p style="font:var(--mx-text-display-large-weight) var(--mx-text-display-large-size)/var(--mx-text-display-large-line) var(--mx-font-display);color:var(--mx-color-feedback-correct);margin:0">92%</p>
+            <p class="mk-body">23 of 25 correct</p>
+          </div>
+          <div class="mk-metric-grid">
+            <div class="mk-metric"><span class="num">25</span><span class="lbl">Reviewed</span></div>
+            <div class="mk-metric"><span class="num">4:12</span><span class="lbl">Time</span></div>
+          </div>
+          <button class="mk-btn mk-btn--primary mk-btn--block">Continue</button>
+          <button class="mk-btn mk-btn--ghost mk-btn--block">Back to deck</button>
+        </div>
+      </div>
+      <div class="mx-dont">
+        <b></b>
+        <span class="mx-cap">no headline · chart overload · three primaries</span>
+        <div class="mx-mock mx-mock--bad">
+          <div class="mk-metric-grid" style="grid-template-columns:1fr 1fr 1fr;gap:var(--mx-space-4)">
+            <div class="mk-metric" style="padding:var(--mx-space-8)"><span class="num" style="font-size:16px">92%</span><span class="lbl">Acc</span></div>
+            <div class="mk-metric" style="padding:var(--mx-space-8)"><span class="num" style="font-size:16px">25</span><span class="lbl">Rev</span></div>
+            <div class="mk-metric" style="padding:var(--mx-space-8)"><span class="num" style="font-size:16px">4:12</span><span class="lbl">Time</span></div>
+          </div>
+          <div class="mk-chart">
+            <div class="mk-bar" style="height:40%"></div><div class="mk-bar" style="height:70%"></div>
+            <div class="mk-bar" style="height:55%"></div><div class="mk-bar" style="height:90%"></div>
+            <div class="mk-bar" style="height:65%"></div>
+          </div>
+          <div class="mk-actions">
+            <button class="mk-btn mk-btn--primary mk-btn--block">Continue</button>
+            <button class="mk-btn mk-btn--primary mk-btn--block">Retry</button>
+            <button class="mk-btn mk-btn--primary mk-btn--block">Stats</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note">
+      <b>Spacing rhythm</b> good: hero → metrics 16 · metrics → action 16. bad: 4px crush, no hero breathing
+      room.<br>
+      <b>Typography hierarchy</b> good: one display-large headline (92%) dominates; metrics are tabular
+      support. bad: everything shrunk to 16px — no focal point.<br>
+      <b>Action hierarchy</b> good: one primary (Continue), rest ghost. bad: three solid primaries.<br>
+      <b>Scope</b> good: no analytics chart here. bad: a stats chart drags long-term analytics into a session
+      result — that belongs on Statistics.
+    </div>
+    <ul class="mk-mistakes">
+      <li>No dominant headline metric.</li>
+      <li>Analytics charts on a session result (wrong recipe).</li>
+      <li>Multiple primary next actions.</li>
+      <li>Missing finalize-failed (retry, data preserved) state.</li>
+    </ul>
+  </section>
+
+  <!-- ============ 6. STATISTICS SCREEN ============ -->
+  <section class="mx-section mx-anchor" id="stats">
+    <h2>6 · Statistics screen</h2>
+    <p><code>MxStatisticsScreenRecipe</code> — scope filter → underline <code>MxTabs</code> → chart → metric
+      summary. Charts <b>never</b> use fake data; the selected tab is clear; don't overload with metrics.
+      Statistics is long-term analytics, never a Session Result.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do">
+        <b></b>
+        <span class="mx-cap">MxStatisticsScreenRecipe · good</span>
+        <div class="mx-mock">
+          <div class="mk-tabs">
+            <span class="mk-tab mk-tab--active">Words</span>
+            <span class="mk-tab">Time</span>
+            <span class="mk-tab">Accuracy</span>
+          </div>
+          <div class="mk-chart">
+            <div class="mk-bar" style="height:35%"></div><div class="mk-bar" style="height:50%"></div>
+            <div class="mk-bar" style="height:45%"></div><div class="mk-bar" style="height:70%"></div>
+            <div class="mk-bar" style="height:60%"></div><div class="mk-bar" style="height:85%"></div>
+            <div class="mk-bar" style="height:75%"></div>
+          </div>
+          <div class="mk-metric-grid">
+            <div class="mk-metric"><span class="num">1,284</span><span class="lbl">Words learned</span></div>
+            <div class="mk-metric"><span class="num">86%</span><span class="lbl">Retention</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-dont">
+        <b></b>
+        <span class="mx-cap">no active tab · metric overload · missing empty state</span>
+        <div class="mx-mock mx-mock--bad">
+          <div class="mk-tabs">
+            <span class="mk-tab">Words</span><span class="mk-tab">Time</span>
+            <span class="mk-tab">Accuracy</span><span class="mk-tab">Streak</span>
+          </div>
+          <div class="mk-metric-grid" style="grid-template-columns:repeat(4,1fr);gap:var(--mx-space-4)">
+            <div class="mk-metric" style="padding:var(--mx-space-6)"><span class="num" style="font-size:15px">1284</span><span class="lbl">Words</span></div>
+            <div class="mk-metric" style="padding:var(--mx-space-6)"><span class="num" style="font-size:15px">86%</span><span class="lbl">Ret</span></div>
+            <div class="mk-metric" style="padding:var(--mx-space-6)"><span class="num" style="font-size:15px">42h</span><span class="lbl">Time</span></div>
+            <div class="mk-metric" style="padding:var(--mx-space-6)"><span class="num" style="font-size:15px">18</span><span class="lbl">Streak</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note">
+      <b>Spacing rhythm</b> good: tabs → chart 16 · chart → metrics 16. bad: 4px crush, eight metrics with no
+      air.<br>
+      <b>Typography</b> good: stat-number (mono, tabular) with a clear label. bad: shrunk to 15px, labels
+      abbreviated to noise.<br>
+      <b>Action / selection hierarchy</b> good: one tab underlined active. bad: no active tab — user can't
+      tell scope.<br>
+      <b>State</b> good: chart present with a defined empty ("no data yet") variant. bad: no empty/read-model
+      state designed, so a fresh account shows a broken chart.
+    </div>
+    <ul class="mk-mistakes">
+      <li>No clearly selected tab.</li>
+      <li>Metric overload (too many tiles, none readable).</li>
+      <li>Fake / placeholder chart data.</li>
+      <li>Missing empty / read-model-needed state.</li>
+    </ul>
+  </section>
+
+  <!-- ============ 7. EMPTY / ERROR ============ -->
+  <section class="mx-section mx-anchor" id="empty">
+    <h2>7 · Empty / error</h2>
+    <p><code>MxEmptyErrorScreenRecipe</code> — centered icon → title → message → recovery action. <b>No-due
+      is positive/neutral, not an error.</b> The message explains what happened; the recovery action is
+      clear; finalize-failed preserves data and offers retry.</p>
+
+    <div class="mx-callouts">
+      <div class="mx-do">
+        <b></b>
+        <span class="mx-cap">no-due · positive, not error</span>
+        <div class="mx-mock">
+          <div class="mk-empty">
+            <span class="glyph glyph--positive">✓</span>
+            <h3 class="mk-title-md">All caught up</h3>
+            <p class="mk-body">Nothing due today. New cards unlock tomorrow.</p>
+            <button class="mk-btn mk-btn--secondary">Browse decks</button>
+          </div>
+        </div>
+      </div>
+      <div class="mx-dont">
+        <b></b>
+        <span class="mx-cap">no-due painted as error · no recovery</span>
+        <div class="mx-mock mx-mock--bad">
+          <div class="mk-empty" style="padding:var(--mx-space-16)">
+            <span class="glyph glyph--error">✕</span>
+            <h3 class="mk-title-md" style="color:var(--mx-color-feedback-wrong)">No cards due!</h3>
+            <p class="mk-body">Error: nothing to study.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note">
+      <b>Spacing rhythm</b> good: generous 48 top/bottom breathing room for a centered state. bad: cramped
+      16 — the empty state feels like a squished error toast.<br>
+      <b>Typography</b> good: title-medium + body message, calm. bad: same size but red.<br>
+      <b>Colour / semantics</b> good: no-due uses <code>srs-noDue</code>/<code>feedback-correct</code> green
+      and a check — a <i>good</i> outcome. bad: painted with <code>feedback-wrong</code> red and an ✕ — a
+      normal, positive state framed as a failure.<br>
+      <b>State</b> good: a recovery action ("Browse decks"). bad: no recovery action at all — dead end.
+    </div>
+    <ul class="mk-mistakes">
+      <li>No-due (a good state) styled as an error.</li>
+      <li>Message that doesn't explain what happened.</li>
+      <li>Missing recovery / retry action.</li>
+      <li>finalize-failed that loses data instead of preserving + retry.</li>
+    </ul>
+  </section>
+
+  <!-- ============ RN HANDOFF ============ -->
+  <section class="mx-section mx-anchor" id="handoff">
+    <h2>Composition is enforced in review</h2>
+    <div class="mx-rn">
+      <b>React Native</b> Composition rules are enforced in <b>review</b>, not by tokens alone — a screen can
+      be token-correct and still composition-wrong. Build every screen from a recipe: use
+      <code>MxActionButton</code> action hierarchy (<b>≤1 primary per region</b>; destructive never styled as
+      a normal primary), <code>MxCard</code> with <b>no card-in-card nesting</b>, one spacing rhythm from
+      <code>MxSpacing</code>, and design <b>every applicable state</b> (loading / empty / error / no-due /
+      finalize-failed). Semantic colour follows intent: <code>srs-due</code> amber ≠ <code>feedback-wrong</code>
+      red, <code>state-selected</code> violet ≠ <code>feedback-correct</code> green.
+    </div>
+  </section>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="11-layout-template-gallery.html">‹ 11 Layout Templates</a>
+    <a href="13-mini-golden-samples.html">13 Mini Golden Samples ›</a>
+  </nav>
+</main>
+
+</body>
+</html>

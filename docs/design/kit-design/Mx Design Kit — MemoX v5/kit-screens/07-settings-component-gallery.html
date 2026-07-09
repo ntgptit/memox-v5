@@ -1,0 +1,594 @@
+<!-- @dsCard group="Kit Screens" viewport="1040x3200" name="07 · Mx Settings Component Gallery" subtitle="Sections, rows, language, reminder, weekday chips, theme tiles — high-risk + unavailable + RN" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>07 · Mx Settings Component Gallery</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="./kit-screens.css" />
+</head>
+<body class="mx-doc">
+
+<header class="mx-doc-bar">
+  <span class="mx-crumb"><b>Mx Kit Screens</b> · 07 Settings Components</span>
+  <span class="mx-spacer"></span>
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="06-learning-component-gallery.html">‹ Prev</a>
+    <a href="08-data-statistics-gallery.html">Next ›</a>
+  </nav>
+</header>
+
+<main class="mx-page">
+  <p class="mx-kicker">Mx Kit Screens · 07</p>
+  <h1 class="mx-title">Mx Settings Component Gallery</h1>
+  <p class="mx-lead">
+    The Settings family is where MemoX exposes preferences without ever mutating learning data. Every
+    line on a settings screen is an <code>MxSettingsRow</code> variant — never a hand-rolled row —
+    grouped by <code>MxSettingsSection</code>, with toggles rendered as <code>MxSwitch</code>. This page
+    documents each built component (anatomy, states, tokens, accessibility, and the <b>React Native</b>
+    handoff), flags the four rows that are still <b>RN handoff contracts, not kit components</b>, and shows
+    the high-risk / unavailable states in token-styled dark<b>+</b>light demos. The live specimen below is
+    the base kit's own settings card, embedded unchanged.
+  </p>
+  <div class="mx-note"><b>Opening ≠ mutating</b> Reaching a settings screen or a child settings screen
+    <b>never</b> changes decks, cards, sessions, <code>box</code>, or <code>due_at</code>. Preference
+    changes take effect going forward only. This is a hard product contract, not a visual nicety —
+    see <code>docs/design/09-settings.md</code> and <code>docs/design/screens/spaced-repetition-settings.md</code>.</div>
+
+  <!-- ============ LIVE GALLERY ============ -->
+  <section class="mx-section mx-anchor" id="live">
+    <h2>Live component gallery</h2>
+    <p>Settings section + rows, native-language rows, a reminder row with weekday chips, and theme preset
+      tiles — rendered from the real <code>Mx*</code> components in both <b>dark</b> (primary) and
+      <b>light</b> themes.</p>
+    <figure class="mx-embed"><figcaption>Mx Settings Components <span class="path">components/settings/settings.card.html</span></figcaption>
+      <iframe src="../components/settings/settings.card.html" height="1000" loading="lazy" title="Settings components — dark and light"></iframe></figure>
+  </section>
+
+  <!-- ============ MxSettingsSection ============ -->
+  <section class="mx-section mx-anchor" id="settings-section">
+    <h2>MxSettingsSection</h2>
+    <p>A titled group of settings rows. It owns the section label, an optional descriptive line, and the
+      shared card surface / dividers around its children. It carries <b>no interaction of its own</b> — it
+      is a layout + grouping primitive.</p>
+
+    <table class="mx-spec">
+      <caption>MxSettingsSection — anatomy &amp; tokens</caption>
+      <thead><tr><th>Part</th><th>Role</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>Section title</td><td>Group label above the card</td><td class="tok">--mx-text-label-medium · --mx-color-text-tertiary</td></tr>
+        <tr><td>Description</td><td>Optional context line (e.g. "Opening never changes learning data")</td><td class="tok">--mx-text-body-small · --mx-color-text-secondary</td></tr>
+        <tr><td>Group surface</td><td>Card wrapping the rows</td><td class="tok">--mx-color-surface-card · --mx-radius-lg · --mx-border-default</td></tr>
+        <tr><td>Row dividers</td><td>Hairline between rows</td><td class="tok">--mx-color-divider-default</td></tr>
+      </tbody>
+    </table>
+
+    <table class="mx-spec">
+      <caption>MxSettingsSection — props</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">title</td><td>ReactNode?</td><td>Group heading</td></tr>
+        <tr><td class="tok">description</td><td>ReactNode?</td><td>Context line; the natural home for the "opening never mutates" reassurance</td></tr>
+        <tr><td class="tok">children</td><td>ReactNode</td><td>The <code>MxSettingsRow</code> lines</td></tr>
+        <tr><td class="tok">style</td><td>CSSProperties?</td><td>Escape hatch — avoid overriding tokens</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxSettingsSection</code>. Renders a
+      <code>&lt;View&gt;</code> with an accessibility <code>role="header"</code> on the title and groups
+      children in a single card; dividers are inset, not full-bleed.</div>
+  </section>
+
+  <!-- ============ MxSettingsRow ============ -->
+  <section class="mx-section mx-anchor" id="settings-row">
+    <h2>MxSettingsRow</h2>
+    <p>The settings-line primitive: leading glyph, title + optional subtitle, and a trailing
+      <b>value</b> (text) <b>or</b> <b>control</b> (e.g. an <code>MxSwitch</code>). It <b>reflects and
+      navigates; opening never mutates</b>. Every settings line is a variant of this row — the app never
+      hand-rolls a settings row.</p>
+
+    <table class="mx-spec">
+      <caption>MxSettingsRow — anatomy &amp; tokens</caption>
+      <thead><tr><th>Part</th><th>Role</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>Leading icon</td><td>Visual hint, secondary to label</td><td class="tok">--mx-size-icon-md · --mx-color-text-secondary</td></tr>
+        <tr><td>Title</td><td>Primary label</td><td class="tok">--mx-text-body-large · --mx-color-text-primary</td></tr>
+        <tr><td>Subtitle</td><td>Optional secondary line</td><td class="tok">--mx-text-body-small · --mx-color-text-tertiary</td></tr>
+        <tr><td>Trailing value</td><td>Reflected current value</td><td class="tok">--mx-text-body-medium · --mx-color-text-secondary</td></tr>
+        <tr><td>Row height / surface</td><td>Consistent tap target</td><td class="tok">--mx-size-settings-row-height (56) · --mx-color-surface-card</td></tr>
+      </tbody>
+    </table>
+
+    <table class="mx-spec">
+      <caption>MxSettingsRow — props</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">title</td><td>ReactNode</td><td>Required label</td></tr>
+        <tr><td class="tok">subtitle</td><td>ReactNode?</td><td>Secondary line</td></tr>
+        <tr><td class="tok">leading</td><td>ReactNode?</td><td>Icon / avatar</td></tr>
+        <tr><td class="tok">value</td><td>ReactNode?</td><td>Trailing text, e.g. "English"</td></tr>
+        <tr><td class="tok">control</td><td>ReactNode?</td><td>Trailing control, e.g. <code>MxSwitch</code></td></tr>
+        <tr><td class="tok">tone</td><td>"default" | "destructive"</td><td><code>destructive</code> = high-risk; pair with <code>MxConfirmDialog</code></td></tr>
+        <tr><td class="tok">disabled</td><td>boolean?</td><td>Temporarily inactive (dimmed, non-tappable)</td></tr>
+        <tr><td class="tok">unavailable</td><td>boolean?</td><td>Future/blocked — shows a "Soon" affordance, blocks tap</td></tr>
+        <tr><td class="tok">onClick</td><td>() =&gt; void</td><td>Navigates / opens a picker — <b>does not mutate</b></td></tr>
+      </tbody>
+    </table>
+
+    <h3>States — default · disabled · unavailable</h3>
+    <p>The live card shows default and unavailable. Below, the three non-destructive lifecycle states side
+      by side, in both themes. <b>Unavailable must look intentional</b> ("Soon"), never broken.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-panel">
+          <div class="mx-stack">
+            <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);">
+              <span style="color:var(--mx-color-text-secondary);">◐</span>
+              <span style="flex:1;font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-primary);">Native language</span>
+              <span style="font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">English</span>
+              <span style="color:var(--mx-color-text-tertiary);">›</span>
+            </div>
+            <div style="height:1px;background:var(--mx-color-divider-default);"></div>
+            <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);opacity:0.5;">
+              <span style="color:var(--mx-color-text-disabled);">◐</span>
+              <span style="flex:1;font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-disabled);">Export deck <span class="mx-muted">(disabled)</span></span>
+              <span style="font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body);color:var(--mx-color-text-disabled);">—</span>
+            </div>
+            <div style="height:1px;background:var(--mx-color-divider-default);"></div>
+            <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);background:var(--mx-color-state-unavailableSurface);border-radius:var(--mx-radius-sm);">
+              <span style="color:var(--mx-color-text-tertiary);">◐</span>
+              <div style="flex:1;">
+                <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">Cloud sync</div>
+                <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Provider not selected</div>
+              </div>
+              <span class="mx-tag" style="background:var(--mx-color-state-selectedSurface);">Soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-panel">
+          <div class="mx-stack">
+            <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);">
+              <span style="color:var(--mx-color-text-secondary);">◐</span>
+              <span style="flex:1;font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-primary);">Native language</span>
+              <span style="font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">English</span>
+              <span style="color:var(--mx-color-text-tertiary);">›</span>
+            </div>
+            <div style="height:1px;background:var(--mx-color-divider-default);"></div>
+            <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);opacity:0.5;">
+              <span style="color:var(--mx-color-text-disabled);">◐</span>
+              <span style="flex:1;font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-disabled);">Export deck <span class="mx-muted">(disabled)</span></span>
+              <span style="font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body);color:var(--mx-color-text-disabled);">—</span>
+            </div>
+            <div style="height:1px;background:var(--mx-color-divider-default);"></div>
+            <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);background:var(--mx-color-state-unavailableSurface);border-radius:var(--mx-radius-sm);">
+              <span style="color:var(--mx-color-text-tertiary);">◐</span>
+              <div style="flex:1;">
+                <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">Cloud sync</div>
+                <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Provider not selected</div>
+              </div>
+              <span class="mx-tag" style="background:var(--mx-color-state-selectedSurface);">Soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>High-risk / destructive row</h3>
+    <p>Data-loss operations use <code>tone="destructive"</code> and must be <b>visually distinct</b> from a
+      normal row — destructive text + surface + a 1.5px destructive border. The row only opens a confirm;
+      the mutation happens inside <code>MxConfirmDialog</code>, never on the row tap itself.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-destructive-text);">⚠</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-destructive-text);">Delete all decks</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Permanent — cannot be undone</div>
+          </div>
+          <span style="color:var(--mx-color-destructive-text);">›</span>
+        </div>
+        <div style="margin-top:var(--mx-space-12);display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-destructive-text);">↺</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-destructive-text);">Restore from backup</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Overwrites current data</div>
+          </div>
+          <span style="color:var(--mx-color-destructive-text);">›</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-destructive-text);">⚠</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-destructive-text);">Delete all decks</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Permanent — cannot be undone</div>
+          </div>
+          <span style="color:var(--mx-color-destructive-text);">›</span>
+        </div>
+        <div style="margin-top:var(--mx-space-12);display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-destructive-text);">↺</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-destructive-text);">Restore from backup</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Overwrites current data</div>
+          </div>
+          <span style="color:var(--mx-color-destructive-text);">›</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="mx-spec">
+      <caption>MxSettingsRow — accessibility</caption>
+      <thead><tr><th>Concern</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td>Tap target</td><td>Full row ≥ <code>--mx-size-settings-row-height</code> (56px), ≥ 44px effective</td></tr>
+        <tr><td>Value announced</td><td>Trailing value read as part of the row label ("Native language, English")</td></tr>
+        <tr><td>Destructive</td><td>Not colour-only — glyph + "Permanent" copy; announced as destructive</td></tr>
+        <tr><td>Unavailable / disabled</td><td>Exposed as <code>disabled</code>; "Soon" spoken, tap blocked</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxSettingsRow</code>. A <code>Pressable</code>
+      row; trailing is either a <code>&lt;Text&gt;</code> value or a control slot. <code>tone="destructive"</code>
+      routes its <code>onClick</code> through <code>MxConfirmDialog</code> — the row never performs the
+      mutation itself. <code>unavailable</code> renders a "Soon" pill and sets
+      <code>accessibilityState={{ disabled: true }}</code>.</div>
+  </section>
+
+  <!-- ============ MxSwitch ============ -->
+  <section class="mx-section mx-anchor" id="switch">
+    <h2>MxSwitch</h2>
+    <p>The on/off toggle used inside a settings row's <code>control</code> slot. It is the <b>only</b>
+      toggle in the kit — a settings boolean is never a checkbox or custom tap area.</p>
+    <table class="mx-spec">
+      <caption>MxSwitch — props &amp; tokens</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Token / note</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">checked</td><td>boolean?</td><td>On track uses <code>--mx-color-action-primary</code></td></tr>
+        <tr><td class="tok">disabled</td><td>boolean?</td><td><code>--mx-color-state-disabledSurface</code></td></tr>
+        <tr><td class="tok">onChange</td><td>(next) =&gt; void</td><td>Emits the next boolean</td></tr>
+        <tr><td class="tok">label</td><td>string?</td><td>Accessible name (visually hidden)</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxSwitch</code>. Wraps the platform
+      <code>Switch</code> with <code>MxTheme</code> track/thumb colours and
+      <code>accessibilityRole="switch"</code>; toggling writes the preference, it does not navigate.</div>
+  </section>
+
+  <!-- ============ MxLanguageRow ============ -->
+  <section class="mx-section mx-anchor" id="language-row">
+    <h2>MxLanguageRow</h2>
+    <p>A row in the Native Language picker: native name, optional secondary (English) name, an optional
+      icon hint, and a selected check. Per the contract, the <b>icon is a visual hint, never the id</b> —
+      selection is keyed off the language, not the flag.</p>
+    <table class="mx-spec">
+      <caption>MxLanguageRow — props &amp; tokens</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Token / note</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">nativeName</td><td>ReactNode</td><td>Primary label · <code>--mx-color-text-primary</code></td></tr>
+        <tr><td class="tok">secondaryName</td><td>ReactNode?</td><td>e.g. "Vietnamese" · <code>--mx-color-text-tertiary</code></td></tr>
+        <tr><td class="tok">icon</td><td>ReactNode?</td><td>Visual hint only — <b>not</b> the identity</td></tr>
+        <tr><td class="tok">selected</td><td>boolean?</td><td>Check + <code>--mx-color-state-selected</code></td></tr>
+        <tr><td class="tok">onClick</td><td>() =&gt; void</td><td>Applies the language immediately</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-do"><b></b>Key selection off the language code (<code>vi</code>/<code>en</code>) and let
+      the row apply the choice immediately (i18n applies live).</div>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxLanguageRow</code>. Selected row exposes
+      <code>accessibilityState={{ selected: true }}</code>; the flag/icon is decorative
+      (<code>accessibilityElementsHidden</code>).</div>
+  </section>
+
+  <!-- ============ MxReminderRow ============ -->
+  <section class="mx-section mx-anchor" id="reminder-row">
+    <h2>MxReminderRow</h2>
+    <p>One reminder line: a tappable time, a strip of <code>MxWeekdayChip</code>s, an enable
+      <code>MxSwitch</code>, and a delete affordance. It <b>never starts a session or mutates learning
+      data</b> — it edits a notification schedule only. <code>invalid</code> (no weekday selected) shows an
+      inline warning outline.</p>
+    <table class="mx-spec">
+      <caption>MxReminderRow — props</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">time</td><td>string?</td><td>Display time, e.g. "13:00"</td></tr>
+        <tr><td class="tok">weekdays</td><td>{ key, label, selected? }[]</td><td>Renders <code>MxWeekdayChip</code>s</td></tr>
+        <tr><td class="tok">enabled</td><td>boolean?</td><td>Bound to the trailing <code>MxSwitch</code></td></tr>
+        <tr><td class="tok">invalid</td><td>boolean?</td><td>No weekday selected → warning outline</td></tr>
+        <tr><td class="tok">onToggleWeekday</td><td>(key) =&gt; void</td><td>Per-chip toggle</td></tr>
+        <tr><td class="tok">onToggleEnabled</td><td>(next) =&gt; void</td><td>Enable/disable reminder</td></tr>
+        <tr><td class="tok">onDelete</td><td>() =&gt; void</td><td>Remove the reminder</td></tr>
+        <tr><td class="tok">onEditTime</td><td>() =&gt; void</td><td>Open the time picker</td></tr>
+      </tbody>
+    </table>
+    <table class="mx-spec">
+      <caption>MxReminderRow — tokens</caption>
+      <thead><tr><th>Part</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>Time</td><td class="tok">--mx-text-title-medium · --mx-color-text-primary</td></tr>
+        <tr><td>Invalid outline</td><td class="tok">--mx-color-feedback-warning / warningSurface</td></tr>
+        <tr><td>Surface</td><td class="tok">--mx-color-surface-card · --mx-radius-lg</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-note"><b>Warning ≠ destructive</b> An <code>invalid</code> reminder is an amber
+      warning (fixable), not a destructive-red state. Amber "needs attention" must never read as data loss.</div>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxReminderRow</code>. Composes
+      <code>MxWeekdayChip</code> + <code>MxSwitch</code>; scheduling a reminder registers a local
+      notification and does <b>not</b> open a study session.</div>
+  </section>
+
+  <!-- ============ MxWeekdayChip ============ -->
+  <section class="mx-section mx-anchor" id="weekday-chip">
+    <h2>MxWeekdayChip</h2>
+    <p>A selectable weekday pill used inside <code>MxReminderRow</code>. Selected vs unselected must be
+      distinguishable beyond colour (fill + weight), and the whole strip stays on the local-day rhythm.</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-row">
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-state-selected);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">T.2</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-state-selected);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">T.3</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:transparent;border:var(--mx-border-default);color:var(--mx-color-text-secondary);font:var(--mx-weight-medium) var(--mx-text-label-medium-size) var(--mx-font-display);">T.4</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:transparent;border:var(--mx-border-default);color:var(--mx-color-text-secondary);font:var(--mx-weight-medium) var(--mx-text-label-medium-size) var(--mx-font-display);">CN</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-disabled);font:var(--mx-weight-medium) var(--mx-text-label-medium-size) var(--mx-font-display);opacity:0.6;">T.7</span>
+        </div>
+        <p class="mx-muted" style="font-size:var(--mx-text-body-small-size);margin-top:var(--mx-space-8);">selected · selected · unselected · unselected · disabled</p>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-row">
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-state-selected);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">T.2</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:var(--mx-color-state-selectedSurface);border:var(--mx-border-selected);color:var(--mx-color-state-selected);font:var(--mx-weight-semibold) var(--mx-text-label-medium-size) var(--mx-font-display);">T.3</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:transparent;border:var(--mx-border-default);color:var(--mx-color-text-secondary);font:var(--mx-weight-medium) var(--mx-text-label-medium-size) var(--mx-font-display);">T.4</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:transparent;border:var(--mx-border-default);color:var(--mx-color-text-secondary);font:var(--mx-weight-medium) var(--mx-text-label-medium-size) var(--mx-font-display);">CN</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;height:var(--mx-size-chip-height);min-width:var(--mx-size-chip-height);padding:0 var(--mx-space-8);border-radius:var(--mx-radius-pill);background:var(--mx-color-state-disabledSurface);border:var(--mx-border-subtle);color:var(--mx-color-text-disabled);font:var(--mx-weight-medium) var(--mx-text-label-medium-size) var(--mx-font-display);opacity:0.6;">T.7</span>
+        </div>
+        <p class="mx-muted" style="font-size:var(--mx-text-body-small-size);margin-top:var(--mx-space-8);">selected · selected · unselected · unselected · disabled</p>
+      </div>
+    </div>
+    <table class="mx-spec">
+      <caption>MxWeekdayChip — props &amp; tokens</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Token / note</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">label</td><td>ReactNode</td><td>Weekday label, e.g. "T.2"</td></tr>
+        <tr><td class="tok">selected</td><td>boolean?</td><td><code>--mx-border-selected</code> · <code>--mx-color-state-selectedSurface</code></td></tr>
+        <tr><td class="tok">disabled</td><td>boolean?</td><td><code>--mx-color-state-disabledSurface</code></td></tr>
+        <tr><td class="tok">onClick</td><td>() =&gt; void</td><td>Toggle this day</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxWeekdayChip</code>. A <code>Pressable</code>
+      pill ≥ <code>--mx-size-chip-height</code> (34) with <code>accessibilityRole="button"</code> and
+      <code>accessibilityState={{ selected }}</code>.</div>
+  </section>
+
+  <!-- ============ MxThemePresetTile ============ -->
+  <section class="mx-section mx-anchor" id="theme-preset-tile">
+    <h2>MxThemePresetTile</h2>
+    <p>A selectable appearance preset — a day/night theme or an app-icon variant. It renders a colour
+      preview, a name, a clear selected ring, and an <code>unavailable</code> state for platform-blocked
+      variants (e.g. an icon a given OS can't apply).</p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-grid-2">
+          <div style="border:var(--mx-border-selected);border-radius:var(--mx-radius-lg);padding:var(--mx-space-12);background:var(--mx-color-surface-card);">
+            <div style="height:56px;border-radius:var(--mx-radius-md);background:var(--mx-slate-950);border:1px solid var(--mx-color-border-subtle);display:flex;align-items:center;padding:var(--mx-space-8);gap:var(--mx-space-6);"><span style="width:16px;height:16px;border-radius:var(--mx-radius-xs);background:var(--mx-slate-800);"></span><span style="width:24px;height:8px;border-radius:var(--mx-radius-pill);background:var(--mx-purple-light);"></span></div>
+            <div style="margin-top:var(--mx-space-8);display:flex;align-items:center;justify-content:space-between;"><span style="font:var(--mx-weight-semibold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-text-primary);">Night</span><span style="color:var(--mx-color-state-selected);">●</span></div>
+          </div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);padding:var(--mx-space-12);background:var(--mx-color-surface-card);opacity:0.55;">
+            <div style="height:56px;border-radius:var(--mx-radius-md);background:var(--mx-slate-100);border:1px solid var(--mx-color-border-subtle);display:flex;align-items:center;padding:var(--mx-space-8);gap:var(--mx-space-6);"><span style="width:16px;height:16px;border-radius:var(--mx-radius-xs);background:var(--mx-slate-0);"></span><span style="width:24px;height:8px;border-radius:var(--mx-radius-pill);background:var(--mx-purple-500);"></span></div>
+            <div style="margin-top:var(--mx-space-8);display:flex;align-items:center;justify-content:space-between;"><span style="font:var(--mx-weight-semibold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-text-secondary);">Classic icon</span><span class="mx-tag" style="background:var(--mx-color-state-unavailableSurface);color:var(--mx-color-text-tertiary);">Soon</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-grid-2">
+          <div style="border:var(--mx-border-selected);border-radius:var(--mx-radius-lg);padding:var(--mx-space-12);background:var(--mx-color-surface-card);">
+            <div style="height:56px;border-radius:var(--mx-radius-md);background:var(--mx-slate-100);border:1px solid var(--mx-color-border-subtle);display:flex;align-items:center;padding:var(--mx-space-8);gap:var(--mx-space-6);"><span style="width:16px;height:16px;border-radius:var(--mx-radius-xs);background:var(--mx-slate-0);"></span><span style="width:24px;height:8px;border-radius:var(--mx-radius-pill);background:var(--mx-purple-500);"></span></div>
+            <div style="margin-top:var(--mx-space-8);display:flex;align-items:center;justify-content:space-between;"><span style="font:var(--mx-weight-semibold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-text-primary);">Day</span><span style="color:var(--mx-color-state-selected);">●</span></div>
+          </div>
+          <div style="border:var(--mx-border-default);border-radius:var(--mx-radius-lg);padding:var(--mx-space-12);background:var(--mx-color-surface-card);opacity:0.55;">
+            <div style="height:56px;border-radius:var(--mx-radius-md);background:var(--mx-slate-950);border:1px solid var(--mx-color-border-subtle);display:flex;align-items:center;padding:var(--mx-space-8);gap:var(--mx-space-6);"><span style="width:16px;height:16px;border-radius:var(--mx-radius-xs);background:var(--mx-slate-800);"></span><span style="width:24px;height:8px;border-radius:var(--mx-radius-pill);background:var(--mx-purple-light);"></span></div>
+            <div style="margin-top:var(--mx-space-8);display:flex;align-items:center;justify-content:space-between;"><span style="font:var(--mx-weight-semibold) var(--mx-text-label-large-size) var(--mx-font-display);color:var(--mx-color-text-secondary);">Classic icon</span><span class="mx-tag" style="background:var(--mx-color-state-unavailableSurface);color:var(--mx-color-text-tertiary);">Soon</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="mx-spec">
+      <caption>MxThemePresetTile — props &amp; tokens</caption>
+      <thead><tr><th>Prop</th><th>Type</th><th>Token / note</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">name</td><td>ReactNode</td><td>Tile label</td></tr>
+        <tr><td class="tok">preview</td><td>{ bg, surface, accent } | ReactNode</td><td>Colour swatches or a custom preview node</td></tr>
+        <tr><td class="tok">selected</td><td>boolean?</td><td>Selected ring · <code>--mx-border-selected</code></td></tr>
+        <tr><td class="tok">unavailable</td><td>boolean?</td><td>Platform-blocked variant — dimmed + "Soon"</td></tr>
+        <tr><td class="tok">onClick</td><td>() =&gt; void</td><td>Applies the preset</td></tr>
+      </tbody>
+    </table>
+    <div class="mx-note"><b>Preview literals</b> The <code>preview.bg/surface/accent</code> values are
+      <b>illustrative swatch colours</b> passed in as data (a picture of a theme), not app design tokens.
+      They are the one documented exception where raw hex is allowed — the chrome around them stays on
+      <code>var(--mx-*)</code>.</div>
+    <div class="mx-rn"><b>React Native</b> Handoff name <code>MxThemePresetTile</code>. Selected tile draws
+      a 2px <code>state-selected</code> ring; <code>unavailable</code> dims and disables the tile with
+      <code>accessibilityState={{ disabled: true }}</code> plus a "Soon" label.</div>
+  </section>
+
+  <!-- ============ RN HANDOFF CONTRACTS (NOT YET COMPONENTS) ============ -->
+  <section class="mx-section mx-anchor" id="rn-contracts">
+    <h2>RN handoff contracts — not yet kit components</h2>
+    <p>The following rows are documented <b>contracts</b> for the React Native build. They do <b>not</b>
+      exist as kit components yet — each is expected to be a <b>variant of <code>MxSettingsRow</code></b>
+      (never a hand-rolled row) once built. The demos below are token-styled illustrations of the intended
+      shape, not shipped components.</p>
+
+    <!-- MxAppIconTile -->
+    <h3>MxAppIconTile <span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning);">contract — not built</span></h3>
+    <p>An app-icon variant tile — conceptually a specialised <code>MxThemePresetTile</code> whose preview is
+      an icon rather than a theme swatch. Icon variants a platform can't apply render <code>unavailable</code>.
+      <b>No such component exists in the manifest yet.</b></p>
+    <table class="mx-spec">
+      <caption>MxAppIconTile — proposed contract</caption>
+      <thead><tr><th>Field</th><th>Intent</th></tr></thead>
+      <tbody>
+        <tr><td class="tok">name</td><td>Icon variant name</td></tr>
+        <tr><td class="tok">preview</td><td>Icon artwork node</td></tr>
+        <tr><td class="tok">selected</td><td>Currently applied icon</td></tr>
+        <tr><td class="tok">unavailable</td><td>Platform can't apply this icon → "Soon"</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MxSrsSettingRow -->
+    <h3>MxSrsSettingRow <span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning);">contract — not built</span></h3>
+    <p>A settings row for a single SRS preference (box order, forgotten behaviour, notification, game
+      source). It is an <code>MxSettingsRow</code> whose <code>value</code> reflects the current SRS
+      preference and whose <code>onClick</code> opens a picker. <b>Opening it never mutates box/due.</b></p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div class="mx-stack">
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);">
+            <span style="flex:1;font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-primary);">Repeat box ordering</span>
+            <span style="font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">Ascending</span>
+            <span style="color:var(--mx-color-text-tertiary);">›</span>
+          </div>
+          <div style="height:1px;background:var(--mx-color-divider-default);"></div>
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);border-radius:var(--mx-radius-md);">
+            <span style="color:var(--mx-color-feedback-warning);">?</span>
+            <div style="flex:1;">
+              <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-primary);">Box (Ô)</div>
+              <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-feedback-warning);">Ô: 7 — open question, blocked pending product decision</div>
+            </div>
+            <span class="mx-tag space">OPEN</span>
+          </div>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div class="mx-stack">
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-8);">
+            <span style="flex:1;font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-primary);">Repeat box ordering</span>
+            <span style="font:var(--mx-text-body-medium-weight) var(--mx-text-body-medium-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">Ascending</span>
+            <span style="color:var(--mx-color-text-tertiary);">›</span>
+          </div>
+          <div style="height:1px;background:var(--mx-color-divider-default);"></div>
+          <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning);border-radius:var(--mx-radius-md);">
+            <span style="color:var(--mx-color-feedback-warning);">?</span>
+            <div style="flex:1;">
+              <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-primary);">Box (Ô)</div>
+              <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-feedback-warning);">Ô: 7 — open question, blocked pending product decision</div>
+            </div>
+            <span class="mx-tag space">OPEN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note"><b>"Ô: 7" is an OPEN QUESTION, not a rule</b> MemoX is <b>8-box</b> SRS (source of
+      truth <code>docs/design/06-srs-8box.md</code>). The mock's <code>Ô: 7</code> is <b>ambiguous</b> —
+      it must render as a blocked open-question state, never as a final "7-box" rule, and never trigger an
+      8-box → 7-box migration. Possible meanings (current selected box / max visible box / active interval
+      box / legacy value) are unresolved and must not be implemented until a product decision lands.</div>
+
+    <!-- MxBackupRestoreRow -->
+    <h3>MxBackupRestoreRow <span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning);">contract — not built</span></h3>
+    <p>A high-risk data row for backup / restore. Restore <b>overwrites current data</b>, so as an
+      <code>MxSettingsRow</code> it is <code>tone="destructive"</code> and routes through
+      <code>MxConfirmDialog</code>. <b>No such component exists yet.</b></p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-destructive-text);">↺</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-destructive-text);">Restore from backup</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Overwrites current data · confirm required</div>
+          </div>
+          <span style="color:var(--mx-color-destructive-text);">›</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-destructive-surface);border:var(--mx-border-destructive);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-destructive-text);">↺</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-destructive-text);">Restore from backup</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Overwrites current data · confirm required</div>
+          </div>
+          <span style="color:var(--mx-color-destructive-text);">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MxCloudSyncRow -->
+    <h3>MxCloudSyncRow <span class="mx-tag" style="background:var(--mx-color-feedback-warningSurface);color:var(--mx-color-feedback-warning);">contract — not built</span></h3>
+    <p>A cloud-sync row for a future (Phase 4) capability. Until sync ships it renders as an
+      <code>MxSettingsRow</code> with <code>unavailable</code> — an intentional "coming soon" affordance on
+      <code>--mx-color-state-unavailableSurface</code> that must <b>look deliberate, not broken</b>.
+      <b>No such component exists yet.</b></p>
+    <div class="mx-duo">
+      <div class="mx-pane" data-label="Dark">
+        <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-state-unavailableSurface);border:var(--mx-border-subtle);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-text-tertiary);">☁</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">Cloud sync</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Available in a future update</div>
+          </div>
+          <span class="mx-tag" style="background:var(--mx-color-state-selectedSurface);">Soon</span>
+        </div>
+      </div>
+      <div class="mx-pane" data-label="Light" data-theme="light">
+        <div style="display:flex;align-items:center;gap:var(--mx-space-12);min-height:var(--mx-size-settings-row-height);padding:0 var(--mx-space-12);background:var(--mx-color-state-unavailableSurface);border:var(--mx-border-subtle);border-radius:var(--mx-radius-md);">
+          <span style="color:var(--mx-color-text-tertiary);">☁</span>
+          <div style="flex:1;">
+            <div style="font:var(--mx-text-body-large-weight) var(--mx-text-body-large-size) var(--mx-font-body);color:var(--mx-color-text-secondary);">Cloud sync</div>
+            <div style="font:var(--mx-text-body-small-weight) var(--mx-text-body-small-size) var(--mx-font-body);color:var(--mx-color-text-tertiary);">Available in a future update</div>
+          </div>
+          <span class="mx-tag" style="background:var(--mx-color-state-selectedSurface);">Soon</span>
+        </div>
+      </div>
+    </div>
+    <div class="mx-note"><b>These four are contracts</b> <code>MxAppIconTile</code>,
+      <code>MxSrsSettingRow</code>, <code>MxBackupRestoreRow</code>, and <code>MxCloudSyncRow</code> are not
+      in the kit manifest. Do not treat the illustrations above as shipped components — they document the
+      intended <code>MxSettingsRow</code> / <code>MxThemePresetTile</code> variants for the RN build.</div>
+  </section>
+
+  <!-- ============ RULES ============ -->
+  <section class="mx-section mx-anchor" id="rules">
+    <h2>Rules</h2>
+    <div class="mx-callouts">
+      <div class="mx-do"><b></b>Treat opening a settings screen (or child SRS-settings screen) as
+        <b>read-only navigation</b> — it reflects state and never mutates decks, cards, sessions,
+        <code>box</code>, or <code>due_at</code>.</div>
+      <div class="mx-dont"><b></b>Perform any write on screen open or row tap. Preference changes apply
+        going forward and, for high-risk data operations, only after confirmation.</div>
+
+      <div class="mx-do"><b></b>Make high-risk data operations <b>visually distinct</b> with
+        <code>--mx-color-destructive-*</code> — destructive text, surface, and a 1.5px destructive border,
+        plus a glyph and "permanent / overwrites" copy.</div>
+      <div class="mx-dont"><b></b>Style "Delete all decks" or "Restore from backup" like an ordinary row,
+        or reuse answer-<code>wrong</code> red for it — destructive is its own role.</div>
+
+      <div class="mx-do"><b></b>Make future / unavailable rows look <b>intentional</b> — a "Soon" pill on
+        <code>--mx-color-state-unavailableSurface</code>, so "coming soon" reads as a decision.</div>
+      <div class="mx-dont"><b></b>Let an unavailable row look broken, error-coloured, or half-rendered — an
+        empty/greyed row with no label is a bug, not a "Soon" affordance.</div>
+
+      <div class="mx-do"><b></b>Render the SRS <b>"Ô: 7"</b> box setting as an <b>OPEN QUESTION</b> —
+        amber, blocked, awaiting product decision — consistent with 8-box being the source of truth.</div>
+      <div class="mx-dont"><b></b>Ship "Ô: 7" as a final 7-box rule, or migrate the 8-box model to 7 boxes
+        to match the mock. That contradicts <code>06-srs-8box.md</code>.</div>
+    </div>
+  </section>
+
+  <div class="mx-rn"><b>React Native</b> Every settings line is an <code>MxSettingsRow</code> variant —
+    <b>never a hand-rolled row</b>. Toggles are <code>MxSwitch</code>; grouping is
+    <code>MxSettingsSection</code>. Destructive rows (<code>tone="destructive"</code>) route their action
+    through <code>MxConfirmDialog</code> — the row opens the confirm, the dialog performs the mutation.
+    Unavailable rows (<code>unavailable</code>) show "Soon" and set
+    <code>accessibilityState={{ disabled: true }}</code>. The SRS "Ô: 7" box setting stays a blocked
+    open-question until a product decision lands.</div>
+
+  <hr class="mx-rule" />
+  <nav class="mx-doc-nav">
+    <a href="index.html">‹ Index</a>
+    <a href="06-learning-component-gallery.html">‹ 06 Learning Components</a>
+    <a href="08-data-statistics-gallery.html">08 Data &amp; Statistics ›</a>
+  </nav>
+</main>
+
+</body>
+</html>

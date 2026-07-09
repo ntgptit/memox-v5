@@ -26,5 +26,5 @@ The layers, and the question each answers:
 3. Update the Definition of Done if a new checkable rule was added.
 4. Only then implement screens against the updated system.
 
-See also: [kit governance](governance.md) (component/token promotion + prefix rules) and
-[Flutter handoff](flutter-handoff.md).
+See also: [kit governance](governance.md) (component/token promotion + prefix rules) and the
+[React Native handoff](../kit-screens/14-react-native-handoff-gallery.html).
