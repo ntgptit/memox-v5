@@ -1,4 +1,4 @@
-<!-- @dsCard group="Sample Screens" viewport="430x900" name="Settings / More Hub" subtitle="Bazar-language settings — grouped rows, switch, destructive, bottom nav (light-first)" -->
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Settings / More Hub" subtitle="Settings hub — grouped rows, switches, high-risk, unavailable; loaded / activity-empty / switches / high-risk / unavailable / destructive-confirm-error, dark + light" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,45 +16,174 @@
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
-const { MxTopBar, MxIconButton, MxSettingsSection, MxSettingsRow, MxSwitch, MxSectionHeader, MxBottomNav } = K;
+const { MxTopBar, MxIconButton, MxSettingsSection, MxSettingsRow, MxSwitch, MxSectionHeader, MxBottomNav, MxMetricCard, MxCallout, MxConfirmDialog, MxErrorState, MxEmptyState } = K;
 function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
 
-function App() {
-  const [notif, setNotif] = React.useState(true);
-  const [autoBackup, setAutoBackup] = React.useState(true);
-  const [nav, setNav] = React.useState('more');
+function Shell({ theme, children, overlay }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
-    <div className="mx-phone" data-theme="light">
-      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" title="Settings" actions={<MxIconButton icon={<Ic n="circle-user-round" s={22} />} label="Account" />} />
-      <div className="mx-scroll" style={{ padding: '4px 16px 12px' }}>
-        <MxSectionHeader size="hero" eyebrow="Preferences" title="More" style={{ margin: '4px 4px 18px' }} />
-        <MxSettingsSection title="Learning">
-          <MxSettingsRow leading={<Ic n="globe" />} title="Native language" value="English" onClick={()=>{}} />
-          <MxSettingsRow leading={<Ic n="layers" />} title="Spaced repetition" value="8 boxes" onClick={()=>{}} />
-          <MxSettingsRow leading={<Ic n="bell" />} title="SRS notifications" control={<MxSwitch checked={notif} onChange={setNotif} label="Notifications" />} />
-        </MxSettingsSection>
-        <MxSettingsSection title="Reminders & appearance">
-          <MxSettingsRow leading={<Ic n="clock" />} title="Reminders" value="13:00 · Mon–Fri" onClick={()=>{}} />
-          <MxSettingsRow leading={<Ic n="palette" />} title="Theme" value="System" onClick={()=>{}} />
-        </MxSettingsSection>
-        <MxSettingsSection title="Data" description="High-risk actions require confirmation.">
-          <MxSettingsRow leading={<Ic n="save" />} title="Auto backup" subtitle="Last: 1 minute ago" control={<MxSwitch checked={autoBackup} onChange={setAutoBackup} label="Auto backup" />} />
-          <MxSettingsRow leading={<Ic n="cloud" />} title="Cloud sync" unavailable />
-          <MxSettingsRow leading={<Ic n="rotate-ccw" />} title="Restore data" subtitle="Overwrites current data" tone="destructive" onClick={()=>{}} />
-        </MxSettingsSection>
+      <div className="mx-scroll" style={{ padding: '4px 16px 12px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <MxSectionHeader size="hero" eyebrow="Preferences" title="More" style={{ margin: '4px 4px 0' }} />
+        {children}
       </div>
-      <MxBottomNav value={nav} onChange={setNav} items={[
+      <MxBottomNav value="more" onChange={() => {}} items={[
         { key: 'home', label: 'Home', icon: 'house' },
         { key: 'decks', label: 'Decks', icon: 'layers' },
         { key: 'stats', label: 'Stats', icon: 'bar-chart-3' },
         { key: 'more', label: 'More', icon: 'menu' },
       ]} />
+      {overlay}
     </div>
   );
 }
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+function ActivitySummary() {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+      <MxMetricCard label="Streak" value="7" unit="d" tone="word" />
+      <MxMetricCard label="Due today" value="12" tone="time" />
+      <MxMetricCard label="Learned" value="342" tone="correct" />
+    </div>
+  );
+}
+function LearningSection() {
+  return (
+    <MxSettingsSection title="Learning">
+      <MxSettingsRow leading={<Ic n="globe" />} title="Native language" value="English" onClick={() => {}} />
+      <MxSettingsRow leading={<Ic n="layers" />} title="Spaced repetition" value="8 boxes" onClick={() => {}} />
+      <MxSettingsRow leading={<Ic n="palette" />} title="Appearance" value="System" onClick={() => {}} />
+    </MxSettingsSection>
+  );
+}
+function DataSection() {
+  return (
+    <MxSettingsSection title="Data" description="High-risk actions require confirmation.">
+      <MxSettingsRow leading={<Ic n="save" />} title="Auto backup" subtitle="Last: 1 minute ago" control={<MxSwitch checked label="Auto backup" onChange={() => {}} />} />
+      <MxSettingsRow leading={<Ic n="rotate-ccw" />} title="Restore data" subtitle="Overwrites current data" tone="destructive" onClick={() => {}} />
+      <MxSettingsRow leading={<Ic n="trash-2" />} title="Delete all data" subtitle="Removes every deck and word" tone="destructive" onClick={() => {}} />
+    </MxSettingsSection>
+  );
+}
+
+/* ---- MX-15.1 Loaded (audited) ---- */
+function LoadedPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <ActivitySummary />
+      <LearningSection />
+      <MxSettingsSection title="Reminders & notifications">
+        <MxSettingsRow leading={<Ic n="clock" />} title="Reminders" value="13:00 · Mon–Fri" onClick={() => {}} />
+        <MxSettingsRow leading={<Ic n="bell" />} title="SRS notifications" control={<MxSwitch checked label="Notifications" onChange={() => {}} />} />
+      </MxSettingsSection>
+      <DataSection />
+    </Shell>
+  );
+}
+
+/* ---- MX-15.2 Activity empty ---- */
+function ActivityEmptyPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxCallout tone="info" icon={<Ic n="sparkles" s={16} />} title="No activity yet">Finish a study session to start your streak and see today’s summary here.</MxCallout>
+      <LearningSection />
+      <DataSection />
+    </Shell>
+  );
+}
+
+/* ---- MX-15.3 Switch on/off ---- */
+function SwitchesPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxSettingsSection title="Notifications" description="Switch on ≠ switch off — the track and knob both change.">
+        <MxSettingsRow leading={<Ic n="bell" />} title="SRS reminders" subtitle="On" control={<MxSwitch checked label="SRS reminders" onChange={() => {}} />} />
+        <MxSettingsRow leading={<Ic n="volume-2" />} title="Sound" subtitle="Off" control={<MxSwitch checked={false} label="Sound" onChange={() => {}} />} />
+        <MxSettingsRow leading={<Ic n="moon" />} title="Quiet hours" subtitle="Unavailable while reminders are off" disabled control={<MxSwitch checked={false} disabled label="Quiet hours" onChange={() => {}} />} />
+      </MxSettingsSection>
+    </Shell>
+  );
+}
+
+/* ---- MX-15.4 High-risk section ---- */
+function HighRiskPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxCallout tone="warning" icon={<Ic n="shield-alert" s={16} />} title="High-risk zone">These actions change or remove your data. They’re grouped apart and always ask before running.</MxCallout>
+      <DataSection />
+    </Shell>
+  );
+}
+
+/* ---- MX-15.5 Unavailable / soon ---- */
+function UnavailablePhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxSettingsSection title="Coming soon" description="These features aren’t part of this version yet.">
+        <MxSettingsRow leading={<Ic n="cloud" />} title="Cloud sync" unavailable />
+        <MxSettingsRow leading={<Ic n="download" />} title="Export deck" unavailable />
+        <MxSettingsRow leading={<Ic n="layout-grid" />} title="Home-screen widget" unavailable />
+      </MxSettingsSection>
+      <LearningSection />
+    </Shell>
+  );
+}
+
+/* ---- MX-15.6a Destructive confirm ---- */
+function DestructiveConfirmPhone({ theme }) {
+  return (
+    <Shell theme={theme}
+      overlay={
+        <MxConfirmDialog open variant="highRisk"
+          title="Delete all data?"
+          message="This removes every deck, word and review stored on this device."
+          warning="This can’t be undone, and there’s no cloud backup yet. Consider a backup first."
+          confirmLabel="Delete everything"
+          cancelLabel="Cancel" />
+      }>
+      <ActivitySummary />
+      <DataSection />
+    </Shell>
+  );
+}
+
+/* ---- MX-15.6b Error ---- */
+function ErrorPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <div style={{ minHeight: '52vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't complete that action"
+          message="Your settings and learning data are safe on this device. Check your connection and try again."
+          action={<span style={{ display: 'inline-flex' }}><MxIconButton icon={<Ic n="rotate-cw" s={18} />} label="Retry" variant="surface" /></span>} />
+      </div>
+    </Shell>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-15.1 · Loaded settings hub</DeskCaption>
+    <LoadedPhone theme="dark" /><LoadedPhone theme="light" />
+    <DeskCaption>MX-15.2 · Activity empty</DeskCaption>
+    <ActivityEmptyPhone theme="dark" /><ActivityEmptyPhone theme="light" />
+    <DeskCaption>MX-15.3 · Switch on / off / disabled</DeskCaption>
+    <SwitchesPhone theme="dark" /><SwitchesPhone theme="light" />
+    <DeskCaption>MX-15.4 · High-risk section</DeskCaption>
+    <HighRiskPhone theme="dark" /><HighRiskPhone theme="light" />
+    <DeskCaption>MX-15.5 · Unavailable / soon</DeskCaption>
+    <UnavailablePhone theme="dark" /><UnavailablePhone theme="light" />
+    <DeskCaption>MX-15.6 · Destructive confirm (high-risk)</DeskCaption>
+    <DestructiveConfirmPhone theme="dark" /><DestructiveConfirmPhone theme="light" />
+    <DeskCaption>MX-15.6 · Action error (data safe)</DeskCaption>
+    <ErrorPhone theme="dark" /><ErrorPhone theme="light" />
+  </>
+);
 setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
 </script>
 </body>
