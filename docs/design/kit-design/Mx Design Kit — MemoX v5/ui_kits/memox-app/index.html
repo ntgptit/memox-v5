@@ -69,7 +69,7 @@ function Phone({ theme }) {
       />
       <div className="mx-scroll" style={{ paddingBottom: 12 }}>
         {/* Promo / daily goal banner */}
-        <div style={{ margin: '4px 16px 20px', borderRadius: 20, padding: '18px 20px', background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ margin: '4px 16px 24px', borderRadius: 20, padding: '16px 24px', background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ flex: '1 1 auto' }}>
             <div style={{ font: '600 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-action-primary)', marginBottom: 3 }}>Daily goal</div>
             <div style={{ font: '800 var(--mx-text-title-medium-size)/1.2 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', marginBottom: 12 }}>12 cards due today</div>
@@ -137,7 +137,7 @@ function LoadingPhone({ theme }) {
       <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="signal" style={{width:15,height:15}}></i><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
       <MxTopBar leading={<MxIconButton icon={<Ic n="search" s={20} />} label="Search" />} title="MemoX" actions={<MxIconButton icon={<Ic n="bell" s={20} />} label="Notifications" />} />
       <div className="mx-scroll" style={{ paddingBottom: 12 }}>
-        <div style={{ margin: '4px 16px 20px' }}><Skel w="100%" h={96} r="20px" /></div>
+        <div style={{ margin: '4px 16px 24px' }}><Skel w="100%" h={96} r="20px" /></div>
         <div style={{ margin: '0 16px 12px' }}><Skel w={150} h={18} r="var(--mx-radius-sm)" /></div>
         <div style={{ display: 'flex', gap: 16, padding: '0 16px 6px' }}>
           {[0, 1].map(i => (
