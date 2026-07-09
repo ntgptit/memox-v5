@@ -1,0 +1,174 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="New Learning — Review" subtitle="reviewMode (mode 1/5): prompt → reveal meaning, audio, progress; prompt / revealed / audio / progress / exit / loading-error, dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxStudyProgressBar, MxStudyCard, MxActionButton, MxBadge, MxCallout, MxErrorState, MxConfirmDialog } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
+}
+
+/* ---- study shell: study top bar + mode progress + body + sticky action ---- */
+function StudyShell({ theme, step, percent, audioActive, children, bottom, overlay }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar variant="study"
+        leading={<MxIconButton icon={<Ic n="x" />} label="Exit review" />}
+        title="Review"
+        actions={<MxIconButton icon={<Ic n={audioActive ? 'volume-2' : 'volume-2'} s={18} />} label="Play audio" variant={audioActive ? 'surface' : 'ghost'} />} />
+      {typeof percent === 'number' && (
+        <div style={{ padding: '0 20px' }}>
+          <MxStudyProgressBar percent={percent} modeLabel="Review" stepLabel={step} />
+        </div>
+      )}
+      <div className="mx-scroll" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
+      {bottom !== null && <div className="mx-bottom">{bottom}</div>}
+      {overlay}
+    </div>
+  );
+}
+
+const CARD = { prompt: '검토하다', meaning: 'To review / examine', note: 'Verb · dictionary form' };
+
+/* ---- MX-06.1 Prompt / front ---- */
+function PromptPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="3 / 12" percent={25}
+      bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="eye" s={18} />}>Show meaning</MxActionButton>}>
+      <MxStudyCard variant="prompt" prompt={CARD.prompt} note="Recall the meaning, then reveal" onAudio={() => {}} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-06.2 Revealed meaning ---- */
+function RevealedPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="3 / 12" percent={25}
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next word</MxActionButton>}>
+      <MxStudyCard variant="both" prompt={CARD.prompt} meaning={CARD.meaning} note={CARD.note} onAudio={() => {}} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-06.3 Audio playing ---- */
+function AudioPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="3 / 12" percent={25} audioActive
+      bottom={<MxActionButton variant="primary" fullWidth trailingIcon={<Ic n="arrow-right" s={18} />}>Next word</MxActionButton>}>
+      <MxStudyCard variant="both" prompt={CARD.prompt} meaning={CARD.meaning} note={CARD.note} onAudio={() => {}} />
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <MxBadge tone="info" icon={<Ic n="volume-2" s={13} />}>Playing audio…</MxBadge>
+      </div>
+    </StudyShell>
+  );
+}
+
+/* ---- MX-06.4 Progress variants (start / mid / last) ---- */
+function ProgressPhone({ theme, step, percent, word, last }) {
+  return (
+    <StudyShell theme={theme} step={step} percent={percent}
+      bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n={last ? 'flag' : 'eye'} s={18} />}>{last ? 'Show meaning (last word)' : 'Show meaning'}</MxActionButton>}>
+      <MxStudyCard variant="prompt" prompt={word} note={last ? 'Last word in this round' : 'Recall the meaning, then reveal'} onAudio={() => {}} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-06.5 Protected exit ---- */
+function ExitPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} step="3 / 12" percent={25}
+      bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="eye" s={18} />}>Show meaning</MxActionButton>}
+      overlay={
+        <MxConfirmDialog
+          open
+          variant="normal"
+          title="Exit review?"
+          message="Your progress is saved automatically. You can resume this session right where you left off."
+          confirmLabel="Exit"
+          cancelLabel="Keep studying"
+        />
+      }>
+      <MxStudyCard variant="prompt" prompt={CARD.prompt} note="Recall the meaning, then reveal" onAudio={() => {}} />
+    </StudyShell>
+  );
+}
+
+/* ---- MX-06.6 Loading ---- */
+function LoadingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <StudyShell theme={theme} percent={undefined} bottom={<Skel w="100%" h={52} r="var(--mx-radius-lg)" />}>
+      <div style={{ padding: '0 0 4px' }}><Skel w="60%" h={14} r="var(--mx-radius-sm)" /></div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: '40px 0' }}>
+        <Skel w={180} h={48} r="var(--mx-radius-md)" />
+        <Skel w={120} h={16} r="var(--mx-radius-sm)" />
+      </div>
+      <div style={{ textAlign: 'center', font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>Preparing your review…</div>
+    </StudyShell>
+  );
+}
+
+/* ---- MX-06.6 Error ---- */
+function ErrorPhone({ theme }) {
+  return (
+    <StudyShell theme={theme} percent={undefined} bottom={null}>
+      <div style={{ minHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't start review"
+          message="Your words and progress are safe on this device. Check your connection and try again."
+          action={<MxActionButton variant="secondary" leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry</MxActionButton>} />
+      </div>
+    </StudyShell>
+  );
+}
+
+/* ---- desk grouping caption ---- */
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-06.1 · Prompt / front</DeskCaption>
+    <PromptPhone theme="dark" /><PromptPhone theme="light" />
+    <DeskCaption>MX-06.2 · Revealed meaning</DeskCaption>
+    <RevealedPhone theme="dark" /><RevealedPhone theme="light" />
+    <DeskCaption>MX-06.3 · Audio playing</DeskCaption>
+    <AudioPhone theme="dark" /><AudioPhone theme="light" />
+    <DeskCaption>MX-06.4 · Progress — start</DeskCaption>
+    <ProgressPhone theme="dark" step="1 / 12" percent={8} word="안녕하세요" />
+    <ProgressPhone theme="light" step="1 / 12" percent={8} word="안녕하세요" />
+    <DeskCaption>MX-06.4 · Progress — mid</DeskCaption>
+    <ProgressPhone theme="dark" step="6 / 12" percent={50} word="감사합니다" />
+    <ProgressPhone theme="light" step="6 / 12" percent={50} word="감사합니다" />
+    <DeskCaption>MX-06.4 · Progress — last</DeskCaption>
+    <ProgressPhone theme="dark" step="12 / 12" percent={100} word="사랑하다" last />
+    <ProgressPhone theme="light" step="12 / 12" percent={100} word="사랑하다" last />
+    <DeskCaption>MX-06.5 · Protected exit</DeskCaption>
+    <ExitPhone theme="dark" /><ExitPhone theme="light" />
+    <DeskCaption>MX-06.6 · Loading</DeskCaption>
+    <LoadingPhone theme="dark" /><LoadingPhone theme="light" />
+    <DeskCaption>MX-06.6 · Error</DeskCaption>
+    <ErrorPhone theme="dark" /><ErrorPhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
