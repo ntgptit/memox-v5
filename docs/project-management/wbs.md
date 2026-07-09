@@ -207,6 +207,34 @@ Concept/business spec + its future implementation rows. Spec:
 
 ---
 
+## Settings / More Hub (F1.SETTINGS)
+
+Drawer-derived system functions, surfaced via a modern Settings / More Hub (drawer not required). Spec:
+[`../design/screens/settings-more-hub.md`](../design/screens/settings-more-hub.md)
+([decision table](../decision-tables/settings-more-hub-decision-table.md)).
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.SETTINGS.HUB.1 | Settings / More Hub concept from drawer functions | Docs | In progress → `Done` after merge | [settings-more-hub.md](../design/screens/settings-more-hub.md); [memox-scope.md](../product/memox-scope.md); [navigation.md](../design/navigation.md) | `npm run check` / `git diff --check` | PR `docs/settings-more-hub-concept` (squash commit after merge) |
+| F1.SETTINGS.HUB.2 | Settings / More Hub UI shell | FE | Not started | [settings-more-hub.md](../design/screens/settings-more-hub.md) | TBD | TBD |
+| F1.ACTIVITY.1 | Today activity summary (duration + cards processed today) | BE/FE | Not started | [settings-more-hub.md → Group A](../design/screens/settings-more-hub.md#group-a--activity-summary-hoạt-động-hôm-nay) | TBD | TBD |
+| F1.LANGUAGE.1 | Add language flow (learning-language workspace) | BE/FE | Future | [settings-more-hub.md → Group B](../design/screens/settings-more-hub.md#group-b--language-management-thêm--xóa-ngôn-ngữ); needs data-model task | TBD | TBD |
+| F1.LANGUAGE.2 | Delete language policy and flow (destructive; confirm + policy) | BE/FE | Future | [settings-more-hub.md → Group B](../design/screens/settings-more-hub.md#group-b--language-management-thêm--xóa-ngôn-ngữ) | TBD | TBD |
+| F1.DATA.IMPORT.1 | Import flow (validate before commit; local-first) | BE/FE | Future | [settings-more-hub.md → Group C](../design/screens/settings-more-hub.md#group-c--import--export-nhập--xuất); format not decided | TBD | TBD |
+| F1.DATA.EXPORT.1 | Export flow (no mutation; local-first) | BE/FE | Future | [settings-more-hub.md → Group C](../design/screens/settings-more-hub.md#group-c--import--export-nhập--xuất); format not decided | TBD | TBD |
+| F1.STATS.1 | Statistics entry and screen (long-term progress) | BE/FE | Future | [settings-more-hub.md → Group D](../design/screens/settings-more-hub.md#group-d--statistics-thống-kê); separate Progress screen | TBD | TBD |
+| F1.APPEARANCE.1 | Theme settings (theme/dark/light/system) | FE/Settings | Not started | [settings-more-hub.md → Group E](../design/screens/settings-more-hub.md#group-e--appearance--theme-chủ-đề), [09-settings.md](../design/09-settings.md) | TBD | TBD |
+| F1.SUPPORT.1 | FAQ and support contact entries (email / Telegram) | FE | Future | [settings-more-hub.md → Group G](../design/screens/settings-more-hub.md#group-g--help--support-trợ-giúp); links not decided | TBD | TBD |
+
+> `F1.SETTINGS.HUB.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash
+> commit), per the [evidence policy](#done-criteria--evidence-policy). **Drawer is not a required UI** —
+> it only sourced the function list. **Add/Delete language** (learning-language workspace) is **not** in
+> the current data model and needs a **data-model + destructive-policy task** first — marked **Future**.
+> Import/export file formats, theme storage, and support links are **not** decided here; those functions
+> are **Future** until they get their own spec.
+
+---
+
 ## 5. Later phases (NOT started)
 
 | ID | Deliverable | Status |
