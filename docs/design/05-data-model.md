@@ -115,6 +115,11 @@ Ghi chú thiết kế:
   **soft-delete** (đặt `deleted_at`) và cascade soft-delete ở tầng repository.
 - **Settings** lưu trong `app_meta` dạng JSON (một dòng `key='settings'`). Đơn giản, đủ cho cấu hình
   đơn người dùng; xem [09-settings](09-settings.md).
+- **Không có bảng phiên học (session).** Phase 1 chỉ có 4 bảng trên. Phiên học là **state tạm**; tiến
+  độ bền vững chỉ nằm trong `cards` + `card_reviews` (Option B — xem
+  [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence) và
+  [07-study-modes](07-study-modes.md#persist-phiên-học--option-b-phiên-là-state-tạm)). **Không** tạo
+  `study_sessions` / `study_session_items` ở Phase 1.
 
 ## Kiểu domain (TypeScript)
 
@@ -183,9 +188,14 @@ SELECT * FROM cards
 WHERE deleted_at IS NULL
   AND deck_id IN (/* danh sách id từ subtree hoặc chỉ 1 deck */)
   AND due_at IS NOT NULL
-  AND due_at <= ?           -- ? = now (epoch ms)
+  AND due_at <= ?           -- ? = now (epoch ms) — Option A, xem DT-1
 ORDER BY due_at ASC;
 ```
+
+> **Ngữ nghĩa Due (Option A):** đây là **vị ngữ due chuẩn** dùng thống nhất cho Today session,
+> Dashboard due count, Study eligibility query, và Progress/statistics. Xem
+> [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics). Ngày địa phương **chỉ** dùng
+> cho hạn mức thẻ mới (`new_seen_on`), **không** dùng cho due.
 
 ### Thẻ mới trong phạm vi (áp hạn mức/ngày)
 ```sql

@@ -71,10 +71,25 @@ với `MS_PER_DAY = 86_400_000`. (Interval index 0-based: box `b` dùng `interva
 phiên học lần đầu, đặt `new_seen_on = ngày local hôm nay` (để đếm hạn mức thẻ mới). Sau lần chấm đầu,
 `due_at` được tính như trên.
 
-> **Quyết định thiết kế — "ngày" theo giờ địa phương:** interval cộng theo mili-giây tuyệt đối
-> (đơn giản, tránh lệ thuộc lịch). "Đến hạn hôm nay" và "hạn mức thẻ mới/ngày" thì tính theo **ngày
-> địa phương** của thiết bị. Đây là đánh đổi có chủ đích: đủ tốt cho một app đơn thiết bị, và né các
-> ca biên phức tạp của DST/timezone. Khi bật sync đa thiết bị (Phase 4) sẽ xem lại quy ước "ngày".
+> **Quyết định thiết kế — mili-giây tuyệt đối:** interval cộng theo mili-giây tuyệt đối
+> (đơn giản, tránh lệ thuộc lịch). Việc xác định **đến hạn (due)** dùng mốc `now` tuyệt đối, **không**
+> dùng cửa sổ ngày lịch (xem "Ngữ nghĩa Due" ngay dưới). **Ngày địa phương** của thiết bị **chỉ** dùng
+> cho một việc duy nhất: đếm **hạn mức thẻ mới/ngày** (`new_seen_on`). Đây là đánh đổi có chủ đích: né
+> ca biên DST/timezone. Khi bật sync đa thiết bị (Phase 4) sẽ xem lại quy ước "ngày".
+
+## Ngữ nghĩa "đến hạn" (Due) — Option A
+
+> **Quyết định (DT-1):** một thẻ **đến hạn** khi `due_at <= now`.
+> Xem bảng quyết định: [decision-tables/phase-1-contracts.md#dt-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics).
+
+- `now` là **mốc thời gian tuyệt đối** (epoch ms). "Due" được đánh giá **tại thời điểm truy vấn**,
+  **không** theo cửa sổ ngày lịch.
+- **Vị ngữ due chuẩn:** `deleted_at IS NULL AND due_at IS NOT NULL AND due_at <= now`.
+- **Thẻ mới** (`due_at IS NULL`) **không** tính là due — chúng là "new", gating bằng hạn mức/ngày
+  (qua `new_seen_on`, theo ngày địa phương). Đây là **chỗ duy nhất** dùng ngày địa phương.
+- Cùng một vị ngữ này dùng thống nhất cho: **Today session**, **Dashboard due count**, **Study
+  eligibility query**, và **Progress/statistics due count** — nên các nơi này không bao giờ lệch nhau.
+  Chi tiết tác động: [DT-1](../decision-tables/phase-1-contracts.md#impact--every-surface-uses-the-same-predicate).
 
 ## Hợp đồng hàm engine
 

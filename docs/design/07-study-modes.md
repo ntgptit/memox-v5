@@ -16,9 +16,31 @@ Chọn deck → chọn phạm vi (công tắc "gồm deck con") → chọn chế
 ```
 
 - **Dựng danh sách thẻ**: theo mục "Chọn thẻ cho một phiên học" trong [06-srs-8box](06-srs-8box.md).
+  Điều kiện due dùng vị ngữ `due_at <= now` (Option A — xem
+  [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics)).
 - **Lưu sau mỗi lần chấm**: cập nhật `cards.box/due_at/last_reviewed_at` + chèn `card_reviews`
   (một transaction). Thẻ mới lần đầu: đặt `new_seen_on = hôm nay`.
 - **Tóm tắt cuối phiên** (FR-M8): số đúng/sai, số thẻ lên/xuống box, thời lượng.
+
+## Persist phiên học — Option B (phiên là state tạm)
+
+> **Quyết định (DT-2):** phiên học là **state tạm** (UI/domain, in-memory). Tiến độ học **bền vững chỉ
+> nằm trong `cards` và `card_reviews`**. Phase 1 **không** tạo bảng `study_sessions` /
+> `study_session_items`. Xem [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence).
+
+Đây là lý do data model Phase 1 chỉ có 4 bảng (`decks`, `cards`, `card_reviews`, `app_meta`) — khớp với
+[05-data-model](05-data-model.md). Hợp đồng hành vi:
+
+| Sự kiện | Hành vi |
+|---------|---------|
+| Chấm một thẻ | Persist **ngay** trong **một** transaction: cập nhật `cards` + chèn `card_reviews`. |
+| Kết thúc phiên | Hiện tóm tắt tính từ kết quả vừa lưu. **Không** ghi thêm bản ghi "session" nào. |
+| Resume | Phase 1 **không** có "mở lại đúng phiên cũ". Mở lại app = dựng lại danh sách đủ điều kiện (due + hạn mức thẻ mới). Thẻ đã chấm không còn due nên tự rơi ra. |
+| Crash / thoát giữa chừng | Mọi câu đã chấm đều đã bền vững. Chỉ mất thẻ đang dở (chưa chấm) và state UI tạm (thanh tiến độ, thứ tự). Không có state hỏng/nửa vời. |
+| Answered attempts lưu ở đâu | `card_reviews` (lịch sử) + trạng thái SRS hiện tại trên `cards`. |
+| Dữ liệu durable | `cards` (`box`, `due_at`, `last_reviewed_at`, `new_seen_on`) + `card_reviews`. |
+
+Persist phiên (mở lại đúng phiên, analytics theo phiên) là **hướng mở rộng ngoài Phase 1**.
 
 ## 1. Typing — Phase 1 (mode nền tảng)
 
