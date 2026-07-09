@@ -53,7 +53,7 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 - **Spaced Repetition Settings không được đổi mô hình 8-box** nếu chưa có **migration policy** tường
   minh ở tương lai (xem [Spaced Repetition Settings](screens/spaced-repetition-settings.md)).
 - **SRS Repeat Flow bắt đầu từ Repeat Mode Menu.** Bấm **Lặp lại** mở
-  [Repeat Mode Menu](../07-study-modes.md#repeat-mode-menu); user **chọn 1 repeat mode** trong **match /
+  [Repeat Mode Menu](07-study-modes.md#repeat-mode-menu); user **chọn 1 repeat mode** trong **match /
   guess / recall / fill** (đây là **SRS review** cho card **Box 1+ đã due**). **`reviewMode` KHÔNG** dùng
   cho SRS Repeat. Nếu **due count = 0**, **không** tạo SRS repeat session **rỗng**.
 - Card chưa hoàn thành đủ 5 mode → **vẫn Box 0 / not SRS-active** (tiến độ có thể phản ánh partial

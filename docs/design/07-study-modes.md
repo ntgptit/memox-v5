@@ -75,7 +75,7 @@ nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions
 
 Năm mode có **cùng cơ chế tương tác** dù ở New Learning hay SRS Repeat; **khác nhau ở lifecycle**
 (pre-SRS activation vs. SRS grading). Chi tiết đầy đủ ở phần
-[New Learning modes](#new-learning-flow) và [SRS Repeat modes](#srs-repeat-modes).
+[New Learning modes](#new-learning-flow) và [SRS Repeat modes](#srs-repeat-flow).
 
 - **review** — làm quen thẻ (xem prompt + answer). **Chỉ** ở New Learning Flow (mode đầu).
 - **match** — ghép prompt/front ↔ answer/meaning; đúng = xanh, sai = đỏ + retry.
