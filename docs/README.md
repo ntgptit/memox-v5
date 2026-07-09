@@ -23,6 +23,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [decision-tables/phase-1-contracts.md](decision-tables/phase-1-contracts.md) | Quyết định Phase 1: due (local-day), session persistence, starter template |
 | — | [decision-tables/study-srs-decision-table.md](decision-tables/study-srs-decision-table.md) | Bảng tra nhanh: due eligibility + SRS box + session |
 | — | [decision-tables/play-menu-decision-table.md](decision-tables/play-menu-decision-table.md) | Play Menu: Học vs Lặp lại, activation 5 mode, SRS Repeat |
+| — | [decision-tables/new-learning-flow-decision-table.md](decision-tables/new-learning-flow-decision-table.md) | New Learning Flow + reviewMode; activation vs browse/Repeat |
 | — | [project-management/wbs.md](project-management/wbs.md) | Work breakdown (foundation-first) |
 | — | [verification.md](verification.md) | Cách verify (`npm run check`) |
 

@@ -205,8 +205,11 @@ hoặc có lịch sử học hợp lệ).
 
 ### Behavior (nghiệp vụ)
 
-- Bấm **Học** → bắt đầu **New Learning Flow** (review→match→guess→recall→fill) cho thẻ mới
-  ([07-study-modes](../07-study-modes.md#new-learning-flow)). Đây **không** phải SRS review.
+- Bấm **Học** → mở **New Learning Flow**, **mode đầu tiên luôn là `reviewMode`** (bước làm quen thẻ
+  mới), rồi chuỗi tiếp tục **review → match → guess → recall → fill**
+  ([07-study-modes → reviewMode](../07-study-modes.md#reviewmode-mode-đầu-tiên)). Bấm Học **không** mở
+  **SRS Repeat**, và **không** activate ngay card vào **Box 1** — card chỉ vào Box 1 sau khi hoàn thành
+  **đủ 5 mode**.
 - Bấm **Lặp lại** khi `reviewDueCount > 0` → bắt đầu **SRS Repeat Flow** (card Box 1+ đến hạn, local-day).
 - Bấm **Lặp lại** khi `reviewDueCount = 0` → **không** tạo **session rỗng**; hiển thị trạng thái **không
   có từ đến hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).

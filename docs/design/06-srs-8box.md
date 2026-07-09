@@ -22,9 +22,12 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 - Thẻ chỉ được **activate** (Box 0 → **Box 1**) sau khi hoàn thành đủ **5 mode** của New Learning Flow
   theo thứ tự: **review → match → guess → recall → fill** (xem
   [07-study-modes → New Learning Flow](07-study-modes.md#new-learning-flow)).
+- **`reviewMode`** là **mode đầu tiên** (bước làm quen thẻ mới) của New Learning Flow, **thuộc pha
+  trước SRS**. Hoàn thành **riêng** `reviewMode` **không** đủ để bật SRS: card **vẫn Box 0 /
+  not SRS-active** cho tới khi hoàn thành **đủ cả 5 mode**.
 - **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
-- **Repeat mode** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate **không** được đưa vào
-  Repeat.
+- **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate (kể cả đang
+  ở `reviewMode`) **không** được đưa vào Repeat.
 - Card chưa hoàn thành đủ 5 mode → **vẫn Box 0 / not SRS-active** (tiến độ có thể phản ánh partial
   learning nếu docs progress cho phép, nhưng **không** phải SRS review).
 

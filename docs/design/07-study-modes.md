@@ -159,6 +159,55 @@ nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions
 >            docs này ghi nhận drift, không tự chốt lại toàn bộ phasing.
 > ```
 
+### reviewMode (mode đầu tiên)
+
+**Purpose.** `reviewMode` là **guided review mode** cho **thẻ mới**: bước **làm quen** nội dung card,
+**không** phải bài kiểm tra trí nhớ, **không** phải SRS Repeat.
+
+**When it appears.** Ngay khi người dùng bấm **Học** trong [Play Menu](screens/deck-management.md#play-menu)
+→ New Learning Flow mở, **mode đầu tiên luôn là `reviewMode`**. Không nhảy thẳng vào match/guess/recall/
+fill, không nhảy vào SRS Repeat.
+
+**What user sees.** Người học nhìn thấy **cả prompt (front/term) và answer (back/meaning/definition)**
+cùng lúc để làm quen. Ví dụ theo hướng `KO → VI`:
+
+- front/prompt: `기자`
+- back/meaning: `Reporter / Nhà báo …`
+
+**Actions (concept-level, optional / product-dependent).** Chỉ ghi ở mức concept, **không** chốt
+implementation:
+
+- Nghe **phát âm** (audio) — **nếu** product scope hỗ trợ audio (chưa chốt TTS/audio).
+- **Edit card** — **nếu** edit flow được docs khác hỗ trợ.
+- Điều khiển **hiển thị/text** và **more menu** — nếu product scope cho phép.
+- (Layout: Header có Back + title "Xem lại"/label tương ứng; Progress area có progress bar/% — có thể
+  bắt đầu 0%; Card review area hiển thị answer + prompt.)
+
+**Completion rule.** Người học **chưa cần** nhập đáp án hay chấm đúng/sai ở `reviewMode` (nếu docs study
+mode chưa quy định scoring). Hoàn thành `reviewMode` **chỉ** đánh dấu card đã **qua bước review** trong
+New Learning Flow, rồi flow tiếp tục sang **match → guess → recall → fill**.
+
+**What it must NOT do.**
+
+- **Không** đưa card vào **Box 1** chỉ vì đã mở/hoàn thành `reviewMode`.
+- **Không** làm card thành **SRS-active**; card vẫn ở **Box 0 / not-activated**.
+- **Không** áp **SRS due scheduling** cho card chưa vào Box 1.
+- **Không** ảnh hưởng **Repeat count** (mở reviewMode không đổi số card due của Lặp lại).
+
+### reviewMode vs. "Xem lại các từ" (browse)
+
+Hai khái niệm **khác nghiệp vụ**, dù label tiếng Việt gần giống nhau:
+
+| | reviewMode | Xem lại các từ (Play Menu) |
+|--|-----------|----------------------------|
+| Thuộc | **New Learning Flow** (bước 1/5) | **Browse/review content mode** |
+| Mục đích | Làm quen thẻ **mới** để tiến tới activate | Duyệt/xem lại nội dung ([Flashcard List](screens/flashcard-list.md)) |
+| Tạo flow học | Có (mở chuỗi review→match→guess→recall→fill) | **Không** bắt buộc study session |
+| Activate SRS | Chỉ khi hoàn thành **đủ 5 mode** | **Không bao giờ** tự activate card vào SRS |
+
+> **Browse mode không được tự động activate card vào SRS.** Chỉ New Learning Flow hoàn thành đủ 5 mode
+> mới đưa card lên Box 1.
+
 ## SRS Repeat Flow
 
 **Lặp lại** (từ Play Menu) là **review SRS**.
