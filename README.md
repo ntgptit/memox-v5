@@ -1,56 +1,73 @@
-# Welcome to your Expo app 👋
+# MemoX v5
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+MemoX is a **flashcard app with spaced-repetition review (8-box Leitner)**, **nested decks**, and
+multiple study modes. It is **local-first** (works offline) and runs on **iOS, Android, and Web**.
 
-## Get started
+- **Stack:** Expo (SDK 57) · React Native · TypeScript
+- **Source root:** [`src/`](src/)
+- **App routes (Expo Router):** [`src/app/`](src/app/) — there is **no** root `app/` directory;
+  Expo Router uses `src/app`.
+- **Status:** Foundation / documentation phase. No product feature code has been implemented yet.
 
-1. Install dependencies
+> ⚠️ Expo has changed across versions. Before writing any code that touches Expo APIs, read the
+> **exact versioned docs** at <https://docs.expo.dev/versions/v57.0.0/>. See [`AGENTS.md`](AGENTS.md).
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Getting started
 
 ```bash
-npm run reset-project
+npm install
+npm start          # Expo dev server (press w / a / i for web / Android / iOS)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Platform shortcuts: `npm run web`, `npm run android`, `npm run ios`.
 
-### Other setup steps
+## Verification
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+One command gates everything. Run it before every commit/PR:
 
-## Learn more
+```bash
+npm run check
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+It runs, in order: **TypeScript** (`tsc --noEmit`) → **Biome** (format + lint) → **Jest** →
+**architecture boundary check** (`scripts/check-boundaries.mjs`). Details in
+[`docs/verification.md`](docs/verification.md).
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Foundation dependencies
 
-## Join the community
+The starting toolset for building features (nothing app-specific has been built on top yet):
 
-Join our community of developers creating universal apps.
+| Concern | Library |
+|---------|---------|
+| Routing | **Expo Router** (file-based, in `src/app`) |
+| Styling | **NativeWind** (Tailwind for React Native) |
+| State | **Zustand** |
+| Validation / schemas | **Zod** |
+| Error handling | **neverthrow** (`Result`, no hidden throws) |
+| Forms | **react-hook-form** |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Architecture rules (must-follow)
+
+- Everything lives under `src/`. Screens/routes are thin and live in `src/app`.
+- Feature isolation: **`src/features/<A>` must not import `src/features/<B>`.**
+- **`src/shared` must not import `src/features`.** Cross-feature code goes in `src/shared`.
+- These rules are enforced by `scripts/check-boundaries.mjs` (part of `npm run check`).
+
+Read the full rules in [`docs/architecture/dependency-boundaries.md`](docs/architecture/dependency-boundaries.md)
+and folder layout in [`docs/architecture/folder-structure.md`](docs/architecture/folder-structure.md).
+
+## Documentation
+
+| Doc | Purpose |
+|-----|---------|
+| [`AGENTS.md`](AGENTS.md) | Actionable implementation rules for contributors & AI agents |
+| [`docs/product/memox-scope.md`](docs/product/memox-scope.md) | What MemoX is / is not (scope) |
+| [`docs/architecture/overview.md`](docs/architecture/overview.md) | Layers, data flow, tech stack |
+| [`docs/architecture/folder-structure.md`](docs/architecture/folder-structure.md) | Where code goes |
+| [`docs/architecture/dependency-boundaries.md`](docs/architecture/dependency-boundaries.md) | Import rules (enforced) |
+| [`docs/project-management/wbs.md`](docs/project-management/wbs.md) | Work breakdown (foundation-first) |
+| [`docs/verification.md`](docs/verification.md) | How to verify changes |
+
+Deeper design specs (data model, SRS algorithm, study modes, i18n, settings, phasing) live under
+[`docs/design/`](docs/design/), [`docs/product/`](docs/product/), and [`docs/roadmap/`](docs/roadmap/) —
+see [`docs/README.md`](docs/README.md) for the full index.
