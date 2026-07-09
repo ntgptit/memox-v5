@@ -1,0 +1,181 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Spaced Repetition Settings" subtitle="SRS preferences (8-box): loaded / box-count open question / interval rows / warning / reset confirm / unavailable+save-failed, dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxSettingsSection, MxSettingsRow, MxSwitch, MxBadge, MxCallout, MxConfirmDialog, MxErrorState, MxActionButton } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+const BOXES = [
+  { n: 1, interval: '1 day' }, { n: 2, interval: '2 days' }, { n: 3, interval: '4 days' }, { n: 4, interval: '8 days' },
+  { n: 5, interval: '2 weeks' }, { n: 6, interval: '1 month' }, { n: 7, interval: '2 months' }, { n: 8, interval: '4 months' },
+];
+function BoxNum({ n }) {
+  return <span style={{ width: 28, height: 28, flex: '0 0 auto', borderRadius: 8, background: 'var(--mx-color-srs-preSrsSurface)', color: 'var(--mx-color-srs-active)', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '700 13px var(--mx-font-mono)' }}>{n}</span>;
+}
+
+function Shell({ theme, children, overlay }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar variant="settings" leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Spaced repetition" />
+      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
+      {overlay}
+    </div>
+  );
+}
+
+function PrefSection() {
+  return (
+    <MxSettingsSection title="Review behavior">
+      <MxSettingsRow leading={<Ic n="arrow-up-narrow-wide" />} title="Repeat order" subtitle="Which cards come up first" value="Ascending" onClick={() => {}} />
+      <MxSettingsRow leading={<Ic n="corner-left-down" />} title="If you forget a word" subtitle="Move down one box (never below Box 1)" value="Step down" onClick={() => {}} />
+      <MxSettingsRow leading={<Ic n="bell" />} title="Due-word notifications" subtitle="Notify only when words are due" control={<MxSwitch checked label="Due notifications" onChange={() => {}} />} />
+    </MxSettingsSection>
+  );
+}
+
+/* ---- MX-20.1 Loaded ---- */
+function LoadedPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxSettingsSection title="Boxes" description="MemoX uses an 8-box spaced-repetition system.">
+        <MxSettingsRow leading={<Ic n="layers" />} title="Box system" value="8 boxes" subtitle="Fixed by the SRS model" disabled />
+        <MxSettingsRow leading={<Ic n="gamepad-2" />} title="Game word source" subtitle="Where the game pulls cards from" value="SRS due pool" onClick={() => {}} />
+      </MxSettingsSection>
+      <PrefSection />
+      <MxSettingsSection title="Reset">
+        <MxSettingsRow leading={<Ic n="rotate-ccw" />} title="Reset to defaults" subtitle="Restore the default SRS preferences" tone="destructive" onClick={() => {}} />
+      </MxSettingsSection>
+    </Shell>
+  );
+}
+
+/* ---- MX-20.2 Box-count open question ---- */
+function OpenQuestionPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxSettingsSection title="Boxes">
+        <MxSettingsRow leading={<Ic n="layers" />} title="Box count"
+          subtitle="Meaning of this value isn’t decided yet"
+          value={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>7<MxBadge tone="neutral" size="small" icon={<Ic n="help-circle" s={12} />}>Under review</MxBadge></span>}
+          disabled />
+      </MxSettingsSection>
+      <MxCallout tone="warning" icon={<Ic n="triangle-alert" s={16} />} title="Open question — not final">
+        MemoX’s model is 8 boxes. The “7” from earlier mockups is unresolved and won’t change the box model until there’s a product decision — no 8→7 migration is implied.
+      </MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-20.3 Interval rows ---- */
+function IntervalsPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxSettingsSection title="Box intervals" description="Default review gap for each of the 8 boxes.">
+        {BOXES.map(b => (
+          <MxSettingsRow key={b.n} leading={<BoxNum n={b.n} />} title={`Box ${b.n}`} value={b.interval} onClick={() => {}} />
+        ))}
+      </MxSettingsSection>
+    </Shell>
+  );
+}
+
+/* ---- MX-20.4 Warning ---- */
+function WarningPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxCallout tone="warning" icon={<Ic n="triangle-alert" s={16} />} title="Changes apply to future reviews only">
+        Editing these preferences won’t change your current due dates or which box a word is in — only how upcoming reviews are scheduled.
+      </MxCallout>
+      <PrefSection />
+    </Shell>
+  );
+}
+
+/* ---- MX-20.5 Reset confirm ---- */
+function ResetConfirmPhone({ theme }) {
+  return (
+    <Shell theme={theme}
+      overlay={
+        <MxConfirmDialog open variant="destructive"
+          title="Reset SRS settings to default?"
+          message="Repeat order, forget behavior, notifications and game source go back to their defaults."
+          warning="Your words, boxes and due dates are not affected — only these preferences reset."
+          confirmLabel="Reset settings"
+          cancelLabel="Cancel" />
+      }>
+      <PrefSection />
+      <MxSettingsSection title="Reset">
+        <MxSettingsRow leading={<Ic n="rotate-ccw" />} title="Reset to defaults" subtitle="Restore the default SRS preferences" tone="destructive" onClick={() => {}} />
+      </MxSettingsSection>
+    </Shell>
+  );
+}
+
+/* ---- MX-20.6a Unavailable / future ---- */
+function UnavailablePhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <MxSettingsSection title="Review behavior">
+        <MxSettingsRow leading={<Ic n="bell" />} title="Due-word notifications" subtitle="Notifications aren’t available on this device yet" unavailable />
+        <MxSettingsRow leading={<Ic n="shuffle" />} title="Random repeat order" subtitle="A future ordering option" unavailable />
+      </MxSettingsSection>
+      <MxCallout tone="unavailable" icon={<Ic n="clock" s={16} />}>Some SRS options are coming in a later version — they’re shown but disabled for now.</MxCallout>
+    </Shell>
+  );
+}
+
+/* ---- MX-20.6b Save failed ---- */
+function SaveFailedPhone({ theme }) {
+  return (
+    <Shell theme={theme}>
+      <div style={{ minHeight: '54vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't save SRS settings"
+          message="Your previous preferences are still active and your words, boxes and due dates are safe on this device. Try again."
+          action={<MxActionButton variant="secondary" leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry</MxActionButton>} />
+      </div>
+    </Shell>
+  );
+}
+
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-20.1 · Loaded</DeskCaption>
+    <LoadedPhone theme="dark" /><LoadedPhone theme="light" />
+    <DeskCaption>MX-20.2 · Box count — open question</DeskCaption>
+    <OpenQuestionPhone theme="dark" /><OpenQuestionPhone theme="light" />
+    <DeskCaption>MX-20.3 · Interval rows (8 boxes)</DeskCaption>
+    <IntervalsPhone theme="dark" /><IntervalsPhone theme="light" />
+    <DeskCaption>MX-20.4 · Warning</DeskCaption>
+    <WarningPhone theme="dark" /><WarningPhone theme="light" />
+    <DeskCaption>MX-20.5 · Reset confirm (destructive)</DeskCaption>
+    <ResetConfirmPhone theme="dark" /><ResetConfirmPhone theme="light" />
+    <DeskCaption>MX-20.6 · Unavailable / future</DeskCaption>
+    <UnavailablePhone theme="dark" /><UnavailablePhone theme="light" />
+    <DeskCaption>MX-20.6 · Save failed</DeskCaption>
+    <SaveFailedPhone theme="dark" /><SaveFailedPhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
