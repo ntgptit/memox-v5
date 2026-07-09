@@ -1,0 +1,176 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Play Menu" subtitle="Play Menu bottom sheet — Learn / Repeat / Review / game / player by availability; normal / new-only / due-only / partial / no-due / future, dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxListRow, MxModalSheet, MxCallout } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+/* ---- option rows (built from the shared MxListRow) ---- */
+function LearnRow({ newCount }) {
+  if (newCount > 0) return <MxListRow leading={<Ic n="graduation-cap" />} title="Learn" subtitle={`${newCount} new words`} showChevron onClick={() => {}} />;
+  return <MxListRow leading={<Ic n="graduation-cap" />} title="Learn" subtitle="No new words to learn" disabled trailing={<MxBadge tone="neutral" size="small">0 new</MxBadge>} />;
+}
+function RepeatRow({ dueCount, show }) {
+  if (!show) return null;
+  if (dueCount > 0) return <MxListRow leading={<Ic n="repeat" />} title="Repeat" subtitle={`${dueCount} words due · choose a mode`} trailing={<MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>{dueCount}</MxBadge>} showChevron onClick={() => {}} />;
+  return <MxListRow leading={<Ic n="repeat" />} title="Repeat" subtitle="Nothing due right now" trailing={<MxBadge tone="noDue" size="small" icon={<Ic n="check" s={12} />}>Up to date</MxBadge>} showChevron onClick={() => {}} />;
+}
+function ReviewRow({ total }) {
+  return <MxListRow leading={<Ic n="book-open" />} title="Review words" subtitle={`Browse all ${total} · read-only`} showChevron onClick={() => {}} />;
+}
+function GameRow() {
+  return <MxListRow leading={<Ic n="gamepad-2" />} title="A game" subtitle="Match game" disabled trailing={<MxBadge tone="preSrs" size="small">Soon</MxBadge>} />;
+}
+function PlayerRow() {
+  return <MxListRow leading={<Ic n="headphones" />} title="Player" subtitle="Listening mode" disabled trailing={<MxBadge tone="preSrs" size="small">Soon</MxBadge>} />;
+}
+
+/* ---- background deck context behind the sheet ---- */
+function DeckBg({ title }) {
+  return (
+    <div className="mx-scroll" style={{ padding: '4px 16px 12px', opacity: 0.55 }} aria-hidden="true">
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 16px' }}>
+        <div style={{ width: 108, height: 138, borderRadius: 18, background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className="mx-korean" style={{ font: '800 44px var(--mx-font-display)', color: 'var(--mx-color-action-primary)' }}>한</span>
+        </div>
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ font: '800 var(--mx-text-title-medium-size)/1.2 var(--mx-font-display)', color: 'var(--mx-color-text-primary)' }}>{title}</div>
+        <div style={{ marginTop: 6, display: 'inline-flex' }}><MxBadge tone="active" icon={<i data-lucide="arrow-right" style={{ width: 13, height: 13 }}></i>}>KO → EN</MxBadge></div>
+      </div>
+    </div>
+  );
+}
+
+/* ---- shell: deck context + open play menu sheet ---- */
+function PlayPhone({ theme, subtitle, callout, children }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <MxTopBar leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Deck" />
+      <DeckBg title="Korean TOPIK I" />
+      <MxModalSheet title="Play · Korean TOPIK I" onClose={() => {}}>
+        {subtitle && <div style={{ padding: '0 4px 8px', font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>{subtitle}</div>}
+        {callout && <div style={{ paddingBottom: 10 }}>{callout}</div>}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingBottom: 8 }}>{children}</div>
+      </MxModalSheet>
+    </div>
+  );
+}
+
+/* ---- MX-05.1 Normal · all modes (variant B, new + due) ---- */
+function NormalPhone({ theme }) {
+  return (
+    <PlayPhone theme={theme} subtitle="12 new · 83 due">
+      <LearnRow newCount={12} />
+      <RepeatRow dueCount={83} show />
+      <ReviewRow total={120} />
+      <GameRow /><PlayerRow />
+    </PlayPhone>
+  );
+}
+
+/* ---- MX-05.2 New-only (variant A · progress 0%, no Repeat) ---- */
+function NewOnlyPhone({ theme }) {
+  return (
+    <PlayPhone theme={theme} subtitle="120 new · not started yet"
+      callout={<MxCallout tone="info" icon={<Ic n="sparkles" s={16} />}>Nothing to repeat yet — cards join spaced repetition after you learn them.</MxCallout>}>
+      <LearnRow newCount={120} />
+      <RepeatRow dueCount={0} show={false} />
+      <ReviewRow total={120} />
+      <GameRow /><PlayerRow />
+    </PlayPhone>
+  );
+}
+
+/* ---- MX-05.3 Due-only (no new words, has due) ---- */
+function DueOnlyPhone({ theme }) {
+  return (
+    <PlayPhone theme={theme} subtitle="0 new · 83 due">
+      <LearnRow newCount={0} />
+      <RepeatRow dueCount={83} show />
+      <ReviewRow total={120} />
+      <GameRow /><PlayerRow />
+    </PlayPhone>
+  );
+}
+
+/* ---- MX-05.4 Partial modes (some unavailable, explained) ---- */
+function PartialPhone({ theme }) {
+  return (
+    <PlayPhone theme={theme} subtitle="12 new · nothing due right now"
+      callout={<MxCallout tone="noDue" icon={<Ic n="check" s={16} />}>You’re caught up on reviews — learn new words or browse while you wait for the next due date.</MxCallout>}>
+      <LearnRow newCount={12} />
+      <RepeatRow dueCount={0} show />
+      <ReviewRow total={120} />
+      <GameRow /><PlayerRow />
+    </PlayPhone>
+  );
+}
+
+/* ---- MX-05.5 No due / all mastered ---- */
+function MasteredPhone({ theme }) {
+  return (
+    <PlayPhone theme={theme} subtitle="All 120 words learned"
+      callout={<MxCallout tone="noDue" icon={<Ic n="party-popper" s={16} />} title="All caught up">Every word is learned and nothing is due. Come back later, or browse your words.</MxCallout>}>
+      <LearnRow newCount={0} />
+      <RepeatRow dueCount={0} show />
+      <ReviewRow total={120} />
+      <GameRow /><PlayerRow />
+    </PlayPhone>
+  );
+}
+
+/* ---- MX-05.6 Future actions (game / player soon) ---- */
+function FuturePhone({ theme }) {
+  return (
+    <PlayPhone theme={theme} subtitle="12 new · 83 due"
+      callout={<MxCallout tone="unavailable" icon={<Ic n="clock" s={16} />} title="Coming soon">A match game and a listening player are on the way — they’re disabled for now.</MxCallout>}>
+      <LearnRow newCount={12} />
+      <RepeatRow dueCount={83} show />
+      <ReviewRow total={120} />
+      <GameRow /><PlayerRow />
+    </PlayPhone>
+  );
+}
+
+/* ---- desk grouping caption ---- */
+function DeskCaption({ children }) {
+  return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <DeskCaption>MX-05.1 · Normal — all modes</DeskCaption>
+    <NormalPhone theme="dark" /><NormalPhone theme="light" />
+    <DeskCaption>MX-05.2 · New-only (no repeat yet)</DeskCaption>
+    <NewOnlyPhone theme="dark" /><NewOnlyPhone theme="light" />
+    <DeskCaption>MX-05.3 · Due-only (no new words)</DeskCaption>
+    <DueOnlyPhone theme="dark" /><DueOnlyPhone theme="light" />
+    <DeskCaption>MX-05.4 · Partial modes</DeskCaption>
+    <PartialPhone theme="dark" /><PartialPhone theme="light" />
+    <DeskCaption>MX-05.5 · No due / all mastered</DeskCaption>
+    <MasteredPhone theme="dark" /><MasteredPhone theme="light" />
+    <DeskCaption>MX-05.6 · Future actions (soon)</DeskCaption>
+    <FuturePhone theme="dark" /><FuturePhone theme="light" />
+  </>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
