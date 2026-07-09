@@ -89,6 +89,54 @@ Ghi chú nghiệp vụ:
   [DT-1](../../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day); màn này
   **không** định nghĩa lại các rule đó.
 
+## Sort Menu
+
+Menu để **thay đổi thứ tự hiển thị** của deck/subdeck rows trong scope hiện tại. Mở từ **icon
+sort/filter** ở [Control area](#các-thành-phần-nghiệp-vụ). Sort Menu là **một phần của Deck Management /
+Subdeck List**, không phải feature độc lập; hiện chỉ áp dụng cho **Deck/Subdeck List** (không mặc định
+áp cho mọi màn khác khi docs chưa nói).
+
+### Sort options
+
+Product meaning dùng **label rõ**, **không** chỉ dựa vào mũi tên ↑/↓ (UI có thể hiển thị ↑/↓ kèm theo,
+nhưng ý nghĩa sản phẩm phải rõ bằng label).
+
+| # | Option (EN) | Label đề xuất (VI) | Thứ tự |
+|---|-------------|--------------------|--------|
+| 1 | Alphabetical A to Z | Bảng chữ cái A → Z | Theo **title tăng dần** |
+| 2 | Alphabetical Z to A | Bảng chữ cái Z → A | Theo **title giảm dần** |
+| 3 | Created newest first | Ngày tạo mới nhất | Theo **ngày tạo giảm dần** |
+| 4 | Created oldest first | Ngày tạo cũ nhất | Theo **ngày tạo tăng dần** |
+| 5 | Recently studied first | Học gần đây | Theo **lần học gần nhất giảm dần** |
+| 6 | Least recently studied first | Lâu chưa học | Theo **lần học gần nhất tăng dần** |
+
+Ba **sort key** (title, ngày tạo, lần học gần nhất), mỗi key có **2 chiều**.
+
+### Rule cho item chưa từng học
+
+"Lần học gần nhất" của một deck/section là giá trị **dẫn xuất** (derived) từ nội dung bên trong; deck
+có thể **chưa từng được học** (không có last-studied). Quy tắc hiển thị bắt buộc:
+
+- **Học gần đây (Recently studied first):** item **chưa từng học** nằm **cuối** danh sách.
+- **Lâu chưa học (Least recently studied first):** item **chưa từng học** nằm **đầu** danh sách (vì đây
+  là nội dung chưa được học).
+
+### Stable fallback (tie-break)
+
+Nếu nhiều item có **cùng sort value**, dùng **fallback ổn định** theo **title** (hoặc ngày tạo) để danh
+sách **không nhảy lung tung** giữa các lần render.
+
+### Behavior (nghiệp vụ)
+
+- Sort **chỉ áp dụng cho list hiện tại** (presentation order).
+- Sort **không** thay đổi **dữ liệu gốc**.
+- Sort **không** thay đổi **study eligibility**.
+- Sort **không** thay đổi **due/workload count**.
+- Sort **không** thay đổi **progress percent**.
+- Nếu **search/filter đang active**, sort áp dụng trên **kết quả hiện tại**.
+- Khi **clear search/filter**, sort hiện tại **vẫn** được dùng cho list đầy đủ nếu màn còn mở.
+- **Persistence** của lựa chọn sort **chưa chốt** trong task này (trừ khi docs settings đã có rule).
+
 ## Các state chính
 
 Ở mức concept (không yêu cầu implement UI trong task này):
@@ -102,6 +150,17 @@ Ghi chú nghiệp vụ:
 | `error` | Lỗi khi tải danh sách. |
 | `no studyable content` | Không có nội dung học phù hợp để bắt đầu — action học **không khả dụng** / thông báo phù hợp. |
 | `creating new deck/card entry point` | Người dùng đang bắt đầu tạo deck con hoặc card mới (điểm vào tạo mới). |
+
+Các state liên quan **Sort Menu** (xem [Sort Menu](#sort-menu)):
+
+| State | Ý nghĩa |
+|-------|---------|
+| `sort menu closed` | Sort Menu đang đóng (mặc định). |
+| `sort menu open` | Sort Menu đang mở để chọn cách sắp xếp. |
+| `selected sort option` | Một option sort đang được chọn/áp dụng cho list. |
+| `search/filter active with sort` | Đang có search/filter, sort áp trên kết quả hiện tại. |
+| `empty result after search/filter/sort` | Không có item nào khớp sau khi search/filter (sort không tạo/bớt item). |
+| `unavailable sort field` | Trường sort chưa đủ dữ liệu (ví dụ chưa có last-studied date) — áp dụng rule "item chưa từng học". |
 
 ## Open questions / cố ý không chốt
 
@@ -120,6 +179,10 @@ Các điểm **chưa** được chốt trong screen spec này (tránh biến chi
   [07-study-modes](../07-study-modes.md#hướng-direction-hiện--hỏi). Xem [Drift note](#drift-note).
 - **Persistence/session implementation** của màn này **không** thuộc task này (session flow đã có ở
   [DT-2](../../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence-persisted)).
+- **Persistence của lựa chọn Sort** (nhớ sort giữa các lần mở màn/phiên): **chưa chốt** trong task này
+  (chỉ chốt nếu docs settings đã có rule). Xem [Sort Menu → Behavior](#sort-menu).
+- **Dẫn xuất "lần học gần nhất" ở cấp deck/section** (deck không có last-studied trực tiếp; là aggregate
+  từ nội dung bên trong): là việc của **read model** (`F1.DM.2`), **không** chốt schema/query ở spec này.
 - **Schema dữ liệu chi tiết mới**: không chốt ở đây; đọc read model từ [05-data-model](../05-data-model.md).
 
 ## Drift note
