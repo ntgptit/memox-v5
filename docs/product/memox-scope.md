@@ -68,6 +68,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   understand how the session went, and is **separate** from the long-term **Dashboard/Progress** (which
   it does not replace). Concept spec:
   [`../design/screens/session-result.md`](../design/screens/session-result.md).
+- **Settings / More Hub.** The system functions from the drawer mock are **kept** (today-activity
+  summary, add/delete learning language, import/export, statistics, theme, app settings, help/support),
+  but their **UI location may be a Settings tab / More screen** — a **drawer is not required**. The goal
+  is to fully develop these functions, not to copy the drawer UI. Concept spec:
+  [`../design/screens/settings-more-hub.md`](../design/screens/settings-more-hub.md). Note: **add/delete
+  learning language** is a **language-workspace** concept not yet in the data model (distinct from UI
+  i18n); import/export/theme file formats and storage are **not** decided here.
 - **Cards.** A card has a `term` and a `meaning` (both required) and an optional `note`. Content is
   free-form Unicode.
 - **Flashcard List screen.** Browse and manage the flashcards inside a deck/section: quickly read each

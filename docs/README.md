@@ -25,6 +25,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [decision-tables/play-menu-decision-table.md](decision-tables/play-menu-decision-table.md) | Play Menu: Học vs Lặp lại, activation 5 mode, SRS Repeat |
 | — | [decision-tables/new-learning-flow-decision-table.md](decision-tables/new-learning-flow-decision-table.md) | New Learning Flow + reviewMode; activation vs browse/Repeat |
 | — | [decision-tables/session-result-decision-table.md](decision-tables/session-result-decision-table.md) | Session Result: khi nào hiện, counting, không mutate |
+| — | [decision-tables/settings-more-hub-decision-table.md](decision-tables/settings-more-hub-decision-table.md) | Settings / More Hub: chức năng hệ thống, destructive, import/export |
 | — | [project-management/wbs.md](project-management/wbs.md) | Work breakdown (foundation-first) |
 | — | [verification.md](verification.md) | Cách verify (`npm run check`) |
 
@@ -45,6 +46,8 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [design/screens/deck-management.md](design/screens/deck-management.md) | Concept & nghiệp vụ màn Deck Management (gồm Subdeck List variant) |
 | — | [design/screens/flashcard-list.md](design/screens/flashcard-list.md) | Concept & nghiệp vụ màn Flashcard List |
 | — | [design/screens/session-result.md](design/screens/session-result.md) | Concept & nghiệp vụ màn Session Result (kết quả phiên) |
+| — | [design/screens/settings-more-hub.md](design/screens/settings-more-hub.md) | Chức năng hệ thống: Settings / More Hub (từ drawer mock) |
+| — | [design/navigation.md](design/navigation.md) | Concept điều hướng: Settings/More Hub, drawer không bắt buộc |
 | — | [roadmap/11-phasing.md](roadmap/11-phasing.md) | Lộ trình Phase 1–4 |
 
 ## Tóm tắt quyết định thiết kế (một chỗ)

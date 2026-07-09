@@ -21,6 +21,23 @@ Ràng buộc bắt buộc cho toàn bộ tầng dữ liệu:
   vỡ** hợp đồng local-first (vẫn qua repository + transaction + DB là nguồn sự thật). Xem
   [memox-scope](../product/memox-scope.md) và [overview](../architecture/overview.md).
 
+## Chức năng hệ thống (concept-level — chưa chốt schema)
+
+Các chức năng ở [Settings / More Hub](screens/settings-more-hub.md) cần cân nhắc storage, nhưng **task
+đó không chốt schema**; ghi lại ở đây như **dependency** cần một task riêng:
+
+- **Language / workspace management** (Thêm/Xóa ngôn ngữ học): có thể cần một **storage contract riêng**
+  (thực thể/scope "ngôn ngữ học"). Data model **hiện chưa có** entity này (chỉ có `decks`/`cards`) — xem
+  [drift note](screens/settings-more-hub.md#drift-note). **Cần task data-model riêng** trước khi implement.
+- **Settings / theme preference**: lưu theo **settings storage** hiện có (`app_meta`, xem
+  [09-settings](09-settings.md)); theme preference nếu persist thì đi qua đó, **không** tạo store riêng.
+- **Import / export**: phải dựa trên **local database** (nguồn sự thật); import **validate trước khi
+  commit**, export **không mutate** dữ liệu học. File format **chưa chốt**.
+- **Destructive delete (Xóa ngôn ngữ)**: là hành động phá hủy → **phải có policy** (block / cascade /
+  require export trước) **được chốt trước khi implement**; **không** tự xóa dữ liệu học khi chưa có policy.
+
+**Không** thêm schema chi tiết / migration trong task này.
+
 ## Nguyên tắc sync-ready
 
 Mọi bảng dữ liệu người dùng đều có:
