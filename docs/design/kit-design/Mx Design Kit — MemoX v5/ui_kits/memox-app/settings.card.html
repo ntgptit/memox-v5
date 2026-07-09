@@ -23,9 +23,9 @@ function Shell({ theme, children, overlay }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" title="Settings" actions={<MxIconButton icon={<Ic n="circle-user-round" s={22} />} label="Account" />} />
-      <div className="mx-scroll" style={{ padding: '4px 16px 12px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div className="mx-scroll" style={{ padding: '4px 16px 12px', display: 'flex', flexDirection: 'column', gap: 24 }}>
         <MxSectionHeader size="hero" eyebrow="Preferences" title="More" style={{ margin: '4px 4px 0' }} />
         {children}
       </div>
@@ -42,7 +42,7 @@ function Shell({ theme, children, overlay }) {
 
 function ActivitySummary() {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
       <MxMetricCard label="Streak" value="7" unit="d" tone="word" />
       <MxMetricCard label="Due today" value="12" tone="time" />
       <MxMetricCard label="Learned" value="342" tone="correct" />

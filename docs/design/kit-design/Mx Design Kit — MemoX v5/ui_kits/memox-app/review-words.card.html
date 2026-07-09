@@ -24,7 +24,7 @@ function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height
 function SearchField({ value }) {
   const has = value && value.length > 0;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 44, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 44, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)' }}>
       <i data-lucide="search" style={{ width: 18, height: 18, color: 'var(--mx-color-text-tertiary)', flex: '0 0 auto' }}></i>
       <span style={{ flex: '1 1 auto', font: '500 var(--mx-text-body-medium-size) var(--mx-font-display)', color: has ? 'var(--mx-color-text-primary)' : 'var(--mx-color-text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{has ? value : 'Search words'}</span>
       {has && <MxIconButton icon={<Ic n="x" s={16} />} label="Clear search" variant="ghost" size="small" />}
@@ -46,7 +46,7 @@ function ControlArea({ query, count }) {
 
 function Flashcard({ c, audioOff }) {
   return (
-    <MxCard padding="16" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+    <MxCard padding="16" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
         <div style={{ minWidth: 0, flex: '1 1 auto' }}>
           <div className="mx-korean" style={{ font: '700 var(--mx-text-title-medium-size)/1.3 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', overflowWrap: 'anywhere' }}>{c.term}</div>
@@ -55,7 +55,7 @@ function Flashcard({ c, audioOff }) {
         <MxIconButton icon={<Ic n={audioOff ? 'volume-x' : 'volume-2'} s={18} />} label={audioOff ? 'Audio not available yet' : `Play audio for ${c.term}`} variant="ghost" disabled={audioOff} />
       </div>
       <div style={{ font: '500 var(--mx-text-body-large-size)/1.4 var(--mx-font-display)', color: 'var(--mx-color-text-secondary)', overflowWrap: 'anywhere' }}>{c.meaning}</div>
-      {c.note && <div style={{ font: '400 var(--mx-text-body-small-size)/1.45 var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)', overflowWrap: 'anywhere' }}>{c.note}</div>}
+      {c.note && <div style={{ font: '500 var(--mx-text-body-small-size)/1.45 var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)', overflowWrap: 'anywhere' }}>{c.note}</div>}
       {audioOff && <div style={{ marginTop: 2 }}><MxBadge tone="neutral" size="small" icon={<Ic n="clock" s={12} />}>Audio soon</MxBadge></div>}
     </MxCard>
   );
@@ -85,7 +85,7 @@ function Shell({ theme, children }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar
         leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
         title="Review words"
@@ -96,7 +96,7 @@ function Shell({ theme, children }) {
   );
 }
 function CardList({ children }) {
-  return <div style={{ padding: '8px 16px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>{children}</div>;
+  return <div style={{ padding: '8px 16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>{children}</div>;
 }
 function Centered({ children }) {
   return <div style={{ minHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>{children}</div>;

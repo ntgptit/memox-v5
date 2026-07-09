@@ -28,9 +28,9 @@ function Shell({ theme, children }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" title="Statistics" actions={<MxIconButton icon={<Ic n="sliders-horizontal" s={18} />} label="Scope" />} />
-      <div className="mx-scroll" style={{ padding: '4px 16px 12px', display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
+      <div className="mx-scroll" style={{ padding: '4px 16px 12px', display: 'flex', flexDirection: 'column', gap: 24 }}>{children}</div>
       <MxBottomNav value="stats" onChange={() => {}} items={[
         { key: 'home', label: 'Home', icon: 'house' },
         { key: 'decks', label: 'Decks', icon: 'layers' },
@@ -45,7 +45,7 @@ function Hero() {
 }
 function Metrics2({ a, b }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
       <MxMetricCard {...a} /><MxMetricCard {...b} />
     </div>
   );
@@ -102,7 +102,7 @@ function LoadingPhone({ theme }) {
     <Shell theme={theme}>
       <div style={{ padding: '4px' }}><Skel w={120} h={12} r="var(--mx-radius-sm)" /><div style={{ height: 8 }} /><Skel w={180} h={26} r="var(--mx-radius-sm)" /></div>
       <Skel w="100%" h={40} r="999px" />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}><Skel w="100%" h={80} r="var(--mx-radius-lg)" /><Skel w="100%" h={80} r="var(--mx-radius-lg)" /></div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}><Skel w="100%" h={80} r="var(--mx-radius-lg)" /><Skel w="100%" h={80} r="var(--mx-radius-lg)" /></div>
       <Skel w="100%" h={200} r="var(--mx-radius-lg)" />
     </Shell>
   );

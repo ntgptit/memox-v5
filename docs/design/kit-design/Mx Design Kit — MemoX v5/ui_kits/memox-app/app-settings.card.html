@@ -23,9 +23,9 @@ function Shell({ theme, children, overlay }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="App settings" />
-      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>
+      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 24 }}>{children}</div>
       {overlay}
     </div>
   );

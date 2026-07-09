@@ -23,7 +23,7 @@ function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height
 
 function Meta({ value, label, ink }) {
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', padding: '12px 4px', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)', borderRadius: 'var(--mx-radius-md)' }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'center', padding: '12px 4px', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)', borderRadius: 'var(--mx-radius-md)' }}>
       <span className="mx-tabular" style={{ font: '700 var(--mx-text-stat-number-size)/1 var(--mx-font-mono)', color: ink || 'var(--mx-color-text-primary)' }}>{value}</span>
       <span style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{label}</span>
     </div>
@@ -64,7 +64,7 @@ function Shell({ theme, children, bottom, overlay }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar
         leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
         title="Deck"
@@ -102,7 +102,7 @@ function LoadedPhone({ theme }) {
     <Shell theme={theme} bottom={loadedBottom}>
       <Cover glyph="한" />
       <TitleBlock />
-      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <Meta value="62%" label="Learned" ink="var(--mx-color-srs-active)" />
         <Meta value="83" label="Due" ink="var(--mx-color-srs-due)" />
         <Meta value="120" label="Words" />
@@ -123,12 +123,12 @@ function LoadingPhone({ theme }) {
         <Skel w={180} h={26} r="var(--mx-radius-sm)" />
         <Skel w={96} h={22} r="999px" />
       </div>
-      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         {[0, 1, 2].map(i => <Skel key={i} w="100%" h={64} r="var(--mx-radius-md)" />)}
       </div>
       <Skel w={120} h={18} r="var(--mx-radius-sm)" />
       <div style={{ height: 12 }} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {[0, 1, 2, 3].map(i => <Skel key={i} w="100%" h={56} r="var(--mx-radius-md)" />)}
       </div>
     </Shell>
@@ -141,7 +141,7 @@ function EmptyPhone({ theme }) {
     <Shell theme={theme} bottom={<MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />}>Add first card</MxActionButton>}>
       <Cover glyph="한" />
       <TitleBlock />
-      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <Meta value="0%" label="Learned" />
         <Meta value="0" label="Due" />
         <Meta value="0" label="Words" />
@@ -191,7 +191,7 @@ function ModesPhone({ theme }) {
     }>
       <Cover glyph="한" />
       <TitleBlock />
-      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <Meta value="100%" label="Learned" ink="var(--mx-color-srs-mastered)" />
         <Meta value="0" label="Due" ink="var(--mx-color-srs-noDue)" />
         <Meta value="120" label="Words" />
@@ -219,7 +219,7 @@ function DeleteConfirmPhone({ theme }) {
       }>
       <Cover glyph="한" />
       <TitleBlock />
-      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
         <Meta value="62%" label="Learned" ink="var(--mx-color-srs-active)" />
         <Meta value="83" label="Due" ink="var(--mx-color-srs-due)" />
         <Meta value="120" label="Words" />

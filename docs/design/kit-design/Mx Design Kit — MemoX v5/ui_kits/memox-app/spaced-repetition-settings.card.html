@@ -31,9 +31,9 @@ function Shell({ theme, children, overlay }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="settings" leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Spaced repetition" />
-      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
+      <div className="mx-scroll" style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 24 }}>{children}</div>
       {overlay}
     </div>
   );
@@ -72,7 +72,7 @@ function OpenQuestionPhone({ theme }) {
       <MxSettingsSection title="Boxes">
         <MxSettingsRow leading={<Ic n="layers" />} title="Box count"
           subtitle="Meaning of this value isn’t decided yet"
-          value={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>7<MxBadge tone="neutral" size="small" icon={<Ic n="help-circle" s={12} />}>Under review</MxBadge></span>}
+          value={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>7<MxBadge tone="neutral" size="small" icon={<Ic n="help-circle" s={12} />}>Under review</MxBadge></span>}
           disabled />
       </MxSettingsSection>
       <MxCallout tone="warning" icon={<Ic n="triangle-alert" s={16} />} title="Open question — not final">

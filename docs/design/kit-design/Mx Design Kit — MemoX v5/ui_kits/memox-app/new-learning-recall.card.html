@@ -30,13 +30,13 @@ function StudyShell({ theme, step, percent, feedback, children, bottom }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="study" leading={<MxIconButton icon={<Ic n="x" />} label="Exit recall" />} title="Recall"
         actions={<MxIconButton icon={<Ic n="volume-2" s={18} />} label="Play audio" variant="ghost" />} />
       {typeof percent === 'number' && (
-        <div style={{ padding: '0 20px' }}><MxStudyProgressBar percent={percent} modeLabel="Recall" stepLabel={step} /></div>
+        <div style={{ padding: '0 16px' }}><MxStudyProgressBar percent={percent} modeLabel="Recall" stepLabel={step} /></div>
       )}
-      <div className="mx-scroll" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+      <div className="mx-scroll" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 24 }}>
         {children}
         {feedback}
       </div>

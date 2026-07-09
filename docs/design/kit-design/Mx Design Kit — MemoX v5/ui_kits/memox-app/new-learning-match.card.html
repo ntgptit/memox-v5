@@ -29,7 +29,7 @@ function Tile({ side, state, children }) {
   const inactive = state === 'completed';
   return (
     <MxMatchTile side={side} state={state} onClick={inactive ? undefined : () => {}}
-      style={{ minHeight: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+      style={{ minHeight: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
       {glyph && <i data-lucide={glyph} style={{ width: 15, height: 15 }}></i>}
       <span className={side === 'prompt' ? 'mx-korean' : undefined}>{children}</span>
     </MxMatchTile>
@@ -41,12 +41,12 @@ function StudyShell({ theme, step, percent, feedback, children, bottom }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar variant="study" leading={<MxIconButton icon={<Ic n="x" />} label="Exit match" />} title="Match" />
       {typeof percent === 'number' && (
-        <div style={{ padding: '0 20px' }}><MxStudyProgressBar percent={percent} modeLabel="Match" stepLabel={step} /></div>
+        <div style={{ padding: '0 16px' }}><MxStudyProgressBar percent={percent} modeLabel="Match" stepLabel={step} /></div>
       )}
-      <div className="mx-scroll" style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div className="mx-scroll" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 24 }}>
         <div style={{ textAlign: 'center', font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>Tap a word, then its meaning</div>
         {children}
         {feedback}
@@ -62,10 +62,10 @@ function Board({ states = {} }) {
   const meanings = [['b', 'School'], ['d', 'Time'], ['a', 'Water'], ['c', 'Love']];
   return (
     <div style={{ display: 'flex', gap: 12 }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {prompts.map(([k, v]) => <Tile key={k} side="prompt" state={states['p_' + k] || 'default'}>{v}</Tile>)}
       </div>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {meanings.map(([k, v]) => <Tile key={k} side="meaning" state={states['m_' + k] || 'default'}>{v}</Tile>)}
       </div>
     </div>
@@ -125,7 +125,7 @@ function LoadingPhone({ theme }) {
     <StudyShell theme={theme} percent={undefined} bottom={null}>
       <div style={{ display: 'flex', gap: 12 }}>
         {[0, 1].map(col => (
-          <div key={col} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div key={col} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[0, 1, 2, 3].map(i => <Skel key={i} w="100%" h={64} r="var(--mx-radius-md)" />)}
           </div>
         ))}

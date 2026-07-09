@@ -60,13 +60,13 @@ function RepeatPhone({ theme, subtitle, callout, children }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
-      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 6 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
+      <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
       <MxTopBar leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Deck" />
       <DeckBg />
       <MxModalSheet title="Repeat · Korean TOPIK I" onClose={() => {}}>
         {subtitle && <div style={{ padding: '0 4px 8px', font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>{subtitle}</div>}
         {callout && <div style={{ paddingBottom: 10 }}>{callout}</div>}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingBottom: 8 }}>{children}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 8 }}>{children}</div>
       </MxModalSheet>
     </div>
   );
