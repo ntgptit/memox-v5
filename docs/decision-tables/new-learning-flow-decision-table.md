@@ -17,11 +17,18 @@ boundary with **SRS Repeat** and **browse**. Authoritative specs:
 | **`matchMode` correct pair** | mark pair **complete** in `matchMode` |
 | **`matchMode` wrong pair** | show **incorrect** feedback; keep pair **incomplete** (retry) |
 | **`matchMode` completed** | **transition to `guessMode`** |
+| **`guessMode`** shows prompt + answer options | user **selects one option** |
+| **`guessMode` correct** option selected | show **correct** feedback; mark item **complete** in `guessMode` |
+| **`guessMode` wrong** option selected | show **incorrect** feedback; keep item **incomplete** (or retry per docs) |
+| **`guessMode` item complete** | may move to **next item** |
+| **all `guessMode` items complete** | **transition to `recallMode`** |
 | card completed **review only** | **not SRS-active** |
 | card completed **review + match only** | **not SRS-active** |
+| card completed **review + match + guess only** | **not SRS-active** |
 | card completes **review + match + guess + recall + fill** | move to **Box 1** and **enable SRS** |
 | card has **not** completed all five modes | do **not** show in **SRS Repeat**; do **not** schedule SRS due |
 | user **exits during `matchMode`** | card remains **not SRS-active** unless all five modes already completed |
+| user **exits during `guessMode`** | unfinished cards remain **not SRS-active** |
 
 ## Repeat vs. browse boundaries
 
