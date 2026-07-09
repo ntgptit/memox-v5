@@ -75,6 +75,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   [`../design/screens/settings-more-hub.md`](../design/screens/settings-more-hub.md). Note: **add/delete
   learning language** is a **language-workspace** concept not yet in the data model (distinct from UI
   i18n); import/export/theme file formats and storage are **not** decided here.
+- **Statistics screen.** A **long-term** statistics screen (opened from Settings / More Hub) with three
+  tabs — **Từ** (word/card counts), **Thời gian** (learning/repeat time), **Chất lượng** (correct/wrong
+  + learning/repeat quality) — plus a per-day chart and a scope filter (default **Tất cả**). It tracks
+  progress across **many sessions and days** and is **distinct** from **Session Result** (just-finished
+  session) and the **Activity summary** (quick today view). Opening it never mutates learning data;
+  aggregation formulas are left to a read-model task. Concept spec:
+  [`../design/screens/statistics.md`](../design/screens/statistics.md).
 - **Cards.** A card has a `term` and a `meaning` (both required) and an optional `note`. Content is
   free-form Unicode.
 - **Flashcard List screen.** Browse and manage the flashcards inside a deck/section: quickly read each

@@ -222,7 +222,7 @@ Drawer-derived system functions, surfaced via a modern Settings / More Hub (draw
 | F1.LANGUAGE.2 | Delete language policy and flow (destructive; confirm + policy) | BE/FE | Future | [settings-more-hub.md → Group B](../design/screens/settings-more-hub.md#group-b--language-management-thêm--xóa-ngôn-ngữ) | TBD | TBD |
 | F1.DATA.IMPORT.1 | Import flow (validate before commit; local-first) | BE/FE | Future | [settings-more-hub.md → Group C](../design/screens/settings-more-hub.md#group-c--import--export-nhập--xuất); format not decided | TBD | TBD |
 | F1.DATA.EXPORT.1 | Export flow (no mutation; local-first) | BE/FE | Future | [settings-more-hub.md → Group C](../design/screens/settings-more-hub.md#group-c--import--export-nhập--xuất); format not decided | TBD | TBD |
-| F1.STATS.1 | Statistics entry and screen (long-term progress) | BE/FE | Future | [settings-more-hub.md → Group D](../design/screens/settings-more-hub.md#group-d--statistics-thống-kê); separate Progress screen | TBD | TBD |
+| _(Statistics)_ | Statistics has its **own section** — see [Statistics (F1.STATS)](#statistics-f1stats) | — | — | [settings-more-hub.md → Group D](../design/screens/settings-more-hub.md#group-d--statistics-thống-kê) | — | — |
 | F1.APPEARANCE.1 | Theme settings (theme/dark/light/system) | FE/Settings | Not started | [settings-more-hub.md → Group E](../design/screens/settings-more-hub.md#group-e--appearance--theme-chủ-đề), [09-settings.md](../design/09-settings.md) | TBD | TBD |
 | F1.SUPPORT.1 | FAQ and support contact entries (email / Telegram) | FE | Future | [settings-more-hub.md → Group G](../design/screens/settings-more-hub.md#group-g--help--support-trợ-giúp); links not decided | TBD | TBD |
 
@@ -232,6 +232,29 @@ Drawer-derived system functions, surfaced via a modern Settings / More Hub (draw
 > the current data model and needs a **data-model + destructive-policy task** first — marked **Future**.
 > Import/export file formats, theme storage, and support links are **not** decided here; those functions
 > are **Future** until they get their own spec.
+
+---
+
+## Statistics (F1.STATS)
+
+Long-term statistics screen (opened from Settings / More Hub). Spec:
+[`../design/screens/statistics.md`](../design/screens/statistics.md)
+([decision table](../decision-tables/statistics-decision-table.md)).
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.STATS.1 | Statistics screen concept | Docs | In progress → `Done` after merge | [statistics.md](../design/screens/statistics.md); [memox-scope.md](../product/memox-scope.md) | `npm run check` / `git diff --check` | PR `docs/statistics-screen-concept` (squash commit after merge) |
+| F1.STATS.2 | Statistics read model (finalized history; scope filter; no mutation) | BE | Not started | [statistics.md](../design/screens/statistics.md), [DT-2](../decision-tables/phase-1-contracts.md#dt-2--study-session-persistence-persisted) | TBD | TBD |
+| F1.STATS.3 | Statistics UI shell and tabs (Từ / Thời gian / Chất lượng + chart + scope) | FE | Not started | [statistics.md](../design/screens/statistics.md) | TBD | TBD |
+| F1.STATS.4 | Word metrics aggregation (Đang học / Đã học / Đã lặp lại / tổng từ / danh mục) | BE | Not started | [statistics.md → Tab Từ](../design/screens/statistics.md#tab-từ-wordcard-counts) | TBD | TBD |
+| F1.STATS.5 | Time metrics aggregation (học / lặp lại / tổng; recorded sessions only) | BE | Not started | [statistics.md → Tab Thời gian](../design/screens/statistics.md#tab-thời-gian-time) | TBD | TBD |
+| F1.STATS.6 | Quality metrics aggregation (correct/wrong; learning/repeat quality; evaluation modes only) | BE | Not started | [statistics.md → Tab Chất lượng](../design/screens/statistics.md#tab-chất-lượng-quality) | TBD | TBD |
+
+> `F1.STATS.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash commit),
+> per the [evidence policy](#done-criteria--evidence-policy). Statistics is **long-term** and **distinct**
+> from Session Result (just-finished session) and Activity summary (today). **Aggregation formulas are
+> not decided** — the read-model rows (`F1.STATS.4/.5/.6`) must define them; docs **do not invent** them.
+> Opening Statistics **never mutates** learning data.
 
 ---
 

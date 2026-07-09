@@ -40,6 +40,10 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
   (**promotion** khi correct / **demotion / reset** theo `lapseRule`) **phải được finalize trước** khi
   Result hiển thị. Result **không** được **schedule SRS** cho card **chưa activate** (chưa vào Box 1), và
   **không** trộn New Learning activation với SRS Repeat metrics.
+- **Đóng góp vào Statistics (dài hạn).** SRS Repeat attempts **có thể đóng góp** vào
+  [Statistics](screens/statistics.md). **SRS quality metrics** (Chất lượng lặp lại) **chỉ** dùng card
+  **Box 1+ đã review** trong Repeat Flow. Statistics **chỉ đọc** history đã finalize: **không** schedule
+  SRS, **không** đổi box, **không** đổi due date.
 - **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
 - **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate (kể cả đang
   ở `reviewMode`) **không** được đưa vào Repeat.
