@@ -22,15 +22,19 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 - Thẻ chỉ được **activate** (Box 0 → **Box 1**) sau khi hoàn thành đủ **5 mode** của New Learning Flow
   theo thứ tự: **review → match → guess → recall → fill** (xem
   [07-study-modes → New Learning Flow](07-study-modes.md#new-learning-flow)).
-- **`reviewMode`** (mode 1), **`matchMode`** (mode 2), **`guessMode`** (mode 3) và **`recallMode`**
-  (mode 4) đều **thuộc pha trước SRS**. Hoàn thành **riêng** review, hoặc review+match, hoặc
-  review+match+guess, hoặc review+match+guess+recall, đều **không** đủ để bật SRS: card **vẫn Box 0 /
-  not SRS-active** cho tới khi hoàn thành **đủ cả 5 mode** (review → match → guess → recall → fill).
-  Feedback **đúng/sai** trong `matchMode` (ghép cặp) và `guessMode` (chọn đáp án), và **recall
-  success/failure** trong `recallMode` (bấm Hiển thị + 20s timer, tự đánh giá Đã quên/Nhớ được), đều là
-  **pre-SRS learning**, **không** phải SRS review grading: match/guess-correct và recall-success **không**
-  đủ để bật SRS; match/guess-incorrect và recall-failure (kể cả **timeout = Đã quên**) **không** đưa card
-  vào Box 1. Card đang ở `reviewMode`/`matchMode`/`guessMode`/`recallMode` vẫn là **pre-SRS card**.
+- **`reviewMode`** (mode 1), **`matchMode`** (mode 2), **`guessMode`** (mode 3), **`recallMode`**
+  (mode 4) và **`fillMode`** (mode 5) đều **thuộc pha trước SRS**. Hoàn thành **riêng** review, hoặc
+  review+match, hoặc review+match+guess, hoặc review+match+guess+recall, đều **không** đủ để bật SRS:
+  card **vẫn Box 0 / not SRS-active** cho tới khi hoàn thành **đủ cả 5 mode** (review → match → guess →
+  recall → fill). Feedback **đúng/sai** trong `matchMode` (ghép cặp) và `guessMode` (chọn đáp án),
+  **recall success/failure** trong `recallMode` (bấm Hiển thị + 20s timer; timeout = Đã quên), và
+  **Kiểm tra đúng/sai** trong `fillMode` (điền lại prompt/front) đều là **pre-SRS learning**, **không**
+  phải SRS review grading. Card đang ở bất kỳ mode nào trong 5 mode vẫn là **pre-SRS card** và **không**
+  xuất hiện trong **Lặp lại (SRS Repeat)**.
+- **`fillMode` là cổng activate SRS.** **Fill-correct** (Kiểm tra đúng) — khi 4 mode trước đã hoàn thành
+  — là **điều kiện cuối** đưa card vào **Box 1** và bật SRS. **Fill-incorrect** **không** đưa card vào
+  Box 1. **Trợ giúp** (gợi ý) **không** tự bật SRS và **không** thay cho Kiểm tra đúng. Card **chưa**
+  hoàn thành `fillMode` vẫn pre-SRS.
 - **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
 - **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate (kể cả đang
   ở `reviewMode`) **không** được đưa vào Repeat.

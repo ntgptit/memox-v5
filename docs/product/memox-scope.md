@@ -38,9 +38,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
       **`recallMode`**, is active recall: the answer is hidden and the learner must tap **Hiển thị**
       within **20 seconds** to prove they recalled it — **not tapping in time counts as "Đã quên"
       (forgotten)**; after revealing, the learner self-grades **Đã quên** or **Nhớ được**. This also
-      serves New Learning Flow before SRS. A new card must complete
-      all five modes (**review → match → guess → recall → fill**) to move from **Box 0** to **Box 1**;
-      only then is SRS enabled for it. Finishing `reviewMode`, `matchMode`, `guessMode`, or `recallMode` alone does
+      serves New Learning Flow before SRS. The 5th and **final** mode, **`fillMode`**, is active
+      production: the answer/meaning is shown and the learner must **type/fill the prompt/front**, with
+      **Trợ giúp** (hint) and **Kiểm tra** (check) actions — correct check completes the item, incorrect
+      lets them retry, and Trợ giúp never auto-completes. `fillMode` is the **gate to SRS activation**. A
+      new card must complete all five modes (**review → match → guess → recall → fill**) to move from
+      **Box 0** to **Box 1**; only then is SRS enabled for it. Finishing `reviewMode`, `matchMode`,
+      `guessMode`, `recallMode`, or `fillMode` alone does
       **not** activate the card.
     - **Lặp lại** = **SRS review** for cards already learned (**Box 1+**). Shown when scope
       **progress > 0%**, but its count depends on what is **due now** and **may be 0** (progress > 0%

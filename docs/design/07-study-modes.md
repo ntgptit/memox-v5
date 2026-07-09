@@ -411,6 +411,99 @@ docs session/flow-state quyết định (ngoài phạm vi task này).
 > [Bảng đối chiếu mode](#bảng-đối-chiếu-mode), **thêm** ràng buộc **Hiển thị + 20s timer**; vai
 > trò/giai đoạn đang được ghi nhận drift ở [New Learning Flow](#new-learning-flow).
 
+### fillMode (mode thứ 5 — cổng activate SRS)
+
+**Purpose.** `fillMode` là **bước điền đáp án chủ động** — bước **kiểm tra mạnh nhất** trong New Learning
+Flow: người học phải **tự tạo lại** đáp án (nhập/điền) thay vì chỉ nhận diện / ghép đôi / đoán / tự đánh
+giá nhớ. Đây là **mode cuối** trước khi card được activate vào SRS. Vẫn là **pha trước SRS** cho tới khi
+hoàn thành.
+
+**When it appears.** Ngay **sau khi `recallMode` hoàn thành**, flow **tự chuyển** sang `fillMode` (mode
+thứ 5/5).
+
+`fillMode` **không** phải multiple-choice, **không** phải match, **không** phải recall self-grade,
+**không** phải SRS Repeat. (Về cơ chế nhập liệu, `fillMode` tương ứng mode **Typing** — `fill` = gõ đáp
+án — trong [Bảng đối chiếu mode](#bảng-đối-chiếu-mode).)
+
+**What user sees / must input.** Hiển thị **meaning/answer side** của card; người dùng **tự nhập/điền lại
+prompt/front** tương ứng. Ví dụ hướng `KO → VI`:
+
+- meaning/answer shown: `To pay / Thanh toán`
+- expected prompt/front: `결제하다` → user phải nhập đúng `결제하다`
+
+**UI concept (không chốt pixel/implementation).**
+
+- **Header:** Back; title "Điền"/label tương ứng; text/display control và speaker/audio (nếu product
+  scope cho phép); More menu.
+- **Progress area:** progress bar (khoảng cuối flow — mock có thể ~80%; **không** chốt công thức %).
+- **Prompt area:** hiển thị meaning/answer để user dựa vào đó điền prompt/front.
+- **Fill/input area:** vùng nhập prompt/front (có thể hỗ trợ audio nếu product scope cho phép).
+- **Actions:** **Trợ giúp**, **Kiểm tra**, **Thử lại** (sau khi sai / cần nhập lại). **Không** chốt
+  layout, keyboard, input component, animation.
+
+**Trợ giúp.**
+
+- Là action **hỗ trợ**: có thể gợi ý một phần đáp án (ký tự đầu, số ký tự, hint tương đương).
+- **Không** tự hoàn thành item, **không** tự đưa card vào Box 1, **không** tự bật SRS.
+- Dùng Trợ giúp **vẫn phải** qua **Kiểm tra** / completion rule rõ ràng — **không** coi là fill success
+  chỉ vì đã bấm Trợ giúp.
+- Penalty của việc dùng Trợ giúp: **chưa chốt** (docs chưa có scoring/penalty).
+
+**Kiểm tra.** Khi user bấm **Kiểm tra**, hệ thống so sánh input với **expected prompt/front**:
+
+- input **đúng** → **correct feedback**.
+- input **sai** → **incorrect feedback**.
+- input **trống** → validation/incorrect state hoặc yêu cầu nhập; **không** được tính là đúng.
+
+> **Cần rule normalize (chưa chốt, để task sau).** So khớp input cần một quy tắc chuẩn hóa cho:
+> khoảng trắng; hoa/thường (nếu ngôn ngữ áp dụng); dấu câu; các **variant đáp án hợp lệ**; spacing tiếng
+> Hàn nếu cần. Task này **không** tự bịa normalization chi tiết.
+
+**Correct feedback (Kiểm tra đúng).**
+
+- Item hiển thị trạng thái **correct** (UI có thể dùng **màu xanh** / style correct tương đương).
+- Item được tính **hoàn thành `fillMode`**.
+- Nếu đây là item cuối cần học và card đã hoàn thành 4 mode trước → card **đủ điều kiện hoàn thành New
+  Learning Flow** → card được đưa vào **Box 1** và **SRS được enable** từ Box 1 trở đi.
+
+**Incorrect feedback (Kiểm tra sai).**
+
+- Item hiển thị trạng thái **incorrect** (UI có thể dùng **màu đỏ** / style incorrect tương đương); có
+  thể hiện input sai + expected answer để user thấy khác biệt.
+- Item **chưa** hoàn thành; user **phải** có cơ hội **Thử lại**.
+- Fill sai **không** đưa card vào Box 1, **không** bật SRS, **không** tạo SRS due schedule.
+
+**Retry (future / implementation detail — không chốt timing).** Ví dụ: retry ngay trên cùng item; retry
+sau khi xem đáp án; đưa item về cuối batch; yêu cầu nhập lại. **Rule bắt buộc:** fill sai **chưa hoàn
+thành** item, **không** SRS-active, **không** Box 1.
+
+**Manual accept / nút "Đúng" (open question).** Nếu UI có nút "Đúng" sau khi Kiểm tra sai/gần đúng:
+manual accept **chưa** được chốt là requirement (docs chưa có nghiệp vụ này) → là **open question /
+implementation detail**. Nếu sau này cho phép, **phải** có rule riêng để tránh user tự cho qua mọi lỗi;
+**không** ngầm hiểu nút "Đúng" luôn hợp lệ khi chưa có docs chính thức.
+
+**Completion rule & SRS activation.**
+
+- Card **chỉ** được activate vào SRS sau khi hoàn thành **đủ 5 mode**: review, match, guess, recall,
+  fill. `fillMode` là bước cuối.
+- Hoàn thành `fillMode` khi card đã hoàn thành 4 mode trước → card chuyển vào **Box 1** (điểm bắt đầu
+  SRS; xem [06-srs-8box → Kích hoạt SRS](06-srs-8box.md#kích-hoạt-srs-box-0--box-1)).
+- Card **chưa** hoàn thành `fillMode` → **vẫn pre-SRS**, **không** xuất hiện trong **Lặp lại**.
+
+**What it must NOT do.**
+
+- **Không** coi feedback đúng/sai ở `fillMode` là **SRS review grading**.
+- **Không** đưa card vào Box 1 khi chưa Kiểm tra đúng (kể cả khi đã dùng Trợ giúp).
+- **Không** áp SRS due scheduling cho card chưa vào Box 1.
+
+**Progress (concept).** Progress trong `fillMode` phản ánh **đoạn cuối** New Learning Flow; mock có thể
+hiển thị ~80% nhưng **không** chốt % (chưa có progress formula). Progress **không** phải SRS box progress;
+**chỉ Box 1** là mốc SRS activation.
+
+**Thoát giữa chừng (concept).** Nếu thoát khi đang ở `fillMode`, card **chưa** hoàn thành đủ 5 mode
+**vẫn** not SRS-active; **không** tự vào Box 1; **không** tạo SRS due schedule. Chi tiết resume do docs
+session/flow-state quyết định (ngoài phạm vi task này).
+
 ## SRS Repeat Flow
 
 **Lặp lại** (từ Play Menu) là **review SRS**.
