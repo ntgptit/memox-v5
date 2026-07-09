@@ -11,6 +11,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
 
 - **Decks, nested.** Cards are grouped into decks; decks can contain sub-decks to arbitrary depth
   (a tree). CRUD on decks and cards.
+- **Deck Management screen.** Manage content inside a deck/folder: browse the direct **child decks**,
+  see each deck's **content count** and **learning-progress indicator** and (if any) **due/review
+  workload indicator**, **start studying** a deck, **add a child deck/folder**, **add a card/word**, and
+  **search / filter / sort** the list (view-only; does not change learning data). Concept spec:
+  [`../design/screens/deck-management.md`](../design/screens/deck-management.md). The screen shows the
+  current study direction (e.g. `KO → VI`); choosing the reverse direction stays out of scope (it ties
+  to the bidirectional extension). Speaker/edit/hidden-suspended behaviors are **not** decided here.
 - **Cards.** A card has a `term` and a `meaning` (both required) and an optional `note`. Content is
   free-form Unicode.
 - **Spaced repetition — 8-box (Leitner).** Each card sits in a box (1–8); correct answers promote it,
