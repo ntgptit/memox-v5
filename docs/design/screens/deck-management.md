@@ -4,6 +4,9 @@ Concept và nghiệp vụ ở **mức sản phẩm** cho màn quản lý deck/su
 Đây là **spec concept**, không phải spec kỹ thuật: không chốt schema mới, không chốt implementation,
 không biến các chi tiết UI chưa chắc thành requirement bắt buộc.
 
+> **Bao gồm variant [Subdeck List](#subdeck-list-variant)** — trạng thái của Deck Management khi scope
+> hiện tại có các section/subdeck con. **Không** phải màn hình tách biệt.
+
 > Nguồn nền tảng: [nested decks](../05-data-model.md), [study flow](../07-study-modes.md),
 > [due local-day (DT-1)](../../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day),
 > [product scope](../../product/memox-scope.md). Những gì các docs đó **chưa** định nghĩa thì màn này
@@ -134,9 +137,82 @@ Suggested fix: Trong Phase 1, coi chỉ báo hướng học ở màn này là RE
            requirement Phase 1.
 ```
 
+## Subdeck List variant
+
+**Subdeck List không phải màn hình riêng — nó là một variant/state của Deck Management.**
+
+### Tên variant
+
+**Subdeck List** — danh sách section/subdeck con.
+
+### Mục đích
+
+Giúp người dùng **nhìn nhanh cấu trúc nội dung bên trong một deck cha**: xem các section/subdeck con
+trực tiếp, quy mô từng section, tiến độ tổng quan, rồi **mở** một section hoặc **bắt đầu học** section
+đó.
+
+### Khi nào xuất hiện
+
+Khi người dùng đang đứng trong **một deck/folder cha** và scope hiện tại **có các section/subdeck con
+trực tiếp**. Đây là cùng một màn Deck Management, ở trạng thái đang liệt kê **deck/section con**.
+
+### Người dùng dùng variant này để làm gì
+
+- Xem các **section/subdeck con trực tiếp** của scope hiện tại.
+- Với mỗi section/subdeck, nắm nhanh **tên**, **số lượng từ/card**, **tiến độ tổng quan** và **workload
+  cần học/ôn** (nếu có).
+- **Mở** một section để xem nội dung bên trong, hoặc **bắt đầu học** section đó.
+- **Tạo section/subdeck con** hoặc **thêm card/từ mới** vào scope hiện tại.
+- **Tìm kiếm / lọc / sắp xếp** danh sách; **thấy hướng học hiện tại** (ví dụ `KO → VI`).
+
+### Thành phần nghiệp vụ chính
+
+Giống các [thành phần nghiệp vụ](#các-thành-phần-nghiệp-vụ) của Deck Management, đọc theo lăng kính
+"section/subdeck":
+
+- **Header:** quay lại; **tên deck/folder hiện tại** (rút gọn nếu quá dài).
+- **Control area:** search/filter input; **chỉ báo hướng học** (ví dụ `KO → VI`); sort/filter menu.
+- **Subdeck row:** tên section/subdeck; số lượng từ/card; **chỉ báo tiến độ học tổng quan** (nếu có);
+  **chỉ báo workload/cần học/ôn** (nếu có); **action bắt đầu học** section/subdeck.
+- **Bottom actions:** tạo **section/subdeck con**; **thêm card/từ mới** vào scope hiện tại.
+
+### Action chính
+
+| Action | Hành vi nghiệp vụ |
+|--------|-------------------|
+| Mở subdeck row | Mở section/subdeck đó để xem nội dung bên trong (đi sâu xuống). |
+| Bắt đầu học (start/play) | Bắt đầu học section/subdeck theo **rule study hiện có** ([07-study-modes](../07-study-modes.md)) — **nếu** study docs cho phép học theo deck/section. Nếu **không có nội dung học phù hợp**, action **không khả dụng** / thông báo phù hợp. |
+| Tạo section/subdeck con | Tạo nhóm nội dung con **trong scope hiện tại**. |
+| Thêm card/từ | Tạo nội dung học mới **trong scope hiện tại**. |
+| Tìm kiếm / lọc / sắp xếp | **Chỉ thay đổi cách hiển thị**; **không** đổi dữ liệu học hay trạng thái SRS. |
+| Xem hướng học | Hiển thị hướng hỏi → trả lời hiện tại (ví dụ `KO → VI`); việc **chọn/đổi** hướng — xem [Open questions](#open-questions--cố-ý-không-chốt) và [Drift note](#drift-note). |
+
+Ghi chú: deck có **cấu trúc phân cấp**; mỗi section/subdeck có thể là một **study scope** nếu study docs
+cho phép học theo deck/section. Variant này **không** định nghĩa lại study rule hay SRS.
+
+### State chính
+
+| State | Ý nghĩa |
+|-------|---------|
+| `loading` | Đang tải danh sách section/subdeck. |
+| `loaded` | Có subdeck rows để hiển thị. |
+| `empty` | Scope hiện tại **chưa có** section/subdeck con — hiển thị hướng dẫn tạo mới. |
+| `search/filter empty` | Có dữ liệu nhưng **không khớp** bộ lọc/tìm kiếm. |
+| `error` | Lỗi khi tải danh sách. |
+| `no studyable content` | Không có nội dung học phù hợp — action học **không khả dụng** / thông báo. |
+| `creating new section/subdeck entry point` | Đang bắt đầu tạo section/subdeck con. |
+| `creating new card entry point` | Đang bắt đầu tạo card mới. |
+
+### Những điểm cố ý không chốt (variant)
+
+Áp dụng đúng [Open questions](#open-questions--cố-ý-không-chốt) chung của Deck Management, gồm: speaker
+icon, edit icon, eye-slash/count indicator (chưa có nghiệp vụ hidden/suspended), công thức
+progress/mastery, semantics badge workload/due, audio/TTS, persistence/session — **không** chốt ở
+variant này.
+
 ## Liên kết WBS
 
-- Docs spec: `F1.DM.1` — Deck Management concept and business spec.
+- Docs spec: `F1.DM.1` — Deck Management and Subdeck List concept spec.
 - Read model: `F1.DM.2` (BE, Not started).
 - UI skeleton: `F1.DM.3` (FE, Not started).
 - States: `F1.DM.4` (FE, Not started).
