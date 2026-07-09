@@ -58,6 +58,7 @@ Evidence rules (traceability):
 | F2.8 | Phase 1 hardening (local-day due, persisted sessions, starter-off-path, local-first, boundaries) | Done | PR #2 `9f1a4f2` |
 | F2.9 | Screen/flow concept docs (deck management, flashcard/subdeck list, play/repeat menus, 5-mode New Learning Flow, session result, statistics, settings hub, appearance, app settings) | Done | PRs #3–#20 — see [Traceability log](#traceability-log) |
 | F2.10 | Docs hygiene + SRS/study drift resolution + WBS traceability | Done | PR #21 `10bb959` — docs: fix hygiene wbs and study drift |
+| F2.11 | Phase 1 wireframes docs (deck/flashcard, play/repeat menus, new-learning + SRS-repeat flows, review words, session result, statistics, settings hub, appearance, app settings) | In progress → `Done` after merge | Source: [wireframes/README.md](../design/wireframes/README.md), [wireframes/phase-1-wireframes.md](../design/wireframes/phase-1-wireframes.md); test: `npm run check` / `git diff --check`; PR `docs/phase-1-wireframes` (squash commit after merge) |
 
 ## Traceability log
 
@@ -347,6 +348,28 @@ Picker, Reminder Settings, Spaced Repetition Settings). Specs:
 > destructive (confirm + validate); **Cloud sync** is **Future** (needs provider/conflict policy). Game
 > is Future relative to Phase 1. Notification API, permission flow, backup format, and schema are **not**
 > decided here.
+
+---
+
+## Phase 1 UI (F1.UI) — from wireframes
+
+UI implementation, guided by the [wireframes](../design/wireframes/README.md). All **Not started**.
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.UI.DECK.1 | Deck Management UI | FE | Not started | [deck-management-wireframe](../design/wireframes/deck-management-wireframe.md) | TBD | TBD |
+| F1.UI.FLASHCARD.1 | Flashcard List UI | FE | Not started | [flashcard-list-wireframe](../design/wireframes/flashcard-list-wireframe.md) | TBD | TBD |
+| F1.UI.STUDY.NEW.1 | New Learning session UI | FE | Not started | [new-learning-flow-wireframe](../design/wireframes/new-learning-flow-wireframe.md) | TBD | TBD |
+| F1.UI.STUDY.REPEAT.1 | SRS Repeat session UI | FE | Not started | [srs-repeat-flow-wireframe](../design/wireframes/srs-repeat-flow-wireframe.md) | TBD | TBD |
+| F1.UI.RESULT.1 | Session Result UI | FE | Not started | [session-result-wireframe](../design/wireframes/session-result-wireframe.md) | TBD | TBD |
+| F1.UI.STATS.1 | Statistics UI | FE | Not started | [statistics-wireframe](../design/wireframes/statistics-wireframe.md) | TBD | TBD |
+| F1.UI.SETTINGS.1 | Settings / More Hub UI | FE | Not started | [settings-more-hub-wireframe](../design/wireframes/settings-more-hub-wireframe.md) | TBD | TBD |
+| F1.UI.SETTINGS.APP.1 | App Settings UI (+ native language / reminder / SRS settings) | FE | Not started | [app-settings-wireframe](../design/wireframes/app-settings-wireframe.md) | TBD | TBD |
+| F1.UI.APPEARANCE.1 | Appearance Settings UI | FE | Not started | [appearance-theme-settings-wireframe](../design/wireframes/appearance-theme-settings-wireframe.md) | TBD | TBD |
+
+> These are FE rows: they stay **Not started** until real UI code + tests + PR evidence exist. Wireframes
+> are docs (`F2.11`), not implementation. Review Words UI is intentionally **not** given a row yet — its
+> source screen spec (`screens/review-words.md`) is absent (wireframe is partial).
 
 ---
 
