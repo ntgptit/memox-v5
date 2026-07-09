@@ -31,6 +31,10 @@ Các chức năng ở [Settings / More Hub](screens/settings-more-hub.md) cần 
   [drift note](screens/settings-more-hub.md#drift-note). **Cần task data-model riêng** trước khi implement.
 - **Settings / theme preference**: lưu theo **settings storage** hiện có (`app_meta`, xem
   [09-settings](09-settings.md)); theme preference nếu persist thì đi qua đó, **không** tạo store riêng.
+- **Appearance preferences** ([Appearance / Theme Settings](screens/appearance-theme-settings.md)):
+  auto-dark-mode, **theme ban ngày**, **theme buổi tối**, và **app icon** (nếu hỗ trợ) là **preference**
+  → cần **local settings storage** (dự kiến `app_meta`; chốt ở task storage). **Không** liên quan
+  deck/card/SRS/session; **không** mutate learning data. App icon switching cần **platform spike** trước.
 - **Import / export**: phải dựa trên **local database** (nguồn sự thật); import **validate trước khi
   commit**, export **không mutate** dữ liệu học. File format **chưa chốt**.
 - **Destructive delete (Xóa ngôn ngữ)**: là hành động phá hủy → **phải có policy** (block / cascade /

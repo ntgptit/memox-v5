@@ -75,6 +75,13 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   [`../design/screens/settings-more-hub.md`](../design/screens/settings-more-hub.md). Note: **add/delete
   learning language** is a **language-workspace** concept not yet in the data model (distinct from UI
   i18n); import/export/theme file formats and storage are **not** decided here.
+- **Appearance / Theme Settings.** Opened from Settings / More Hub (**Chủ đề**): configure **auto dark
+  mode** (follow system light/dark), a **day theme** preset, a **night theme** preset (day/night chosen
+  independently), and — where the platform supports it — an **app icon** variant. Changing appearance
+  **never** touches learning data; preferences must **persist** in local settings. **App icon switching
+  is a separate capability** that needs verified **platform support** before implementation (and can make
+  Home-screen shortcuts disappear). Concept spec:
+  [`../design/screens/appearance-theme-settings.md`](../design/screens/appearance-theme-settings.md).
 - **Statistics screen.** A **long-term** statistics screen (opened from Settings / More Hub) with three
   tabs — **Từ** (word/card counts), **Thời gian** (learning/repeat time), **Chất lượng** (correct/wrong
   + learning/repeat quality) — plus a per-day chart and a scope filter (default **Tất cả**). It tracks
