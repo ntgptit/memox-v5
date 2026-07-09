@@ -30,8 +30,9 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
     - **Học** = **New Learning Flow** — learn **new** cards and **activate** them into SRS. It **starts
       with `reviewMode`**, a guided step where the learner sees the new card's content (prompt + answer)
       to get familiar — not a memory test and not SRS review. **Completing `reviewMode` transitions to
-      `matchMode`** (the 2nd mode), a **pairing** step that reinforces new cards by matching prompt ↔
-      meaning; **SRS is still not enabled at `matchMode`**. The 3rd mode, **`guessMode`**, has the
+      `matchMode`** (the 2nd mode), a **pairing** step matching prompt ↔ meaning with **correct/incorrect
+      feedback** (correct = green-style, incorrect = red-style); **SRS is still not enabled at
+      `matchMode`**. The 3rd mode, **`guessMode`**, has the
       learner pick the correct answer/meaning for a prompt with **correct/incorrect feedback** — this
       serves New Learning Flow **before** SRS and is **not** SRS review grading. A new card must complete
       all five modes (**review → match → guess → recall → fill**) to move from **Box 0** to **Box 1**;

@@ -207,10 +207,12 @@ hoặc có lịch sử học hợp lệ).
 
 - Bấm **Học** → mở **New Learning Flow** theo thứ tự **review → match → guess → recall → fill**: bắt đầu
   ở `reviewMode`, hoàn thành → `matchMode`, rồi **`guessMode`** (mode thứ 3), `recallMode`, `fillMode`
-  ([07-study-modes → guessMode](../07-study-modes.md#guessmode-mode-thứ-3)). `guessMode` có **feedback
-  đúng/sai** (correct/incorrect) — đây là learning feedback, **không** phải **SRS review grading**. Đây
-  là một phần của **New Learning Flow**, **không** phải SRS Repeat; bấm Học **không** activate ngay card
-  vào **Box 1** — card chỉ vào Box 1 sau khi hoàn thành **đủ 5 mode**.
+  ([07-study-modes → matchMode](../07-study-modes.md#matchmode-mode-thứ-2),
+  [guessMode](../07-study-modes.md#guessmode-mode-thứ-3)). `matchMode` và `guessMode` có **feedback
+  đúng/sai** (correct/incorrect): correct dùng **trạng thái xanh**, incorrect dùng **trạng thái đỏ** —
+  đây là learning feedback, **không** phải **SRS review grading**. Đây là một phần của **New Learning
+  Flow**, **không** phải SRS Repeat; bấm Học **không** activate ngay card vào **Box 1** — card chỉ vào
+  Box 1 sau khi hoàn thành **đủ 5 mode**.
 - Bấm **Lặp lại** khi `reviewDueCount > 0` → bắt đầu **SRS Repeat Flow** (card Box 1+ đến hạn, local-day).
 - Bấm **Lặp lại** khi `reviewDueCount = 0` → **không** tạo **session rỗng**; hiển thị trạng thái **không
   có từ đến hạn** / thông báo phù hợp (có thể điều hướng tới review overview nếu docs cho phép).
