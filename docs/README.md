@@ -57,6 +57,15 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [design/screens/native-language-picker.md](design/screens/native-language-picker.md) | Chọn tiếng mẹ đẻ (child của App Settings) |
 | — | [design/screens/reminder-settings.md](design/screens/reminder-settings.md) | Lời nhắc (child của App Settings) |
 | — | [design/screens/spaced-repetition-settings.md](design/screens/spaced-repetition-settings.md) | Lặp lại giãn cách (child của App Settings) |
+
+**Wireframes (Phase 1 UI-flow docs):**
+
+| # | File | Nội dung |
+|---|------|----------|
+| — | [design/wireframes/README.md](design/wireframes/README.md) | Wireframes index — what they are/aren't, screen list, mutation-boundary principle |
+| — | [design/wireframes/phase-1-wireframes.md](design/wireframes/phase-1-wireframes.md) | End-to-end map, screen↔data & screen↔mutation matrices, readiness |
+
+Per-screen wireframes live in [`design/wireframes/`](design/wireframes/) (deck management, flashcard list, play menu, review words, new learning flow, SRS repeat flow, session result, statistics, settings hub, appearance, app settings).
 | — | [design/navigation.md](design/navigation.md) | Concept điều hướng: Settings/More Hub, drawer không bắt buộc |
 | — | [roadmap/11-phasing.md](roadmap/11-phasing.md) | Lộ trình Phase 1–4 |
 
