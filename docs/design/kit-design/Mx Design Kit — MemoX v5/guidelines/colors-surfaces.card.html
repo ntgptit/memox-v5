@@ -1,0 +1,32 @@
+<!-- @dsCard group="Colors" viewport="700x230" name="Surfaces" subtitle="Background & surface roles — dark (primary) + light" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 18px; background: #05070b; font-family: var(--mx-font-body); }
+  .rowlabel { font: 600 10px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: #6b7688; margin: 0 0 8px; }
+  .swrow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
+  .sw { border-radius: 10px; padding: 10px; height: 66px; display: flex; flex-direction: column; justify-content: flex-end; border: 1px solid rgba(128,128,128,0.18); }
+  .sw b { font: 600 11px var(--mx-font-display); }
+  .sw span { font: 500 9px var(--mx-font-mono); opacity: .7; }
+  .light { color: #171c24; } .dark { color: #f2f5f9; }
+</style></head>
+<body>
+<p class="rowlabel">Dark — MxDarkDefault</p>
+<div class="swrow">
+  <div class="sw dark" style="background:var(--mx-color-background-app)"><b>background.app</b></div>
+  <div class="sw dark" style="background:var(--mx-color-surface-base)"><b>surface.base</b></div>
+  <div class="sw dark" style="background:var(--mx-color-surface-card)"><b>surface.card</b></div>
+  <div class="sw dark" style="background:var(--mx-color-surface-elevated)"><b>surface.elevated</b></div>
+  <div class="sw dark" style="background:var(--mx-color-surface-modal)"><b>surface.modal</b></div>
+</div>
+<div data-theme="light">
+<p class="rowlabel">Light — MxLightDefault</p>
+<div class="swrow">
+  <div class="sw light" style="background:var(--mx-color-background-app)"><b>background.app</b></div>
+  <div class="sw light" style="background:var(--mx-color-surface-base)"><b>surface.base</b></div>
+  <div class="sw light" style="background:var(--mx-color-surface-card)"><b>surface.card</b></div>
+  <div class="sw light" style="background:var(--mx-color-surface-elevated)"><b>surface.elevated</b></div>
+  <div class="sw light" style="background:var(--mx-color-surface-modal)"><b>surface.modal</b></div>
+</div>
+</div>
+</body></html>

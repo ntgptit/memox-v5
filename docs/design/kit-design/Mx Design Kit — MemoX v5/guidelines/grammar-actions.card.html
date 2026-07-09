@@ -1,0 +1,29 @@
+<!-- @dsCard group="Composition" viewport="700x260" name="Action Hierarchy" subtitle="≤1 primary per region; destructive never styled as normal primary" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../_ds_bundle.js"></script>
+<style>body { margin: 0; padding: 22px; background: var(--mx-color-background-app); } @keyframes mx-spin { to { transform: rotate(360deg); } }
+ .r { display:flex; align-items:center; gap:14px; padding:8px 0; }
+ .k { width:120px; flex:0 0 120px; font:700 11px var(--mx-font-mono); color:var(--mx-color-text-tertiary); text-transform:uppercase; letter-spacing:.06em; }
+ .u { flex:1; font:500 11px var(--mx-font-body); color:var(--mx-color-text-tertiary); }</style>
+</head>
+<body data-theme="light">
+<div id="root"></div>
+<script type="text/babel">
+const { MxActionButton, MxIconButton } = window.MxDesignKitMemoXV5_9f1387;
+function Row({k,u,children}){return <div className="r"><span className="k">{k}</span>{children}<span className="u">{u}</span></div>;}
+ReactDOM.createRoot(document.getElementById('root')).render(<div>
+  <Row k="Primary" u="Continue · Start · Check · safe Confirm"><MxActionButton size="small">Start studying</MxActionButton></Row>
+  <Row k="Secondary" u="Cancel · Back · View · Edit"><MxActionButton size="small" variant="secondary">Cancel</MxActionButton></Row>
+  <Row k="Ghost" u="audio · more · filter · auxiliary"><MxActionButton size="small" variant="ghost">Skip</MxActionButton></Row>
+  <Row k="Destructive" u="delete · restore · discard — needs confirm"><MxActionButton size="small" variant="destructive">Delete deck</MxActionButton></Row>
+  <Row k="Disabled" u="future / blocked action"><MxActionButton size="small" disabled>Unavailable</MxActionButton></Row>
+</div>);
+</script>
+</body>
+</html>

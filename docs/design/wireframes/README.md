@@ -35,6 +35,7 @@ mutate data vs. what is strictly read-only).
 
 | Wireframe | Screen / flow |
 |-----------|---------------|
+| [home-wireframe](home-wireframe.md) | Home (deck tree + due today + create) |
 | [deck-management-wireframe](deck-management-wireframe.md) | Deck / Subdeck management |
 | [flashcard-list-wireframe](flashcard-list-wireframe.md) | Flashcard List + Subdeck List variant |
 | [play-menu-wireframe](play-menu-wireframe.md) | Play Menu (Học / Lặp lại / Xem lại / game / player) |

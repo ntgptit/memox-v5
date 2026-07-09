@@ -1,0 +1,13 @@
+/* ============================================================================
+   Mx Design Kit — MemoX v5 — global entry point.
+   Consumers link THIS one file. It is an @import manifest only (no rules here).
+   Order: fonts → tokens (colors first so composed tokens resolve) → base.
+   ============================================================================ */
+@import "./tokens/fonts.css";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/radius.css";
+@import "./tokens/elevation.css";
+@import "./tokens/motion.css";
+@import "./tokens/base.css";

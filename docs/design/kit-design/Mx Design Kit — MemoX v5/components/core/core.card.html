@@ -1,0 +1,122 @@
+<!-- @dsCard group="Components" viewport="700x1180" name="Mx Core Components" subtitle="Buttons, cards, rows, top bar, badges, states — dark + light" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 20px; background: #05070b; }
+  @keyframes mx-spin { to { transform: rotate(360deg); } }
+  .mx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mx-pane { border-radius: 20px; padding: 20px; background: var(--mx-color-background-app); border: 1px solid rgba(255,255,255,0.05); }
+  .mx-h { font: 600 11px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 0 0 12px; }
+  .mx-sec { margin-bottom: 22px; }
+  .mx-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { MxActionButton, MxIconButton, MxCard, MxBadge, MxListRow, MxTopBar, MxSegmentedControl, MxEmptyState, MxErrorState } = window.MxDesignKitMemoXV5_9f1387;
+
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function DeckProgress({ p }) {
+  return <div style={{ width: 40, height: 40, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+    background: 'var(--mx-color-state-selectedSurface)', color: 'var(--mx-color-srs-active)', font: '700 12px var(--mx-font-mono)' }}>{p}%</div>;
+}
+
+function Pane({ theme }) {
+  const [tab, setTab] = React.useState('Words');
+  return (
+    <div className="mx-pane" data-theme={theme === 'light' ? 'light' : undefined}>
+      <MxTopBar
+        leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
+        title="Deck Management"
+        actions={<><MxIconButton icon={<Ic n="search" />} label="Search" /><MxIconButton icon={<Ic n="arrow-down-up" s={18} />} label="Sort" /></>}
+      />
+      <div style={{ height: 16 }} />
+
+      <div className="mx-sec">
+        <p className="mx-h">Action buttons</p>
+        <div className="mx-row">
+          <MxActionButton>Study now</MxActionButton>
+          <MxActionButton variant="secondary">Cancel</MxActionButton>
+          <MxActionButton variant="ghost">Skip</MxActionButton>
+        </div>
+        <div className="mx-row" style={{ marginTop: 10 }}>
+          <MxActionButton variant="destructive" leadingIcon={<Ic n="trash-2" s={16} />}>Delete deck</MxActionButton>
+          <MxActionButton disabled>Unavailable</MxActionButton>
+          <MxActionButton loading>Saving</MxActionButton>
+        </div>
+      </div>
+
+      <div className="mx-sec">
+        <p className="mx-h">Segmented control</p>
+        <MxSegmentedControl options={["Words", "Time", "Quality"]} value={tab} onChange={setTab} />
+      </div>
+
+      <div className="mx-sec">
+        <p className="mx-h">Badges — SRS lifecycle</p>
+        <div className="mx-row">
+          <MxBadge tone="preSrs">Box 0</MxBadge>
+          <MxBadge tone="active">Learning</MxBadge>
+          <MxBadge tone="due">Due 83</MxBadge>
+          <MxBadge tone="noDue">Done today</MxBadge>
+          <MxBadge tone="mastered">Box 8</MxBadge>
+          <MxBadge tone="lapse">Lapsed</MxBadge>
+        </div>
+      </div>
+
+      <div className="mx-sec">
+        <p className="mx-h">List rows</p>
+        <MxCard padding="4" style={{ padding: 4 }}>
+          <MxListRow leading={<DeckProgress p={62} />} title="Korean TOPIK I" subtitle="120 words · KO → EN"
+            trailing={<MxBadge tone="due">83</MxBadge>} showChevron onClick={() => {}} />
+          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
+          <MxListRow leading={<DeckProgress p={0} />} title="Beginner grammar" subtitle="64 words · not started"
+            trailing={<MxBadge tone="preSrs">New</MxBadge>} showChevron onClick={() => {}} />
+          <div style={{ height: 1, background: 'var(--mx-color-divider-default)', margin: '0 16px' }}></div>
+          <MxListRow title="Failed deck" subtitle="Couldn’t load content" variant="error"
+            trailing={<MxIconButton icon={<Ic n="rotate-cw" s={16} />} label="Retry" />} />
+        </MxCard>
+      </div>
+
+      <div className="mx-sec">
+        <p className="mx-h">Cards — feedback states</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <MxCard state="selected" style={{ fontSize: 14 }}>Selected</MxCard>
+          <MxCard state="correct" style={{ fontSize: 14, color: 'var(--mx-color-feedback-correct)' }}>Correct</MxCard>
+          <MxCard state="wrong" style={{ fontSize: 14, color: 'var(--mx-color-feedback-wrong)' }}>Wrong</MxCard>
+          <MxCard variant="elevated" style={{ fontSize: 14 }}>Elevated</MxCard>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <MxCard padding="8" style={{ padding: 4 }}>
+          <MxEmptyState tone="positive" icon={<Ic n="check" s={24} />} title="All caught up" message="You’ve reviewed everything today." style={{ padding: 20 }} />
+        </MxCard>
+        <MxCard padding="8" style={{ padding: 4 }}>
+          <MxErrorState title="Couldn’t save session" message="Your learning data is safe." style={{ padding: 20 }} />
+        </MxCard>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <div className="mx-grid">
+    <Pane theme="dark" />
+    <Pane theme="light" />
+  </div>
+);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 60);
+</script>
+</body>
+</html>

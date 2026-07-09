@@ -52,7 +52,9 @@
     "lint": "expo lint",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npx biome check . && npm test -- --passWithNoTests && node scripts/check-boundaries.mjs"
+    "check": "npm run typecheck && npx biome check . && npm test -- --passWithNoTests && node scripts/check-boundaries.mjs",
+    "design:sync": "node scripts/sync-design.js",
+    "design:sync:dry": "node scripts/sync-design.js --dry"
   },
   "jest": {
     "preset": "jest-expo",

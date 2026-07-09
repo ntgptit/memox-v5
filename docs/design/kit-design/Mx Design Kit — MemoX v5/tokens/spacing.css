@@ -1,0 +1,55 @@
+/* ============================================================================
+   Mx Spacing & Sizing — MemoX v5
+   4px base grid. Space tokens are the ONLY spacing values screens may use
+   (gap, padding, margin). Sizing tokens fix touch targets, control heights and
+   layout maxes so every screen keeps the same rhythm and safe hit areas.
+   ============================================================================ */
+
+:root {
+  /* ---- spacing scale (4px grid) ------------------------------------------ */
+  --mx-space-0: 0px;
+  --mx-space-2: 2px;
+  --mx-space-4: 4px;
+  --mx-space-6: 6px;
+  --mx-space-8: 8px;
+  --mx-space-12: 12px;
+  --mx-space-16: 16px;
+  --mx-space-20: 20px;
+  --mx-space-24: 24px;
+  --mx-space-32: 32px;
+  --mx-space-40: 40px;
+  --mx-space-48: 48px;
+  --mx-space-64: 64px;
+
+  /* ---- sizing : interaction ---------------------------------------------- */
+  --mx-size-touch-target: 44px;   /* min tappable area (a11y floor) */
+  --mx-size-icon-sm: 18px;
+  --mx-size-icon-md: 24px;        /* default icon */
+  --mx-size-icon-lg: 28px;
+
+  /* ---- sizing : controls ------------------------------------------------- */
+  --mx-size-button-height: 48px;         /* standard action button */
+  --mx-size-button-height-compact: 40px; /* inline / secondary */
+  --mx-size-button-height-bottom: 54px;  /* large bottom action */
+  --mx-size-input-height: 50px;
+  --mx-size-chip-height: 34px;
+
+  /* ---- sizing : content blocks ------------------------------------------- */
+  --mx-size-card-min-height: 72px;
+  --mx-size-list-row-height: 60px;        /* single-line row */
+  --mx-size-list-row-height-two-line: 68px;
+  --mx-size-settings-row-height: 56px;
+
+  /* ---- sizing : overlays ------------------------------------------------- */
+  --mx-size-modal-width: 400px;           /* max modal/dialog width */
+  --mx-size-modal-width-min: 300px;
+  --mx-size-sheet-max-height: 88vh;       /* bottom sheet cap */
+  --mx-size-study-card-min-height: 240px; /* study prompt/answer card */
+
+  /* ---- layout : screen --------------------------------------------------- */
+  --mx-layout-screen-padding-x: 16px;     /* horizontal gutter */
+  --mx-layout-screen-padding-x-wide: 20px;/* large phones */
+  --mx-layout-content-max-width: 520px;   /* readable column cap on tablet */
+  --mx-layout-section-gap: 24px;          /* between grouped sections */
+  --mx-layout-bottom-action-inset: 12px;  /* gap above safe-area for sticky CTA */
+}

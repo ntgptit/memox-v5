@@ -1,0 +1,11 @@
+{
+  "projectId": "9f138728-8b42-49a6-9af0-feb2abbc737e",
+  "projectName": "Mx Design Kit — MemoX v5",
+  "shape": "prebuilt-kit",
+  "status": "synced",
+  "lastSyncDate": "2026-07-09",
+  "syncedFileCount": 172,
+  "localDir": "docs/design/kit-design/Mx Design Kit — MemoX v5",
+  "lastSyncedCommit": "ef931a55b372ac3ce6578c4267ca92a39c3b9520",
+  "notes": "Hand-authored/exported design kit already in claude.ai/design upload layout (bundle format 4, _ds_manifest.json + group-level *.card.html + @dsCard markers). NOT produced by the design-sync converter; there is no repo dist/ to build from. Sync = faithful re-upload of the local kit folder into its origin project (re-adopted). No _ds_sync.json anchor by design; app compiles _ds_manifest.json from @dsCard first-lines."
+}

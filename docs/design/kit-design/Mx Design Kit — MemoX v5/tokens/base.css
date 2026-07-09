@@ -1,0 +1,42 @@
+/* ============================================================================
+   Mx Base — minimal resets + type defaults for the kit. Kept small on purpose:
+   components style themselves from tokens. This mostly ensures specimen cards
+   and UI-kit frames render on the app background with the right base font.
+   ============================================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--mx-font-body);
+  background: var(--mx-color-background-app);
+  color: var(--mx-color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Link defaults come from the action palette so user-added links never fall
+   back to browser blue. */
+a {
+  color: var(--mx-color-action-primary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--mx-color-action-primaryPressed);
+  text-decoration: underline;
+}
+
+/* Korean helper class — apply on any prompt/front text node. */
+.mx-korean {
+  font-family: var(--mx-font-korean);
+}
+
+/* Tabular numbers helper for stats/metrics. */
+.mx-tabular {
+  font-family: var(--mx-font-mono);
+  font-variant-numeric: tabular-nums;
+}

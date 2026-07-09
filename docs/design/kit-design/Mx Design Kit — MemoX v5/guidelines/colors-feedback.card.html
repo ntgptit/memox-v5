@@ -1,0 +1,32 @@
+<!-- @dsCard group="Colors" viewport="700x240" name="Feedback" subtitle="Correct / Wrong / Warning / Info — distinct in both themes, never colour-only" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 18px; background: #05070b; font-family: var(--mx-font-body); }
+  .lab { font: 600 10px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 0 0 10px; }
+  .pane { border-radius: 12px; padding: 16px; margin-bottom: 12px; background: var(--mx-color-background-app); border: 1px solid rgba(128,128,128,0.15); }
+  .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+  .fb { border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .fb b { font: 700 13px var(--mx-font-display); }
+  .fb span { font: 500 10px var(--mx-font-mono); color: var(--mx-color-text-tertiary); }
+</style></head>
+<body>
+<div class="pane">
+  <p class="lab">Feedback — dark</p>
+  <div class="grid">
+    <div class="fb" style="background:var(--mx-color-feedback-correctSurface);border:1px solid var(--mx-color-feedback-correctBorder)"><b style="color:var(--mx-color-feedback-correct)">✓ Correct</b><span>feedback.correct</span></div>
+    <div class="fb" style="background:var(--mx-color-feedback-wrongSurface);border:1px solid var(--mx-color-feedback-wrongBorder)"><b style="color:var(--mx-color-feedback-wrong)">✕ Wrong</b><span>feedback.wrong</span></div>
+    <div class="fb" style="background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning)"><b style="color:var(--mx-color-feedback-warning)">⚠ Warning</b><span>feedback.warning</span></div>
+    <div class="fb" style="background:var(--mx-color-feedback-infoSurface);border:1px solid var(--mx-color-feedback-info)"><b style="color:var(--mx-color-feedback-info)">ⓘ Info</b><span>feedback.info</span></div>
+  </div>
+</div>
+<div class="pane" data-theme="light">
+  <p class="lab">Feedback — light</p>
+  <div class="grid">
+    <div class="fb" style="background:var(--mx-color-feedback-correctSurface);border:1px solid var(--mx-color-feedback-correctBorder)"><b style="color:var(--mx-color-feedback-correct)">✓ Correct</b><span>feedback.correct</span></div>
+    <div class="fb" style="background:var(--mx-color-feedback-wrongSurface);border:1px solid var(--mx-color-feedback-wrongBorder)"><b style="color:var(--mx-color-feedback-wrong)">✕ Wrong</b><span>feedback.wrong</span></div>
+    <div class="fb" style="background:var(--mx-color-feedback-warningSurface);border:1px solid var(--mx-color-feedback-warning)"><b style="color:var(--mx-color-feedback-warning)">⚠ Warning</b><span>feedback.warning</span></div>
+    <div class="fb" style="background:var(--mx-color-feedback-infoSurface);border:1px solid var(--mx-color-feedback-info)"><b style="color:var(--mx-color-feedback-info)">ⓘ Info</b><span>feedback.info</span></div>
+  </div>
+</div>
+</body></html>

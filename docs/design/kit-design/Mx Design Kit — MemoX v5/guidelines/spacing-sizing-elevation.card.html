@@ -1,0 +1,35 @@
+<!-- @dsCard group="Spacing" viewport="700x210" name="Sizing & Elevation" subtitle="Touch targets, control heights, and elevation steps" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px; background: var(--mx-color-background-app); display:flex; gap:24px; flex-wrap:wrap; }
+  .col { display:flex; flex-direction:column; gap:10px; }
+  .lab { font: 600 10px/1 var(--mx-font-display); letter-spacing:.1em; text-transform:uppercase; color: var(--mx-color-text-tertiary); }
+  .size { display:flex; align-items:center; gap:10px; }
+  .size .box { background: var(--mx-color-action-primary); border-radius: 8px; }
+  .size .t { font: 500 10px var(--mx-font-mono); color: var(--mx-color-text-secondary); }
+  .elev { display:flex; gap:14px; }
+  .e { width:74px; height:52px; border-radius:12px; background: var(--mx-color-surface-card); border: 1px solid var(--mx-color-border-default); display:flex; align-items:flex-end; padding:6px; font:500 9px var(--mx-font-mono); color:var(--mx-color-text-tertiary); }
+</style></head>
+<body>
+<div class="col">
+  <span class="lab">Sizing</span>
+  <div class="size"><span class="box" style="width:44px;height:44px"></span><span class="t">touch 44 (a11y floor)</span></div>
+  <div class="size"><span class="box" style="width:120px;height:48px"></span><span class="t">button 48</span></div>
+  <div class="size"><span class="box" style="width:120px;height:54px"></span><span class="t">bottom action 54</span></div>
+</div>
+<div class="col">
+  <span class="lab">Elevation (light)</span>
+  <div class="elev" data-theme="light">
+    <div class="e" style="box-shadow:var(--mx-elevation-low)">low</div>
+    <div class="e" style="box-shadow:var(--mx-elevation-medium)">medium</div>
+    <div class="e" style="box-shadow:var(--mx-elevation-high)">high</div>
+  </div>
+  <span class="lab" style="margin-top:6px">Dark relies on surface + border</span>
+  <div class="elev">
+    <div class="e" style="background:var(--mx-color-surface-base)">base</div>
+    <div class="e" style="background:var(--mx-color-surface-card)">card</div>
+    <div class="e" style="background:var(--mx-color-surface-elevated)">elevated</div>
+  </div>
+</div>
+</body></html>

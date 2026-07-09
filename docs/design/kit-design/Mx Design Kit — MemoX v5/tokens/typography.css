@@ -1,0 +1,92 @@
+/* ============================================================================
+   Mx Typography System — MemoX v5
+   Mobile scale. Built for mixed Korean (prompt) + Vietnamese (explanation) +
+   English content, long card meanings, and numeric stats. Values are px @ the
+   design's base; consumers may scale with OS text-size settings (see a11y).
+
+   Families: Plus Jakarta Sans = UI/display + body,
+   Noto Sans KR = Korean prompt rendering, JetBrains Mono = numbers/stats.
+   Each text role bundles size + line-height + weight (+ tracking where needed).
+   ============================================================================ */
+
+:root {
+  /* ---- font families ----------------------------------------------------- */
+  --mx-font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mx-font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mx-font-korean: "Noto Sans KR", "Plus Jakarta Sans", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --mx-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ---- weights ----------------------------------------------------------- */
+  --mx-weight-regular: 400;
+  --mx-weight-medium: 500;
+  --mx-weight-semibold: 600;
+  --mx-weight-bold: 700;
+
+  /* ---- role: display  (rare, big screen moments — result hero numbers) --- */
+  --mx-text-display-large-size: 40px;
+  --mx-text-display-large-line: 46px;
+  --mx-text-display-large-weight: 700;
+  --mx-text-display-large-tracking: -0.02em;
+
+  /* ---- role: title  (screen + section headers) --------------------------- */
+  --mx-text-title-large-size: 26px;
+  --mx-text-title-large-line: 32px;
+  --mx-text-title-large-weight: 700;
+  --mx-text-title-large-tracking: -0.01em;
+
+  --mx-text-title-medium-size: 20px;
+  --mx-text-title-medium-line: 26px;
+  --mx-text-title-medium-weight: 600;
+  --mx-text-title-medium-tracking: -0.005em;
+
+  /* ---- role: body  (reading content, card meanings, row titles) ---------- */
+  --mx-text-body-large-size: 17px;
+  --mx-text-body-large-line: 26px;
+  --mx-text-body-large-weight: 400;
+
+  --mx-text-body-medium-size: 15px;
+  --mx-text-body-medium-line: 22px;
+  --mx-text-body-medium-weight: 400;
+
+  --mx-text-body-small-size: 13px;
+  --mx-text-body-small-line: 19px;
+  --mx-text-body-small-weight: 400;
+
+  /* ---- role: label  (buttons, chips, settings values, tabs) -------------- */
+  --mx-text-label-large-size: 15px;
+  --mx-text-label-large-line: 20px;
+  --mx-text-label-large-weight: 600;
+
+  --mx-text-label-medium-size: 13px;
+  --mx-text-label-medium-line: 16px;
+  --mx-text-label-medium-weight: 600;
+
+  /* ---- role: caption  (timestamps, helper text, footnotes) --------------- */
+  --mx-text-caption-size: 12px;
+  --mx-text-caption-line: 16px;
+  --mx-text-caption-weight: 500;
+  --mx-text-caption-tracking: 0.01em;
+
+  /* ---- role: study.korean  (front/prompt — large, centred, high contrast)  */
+  --mx-text-study-korean-size: 34px;
+  --mx-text-study-korean-line: 44px;
+  --mx-text-study-korean-weight: 700;
+  --mx-text-study-korean-tracking: -0.01em;
+
+  /* ---- role: study.explanation  (VI meaning — comfortable long reading) --- */
+  --mx-text-study-explanation-size: 18px;
+  --mx-text-study-explanation-line: 28px;
+  --mx-text-study-explanation-weight: 400;
+
+  /* ---- role: stat.number  (metrics, percentages, counts — tabular) ------- */
+  --mx-text-stat-number-size: 30px;
+  --mx-text-stat-number-line: 34px;
+  --mx-text-stat-number-weight: 700;
+  --mx-text-stat-number-tracking: -0.01em;
+
+  /* ---- role: button  (action button label) ------------------------------- */
+  --mx-text-button-size: 16px;
+  --mx-text-button-line: 20px;
+  --mx-text-button-weight: 600;
+  --mx-text-button-tracking: 0.005em;
+}

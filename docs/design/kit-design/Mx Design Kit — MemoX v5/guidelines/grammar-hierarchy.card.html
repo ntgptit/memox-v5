@@ -1,0 +1,17 @@
+<!-- @dsCard group="Composition" viewport="700x300" name="Hierarchy Levels" subtitle="Every element maps to one of 4 levels — main task must dominate" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 22px; background: var(--mx-color-background-app); }
+  .lv { display: flex; align-items: baseline; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--mx-color-divider-default); }
+  .lv:last-child { border-bottom: none; }
+  .tag { flex: 0 0 34px; font: 700 11px var(--mx-font-mono); color: var(--mx-color-action-primary); }
+  .ex { color: var(--mx-color-text-primary); }
+  .note { flex: 1; text-align: right; font: 500 11px var(--mx-font-body); color: var(--mx-color-text-tertiary); }
+</style></head>
+<body data-theme="light">
+  <div class="lv"><span class="tag">L1</span><span class="ex" style="font:700 26px var(--mx-font-display);letter-spacing:-.01em">Screen title · prompt</span><span class="note">title.large · study.korean · stat.number</span></div>
+  <div class="lv"><span class="tag">L2</span><span class="ex" style="font:600 20px var(--mx-font-display)">Section header · card title</span><span class="note">title.medium · label.large</span></div>
+  <div class="lv"><span class="tag">L3</span><span class="ex" style="font:400 17px var(--mx-font-body)">Body · list-row title · meaning</span><span class="note">body.large · study.explanation</span></div>
+  <div class="lv"><span class="tag">L4</span><span class="ex" style="font:500 12px var(--mx-font-body);color:var(--mx-color-text-tertiary)">metadata · counts · timestamps</span><span class="note">body.small · caption</span></div>
+</body></html>

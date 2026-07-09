@@ -1,0 +1,44 @@
+<!-- @dsCard group="Colors" viewport="700x260" name="Text & Action" subtitle="Text hierarchy + action/state roles in both themes" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 18px; background: #05070b; font-family: var(--mx-font-body); }
+  .pane { border-radius: 12px; padding: 16px; margin-bottom: 12px; background: var(--mx-color-background-app); border: 1px solid rgba(128,128,128,0.15); }
+  .lab { font: 600 10px/1 var(--mx-font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--mx-color-text-tertiary); margin: 0 0 10px; }
+  .txt { display: flex; flex-wrap: wrap; gap: 14px; align-items: baseline; }
+  .txt span { font: 600 15px var(--mx-font-display); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { font: 600 11px var(--mx-font-display); color: #fff; padding: 8px 12px; border-radius: 8px; }
+</style></head>
+<body>
+<div class="pane">
+  <p class="lab">Text — dark</p>
+  <div class="txt">
+    <span style="color:var(--mx-color-text-primary)">Primary</span>
+    <span style="color:var(--mx-color-text-secondary)">Secondary</span>
+    <span style="color:var(--mx-color-text-tertiary)">Tertiary</span>
+    <span style="color:var(--mx-color-text-disabled)">Disabled</span>
+  </div>
+  <div class="chips">
+    <span class="chip" style="background:var(--mx-color-action-primary)">action.primary</span>
+    <span class="chip" style="background:var(--mx-color-action-primaryPressed)">primaryPressed</span>
+    <span class="chip" style="background:var(--mx-color-action-secondary);color:var(--mx-color-text-primary)">secondary</span>
+    <span class="chip" style="background:var(--mx-color-state-selectedSurface);color:var(--mx-color-state-selected)">state.selected</span>
+  </div>
+</div>
+<div class="pane" data-theme="light">
+  <p class="lab">Text — light</p>
+  <div class="txt">
+    <span style="color:var(--mx-color-text-primary)">Primary</span>
+    <span style="color:var(--mx-color-text-secondary)">Secondary</span>
+    <span style="color:var(--mx-color-text-tertiary)">Tertiary</span>
+    <span style="color:var(--mx-color-text-disabled)">Disabled</span>
+  </div>
+  <div class="chips">
+    <span class="chip" style="background:var(--mx-color-action-primary)">action.primary</span>
+    <span class="chip" style="background:var(--mx-color-action-primaryPressed)">primaryPressed</span>
+    <span class="chip" style="background:var(--mx-color-action-secondary);color:var(--mx-color-text-primary)">secondary</span>
+    <span class="chip" style="background:var(--mx-color-state-selectedSurface);color:var(--mx-color-state-selected)">state.selected</span>
+  </div>
+</div>
+</body></html>

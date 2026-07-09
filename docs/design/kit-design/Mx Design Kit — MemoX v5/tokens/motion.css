@@ -1,0 +1,35 @@
+/* ============================================================================
+   Mx Motion & Layers — MemoX v5
+   Durations + easings for a calm, low-noise interface (short, no bounce on
+   content). Reduced-motion rule: honour prefers-reduced-motion, drop non-
+   essential transitions. Layer (z-index) tokens keep stacking predictable.
+   ============================================================================ */
+
+:root {
+  /* ---- durations --------------------------------------------------------- */
+  --mx-motion-fast: 120ms; /* @kind other */
+  --mx-motion-normal: 200ms; /* @kind other */
+  --mx-motion-slow: 320ms; /* @kind other */
+
+  /* ---- easings ----------------------------------------------------------- */
+  --mx-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* @kind other */      /* enter/exit default */
+  --mx-ease-decelerate: cubic-bezier(0, 0, 0, 1); /* @kind other */      /* incoming elements */
+  --mx-ease-accelerate: cubic-bezier(0.3, 0, 1, 1); /* @kind other */    /* outgoing elements */
+
+  /* ---- layers (z-index) -------------------------------------------------- */
+  --mx-layer-base: 0; /* @kind other */
+  --mx-layer-sticky: 100; /* @kind other */   /* sticky top bar / bottom action bar */
+  --mx-layer-overlay: 200; /* @kind other */  /* dropdowns, popovers */
+  --mx-layer-modal: 300; /* @kind other */    /* bottom sheets, modal sheets */
+  --mx-layer-dialog: 400; /* @kind other */   /* confirm dialogs (above sheets) */
+  --mx-layer-toast: 500; /* @kind other */    /* snackbars, toasts (topmost) */
+}
+
+/* Reduced-motion: MemoX respects the OS setting. Non-essential motion off. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mx-motion-fast: 0ms; /* @kind other */
+    --mx-motion-normal: 0ms; /* @kind other */
+    --mx-motion-slow: 0ms; /* @kind other */
+  }
+}

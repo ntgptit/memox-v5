@@ -1,0 +1,41 @@
+<!-- @dsCard group="Brand" viewport="700x560" name="Icon System" subtitle="Icon roles → Lucide glyphs (SF Symbols substitute). Icons are secondary to labels." -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<style>
+  body { margin: 0; padding: 20px; background: var(--mx-color-background-app); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .cell { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--mx-color-surface-card); border: var(--mx-border-default); }
+  .cell i { width: 20px; height: 20px; color: var(--mx-color-text-primary); flex: 0 0 auto; }
+  .cell.dz i { color: var(--mx-color-destructive-text); }
+  .cell.ok i { color: var(--mx-color-feedback-correct); }
+  .cell.no i { color: var(--mx-color-feedback-wrong); }
+  .cell.wa i { color: var(--mx-color-feedback-warning); }
+  .lbl { display: flex; flex-direction: column; min-width: 0; }
+  .lbl b { font: 600 12px var(--mx-font-display); color: var(--mx-color-text-primary); }
+  .lbl span { font: 500 9px var(--mx-font-mono); color: var(--mx-color-text-tertiary); }
+  h3 { margin: 0 0 12px; font: 700 16px var(--mx-font-display); color: var(--mx-color-text-primary); }
+  p.note { margin: 14px 0 0; font: 500 11px/1.5 var(--mx-font-body); color: var(--mx-color-text-tertiary); }
+</style></head>
+<body>
+<h3>Mx Icon System</h3>
+<div class="grid" id="g"></div>
+<p class="note">Substitute: Lucide (2px rounded stroke) stands in for the app's SF Symbols (<code>expo-symbols</code>). Icons are <b>secondary to labels</b> for critical actions; destructive uses the destructive token; audio/language icons are hints, never identifiers.</p>
+<script>
+  const roles = [
+    ['back','chevron-left'],['close','x'],['more','more-vertical'],['edit','pencil'],
+    ['audio','volume-2'],['play / start','play'],['repeat','repeat'],['review / browse','book-open'],
+    ['game','gamepad-2'],['player','headphones'],['add','plus'],['folder','folder'],
+    ['sort','arrow-down-up'],['filter','sliders-horizontal'],['search','search'],['delete','trash-2','dz'],
+    ['import','download'],['export','upload'],['statistics','bar-chart-3'],['settings','settings'],
+    ['theme','palette'],['reminder','bell'],['backup','save'],['sync','refresh-cw'],
+    ['help / support','life-buoy'],['correct','check-circle-2','ok'],['wrong','x-circle','no'],['warning','alert-triangle','wa'],
+  ];
+  document.getElementById('g').innerHTML = roles.map(([role, ic, cls]) =>
+    `<div class="cell ${cls||''}"><i data-lucide="${ic}"></i><span class="lbl"><b>${role}</b><span>${ic}</span></span></div>`
+  ).join('');
+  window.lucide && window.lucide.createIcons();
+</script>
+</body>
+</html>
