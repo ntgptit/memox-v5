@@ -68,6 +68,28 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 >            nghiệp vụ (concept) trong docs SRS/study, chưa phải schema đã chốt.
 > ```
 
+## Spaced Repetition Settings (từ App Settings)
+
+Màn [Spaced Repetition Settings](screens/spaced-repetition-settings.md) (mở từ
+[App Settings](screens/app-settings.md)) có thể hiển thị/cấu hình một số option. **Settings không được
+mâu thuẫn với SRS box model.**
+
+- **8-box, không đổi thành 7-box.** MemoX dùng **8-box**; **không** đổi thành 7-box chỉ vì mock hiển thị
+  **"Ô: 7"**. **"Ô: 7"** cần được **giải thích trước implementation** (current box / max visible box /
+  selected interval box / legacy value) — **không** implement ambiguous box setting khi chưa có product
+  decision. Xem [drift ở screen spec](screens/spaced-repetition-settings.md#box-setting--ô-7-open-question).
+- **Repeat box ordering** ("Thứ tự hộp khi lặp lại: Tăng") **chỉ** ảnh hưởng **thứ tự review**, **không**
+  tự đổi box/due.
+- **SRS notification** ("Thông báo") **chỉ** thông báo khi **có due cards** (local due, DT-1); **không**
+  tự bắt đầu session; **không** tự đổi due date/box.
+- **Forgotten/lapse** ("Di chuyển vào ô trước đó") = `lapseRule: 'stepDown'` — **chỉ** áp dụng cho
+  **SRS-active cards trong Repeat Flow**; Box 1 không giảm dưới Box 1. **New Learning Flow pre-SRS
+  KHÔNG** dùng lapse policy; browse mode cũng không. (Giá trị `reset` vẫn tồn tại — mock chỉ xác nhận
+  `stepDown`; **không** ghi đè.)
+- **Game word selection source** ("Chế độ lặp lại giãn cách") **chỉ** dùng card **Box 1+ và due** nếu
+  game chọn SRS pool.
+- Bất kỳ setting nào ảnh hưởng **box/due hiện có** phải có **policy/migration riêng** trước implement.
+
 ## Cấu hình (từ Settings — xem 09-settings)
 
 ```ts

@@ -280,6 +280,44 @@ Theme/appearance configuration (opened from Settings / More Hub → Chủ đề)
 
 ---
 
+## App Settings (F1.SETTINGS.APP)
+
+Main app configuration (opened from Settings / More Hub → Cài đặt) + its child flows (Native Language
+Picker, Reminder Settings, Spaced Repetition Settings). Specs:
+[app-settings](../design/screens/app-settings.md),
+[native-language-picker](../design/screens/native-language-picker.md),
+[reminder-settings](../design/screens/reminder-settings.md),
+[spaced-repetition-settings](../design/screens/spaced-repetition-settings.md)
+([decision table](../decision-tables/app-settings-decision-table.md)).
+
+| ID | Title | Type | Status | Source evidence | Test evidence | Commit / PR evidence |
+|----|-------|------|--------|-----------------|---------------|----------------------|
+| F1.SETTINGS.APP.1 | App Settings, Native Language Picker, Reminder Settings, and Spaced Repetition Settings concept | Docs | In progress → `Done` after merge | [app-settings.md](../design/screens/app-settings.md); [native-language-picker.md](../design/screens/native-language-picker.md); [reminder-settings.md](../design/screens/reminder-settings.md); [spaced-repetition-settings.md](../design/screens/spaced-repetition-settings.md); [memox-scope.md](../product/memox-scope.md) | `npm run check` / `git diff --check` | PR `docs/app-settings-screen-concept` (squash commit after merge) |
+| F1.SETTINGS.APP.2 | App Settings UI shell | FE | Not started | [app-settings.md](../design/screens/app-settings.md) | TBD | TBD |
+| F1.SETTINGS.STORAGE.1 | Local settings storage | BE/Settings | Not started | [05-data-model.md → app settings](../design/05-data-model.md#chức-năng-hệ-thống-concept-level--chưa-chốt-schema), [09-settings.md](../design/09-settings.md) | TBD | TBD |
+| F1.SETTINGS.LANGUAGE.1 | Native language preference and picker | BE/FE | Not started | [native-language-picker.md](../design/screens/native-language-picker.md) | TBD | TBD |
+| F1.SETTINGS.LANGUAGE.2 | Language list/search behavior | FE/BE | Not started | [native-language-picker.md](../design/screens/native-language-picker.md) | TBD | TBD |
+| F1.SETTINGS.REMINDER.1 | Reminder settings and schedule preferences | BE/FE | Not started | [reminder-settings.md](../design/screens/reminder-settings.md) | TBD | TBD |
+| F1.SETTINGS.REMINDER.2 | Notification permission and platform scheduling | FE/Platform | Not started | [reminder-settings.md](../design/screens/reminder-settings.md) | TBD | TBD |
+| F1.SETTINGS.WORDFORM.1 | Word form/display settings | BE/FE | Not started | [app-settings.md → Word form](../design/screens/app-settings.md#word-form--display-settings-hình-thức-từ-ngữ) | TBD | TBD |
+| F1.SETTINGS.SRS.1 | Spaced Repetition Settings policy | Docs/BE | Not started | [spaced-repetition-settings.md](../design/screens/spaced-repetition-settings.md); [06-srs-8box.md](../design/06-srs-8box.md) | TBD | TBD |
+| F1.SETTINGS.SRS.2 | Spaced Repetition Settings UI | FE | Not started | [spaced-repetition-settings.md](../design/screens/spaced-repetition-settings.md) | TBD | TBD |
+| F1.SETTINGS.SRS.3 | SRS notification preference and scheduling | BE/FE/Platform | Not started | [spaced-repetition-settings.md](../design/screens/spaced-repetition-settings.md) | TBD | TBD |
+| F1.SETTINGS.GAME.1 | Game settings | BE/FE | Not started | [app-settings.md → Game settings](../design/screens/app-settings.md#game-settings-cài-đặt-trò-chơi) | TBD | TBD |
+| F1.BACKUP.1 | Backup/Restore policy and flow | BE/FE | Not started | [app-settings.md → Backup / Restore](../design/screens/app-settings.md#backup--restore-sao-lưu--khôi-phục) | TBD | TBD |
+| F1.SYNC.1 | Cloud sync policy | Docs/Research | Future | [app-settings.md → Cloud sync](../design/screens/app-settings.md#cloud-sync-đồng-bộ-đám-mây); provider/conflict policy not decided | TBD | TBD |
+
+> `F1.SETTINGS.APP.1` is a docs row: it flips to `Done` once this PR is **merged** (evidence = squash
+> commit), per the [evidence policy](#done-criteria--evidence-policy). Native Language Picker, Reminder
+> Settings, and Spaced Repetition Settings are **child flows of App Settings**, not separate modules — all
+> in **one** PR. Opening App Settings **never mutates** learning data. **"Ô: 7"** must not distort the
+> documented **8-box** model — it is an **open question** (see the SRS settings drift). **Restore** is
+> destructive (confirm + validate); **Cloud sync** is **Future** (needs provider/conflict policy). Game
+> is Future relative to Phase 1. Notification API, permission flow, backup format, and schema are **not**
+> decided here.
+
+---
+
 ## 5. Later phases (NOT started)
 
 | ID | Deliverable | Status |

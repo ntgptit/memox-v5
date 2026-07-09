@@ -602,3 +602,17 @@ map về mode/flow như sau (mức concept, **không** chốt UI implementation)
 Quan hệ với cơ chế chung: **Học** đi qua New Learning Flow (pre-SRS, chưa có due); **Lặp lại** chỉ dùng
 card đã activate (Box 1+) và due. Cơ chế chọn thẻ + local-day ở
 [06-srs-8box](06-srs-8box.md#chọn-thẻ-cho-một-phiên-học) vẫn là nền tảng cho luồng **Lặp lại**.
+
+## Ảnh hưởng của App Settings tới study (concept)
+
+Các cài đặt ở [App Settings](screens/app-settings.md) chỉ điều chỉnh **preference/defaults**, **không**
+thay đổi rule học lõi:
+
+- **Game settings** (batch size / random selection) ảnh hưởng **defaults của game mode**; **không** đổi
+  **New Learning Flow 5-mode rule** và **không** đổi **SRS Repeat eligibility** (vẫn Box 1+ due).
+- **Native language preference** **không** tự đổi **study direction** (ví dụ `KO -> VI`) — xem
+  [native-language-picker](screens/native-language-picker.md#difference-from-study-direction).
+- **Reminder notification** **không** tự bắt đầu study session.
+- **Spaced Repetition Settings** **không** đổi New Learning Flow 5-mode rule; **forgotten/lapse** chỉ áp
+  dụng cho **SRS Repeat Flow** (không cho pre-SRS New Learning); **game word selection source** có thể
+  đổi **game pool** nhưng **không** đổi SRS eligibility.

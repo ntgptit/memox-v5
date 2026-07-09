@@ -82,6 +82,25 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   is a separate capability** that needs verified **platform support** before implementation (and can make
   Home-screen shortcuts disappear). Concept spec:
   [`../design/screens/appearance-theme-settings.md`](../design/screens/appearance-theme-settings.md).
+- **App Settings.** The app's main configuration screen (opened from Settings / More Hub → Cài đặt),
+  **distinct** from Appearance / Theme Settings. It groups **native language**, **reminders**, **word
+  display (Hình thức từ ngữ)**, **spaced-repetition settings**, **game settings**, **backup/restore**,
+  and **cloud sync**, serving a local-first learning app. Settings must **persist** locally; opening App
+  Settings **never mutates** learning data; high-risk operations (restore/sync) require confirmation and
+  a policy. Concept spec: [`../design/screens/app-settings.md`](../design/screens/app-settings.md).
+  - **Native language** is a user preference that prioritizes suitable meaning/explanation content; it is
+    **distinct from study direction**, and the app **does not auto-translate** learning data when it
+    changes. Chosen via the [Native Language Picker](../design/screens/native-language-picker.md) (a
+    child screen).
+  - **Reminder Settings** ([child flow](../design/screens/reminder-settings.md)) help maintain a study
+    habit — each reminder has a time and weekdays; reminders **never** auto-start study or mutate learning
+    data, and must persist locally.
+  - **Spaced Repetition Settings** ([child flow](../design/screens/spaced-repetition-settings.md)) let the
+    user configure SRS preferences — repeat ordering, SRS-due notification, forgotten/lapse behavior, and
+    game word-selection source — **without** distorting the documented **8-box** model. Opening or editing
+    settings **never** starts a session or mutates decks/cards/sessions.
+  - **Cloud sync** is marked **Future / Not started** until product scope defines a provider and conflict
+    policy.
 - **Statistics screen.** A **long-term** statistics screen (opened from Settings / More Hub) with three
   tabs — **Từ** (word/card counts), **Thời gian** (learning/repeat time), **Chất lượng** (correct/wrong
   + learning/repeat quality) — plus a per-day chart and a scope filter (default **Tất cả**). It tracks

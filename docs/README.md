@@ -28,6 +28,7 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [decision-tables/settings-more-hub-decision-table.md](decision-tables/settings-more-hub-decision-table.md) | Settings / More Hub: chức năng hệ thống, destructive, import/export |
 | — | [decision-tables/statistics-decision-table.md](decision-tables/statistics-decision-table.md) | Statistics: tabs, scope, no-mutation, không bịa formula |
 | — | [decision-tables/appearance-theme-settings-decision-table.md](decision-tables/appearance-theme-settings-decision-table.md) | Chủ đề: auto dark, day/night theme, app icon, no-mutation |
+| — | [decision-tables/app-settings-decision-table.md](decision-tables/app-settings-decision-table.md) | App Settings + native language / reminder / SRS settings |
 | — | [project-management/wbs.md](project-management/wbs.md) | Work breakdown (foundation-first) |
 | — | [verification.md](verification.md) | Cách verify (`npm run check`) |
 
@@ -51,6 +52,10 @@ Roadmap trả lời *"xây theo thứ tự nào"*.
 | — | [design/screens/settings-more-hub.md](design/screens/settings-more-hub.md) | Chức năng hệ thống: Settings / More Hub (từ drawer mock) |
 | — | [design/screens/statistics.md](design/screens/statistics.md) | Concept & nghiệp vụ màn Statistics (Từ / Thời gian / Chất lượng) |
 | — | [design/screens/appearance-theme-settings.md](design/screens/appearance-theme-settings.md) | Concept & nghiệp vụ màn Chủ đề (theme, auto dark, app icon) |
+| — | [design/screens/app-settings.md](design/screens/app-settings.md) | Concept & nghiệp vụ màn Cài đặt (App Settings) |
+| — | [design/screens/native-language-picker.md](design/screens/native-language-picker.md) | Chọn tiếng mẹ đẻ (child của App Settings) |
+| — | [design/screens/reminder-settings.md](design/screens/reminder-settings.md) | Lời nhắc (child của App Settings) |
+| — | [design/screens/spaced-repetition-settings.md](design/screens/spaced-repetition-settings.md) | Lặp lại giãn cách (child của App Settings) |
 | — | [design/navigation.md](design/navigation.md) | Concept điều hướng: Settings/More Hub, drawer không bắt buộc |
 | — | [roadmap/11-phasing.md](roadmap/11-phasing.md) | Lộ trình Phase 1–4 |
 

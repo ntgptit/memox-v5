@@ -39,6 +39,23 @@ Các chức năng ở [Settings / More Hub](screens/settings-more-hub.md) cần 
   commit**, export **không mutate** dữ liệu học. File format **chưa chốt**.
 - **Destructive delete (Xóa ngôn ngữ)**: là hành động phá hủy → **phải có policy** (block / cascade /
   require export trước) **được chốt trước khi implement**; **không** tự xóa dữ liệu học khi chưa có policy.
+- **App settings** ([App Settings](screens/app-settings.md)): cần **local settings storage** (settings
+  là source of truth cho preference; không chỉ volatile UI state). **Không** thêm migration/schema chi
+  tiết ở đây.
+  - **Native language preference** thuộc local settings. **Language option** nên có **stable id/code**,
+    display name, native name, optional **script/region** metadata; **flag/icon KHÔNG** phải identifier.
+  - **Reminders**: mỗi reminder cần **stable id, time, weekdays**, enabled state (nếu hỗ trợ) — persist
+    schedule preference.
+  - **Spaced Repetition Settings** thuộc local settings; persist: **repeat ordering**, **SRS notification
+    enabled**, **forgotten/lapse behavior**, **game word selection source** (nếu hỗ trợ). Phải **tuân thủ
+    8-box** ([06-srs-8box](06-srs-8box.md)); setting ảnh hưởng box/due hiện có cần **policy/migration
+    riêng** trước implement.
+  - **Word-display / game settings** cần persist (batch size, random selection, keyboard…).
+  - **Backup / restore / cloud sync** là **data operations** cần **policy trước implementation**;
+    **restore/sync fail KHÔNG được làm hỏng local DB**. File format / provider / conflict policy **chưa
+    chốt**.
+  - Đổi **native language** / **reminder** / mở **SRS settings** **KHÔNG** thay đổi deck/card/SRS/session.
+    Nếu tích hợp **OS notification**, **local settings vẫn là source of truth**.
 
 **Không** thêm schema chi tiết / migration trong task này.
 
