@@ -93,7 +93,8 @@ Các action hợp lý (không bắt buộc implement hết ở Phase 1; nếu ch
 - **Study more** — học tiếp nếu còn new cards.
 - **Repeat more** — lặp lại tiếp nếu còn due cards.
 - **Review mistakes** — nếu docs hỗ trợ.
-- **Go to Progress** — nếu Progress screen đã nằm trong scope (CTA, **không** thay thế Progress).
+- **Go to Progress / Statistics** — CTA tới [Statistics](statistics.md) (thống kê **dài hạn**), **không**
+  thay thế nó. Session Result chỉ là **phiên vừa hoàn thành**.
 
 ## Empty / failure states
 
@@ -122,7 +123,9 @@ Các action hợp lý (không bắt buộc implement hết ở Phase 1; nếu ch
 - **Không** schedule SRS due cho card **chưa** activate.
 - **Không** mutate learning data khi chỉ **mở** Result — chỉ **đọc** summary đã finalize.
 - **Không** thay thế **Dashboard/Progress** dài hạn; **không** hiển thị toàn bộ lịch sử học trừ khi docs
-  Progress/History định nghĩa riêng.
+  Progress/History định nghĩa riêng. Thống kê dài hạn là màn **[Statistics](statistics.md)** riêng —
+  Session Result **chỉ** thống kê **phiên vừa hoàn thành**, và có thể **link** tới Statistics nhưng
+  **không thay thế** nó.
 
 ## Open questions / cố ý không chốt
 

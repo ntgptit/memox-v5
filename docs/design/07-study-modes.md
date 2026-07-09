@@ -575,6 +575,16 @@ màn thống kê **phiên vừa hoàn thành** (chi tiết metrics/actions ở s
 - Nếu **finalize thất bại** / session **rỗng** / user **thoát chưa finalize** → **không** hiển thị
   Result như đã hoàn thành. Xem [Session Result → Empty/failure](screens/session-result.md#empty--failure-states).
 
+### Đóng góp vào Statistics (dài hạn)
+
+- **New Learning Flow** và **SRS Repeat Flow** tạo dữ liệu (session/attempt) **có thể được tổng hợp**
+  trong [Statistics](screens/statistics.md) **sau khi finalize**. Statistics chỉ **đọc** history đã
+  finalize, **không** mutate learning data.
+- **Chỉ mode có evaluation** mới đóng góp vào **correct/wrong quality metrics** (match, guess, recall,
+  fill). **`reviewMode`** (làm quen, **không** evaluation) **không** được tự tính là correct answer.
+- **Review Words / browse mode** (chỉ xem card — [Flashcard List](screens/flashcard-list.md)) **không**
+  được tính là learning/repeat attempt.
+
 ## Play Menu entry points mapping
 
 Màn [Deck Management / Subdeck List](screens/deck-management.md#play-menu) mở **Play Menu** khi bấm
