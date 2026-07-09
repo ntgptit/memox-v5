@@ -117,9 +117,11 @@ MemoX is a **local-first flashcard app** with spaced-repetition review.
   [`../design/screens/flashcard-list.md`](../design/screens/flashcard-list.md). Shows the current study
   direction (e.g. `KO → VI`) as a read-only indicator. TTS/audio, advanced edit (delete/reorder/
   suspend), hidden/suspended, and any progress/mastery formula are **not** decided here.
-- **Spaced repetition — 8-box (Leitner).** Each card sits in a box (1–8); correct answers promote it,
-  wrong answers demote it; each box maps to a review interval that determines when the card is due.
-  Algorithm details: [`../design/06-srs-8box.md`](../design/06-srs-8box.md).
+- **Spaced repetition — 8-box (Leitner).** New cards start at **Box 0 (not activated / pre-SRS)** and
+  only enter the SRS after completing the New Learning Flow. SRS-active cards sit in a box **1–8**;
+  correct answers promote, wrong answers demote (lapse, min Box 1); each box maps to a review interval
+  that determines when the card is due (local-day). Algorithm details:
+  [`../design/06-srs-8box.md`](../design/06-srs-8box.md).
 - **Study modes.** Multiple ways to study the same cards. Some modes update SRS state; one is
   practice-only. Details: [`../design/07-study-modes.md`](../design/07-study-modes.md).
 - **Persisted study sessions.** Study sessions are **durable**: Phase 1 includes `study_sessions` and

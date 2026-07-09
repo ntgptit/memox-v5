@@ -74,6 +74,7 @@ Settings**, **Spaced Repetition Settings**). Authoritative specs:
 | repeat box order changed | do **not** mutate card box/due |
 | user enables **SRS notification** | persist SRS notification preference |
 | SRS notification enabled and **due cards exist** | notification **may** be scheduled per platform support |
+| SRS notification fires | **notification only** — does **not** auto-start a session; no box/due change |
 | notification permission missing | show **permission** state |
 | platform notification unavailable | show **unavailable** state |
 | user sets **forgotten → previous box** | future SRS Repeat failures may move a **Box 2+** card to the previous box |

@@ -128,9 +128,10 @@ CREATE TABLE cards (
   term             TEXT NOT NULL,
   meaning          TEXT NOT NULL,
   note             TEXT,                     -- tùy chọn
-  box              INTEGER NOT NULL DEFAULT 1 CHECK (box BETWEEN 1 AND 8),
-  due_at           INTEGER,                  -- NULL = thẻ mới, chưa xếp lịch
+  box              INTEGER NOT NULL DEFAULT 0 CHECK (box BETWEEN 0 AND 8),  -- 0 = not activated / pre-SRS; 1..8 = SRS-active
+  due_at           INTEGER,                  -- NULL cho Box 0; set/ý nghĩa cho Box 1+ (SRS scheduling)
   last_reviewed_at INTEGER,                  -- NULL = chưa ôn lần nào
+  srs_activated_at INTEGER,                  -- NULL tới khi Box 0 → Box 1 (hoàn thành New Learning Flow); recommended field
   new_seen_on      TEXT,                     -- 'YYYY-MM-DD' (giờ địa phương) — ngày đầu đưa vào học, để tính hạn mức thẻ mới
   created_at       INTEGER NOT NULL,
   updated_at       INTEGER NOT NULL,
@@ -162,10 +163,19 @@ CREATE TABLE app_meta (
 
 Ghi chú thiết kế:
 
-- **`box` + `due_at` nằm trên `cards`**: `due_at` lưu **mốc tuyệt đối** (epoch ms), tính lại mỗi lần
-  chấm = `last_reviewed_at + interval(box) * 1 ngày`. **Eligibility "đến hạn" theo local-day** (DT-1),
-  **không** so trực tiếp `due_at <= now`; storage có thể pre-filter timestamp cho hiệu năng nhưng
-  use-case áp local-day làm nguồn sự thật.
+- **Box 0 / not activated (pre-SRS).** Thẻ mới **mặc định `box = 0`** (chưa activate vào SRS). `0` là
+  trạng thái **trước SRS**; `1..8` là **SRS-active**. Card chỉ chuyển **Box 0 → Box 1** sau khi hoàn
+  thành đủ **New Learning Flow** (`review → match → guess → recall → fill`) — xem
+  [06-srs-8box → Kích hoạt SRS](06-srs-8box.md#kích-hoạt-srs-box-0--box-1) và
+  [07-study-modes](07-study-modes.md#new-learning-flow). **Card Box 0 KHÔNG** đủ điều kiện vào **Repeat
+  Mode Menu**. `srs_activated_at` (recommended) set khi activate. **SRS engine schedule chỉ áp dụng cho
+  Box 1..8**; Box 0 **không** có `due_at`/scheduling (trừ thao tác activate tường minh).
+- **Tiến độ 5-mode của New Learning Flow phải persist** qua `study_session_items` (hoặc bảng learning
+  progress ở tương lai) — **không** dựa vào volatile UI state.
+- **`box` + `due_at` nằm trên `cards`**: `due_at` (cho **Box 1+**) lưu **mốc tuyệt đối** (epoch ms),
+  tính lại mỗi lần chấm = `last_reviewed_at + interval(box) * 1 ngày`. **Eligibility "đến hạn" theo
+  local-day** (DT-1), **không** so trực tiếp `due_at <= now`; storage có thể pre-filter timestamp cho
+  hiệu năng nhưng use-case áp local-day làm nguồn sự thật.
 - **`new_seen_on`** giúp áp **hạn mức thẻ mới/ngày** (FR-S7) mà không cần bảng riêng: đếm số thẻ có
   `new_seen_on = hôm nay`.
 - **`ON DELETE CASCADE`** ở FK là cho **hard-delete** (ví dụ dọn rác). Trong luồng thường ta dùng
@@ -241,7 +251,8 @@ Ghi chú:
 
 ```ts
 export type ID = string;                     // ULID/UUID sinh client
-export type Box = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type Box = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8; // 0 = not activated / pre-SRS; 1..8 = SRS-active
+export type SrsBox = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;  // box hợp lệ khi SRS engine thao tác (Box 1+)
 
 export interface Deck {
   id: ID;
@@ -259,9 +270,10 @@ export interface Card {
   term: string;
   meaning: string;
   note?: string;
-  box: Box;
-  dueAt: number | null;          // null = thẻ mới
+  box: Box;                      // 0 = not activated / pre-SRS; 1..8 = SRS-active
+  dueAt: number | null;          // null cho Box 0; có ý nghĩa cho Box 1+
   lastReviewedAt: number | null;
+  srsActivatedAt: number | null; // null tới khi Box 0 → Box 1 (recommended)
   newSeenOn: string | null;      // 'YYYY-MM-DD' local
   createdAt: number;
   updatedAt: number;

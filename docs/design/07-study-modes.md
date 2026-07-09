@@ -1,27 +1,47 @@
-# 07 — Chế độ học
+# 07 — Study Modes and Learning Flows
 
-5 chế độ. Bốn chế độ (**Review, Recall, Guess, Typing**) quy kết quả về `grade` rồi gọi **cùng một**
-engine 8-box ([06-srs-8box](06-srs-8box.md)). **Match** là game luyện tập, **không** đụng SRS.
+## Purpose
 
-Vị trí code: `src/features/study-session/modes/<mode>/`. Mỗi mode là một component nhận **cùng một**
-danh sách thẻ của phiên và một callback `onGrade(cardId, grade)` (trừ Match).
+Định nghĩa **các mode học** và **hai luồng học** của MemoX, đồng nhất với mô hình
+**Box 0 / pre-SRS → Box 1..8 / SRS-active** ở [06-srs-8box](06-srs-8box.md).
+
+## Flow overview
+
+Cùng bộ mode-mechanic (**review, match, guess, recall, fill**) xuất hiện trong **hai luồng khác nhau về
+lifecycle và card eligibility** — **không được nhầm lẫn**:
+
+- **[New Learning Flow](#new-learning-flow)** — cho **card mới / Box 0 / not activated (pre-SRS)**. Thứ
+  tự **bắt buộc** `review → match → guess → recall → fill`. Hoàn thành `fill` (khi 4 mode trước xong)
+  **activate** card vào **Box 1**. **Không** có SRS scheduling trước khi activate; feedback đúng/sai ở
+  đây là **pre-SRS learning**, **không** phải SRS grading.
+- **[SRS Repeat Flow](#srs-repeat-flow)** — **chỉ** cho card **Box 1+ đã due**. Bắt đầu từ
+  [Repeat Mode Menu](#repeat-mode-menu); user chọn **match / guess / recall / fill**. **SRS grading và
+  cập nhật box/due chỉ xảy ra ở luồng này** theo [06-srs-8box](06-srs-8box.md). **`reviewMode` KHÔNG**
+  phải repeat mode.
+
+> **Typing = fillMode (implementation-style).** Trong New Learning, `fillMode` là **cổng activate**
+> (pre-SRS). Trong SRS Repeat, fill/typing có thể **grade** card **Box 1+ đã due**. Không có "Typing
+> Phase 1" tách biệt — nó là hình thức nhập liệu của `fill`.
 
 ## Luồng chung một phiên học
 
 ```
-Chọn deck → chọn phạm vi (công tắc "gồm deck con") → chọn chế độ
-      → study-session dựng danh sách thẻ (due + thẻ mới trong hạn mức)
-      → lặp qua thẻ theo chế độ → mỗi thẻ (trừ Match) sinh grade → engine.schedule() → lưu
-      → màn hình tóm tắt cuối phiên
+Chọn deck → chọn phạm vi (công tắc "gồm deck con") → chọn flow/mode
+      → study-session dựng danh sách thẻ
+      → lặp qua thẻ theo mode → ghi nhận kết quả từng item → lưu → tóm tắt cuối phiên
 ```
 
-- **Dựng danh sách thẻ**: theo mục "Chọn thẻ cho một phiên học" trong [06-srs-8box](06-srs-8box.md).
-  Điều kiện due dùng quy tắc **local-day** (DT-1 — xem
-  [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)).
-- **Lưu sau mỗi lần chấm**: trong **một** transaction — cập nhật `cards.box/due_at/last_reviewed_at`,
-  chèn `card_reviews`, **và** cập nhật `study_session_items` (trạng thái item). Thẻ mới lần đầu: đặt
+- **Dựng danh sách thẻ**:
+  - **New Learning Flow**: thẻ **mới (Box 0)** trong hạn mức thẻ mới/ngày.
+  - **SRS Repeat Flow**: thẻ **Box 1+ đã due** (điều kiện due theo **local-day** —
+    [DT-1](../decision-tables/phase-1-contracts.md#dt-1--due-date-semantics-local-day)).
+- **SRS grading chỉ ở SRS Repeat Flow**: chỉ trong Repeat, mỗi attempt mới `engine.schedule()` để cập
+  nhật `cards.box/due_at/last_reviewed_at`. **New Learning Flow KHÔNG** đổi box/due cho tới khi `fill`
+  activate card lên **Box 1** (một lần, không phải mỗi mode).
+- **Lưu sau mỗi lần chấm** (trong **một** transaction): chèn `card_reviews` + cập nhật
+  `study_session_items`; **SRS Repeat** thêm cập nhật `cards` (box/due). Thẻ mới lần đầu: đặt
   `new_seen_on = hôm nay`.
-- **Tóm tắt cuối phiên** (FR-M8): số đúng/sai, số thẻ lên/xuống box, thời lượng.
+- **Tóm tắt cuối phiên** (FR-M8): số đúng/sai, số thẻ lên/xuống box (Repeat), thời lượng.
 
 ## Persist phiên học — persisted (DT-2)
 
@@ -51,65 +71,34 @@ nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions
 > riêng (`P1-BE-05`) **phải xong trước** khi làm Study UI (`P1-FE-03`). Xem
 > [WBS](../project-management/wbs.md).
 
-## 1. Typing — Phase 1 (mode nền tảng)
+## Cơ chế 5 mode (dùng chung cho 2 flow)
 
-**Mục tiêu:** recall chủ động cao nhất — phải viết ra được.
+Năm mode có **cùng cơ chế tương tác** dù ở New Learning hay SRS Repeat; **khác nhau ở lifecycle**
+(pre-SRS activation vs. SRS grading). Chi tiết đầy đủ ở phần
+[New Learning modes](#new-learning-flow) và [SRS Repeat modes](#srs-repeat-modes).
 
-- Hiện **`term`**. Ô nhập cho người dùng gõ **`meaning`**.
-- Chấm bằng **so khớp chặt tuyệt đối** (exact): so sánh **từng ký tự**, **phân biệt hoa/thường và dấu**,
-  **không** chuẩn hóa khoảng trắng/dấu câu. `grade = (input === card.meaning) ? 'correct' : 'wrong'`.
-- Sau khi gửi: hiện đáp án đúng + `note` (nếu có); nếu sai, hiển thị đối chiếu input vs đáp án.
-- `onGrade(cardId, grade)` → engine.
-
-> Vì so khớp **chặt**, UI nên: không tự sửa chính tả, không viết hoa đầu câu, không auto-trim ẩn.
-> (Có thể trim khoảng trắng **đầu/cuối** ở mức nhập liệu là hợp lý, nhưng mặc định spec là **chặt** —
-> nếu về sau muốn nới, đưa thành tùy chọn trong Settings; hiện tại **không** nới.)
-
-## 2. Review — Phase 2
-
-**Mục tiêu:** ôn nhanh, tự đánh giá.
-
-- Hiện **`term`**. Nút "Lật" → hiện `meaning` (+ `note`).
-- Hai nút: **"Nhớ"** (`correct`) / **"Quên"** (`wrong`) → engine.
-- Khác Recall ở nhịp: Review thiên về **duyệt nhanh** (có thể vuốt), Recall nhấn mạnh **tự kiểm tra
-  trước khi lật**. Về mặt dữ liệu cả hai đều sinh `grade` như nhau.
-
-## 3. Recall — Phase 2
-
-**Mục tiêu:** tự kiểm tra trí nhớ trước khi thấy đáp án.
-
-- Hiện **`term`** + nhắc "Nhớ lại nghĩa trong đầu…".
-- Nút "Hiện đáp án" → lộ `meaning`.
-- Người dùng tự chấm **"Đúng"** (`correct`) / **"Sai"** (`wrong`) → engine.
-
-## 4. Guess — Phase 2
-
-**Mục tiêu:** nhận diện trong nhiễu (recognition).
-
-- Hiện **`term`** + **N lựa chọn** `meaning` (mặc định **4**, gồm 1 đúng + 3 nhiễu).
-- **Nhiễu (distractors)** lấy từ `meaning` của thẻ khác **cùng phạm vi** (ưu tiên cùng deck/độ dài
-  tương tự để nhiễu "thật"); nếu phạm vi có < 4 thẻ, giảm số lựa chọn cho phù hợp.
-- Chọn đúng → `correct`; chọn sai → `wrong` → engine. Sau khi chọn, tô đúng/sai rồi sang thẻ kế.
-
-## 5. Match — Phase 3 (KHÔNG cập nhật SRS)
-
-**Mục tiêu:** khởi động/giải trí, củng cố liên kết term↔meaning.
-
-- Lưới các ô: một nửa là `term`, nửa kia là `meaning` (mặc định **6 cặp** mỗi màn, xáo trộn).
-- Người dùng **nối** term với meaning đúng; cặp đúng biến mất, cặp sai nháy đỏ.
-- **Tính giờ**; xong hiển thị thời gian (và có thể best-time cục bộ). **Không** ghi `card_reviews`,
-  **không** đổi `box`/`due_at`.
-- Chọn thẻ cho Match: lấy trong phạm vi (không cần "due"); ưu tiên thẻ đang học để củng cố.
+- **review** — làm quen thẻ (xem prompt + answer). **Chỉ** ở New Learning Flow (mode đầu).
+- **match** — ghép prompt/front ↔ answer/meaning; đúng = xanh, sai = đỏ + retry.
+- **guess** — chọn 1 answer/meaning đúng trong nhiều lựa chọn; đúng = xanh, sai = đỏ.
+- **recall** — hiện prompt, ẩn answer; nút **Hiển thị** có timer 20s; sau reveal tự chấm Đã quên/Nhớ được.
+- **fill** — hiện meaning/answer, gõ lại prompt/front (**Trợ giúp** + **Kiểm tra**). Tương đương
+  **Typing** về nhập liệu.
 
 ## Bảng đối chiếu mode
 
-| Mode | Hiện | Hành động người dùng | Suy ra grade | Cập nhật SRS | Phase |
-|------|------|----------------------|--------------|:------------:|:-----:|
-| Typing | term | Gõ meaning | exact match | ✅ | 1 |
-| Review | term → lật | Bấm Nhớ/Quên | tự đánh giá | ✅ | 2 |
-| Recall | term → hiện | Bấm Đúng/Sai | tự đánh giá | ✅ | 2 |
-| Guess  | term + 4 lựa chọn | Chọn đáp án | đúng/sai lựa chọn | ✅ | 2 |
-| Match  | lưới cặp | Nối cặp | — | ❌ | 3 |
+Cùng một mode-mechanic, khác vai trò theo flow:
+
+| Mode | Cơ chế tương tác | New Learning Flow (pre-SRS) | SRS Repeat Flow (Box 1+ due) |
+|------|------------------|-----------------------------|------------------------------|
+| review | làm quen (prompt + answer) | mode **1/5** (bắt buộc) | **không** dùng |
+| match | ghép cặp | mode **2/5**, feedback = **learning** | có thể chọn; feedback = **SRS grading** |
+| guess | trắc nghiệm | mode **3/5**, feedback = **learning** | có thể chọn; feedback = **SRS grading** |
+| recall | Hiển thị + 20s | mode **4/5**, self-grade = **learning** | có thể chọn; self-grade = **SRS grading** |
+| fill (Typing) | gõ đáp án | mode **5/5** = **cổng activate Box 1** | có thể chọn; grade = **SRS grading** |
+
+- **SRS grading (đổi box/due) CHỈ ở SRS Repeat Flow** cho card **Box 1+ đã due**.
+- **New Learning Flow là pre-SRS**: đúng/sai chỉ để hoàn thành mode; **không** đổi box/due; chỉ `fill`
+  hoàn tất mới **activate** Box 0 → Box 1.
 
 ## Hướng (direction) hiện & hỏi
 
@@ -123,8 +112,10 @@ nếu cần). Bảng chi tiết: [05-data-model](05-data-model.md#study_sessions
 
 - **Khung phiên** (`SessionShell`): thanh tiến độ, đếm còn lại, nút thoát, xử lý tóm tắt cuối phiên —
   đặt ở `study-session`, dùng chung cho mọi mode.
-- **`onGrade(cardId, grade)`**: giao diện chung nối mode → `study-session` → engine → repository.
-- Mode **không** tự truy vấn DB; nhận thẻ và trả grade. `study-session` lo I/O + engine.
+- **`onResult(cardId, result)`**: giao diện chung nối mode → `study-session`. **SRS engine chỉ được gọi
+  ở SRS Repeat Flow** (card Box 1+); ở New Learning Flow, kết quả mode chỉ đánh dấu tiến độ mode và (ở
+  `fill`) kích hoạt Box 0 → Box 1 **một lần**.
+- Mode **không** tự truy vấn DB; nhận thẻ và trả kết quả. `study-session` lo I/O + engine (khi Repeat).
 
 ## New Learning Flow
 

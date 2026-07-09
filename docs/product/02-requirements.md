@@ -35,11 +35,11 @@ Chi tiết thuật toán ở [design/06-srs-8box.md](../design/06-srs-8box.md). 
 
 | ID | Mức | Phase | Mô tả |
 |----|-----|-------|-------|
-| FR-S1 | MUST | 1 | Mỗi thẻ có trạng thái SRS: **box hiện tại (1–8)** và **thời điểm ôn gần nhất**. |
-| FR-S2 | MUST | 1 | Thẻ mới bắt đầu ở **box 1**. |
-| FR-S3 | MUST | 1 | Trả lời **đúng** → **lên 1 box** (tối đa box 8, ở box 8 giữ nguyên box 8). |
-| FR-S4 | MUST | 1 | Trả lời **sai** → theo cấu hình: **về box 1** *hoặc* **lùi 1 box** (tối thiểu box 1). |
-| FR-S5 | MUST | 1 | Thẻ **đến hạn** khi `now ≥ last_reviewed_at + interval(box)`. |
+| FR-S1 | MUST | 1 | Mỗi thẻ có trạng thái SRS: **box hiện tại (0–8)** (0 = **not activated / pre-SRS**; 1–8 = **SRS-active**) và **thời điểm ôn gần nhất**. |
+| FR-S2 | MUST | 1 | Thẻ mới bắt đầu ở **Box 0 / not activated (pre-SRS)**. Card **chỉ** vào **Box 1** sau khi hoàn thành đủ **New Learning Flow** (`review → match → guess → recall → fill`). Box 1 là điểm bắt đầu SRS. |
+| FR-S3 | MUST | 1 | (SRS Repeat, card Box 1+) Trả lời **đúng** → **lên 1 box** (tối đa box 8, ở box 8 giữ nguyên box 8). |
+| FR-S4 | MUST | 1 | (SRS Repeat, card Box 1+) Trả lời **sai** → theo cấu hình **lapse**: **về box 1** *hoặc* **lùi 1 box** (tối thiểu box 1). Lapse **không** áp dụng cho New Learning Flow pre-SRS. |
+| FR-S5 | MUST | 1 | Thẻ (Box 1+) **đến hạn** theo **local-day**: `localDay(due_at) ≤ localDay(today)` (DT-1). Box 0 **không** có due. |
 | FR-S6 | MUST | 1 | 8 khoảng ôn (interval) **cấu hình được** trong Settings; mặc định nhân đôi. |
 | FR-S7 | MUST | 1 | Giới hạn **số thẻ mới mỗi ngày** (cấu hình); thẻ mới vượt giới hạn chưa được đưa vào phiên học. |
 | FR-S8 | SHOULD | 1 | Engine tính toán **tất định** theo `now` truyền vào (không đọc đồng hồ ẩn) để test được. |

@@ -44,9 +44,14 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
   [Statistics](screens/statistics.md). **SRS quality metrics** (Chất lượng lặp lại) **chỉ** dùng card
   **Box 1+ đã review** trong Repeat Flow. Statistics **chỉ đọc** history đã finalize: **không** schedule
   SRS, **không** đổi box, **không** đổi due date.
-- **SRS interval/due scheduling chỉ áp dụng từ Box 1 trở đi.** Card ở Box 0 không được xếp lịch SRS.
-- **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; new card chưa activate (kể cả đang
-  ở `reviewMode`) **không** được đưa vào Repeat.
+- **SRS interval/due scheduling chỉ áp dụng cho Box 1..8.** Card ở Box 0 **không** được xếp lịch SRS;
+  SRS engine phải **từ chối / bỏ qua** scheduling cho Box 0 **trừ** thao tác **activate tường minh**
+  (Box 0 → Box 1). `due_at` là **null / bỏ qua** cho Box 0.
+- **Lapse (stepDown/reset) không bao giờ xuống dưới Box 1** cho card SRS-active.
+- **Repeat mode (Lặp lại)** chỉ dùng card **Box 1+** đã **đến hạn**; card **Box 0** (kể cả đang ở
+  `reviewMode`) **không** đủ điều kiện vào Repeat.
+- **Spaced Repetition Settings không được đổi mô hình 8-box** nếu chưa có **migration policy** tường
+  minh ở tương lai (xem [Spaced Repetition Settings](screens/spaced-repetition-settings.md)).
 - **SRS Repeat Flow bắt đầu từ Repeat Mode Menu.** Bấm **Lặp lại** mở
   [Repeat Mode Menu](../07-study-modes.md#repeat-mode-menu); user **chọn 1 repeat mode** trong **match /
   guess / recall / fill** (đây là **SRS review** cho card **Box 1+ đã due**). **`reviewMode` KHÔNG** dùng
@@ -54,19 +59,17 @@ test được (FR-S8). Vị trí code: `src/shared/srs/engine/`.
 - Card chưa hoàn thành đủ 5 mode → **vẫn Box 0 / not SRS-active** (tiến độ có thể phản ánh partial
   learning nếu docs progress cho phép, nhưng **không** phải SRS review).
 
-> **DRIFT DETECTED — mô hình activation vs. docs hiện có**
-> ```
-> File code: (none — chưa có code)
-> File doc:  docs/design/05-data-model.md (cards.box DEFAULT 1, CHECK (box BETWEEN 1 AND 8); Box = 1..8),
->            docs/product/02-requirements.md (FR-S2 "Thẻ mới bắt đầu ở box 1")
-> Mismatch:  Docs cũ cho thẻ mới bắt đầu ngay ở Box 1 và box chỉ nhận 1..8. Nghiệp vụ mới yêu cầu thẻ
->            mới ở Box 0 / not-activated và chỉ vào Box 1 sau New Learning Flow (5 mode). => cần Box 0
->            (hoặc cờ activated) mà schema/enum hiện tại chưa có.
-> Suggested fix: Ở task docs này KHÔNG chốt schema/migration. Cần một task riêng cập nhật data model:
->            thêm trạng thái not-activated (ví dụ box 0 hoặc cột activated_at / learning_progress),
->            nới CHECK box (0..8) hoặc tách cột, và sửa FR-S2. Cho tới khi đó, Box 0 là khái niệm
->            nghiệp vụ (concept) trong docs SRS/study, chưa phải schema đã chốt.
-> ```
+> **Box 0 drift — RESOLVED in docs.**
+> Mô hình activation Box 0 đã được **đồng bộ** trong toàn bộ docs (không còn mâu thuẫn):
+> - [05-data-model](05-data-model.md): `cards.box INTEGER NOT NULL DEFAULT 0 CHECK (box BETWEEN 0 AND 8)`;
+>   `due_at` nullable cho Box 0; thêm `srs_activated_at` (recommended); `Box = 0 | 1..8`.
+> - [02-requirements](../product/02-requirements.md): **FR-S1** box (0–8); **FR-S2** thẻ mới ở **Box 0**,
+>   chỉ vào Box 1 sau New Learning Flow.
+> - [memox-scope](../product/memox-scope.md): "new cards start at **Box 0** … only enter SRS after the
+>   New Learning Flow".
+>
+> Đây là **docs concept**, **không** thêm migration/SQL thật (repo chưa có DB implementation). Nếu sau
+> này phát hiện file doc nào còn ghi "box 1..8 / new card starts Box 1", cập nhật để khớp Box 0.
 
 ## Spaced Repetition Settings (từ App Settings)
 
