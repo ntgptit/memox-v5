@@ -119,3 +119,25 @@ Applied after review feedback ("right components, wrong composition"):
 - [x] Guard/test: `check-screen-tokens.mjs` (raw-hex + off-scale-gap lint) — passes on all 20 screens
 
 Conclusion cites specific gates/fixtures above — no "looks good" self-assessment.
+
+## Second review pass — meticulous check vs the critique (measured)
+
+Every numeric requirement re-checked against computed styles. Fixed in this pass:
+
+- **§4 title area reserve** — title now `min-height: 2.5em` (2 lines). Measured: metadata baseline identical (**66px**) across all 5 cards, so it no longer jumps between 1- and 2-line names.
+- **§6 play interaction** — play button now has its own `onClick` with `stopPropagation` and label `Study {name}`; tap card = open detail, tap play = study (distinct, documented).
+- **§3 no decorative icon** — removed the unwired `⋮` from the app bar; the only app-bar action is the concrete `folder+` (New subdeck).
+
+Residual deviations — **kit/token constraints, not free to change here** (would require editing generated `_ds_bundle.js` or kit source, or hand-rolling components the rules forbid):
+
+| Prompt asks | Actual (measured) | Why |
+|---|---|---|
+| Title 18sp / lh 22 | **17px / 21.25** (`--mx-text-body-large` 600) | No 18px token; body-large is the nearest role token |
+| Word count 14sp regular | **13px / 500** (`--mx-text-body-small`, text-secondary) | 13px is the token; weight 500 kept for §9 contrast |
+| Status chip **24px** | **20px** (`MxBadge` size="small") | Height is internal to `MxBadge`; only icon (14) is settable from outside |
+| Button radius 14–16px | **999px pill** (`MxActionButton`) | Radius is baked into the kit button; **whole kit uses pills**, so it's consistent per the prompt's own conditional ("unless the whole app uses that pattern") |
+| Dot `·` in `words · due` | dropped | Removed so the badge wraps cleanly at width-320 (D-03); prompt allowed a dot-less metadata variant |
+
+Card treatment (§9): measured `MxCard` = transparent background + a single faint border (not both) → already "one treatment", not the double faint surface+border the critique warned about.
+
+To change the residual items (badge 24px, button radius) the kit source / DesignSync bundle must be updated — a separate kit-level task, flagged rather than silently worked around.
