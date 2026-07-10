@@ -8,7 +8,7 @@
  * Run:  node "docs/design/kit-design/Mx Design Kit — MemoX v5/ui_kits/memox-app/tools/check-screen-tokens.mjs"
  * Scope (folder layout — see ../README.md):
  *   - screens/*.card.html   the per-screen mockups
- *   - _shared/*.js          reusable, non-generated partials (window.Mx*)
+ *   - _shared/*.jsx         reusable, non-generated partials (window.Mx*)
  *   - index.html            the gallery at the kit root
  * Legacy appearance-reminders.card.html (not part of the MX WBS backlog) is excluded.
  */
@@ -30,7 +30,7 @@ function collect() {
     }
   };
   push('screens', (f) => f.endsWith('.card.html'));
-  push('_shared', (f) => f.endsWith('.js'));
+  push('_shared', (f) => f.endsWith('.jsx'));
   push('.', (f) => f === 'index.html');
   return targets;
 }

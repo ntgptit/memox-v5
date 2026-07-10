@@ -16,7 +16,7 @@ ui_kits/memox-app/
 ├── README.md           This file (folder router + conventions).
 ├── _shared/            Reusable, NON-generated partials shared across screens.
 │   ├── phone.css         384×824 phone frame (Galaxy S23 Ultra, 19.3:9) + scroll/bottom slots.
-│   ├── deck-card-list.js Deck list building blocks → window.MxDeckList (Ring/StatusChip/DeckRow/…).
+│   ├── deck-card-list.jsx Deck list building blocks → window.MxDeckList (Ring/StatusChip/DeckRow/…).
 │   └── README.md         What each partial exports and how to consume it.
 ├── screens/            One *.card.html per screen; all states × dark + light in one file.
 ├── specs/              SCREENS-WBS.md (state registry) + <screen>.contract.md build records.
@@ -36,8 +36,8 @@ kit root for the bundle, and `../_shared/` for partials:
 ```html
 <link rel="stylesheet" href="../../../styles.css" />   <!-- token @import manifest -->
 <script src="../../../_ds_bundle.js"></script>          <!-- Mx* components → window.MxDesignKitMemoXV5_9f1387 -->
-<script type="text/babel" src="../_shared/kit-helpers.js"></script>     <!-- shared atoms → window.MxKit (Ic/Skel/fmt) -->
-<script type="text/babel" src="../_shared/deck-card-list.js"></script>  <!-- optional deck composite → window.MxDeckList -->
+<script type="text/babel" src="../_shared/kit-helpers.jsx"></script>     <!-- shared atoms → window.MxKit (Ic/Skel/fmt) -->
+<script type="text/babel" src="../_shared/deck-card-list.jsx"></script>  <!-- optional deck composite → window.MxDeckList -->
 <link rel="stylesheet" href="../_shared/phone.css" />
 ```
 
@@ -49,12 +49,12 @@ via CDN. Theming is **dark-first** (`:root`); light parity is rendered under `da
 
 1. Create `screens/<name>.card.html` from an existing screen (copy the load block above).
 2. Reuse `_shared/` partials rather than re-implementing shared UI. Promote genuinely shared UI into
-   `_shared/` (a `.js` partial exposing a `window.Mx*` global) — never copy-paste between screens.
+   `_shared/` (a `.jsx` partial exposing a `window.Mx*` global) — never copy-paste between screens.
 3. Add a row to `specs/SCREENS-WBS.md` and a card entry in `index.html`.
 4. Run the guard: `node "tools/check-screen-tokens.mjs"` — must pass (no raw hex, on-scale `gap:`).
 
 > The `Mx*` primitives live in the **generated** `_ds_bundle.js` at the kit root, which is not
-> hand-editable here. Screen-level shared UI therefore lives as `_shared/*.js` partials; promoting a
+> hand-editable here. Screen-level shared UI therefore lives as `_shared/*.jsx` partials; promoting a
 > partial into a real `Mx*` component is a separate DesignSync/kit-source task.
 
 ## Business rules honored

@@ -178,17 +178,17 @@ Named layout constants (`const L`) replace scattered magic numbers. Residual: `M
 
 Viewports: 320 overflow **0px** (widest badge wraps, no clip); 360/390/430 metadata single-line; scrollbar **0px** (fresh CSS). Divergence: status now uses local `StatusChip` (24px) instead of kit `MxBadge` (20px) — recommend promoting a 24px badge size to the kit for cross-screen consistency; likewise the per-screen non-pill button radius.
 
-## Reuse — shared `deck-card-list.js` partial
+## Reuse — shared `deck-card-list.jsx` partial
 
-The verified card-list building blocks are extracted into a **non-generated** partial `deck-card-list.js` (an IIFE exposing `window.MxDeckList`), so any mockup screen can reuse them without touching the generated `_ds_bundle.js`.
+The verified card-list building blocks are extracted into a **non-generated** partial `deck-card-list.jsx` (an IIFE exposing `window.MxDeckList`), so any mockup screen can reuse them without touching the generated `_ds_bundle.js`.
 
 Exports (14): `L` (layout constants), `EN`/`VI` (i18n), `Ic`, `fmt`, `Ring`, `STATUS`, `StatusChip`, `DueBadge`, `DeckRow`, `Chip`, `SearchField`, `ControlArea`, `DeckList`.
 
-Folder layout: the partial lives in [`../_shared/deck-card-list.js`](../_shared/deck-card-list.js); screens live in [`../screens/`](../screens/). Usage in a screen `.card.html`:
+Folder layout: the partial lives in [`../_shared/deck-card-list.jsx`](../_shared/deck-card-list.jsx); screens live in [`../screens/`](../screens/). Usage in a screen `.card.html`:
 
 ```html
 <script src="../../../_ds_bundle.js"></script>
-<script type="text/babel" src="../_shared/deck-card-list.js"></script>   <!-- before the inline script -->
+<script type="text/babel" src="../_shared/deck-card-list.jsx"></script>   <!-- before the inline script -->
 ```
 ```jsx
 const { DeckList, ControlArea, DeckRow, L, EN, VI } = window.MxDeckList;
