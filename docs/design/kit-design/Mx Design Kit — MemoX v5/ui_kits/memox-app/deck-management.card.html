@@ -1,4 +1,4 @@
-<!-- @dsCard group="Sample Screens" viewport="430x900" name="Deck Management" subtitle="Subdeck list within a parent deck — search, sort, direction, deck rows; loaded / loading / empty / search / error / row-states / delete confirm, dark + light" -->
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Deck Management" subtitle="Contract-compliant List archetype — states + edge fixtures (min/dense/long-text/VN/font-scale 1.3·1.5/widths 320–430/keyboard), dark + light. See deck-management.contract.md" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +18,19 @@
 const K = window.MxDesignKitMemoXV5_9f1387;
 const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxListRow, MxSectionHeader, MxEmptyState, MxErrorState, MxConfirmDialog } = K;
 function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+function fmt(n) { return n.toLocaleString('en-US'); }
+
+/* ---- i18n (edge fixture §7: VN / EN content) ---- */
+const EN = { search: 'Search decks', dir: 'KO → EN', sort: 'A → Z', newDeck: 'New subdeck', addCard: 'Add card',
+  words: n => `${fmt(n)} words`, subdecks: (n, w) => `${n} subdecks · ${fmt(w)} words`, results: (n, q) => `${n} results for “${q}”` };
+const VI = { search: 'Tìm bộ thẻ', dir: 'KO → VI', sort: 'A → Z', newDeck: 'Bộ thẻ mới', addCard: 'Thêm thẻ',
+  words: n => `${fmt(n)} từ`, subdecks: (n, w) => `${n} bộ thẻ · ${fmt(w)} từ`, results: (n, q) => `${n} kết quả cho “${q}”` };
+
+/* ---- large-font fixture §7: override px text tokens ×f (tokens are px, so scale explicitly) ---- */
+const TEXT_ROLES = { 'display-large': 40, 'title-large': 26, 'title-medium': 20, 'body-large': 17, 'body-medium': 15, 'body-small': 13, 'label-large': 15, 'label-medium': 13, 'caption': 12, 'study-korean': 34, 'study-explanation': 18, 'stat-number': 30, 'button': 16 };
+function scaleTokens(f) { const o = {}; for (const k in TEXT_ROLES) o[`--mx-text-${k}-size`] = `${Math.round(TEXT_ROLES[k] * f * 10) / 10}px`; return o; }
 
 /* ---- screen-specific helpers (non-Mx, token-only, not reused elsewhere) ---- */
-
 function Ring({ p, size = 46 }) {
   const sw = 4, r = (size - sw) / 2, c = 2 * Math.PI * r;
   const color = p > 0 ? 'var(--mx-color-srs-active)' : 'var(--mx-color-srs-preSrs)';
@@ -34,29 +44,24 @@ function Ring({ p, size = 46 }) {
     </div>
   );
 }
-
 function DueBadge({ d }) {
-  if (d.newc > 0 && d.progress === 0) return <MxBadge tone="preSrs" size="small" icon={<Ic n="sparkles" s={12} />}>{d.newc} new</MxBadge>;
-  if (d.due > 0) return <MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>{d.due} due</MxBadge>;
+  if (d.newc > 0 && d.progress === 0) return <MxBadge tone="preSrs" size="small" icon={<Ic n="sparkles" s={12} />}>{fmt(d.newc)} new</MxBadge>;
+  if (d.due > 0) return <MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={12} />}>{fmt(d.due)} due</MxBadge>;
   if (d.words === 0) return <MxBadge tone="neutral" size="small">Empty</MxBadge>;
   return <MxBadge tone="noDue" size="small" icon={<Ic n="check" s={12} />}>Up to date</MxBadge>;
 }
-
-function DeckRow({ d, pressed }) {
+function DeckRow({ d, pressed, t = EN }) {
   const noStudy = d.disabled || d.words === 0;
   return (
-    <MxCard
-      variant="interactive"
-      state={noStudy ? 'disabled' : 'none'}
-      padding="12"
+    <MxCard variant="interactive" state={noStudy ? 'disabled' : 'none'} padding="12"
       onClick={noStudy ? undefined : () => {}}
-      style={{ display: 'flex', alignItems: 'center', gap: 16, background: pressed ? 'var(--mx-color-state-pressedSurface)' : undefined }}
-    >
+      style={{ display: 'flex', alignItems: 'center', gap: 16, background: pressed ? 'var(--mx-color-state-pressedSurface)' : undefined }}>
       <Ring p={d.progress} />
       <div style={{ flex: '1 1 auto', minWidth: 0 }}>
-        <div style={{ font: '700 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.name}</div>
+        {/* D-01 fix: 2-line clamp instead of 1-line nowrap+ellipsis so long deck names aren't hidden */}
+        <div style={{ font: '700 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{d.name}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{d.words} words</span>
+          <span style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{t.words(d.words)}</span>
           <DueBadge d={d} />
         </div>
       </div>
@@ -64,36 +69,45 @@ function DeckRow({ d, pressed }) {
     </MxCard>
   );
 }
-
-function SearchField({ value }) {
+function SearchField({ value, focused, t = EN }) {
   const has = value && value.length > 0;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 44, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-default)' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 44, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-card)', border: `1px solid ${focused ? 'var(--mx-color-state-selected)' : 'var(--mx-color-border-default)'}` }}>
       <i data-lucide="search" style={{ width: 18, height: 18, color: 'var(--mx-color-text-tertiary)', flex: '0 0 auto' }}></i>
-      <span style={{ flex: '1 1 auto', font: '500 var(--mx-text-body-medium-size) var(--mx-font-display)', color: has ? 'var(--mx-color-text-primary)' : 'var(--mx-color-text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{has ? value : 'Search decks'}</span>
-      {has && <MxIconButton icon={<Ic n="x" s={16} />} label="Clear search" variant="ghost" size="small" />}
+      <span style={{ flex: '1 1 auto', font: '500 var(--mx-text-body-medium-size) var(--mx-font-display)', color: has ? 'var(--mx-color-text-primary)' : 'var(--mx-color-text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{has ? value : t.search}</span>
+      {focused && <span style={{ width: 2, height: 20, background: 'var(--mx-color-action-primary)', flex: '0 0 auto' }} />}
+      {has && !focused && <MxIconButton icon={<Ic n="x" s={16} />} label="Clear search" variant="ghost" size="small" />}
     </div>
   );
 }
-
-function ControlArea({ query }) {
+function ControlArea({ query, focused, t = EN }) {
   return (
     <div style={{ padding: '8px 16px 4px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <SearchField value={query} />
+      <SearchField value={query} focused={focused} t={t} />
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <MxBadge tone="active" icon={<i data-lucide="arrow-right" style={{ width: 13, height: 13 }}></i>}>KO → EN</MxBadge>
-        <MxActionButton size="small" variant="ghost" leadingIcon={<Ic n="arrow-up-down" s={16} />}>A → Z</MxActionButton>
+        <MxBadge tone="active" icon={<i data-lucide="arrow-right" style={{ width: 13, height: 13 }}></i>}>{t.dir}</MxBadge>
+        <MxActionButton size="small" variant="ghost" leadingIcon={<Ic n="arrow-up-down" s={16} />}>{t.sort}</MxActionButton>
       </div>
     </div>
   );
 }
-
 function Skel({ w, h, r }) {
   return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
 }
+function Keyboard() {
+  const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  return (
+    <div aria-hidden="true" style={{ padding: '8px 4px calc(8px + env(safe-area-inset-bottom, 0px))', background: 'var(--mx-color-surface-base)', borderTop: '1px solid var(--mx-color-border-subtle)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {rows.map((r, i) => (
+        <div key={i} style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+          {r.split('').map((c, j) => <span key={j} style={{ flex: '1 1 0', maxWidth: 32, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--mx-radius-sm)', background: 'var(--mx-color-surface-card)', border: '1px solid var(--mx-color-border-subtle)', font: '600 15px var(--mx-font-display)', color: 'var(--mx-color-text-secondary)' }}>{c}</span>)}
+        </div>
+      ))}
+    </div>
+  );
+}
 
-/* ---- data ---- */
-
+/* ---- data + fixtures ---- */
 const decks = [
   { name: 'Basic greetings', words: 38, progress: 66, due: 14, newc: 0 },
   { name: 'Everyday verbs', words: 52, progress: 48, due: 7, newc: 0 },
@@ -101,47 +115,62 @@ const decks = [
   { name: 'Food & dining', words: 54, progress: 100, due: 0, newc: 0 },
   { name: 'Numbers & counting', words: 28, progress: 0, due: 0, newc: 28 },
 ];
+const denseDecks = decks.concat([
+  { name: 'Weather & seasons', words: 31, progress: 20, due: 9, newc: 0 },
+  { name: 'Family & relatives', words: 26, progress: 55, due: 3, newc: 0 },
+  { name: 'Hobbies & leisure', words: 40, progress: 12, due: 0, newc: 12 },
+  { name: 'Work & office', words: 63, progress: 78, due: 22, newc: 0 },
+  { name: 'Health & body', words: 48, progress: 5, due: 0, newc: 48 },
+  { name: 'Shopping & money', words: 37, progress: 90, due: 0, newc: 0 },
+  { name: 'Transport & travel', words: 44, progress: 41, due: 11, newc: 0 },
+]);
+const minDecks = [{ name: 'Basic greetings', words: 38, progress: 66, due: 0, newc: 0 }];
+const longDeck = { name: 'Advanced business Korean — honorifics, formal verb endings, and workplace email etiquette', words: 9999, progress: 47, due: 1234, newc: 0 };
+const viDecks = [
+  { name: 'Chào hỏi cơ bản', words: 38, progress: 66, due: 14, newc: 0 },
+  { name: 'Động từ thường ngày', words: 52, progress: 48, due: 7, newc: 0 },
+  { name: 'Động từ bất quy tắc', words: 45, progress: 34, due: 15, newc: 0 },
+  { name: 'Ăn uống & nhà hàng', words: 54, progress: 100, due: 0, newc: 0 },
+  { name: 'Số đếm & đơn vị', words: 28, progress: 0, due: 0, newc: 28 },
+];
 const totalWords = decks.reduce((a, d) => a + d.words, 0);
 
 /* ---- shared phone shell ---- */
-
-function Shell({ theme, subtitle, children, overlay, busy }) {
+function Shell({ theme, subtitle, children, overlay, busy, t = EN, frameStyle, noBottom, keyboard }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
-    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined} aria-busy={busy ? 'true' : undefined}>
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined} aria-busy={busy ? 'true' : undefined} style={frameStyle}>
       <div className="mx-status"><span>9:41</span><span style={{ display: 'flex', gap: 8 }}><i data-lucide="signal" style={{ width: 15, height: 15 }}></i><i data-lucide="wifi" style={{ width: 15, height: 15 }}></i><i data-lucide="battery-full" style={{ width: 15, height: 15 }}></i></span></div>
-      <MxTopBar
-        leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
-        title="Korean TOPIK I"
-        subtitle={subtitle}
-      />
+      <MxTopBar leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />} title="Korean TOPIK I" subtitle={subtitle} />
       <div className="mx-scroll">{children}</div>
-      <div className="mx-bottom">
-        <MxActionButton variant="secondary" leadingIcon={<Ic n="folder-plus" s={18} />}>New subdeck</MxActionButton>
-        <MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />}>Add card</MxActionButton>
-      </div>
+      {!noBottom && (
+        /* D-02 fix: wrap so the primary CTA is never clipped at narrow widths / large fonts */
+        <div className="mx-bottom" style={{ flexWrap: 'wrap', rowGap: 8 }}>
+          <MxActionButton variant="secondary" leadingIcon={<Ic n="folder-plus" s={18} />}>{t.newDeck}</MxActionButton>
+          <MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />}>{t.addCard}</MxActionButton>
+        </div>
+      )}
+      {keyboard && <Keyboard />}
       {overlay}
     </div>
   );
 }
-
 function Centered({ children }) {
   return <div style={{ minHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>{children}</div>;
 }
+function DeckList({ items, t = EN }) {
+  return <div style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>{items.map((d, i) => <DeckRow key={i} d={d} t={t} />)}</div>;
+}
 
-/* ---- MX-02.1 Loaded deck list ---- */
-function LoadedPhone({ theme }) {
+/* ==== STATE MATRIX (§6) ==== */
+function LoadedPhone({ theme, t = EN, frameStyle, decksData = decks }) {
   return (
-    <Shell theme={theme} subtitle={`${decks.length} subdecks · ${totalWords} words`}>
-      <ControlArea query="" />
-      <div style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {decks.map((d, i) => <DeckRow key={i} d={d} />)}
-      </div>
+    <Shell theme={theme} subtitle={t.subdecks(decksData.length, decksData.reduce((a, d) => a + d.words, 0))} t={t} frameStyle={frameStyle}>
+      <ControlArea query="" t={t} />
+      <DeckList items={decksData} t={t} />
     </Shell>
   );
 }
-
-/* ---- MX-02.2 Loading ---- */
 function LoadingPhone({ theme }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
@@ -154,10 +183,7 @@ function LoadingPhone({ theme }) {
         {[0, 1, 2, 3].map(i => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 12, border: '1px solid var(--mx-color-border-subtle)', borderRadius: 'var(--mx-radius-lg)' }}>
             <Skel w={46} h={46} r="999px" />
-            <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <Skel w="70%" h={15} r="var(--mx-radius-sm)" />
-              <Skel w="42%" h={12} r="var(--mx-radius-sm)" />
-            </div>
+            <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: 8 }}><Skel w="70%" h={15} r="var(--mx-radius-sm)" /><Skel w="42%" h={12} r="var(--mx-radius-sm)" /></div>
             <Skel w={44} h={44} r="var(--mx-radius-md)" />
           </div>
         ))}
@@ -165,8 +191,6 @@ function LoadingPhone({ theme }) {
     </Shell>
   );
 }
-
-/* ---- MX-02.3 Empty no decks ---- */
 function EmptyPhone({ theme }) {
   return (
     <Shell theme={theme} subtitle="No subdecks">
@@ -178,25 +202,17 @@ function EmptyPhone({ theme }) {
     </Shell>
   );
 }
-
-/* ---- MX-02.4 Search active ---- */
 function SearchActivePhone({ theme }) {
   const q = 'verbs';
   const results = decks.filter(d => d.name.toLowerCase().includes(q));
   return (
     <Shell theme={theme} subtitle={`${results.length} of ${decks.length} subdecks`}>
       <ControlArea query={q} />
-      <div style={{ padding: '4px 16px 0', font: '600 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>
-        {results.length} results for “{q}”
-      </div>
-      <div style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {results.map((d, i) => <DeckRow key={i} d={d} />)}
-      </div>
+      <div style={{ padding: '4px 16px 0', font: '600 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>{EN.results(results.length, q)}</div>
+      <DeckList items={results} />
     </Shell>
   );
 }
-
-/* ---- MX-02.5 Search empty ---- */
 function SearchEmptyPhone({ theme }) {
   const q = 'kanji';
   return (
@@ -210,8 +226,6 @@ function SearchEmptyPhone({ theme }) {
     </Shell>
   );
 }
-
-/* ---- MX-02.6 Error ---- */
 function ErrorPhone({ theme }) {
   return (
     <Shell theme={theme}>
@@ -223,77 +237,85 @@ function ErrorPhone({ theme }) {
     </Shell>
   );
 }
-
-/* ---- MX-02.7 Row states ---- */
 function RowCaption({ children }) {
-  return <div style={{ margin: '14px 4px 2px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
+  return <div style={{ margin: '12px 4px 4px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
 }
 function RowStatesPhone({ theme }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
     <Shell theme={theme} subtitle="Deck row states">
       <div style={{ padding: '4px 16px 16px' }}>
-        <RowCaption>Default · resting</RowCaption>
-        <DeckRow d={{ name: 'Basic greetings', words: 38, progress: 66, due: 0, newc: 0 }} />
-        <RowCaption>Pressed · tap feedback</RowCaption>
-        <DeckRow d={{ name: 'Basic greetings', words: 38, progress: 66, due: 0, newc: 0 }} pressed />
-        <RowCaption>Due · review workload</RowCaption>
-        <DeckRow d={{ name: 'Irregular verbs', words: 45, progress: 34, due: 15, newc: 0 }} />
-        <RowCaption>No-due · up to date</RowCaption>
-        <DeckRow d={{ name: 'Food & dining', words: 54, progress: 100, due: 0, newc: 0 }} />
-        <RowCaption>Disabled · nothing to study</RowCaption>
-        <DeckRow d={{ name: 'Travel & directions', words: 0, progress: 0, due: 0, newc: 0 }} />
+        <RowCaption>Default · resting</RowCaption><DeckRow d={{ name: 'Basic greetings', words: 38, progress: 66, due: 0, newc: 0 }} />
+        <RowCaption>Pressed · tap feedback</RowCaption><DeckRow d={{ name: 'Basic greetings', words: 38, progress: 66, due: 0, newc: 0 }} pressed />
+        <RowCaption>Due · review workload</RowCaption><DeckRow d={{ name: 'Irregular verbs', words: 45, progress: 34, due: 15, newc: 0 }} />
+        <RowCaption>No-due · up to date</RowCaption><DeckRow d={{ name: 'Food & dining', words: 54, progress: 100, due: 0, newc: 0 }} />
+        <RowCaption>Disabled · nothing to study</RowCaption><DeckRow d={{ name: 'Travel & directions', words: 0, progress: 0, due: 0, newc: 0 }} />
       </div>
     </Shell>
   );
 }
-
-/* ---- MX-02.8 Delete confirm ---- */
 function DeleteConfirmPhone({ theme }) {
   return (
     <Shell theme={theme} subtitle={`${decks.length} subdecks · ${totalWords} words`}
-      overlay={
-        <MxConfirmDialog
-          open
-          variant="highRisk"
-          title="Delete “Irregular verbs”?"
-          message="This subdeck and its 45 words will be permanently removed from this device."
-          warning="Your other decks and learning history stay safe — but this subdeck can’t be recovered."
-          confirmLabel="Delete deck"
-          cancelLabel="Keep deck"
-        />
-      }>
+      overlay={<MxConfirmDialog open variant="highRisk" title="Delete “Irregular verbs”?"
+        message="This subdeck and its 45 words will be permanently removed from this device."
+        warning="Your other decks and learning history stay safe — but this subdeck can’t be recovered."
+        confirmLabel="Delete deck" cancelLabel="Keep deck" />}>
       <ControlArea query="" />
-      <div style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {decks.slice(0, 3).map((d, i) => <DeckRow key={i} d={d} pressed={d.name === 'Irregular verbs'} />)}
-      </div>
+      <div style={{ padding: '8px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>{decks.slice(0, 3).map((d, i) => <DeckRow key={i} d={d} pressed={d.name === 'Irregular verbs'} />)}</div>
     </Shell>
   );
 }
 
-/* ---- desk grouping caption ---- */
+/* ==== EDGE-DATA FIXTURES (§7) ==== */
+function MinDataPhone({ theme }) { return <LoadedPhone theme={theme} decksData={minDecks} />; }
+function DenseDataPhone({ theme }) { return <LoadedPhone theme={theme} decksData={denseDecks} />; }
+function LongTextPhone({ theme }) {
+  return (
+    <Shell theme={theme} subtitle="1 subdeck · 9,999 words">
+      <ControlArea query="" />
+      <DeckList items={[longDeck, { name: 'Food & dining', words: 54, progress: 100, due: 0, newc: 0 }]} />
+    </Shell>
+  );
+}
+function VNPhone({ theme }) { return <LoadedPhone theme={theme} t={VI} decksData={viDecks} />; }
+function FontScalePhone({ theme, scale }) { return <LoadedPhone theme={theme} frameStyle={scaleTokens(scale)} />; }
+function WidthPhone({ theme, width }) { return <LoadedPhone theme={theme} frameStyle={{ width }} />; }
+function KeyboardSearchPhone({ theme }) {
+  const q = 'ver';
+  const results = decks.filter(d => d.name.toLowerCase().includes(q));
+  return (
+    <Shell theme={theme} subtitle={`${results.length} of ${decks.length} subdecks`} noBottom keyboard>
+      <ControlArea query={q} focused />
+      <div style={{ padding: '4px 16px 0', font: '600 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-tertiary)' }}>{EN.results(results.length, q)}</div>
+      <DeckList items={results} />
+    </Shell>
+  );
+}
+
 function DeskCaption({ children }) {
   return <div style={{ flexBasis: '100%', maxWidth: '100%', textAlign: 'center', margin: '10px 0 -8px', font: '700 var(--mx-text-body-small-size) var(--mx-font-display)', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--mx-color-text-tertiary)' }}>{children}</div>;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <>
-    <DeskCaption>MX-02.1 · Loaded deck list</DeskCaption>
-    <LoadedPhone theme="dark" /><LoadedPhone theme="light" />
-    <DeskCaption>MX-02.2 · Loading</DeskCaption>
-    <LoadingPhone theme="dark" /><LoadingPhone theme="light" />
-    <DeskCaption>MX-02.3 · Empty — no subdecks</DeskCaption>
-    <EmptyPhone theme="dark" /><EmptyPhone theme="light" />
-    <DeskCaption>MX-02.4 · Search active</DeskCaption>
-    <SearchActivePhone theme="dark" /><SearchActivePhone theme="light" />
-    <DeskCaption>MX-02.5 · Search empty</DeskCaption>
-    <SearchEmptyPhone theme="dark" /><SearchEmptyPhone theme="light" />
-    <DeskCaption>MX-02.6 · Load error</DeskCaption>
-    <ErrorPhone theme="dark" /><ErrorPhone theme="light" />
-    <DeskCaption>MX-02.7 · Deck row states</DeskCaption>
-    <RowStatesPhone theme="dark" /><RowStatesPhone theme="light" />
-    <DeskCaption>MX-02.8 · Delete confirm (high-risk)</DeskCaption>
-    <DeleteConfirmPhone theme="dark" /><DeleteConfirmPhone theme="light" />
+    <DeskCaption>§6 · Loaded (normal)</DeskCaption><LoadedPhone theme="dark" /><LoadedPhone theme="light" />
+    <DeskCaption>§6 · Loading</DeskCaption><LoadingPhone theme="dark" /><LoadingPhone theme="light" />
+    <DeskCaption>§6 · Loaded — minimum data (1 item, 0 due)</DeskCaption><MinDataPhone theme="dark" /><MinDataPhone theme="light" />
+    <DeskCaption>§6 · Loaded — dense data (12 items)</DeskCaption><DenseDataPhone theme="dark" /><DenseDataPhone theme="light" />
+    <DeskCaption>§6 · Empty</DeskCaption><EmptyPhone theme="dark" /><EmptyPhone theme="light" />
+    <DeskCaption>§6 · Recoverable error</DeskCaption><ErrorPhone theme="dark" /><ErrorPhone theme="light" />
+    <DeskCaption>§6 · Search active</DeskCaption><SearchActivePhone theme="dark" /><SearchActivePhone theme="light" />
+    <DeskCaption>§6 · Search empty</DeskCaption><SearchEmptyPhone theme="dark" /><SearchEmptyPhone theme="light" />
+    <DeskCaption>§6 · Row states</DeskCaption><RowStatesPhone theme="dark" /><RowStatesPhone theme="light" />
+    <DeskCaption>§6 · Delete confirm (high-risk)</DeskCaption><DeleteConfirmPhone theme="dark" /><DeleteConfirmPhone theme="light" />
+    <DeskCaption>§7 · Long text (3-line name, 9,999 words, 1,234 due)</DeskCaption><LongTextPhone theme="dark" /><LongTextPhone theme="light" />
+    <DeskCaption>§7 · Vietnamese content (KO → VI)</DeskCaption><VNPhone theme="dark" /><VNPhone theme="light" />
+    <DeskCaption>§7 · Large font — scale 1.3</DeskCaption><FontScalePhone theme="dark" scale={1.3} /><FontScalePhone theme="light" scale={1.3} />
+    <DeskCaption>§7 · Large font — scale 1.5</DeskCaption><FontScalePhone theme="dark" scale={1.5} /><FontScalePhone theme="light" scale={1.5} />
+    <DeskCaption>§7 · Narrow device — 320 / 360 / 390 / 430 px</DeskCaption>
+    <WidthPhone theme="dark" width={320} /><WidthPhone theme="dark" width={360} /><WidthPhone theme="dark" width={390} /><WidthPhone theme="dark" width={430} />
+    <DeskCaption>§7 · Keyboard open (search focused — CTA yields, search stays visible)</DeskCaption><KeyboardSearchPhone theme="dark" /><KeyboardSearchPhone theme="light" />
   </>
 );
 setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
