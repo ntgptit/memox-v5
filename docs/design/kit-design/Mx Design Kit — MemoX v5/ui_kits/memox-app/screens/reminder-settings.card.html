@@ -10,14 +10,15 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
 <script src="../../../_ds_bundle.js"></script>
+<script type="text/babel" src="../_shared/kit-helpers.js"></script>
 <link rel="stylesheet" href="../_shared/phone.css" />
 </head>
 <body class="mx-desk">
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
+const { Ic } = window.MxKit;
 const { MxTopBar, MxIconButton, MxSettingsSection, MxSettingsRow, MxSwitch, MxReminderRow, MxWeekdayChip, MxModalSheet, MxConfirmDialog, MxCallout, MxActionButton } = K;
-function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 function wd(sel) { return DAYS.map((d, i) => ({ key: d.toLowerCase(), label: d[0], selected: sel.includes(i) })); }

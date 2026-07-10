@@ -10,18 +10,16 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
 <script src="../../../_ds_bundle.js"></script>
+<script type="text/babel" src="../_shared/kit-helpers.js"></script>
 <link rel="stylesheet" href="../_shared/phone.css" />
 </head>
 <body class="mx-desk">
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
+const { Ic, Skel } = window.MxKit;
 const { MxTopBar, MxIconButton, MxSessionResultSummary, MxMetricCard, MxActionButton, MxBadge, MxCallout, MxErrorState, MxEmptyState } = K;
-function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
 
-function Skel({ w, h, r }) {
-  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
-}
 
 function Hero({ icon, tint, ink }) {
   return (

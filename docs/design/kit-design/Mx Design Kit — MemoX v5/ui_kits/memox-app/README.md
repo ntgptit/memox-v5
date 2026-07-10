@@ -36,11 +36,13 @@ kit root for the bundle, and `../_shared/` for partials:
 ```html
 <link rel="stylesheet" href="../../../styles.css" />   <!-- token @import manifest -->
 <script src="../../../_ds_bundle.js"></script>          <!-- Mx* components → window.MxDesignKitMemoXV5_9f1387 -->
-<script type="text/babel" src="../_shared/deck-card-list.js"></script>  <!-- optional shared partial -->
+<script type="text/babel" src="../_shared/kit-helpers.js"></script>     <!-- shared atoms → window.MxKit (Ic/Skel/fmt) -->
+<script type="text/babel" src="../_shared/deck-card-list.js"></script>  <!-- optional deck composite → window.MxDeckList -->
 <link rel="stylesheet" href="../_shared/phone.css" />
 ```
 
-Screens then mount via `const { … } = window.MxDesignKitMemoXV5_9f1387`. Icons use Lucide 0.454.0
+Screens then mount via `const { … } = window.MxDesignKitMemoXV5_9f1387` and pull shared atoms with
+`const { Ic, Skel } = window.MxKit` — no screen re-declares the icon wrapper or skeleton block. Icons use Lucide 0.454.0
 via CDN. Theming is **dark-first** (`:root`); light parity is rendered under `data-theme="light"`.
 
 ## Adding a screen

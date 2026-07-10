@@ -10,6 +10,7 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
 <script src="../../../_ds_bundle.js"></script>
+<script type="text/babel" src="../_shared/kit-helpers.js"></script>
 <script type="text/babel" src="../_shared/deck-card-list.js"></script>
 <link rel="stylesheet" href="../_shared/phone.css" />
 </head>
@@ -17,6 +18,7 @@
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
+const { Skel } = window.MxKit;
 const { MxTopBar, MxIconButton, MxActionButton, MxEmptyState, MxErrorState, MxConfirmDialog } = K;
 /* reusable deck card-list building blocks (shared partial: deck-card-list.js) */
 const { L, EN, VI, Ic, fmt, DeckRow, ControlArea, DeckList } = window.MxDeckList;
@@ -25,9 +27,6 @@ const { L, EN, VI, Ic, fmt, DeckRow, ControlArea, DeckList } = window.MxDeckList
 const TEXT_ROLES = { 'display-large': 40, 'title-large': 26, 'title-medium': 20, 'body-large': 17, 'body-medium': 15, 'body-small': 13, 'label-large': 15, 'label-medium': 13, 'caption': 12, 'study-korean': 34, 'study-explanation': 18, 'stat-number': 30, 'button': 16 };
 function scaleTokens(f) { const o = {}; for (const k in TEXT_ROLES) o[`--mx-text-${k}-size`] = `${Math.round(TEXT_ROLES[k] * f * 10) / 10}px`; return o; }
 
-function Skel({ w, h, r }) {
-  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
-}
 function Keyboard() {
   const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
   return (
