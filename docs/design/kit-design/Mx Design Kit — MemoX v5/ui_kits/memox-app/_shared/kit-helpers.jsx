@@ -5,7 +5,7 @@
    block, number format) live here ONCE, mirroring V4's kit-helpers.jsx. Load it
    AFTER _ds_bundle.js and BEFORE a screen's own inline babel script:
 
-     <script type="text/babel" src="../_shared/kit-helpers.js"></script>
+     <script type="text/babel" src="../_shared/kit-helpers.jsx"></script>
 
    then, at the top of the inline script:
 

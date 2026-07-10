@@ -5,7 +5,7 @@
    _shared/. Any screen in ../screens/ reuses the deck list by adding, BEFORE its
    own inline babel script:
 
-     <script type="text/babel" src="../_shared/deck-card-list.js"></script>
+     <script type="text/babel" src="../_shared/deck-card-list.jsx"></script>
 
    then destructuring from the global it exposes:
 
