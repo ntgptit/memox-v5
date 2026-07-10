@@ -184,15 +184,15 @@ The verified card-list building blocks are extracted into a **non-generated** pa
 
 Exports (14): `L` (layout constants), `EN`/`VI` (i18n), `Ic`, `fmt`, `Ring`, `STATUS`, `StatusChip`, `DueBadge`, `DeckRow`, `Chip`, `SearchField`, `ControlArea`, `DeckList`.
 
-Usage in a screen `.card.html`:
+Folder layout: the partial lives in [`../_shared/deck-card-list.js`](../_shared/deck-card-list.js); screens live in [`../screens/`](../screens/). Usage in a screen `.card.html`:
 
 ```html
-<script src="../../_ds_bundle.js"></script>
-<script type="text/babel" src="deck-card-list.js"></script>   <!-- before the inline script -->
+<script src="../../../_ds_bundle.js"></script>
+<script type="text/babel" src="../_shared/deck-card-list.js"></script>   <!-- before the inline script -->
 ```
 ```jsx
 const { DeckList, ControlArea, DeckRow, L, EN, VI } = window.MxDeckList;
 // <ControlArea query="" t={EN} /> then <DeckList items={decks} t={EN} />
 ```
 
-`deck-management.card.html` now consumes the partial (34 frames unchanged; card measured 112 after refactor). The guard `check-screen-tokens.mjs` also lints the partial (21 files total, clean). Note: it's a mockup-level partial, not a kit `Mx*` component — promoting `DeckRow`/`DeckList` into the DesignSync kit bundle would be a separate kit-source task (generated bundle can't be edited by hand here).
+`screens/deck-management.card.html` now consumes the partial (34 frames unchanged; card measured 112 after refactor). The guard `tools/check-screen-tokens.mjs` also lints the partial (22 files total, clean). Note: it's a mockup-level partial, not a kit `Mx*` component — promoting `DeckRow`/`DeckList` into the DesignSync kit bundle would be a separate kit-source task (generated bundle can't be edited by hand here).

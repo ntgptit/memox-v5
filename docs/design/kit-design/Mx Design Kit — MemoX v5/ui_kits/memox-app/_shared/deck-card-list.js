@@ -1,10 +1,11 @@
 /* ============================================================================
    Shared deck card-list building blocks for MemoX mockup screens.
 
-   Reusable, NON-GENERATED partial (do not confuse with _ds_bundle.js). Any kit
-   screen can reuse the deck list by adding, BEFORE its own inline babel script:
+   Reusable, NON-GENERATED partial (do not confuse with _ds_bundle.js). Lives in
+   _shared/. Any screen in ../screens/ reuses the deck list by adding, BEFORE its
+   own inline babel script:
 
-     <script type="text/babel" src="deck-card-list.js"></script>
+     <script type="text/babel" src="../_shared/deck-card-list.js"></script>
 
    then destructuring from the global it exposes:
 
