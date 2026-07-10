@@ -141,3 +141,22 @@ Residual deviations — **kit/token constraints, not free to change here** (woul
 Card treatment (§9): measured `MxCard` = transparent background + a single faint border (not both) → already "one treatment", not the double faint surface+border the critique warned about.
 
 To change the residual items (badge 24px, button radius) the kit source / DesignSync bundle must be updated — a separate kit-level task, flagged rather than silently worked around.
+
+## VIS-001…010 fix pass (measured)
+
+Applied to `deck-management.card.html` + `phone.css`. Medium = HTML mockup (no Flutter screen exists — design phase); Flutter-specific steps (RawScrollbar / widget tests / `flutter analyze` / code-gen) are N/A and replaced by the token guard + browser render + `npm run check`.
+
+| ID | Fix | Measured |
+|----|-----|----------|
+| VIS-001 | `.mx-scroll` hides the desktop scrollbar (`scrollbar-width:none` + `::-webkit-scrollbar{display:none}`) in phone.css | `offsetWidth − clientWidth = 0px`; content uses full width; gesture/wheel scroll intact |
+| VIS-002 | App bar create icon label + tooltip `Create new subdeck`; back + create are `MxIconButton` (≥44) | via `MxIconButton` (aria-label + title) |
+| VIS-003 | search **48**, filter **40**, gaps 12/12/16 | measured search 48, chip 40 |
+| VIS-004 | selected chip foreground → `--mx-color-action-onSecondary` (kit-documented ~6:1) instead of too-dark `action-primary` | color `#b4aadd` on tonal surface |
+| VIS-005 | card min-height **112**, ring **48**, play **48**, ring→content 16 / content→play 12 (margins), title→meta 8 | measured card 112, ring 48×48, play 48×48 |
+| VIS-006 | ring shows `%`, 0% neutral track, a11y `N percent mastered` | verified |
+| VIS-007 | play **48×48**, icon **22**, `surface` (weight < primary CTA), label `Study {name}` | measured play 48×48 |
+| VIS-008 | metadata one line `words  status`; semantic badges (due=warn/new=neutral/success). At ≥360 single-line; at 320 the widest badges wrap (no clip) — trade-off vs the mandated 48px controls | 7-due meta height 20px at all widths; wider badges wrap only at 320 |
+| VIS-009 | single primary `+ Add card`, height **52**; bottom bar is a flex sibling (not an overlay) so the last card always clears it; list has 16px bottom padding | measured Add-card 52; no overlap by construction |
+| VIS-010 | 3 surfaces: bg(0) / card=transparent+single border(1) / search=`surface-elevated`(2); footer top-divider | measured card bg transparent + one border |
+
+Named layout constants (`const L`) replace scattered magic numbers. Residual: `MxBadge` height 20px (VIS-008 asked 24) and `MxActionButton` pill radius — component geometry baked into the kit/bundle; changing needs a kit-source task (flagged, not hacked).
