@@ -58,20 +58,21 @@ function DueBadge({ d }) {
 function DeckRow({ d, pressed, t = EN }) {
   const noStudy = d.disabled || d.words === 0;
   return (
+    /* interaction: tap card = open subdeck detail; tap play = start studying (stops propagation) */
     <MxCard variant="interactive" state={noStudy ? 'disabled' : 'none'} padding="16"
       onClick={noStudy ? undefined : () => {}}
       style={{ display: 'flex', alignItems: 'center', gap: 16, minHeight: 104, background: pressed ? 'var(--mx-color-state-pressedSurface)' : undefined }}>
       <Ring p={d.progress} />
       <div style={{ flex: '1 1 auto', minWidth: 0 }}>
-        {/* primary = deck name (semibold, up to 2 lines, never ellipsis-hidden to 1 line) */}
-        <div style={{ font: '600 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{d.name}</div>
+        {/* primary = deck name (semibold). Title area reserves 2 lines (§4) so metadata baseline is stable across 1- and 2-line names. */}
+        <div style={{ font: '600 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '2.5em' }}>{d.name}</div>
         {/* D-03: consistent metadata — words + status; wraps as a whole at narrow widths so the badge is never clipped */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6, minWidth: 0, flexWrap: 'wrap', rowGap: 4 }}>
           <span style={{ font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-secondary)', flex: '0 0 auto' }}>{t.words(d.words)}</span>
           <DueBadge d={d} />
         </div>
       </div>
-      <MxIconButton icon={<Ic n="play" s={18} />} label={`Start studying ${d.name}`} variant="surface" disabled={noStudy} />
+      <MxIconButton icon={<Ic n="play" s={18} />} label={`Study ${d.name}`} variant="surface" disabled={noStudy} onClick={e => { if (e && e.stopPropagation) e.stopPropagation(); }} />
     </MxCard>
   );
 }
@@ -169,10 +170,7 @@ function Shell({ theme, subtitle, children, overlay, busy, t = EN, frameStyle, n
       <MxTopBar
         leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
         title="Korean TOPIK I" subtitle={subtitle}
-        actions={<span style={{ display: 'flex', gap: 4 }}>
-          <MxIconButton icon={<Ic n="folder-plus" s={20} />} label={t.newDeck} variant="ghost" />
-          <MxIconButton icon={<Ic n="ellipsis-vertical" s={20} />} label="More options" variant="ghost" />
-        </span>} />
+        actions={<MxIconButton icon={<Ic n="folder-plus" s={20} />} label={t.newDeck} variant="ghost" />} />
       <div className="mx-scroll">{children}</div>
       {!noBottom && <div className="mx-bottom"><MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />}>{t.addCard}</MxActionButton></div>}
       {keyboard && <Keyboard />}
