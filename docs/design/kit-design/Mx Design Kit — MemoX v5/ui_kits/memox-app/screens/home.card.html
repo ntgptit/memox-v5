@@ -1,0 +1,205 @@
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Home" subtitle="Bazar-language home — promo, See-all sections, deck carousel, bottom nav" -->
+<!-- @startingPoint section="MemoX App" subtitle="Home screen with promo, carousels and bottom nav" viewport="430x900" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+<script src="../../../_ds_bundle.js"></script>
+<link rel="stylesheet" href="../_shared/phone.css" />
+</head>
+<body class="mx-desk">
+<div id="root"></div>
+<script type="text/babel">
+const K = window.MxDesignKitMemoXV5_9f1387;
+const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxModalSheet, MxListRow, MxSectionHeader, MxBottomNav, MxEmptyState, MxErrorState } = K;
+function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
+
+function Ring({ p, size = 46 }) {
+  const sw = 4, r = (size - sw) / 2, c = 2 * Math.PI * r;
+  const color = p > 0 ? 'var(--mx-color-srs-active)' : 'var(--mx-color-srs-preSrs)';
+  return (
+    <div style={{ position: 'relative', width: size, height: size, flex: '0 0 auto' }}>
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--mx-color-border-default)" strokeWidth={sw} />
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - p / 100)} />
+      </svg>
+      <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', font: '700 12px var(--mx-font-mono)', color }}>{p}</span>
+    </div>
+  );
+}
+
+const decks = [
+  { name: 'Korean TOPIK I', words: 120, progress: 62, due: 83, newc: 12, tint: 'var(--mx-color-state-selectedSurface)', ink: 'var(--mx-color-srs-active)' },
+  { name: 'Irregular verbs', words: 45, progress: 34, due: 15, newc: 30, tint: 'var(--mx-color-feedback-warningSurface)', ink: 'var(--mx-color-srs-due)' },
+  { name: 'Workplace vocabulary', words: 210, progress: 88, due: 0, newc: 0, tint: 'var(--mx-color-feedback-correctSurface)', ink: 'var(--mx-color-srs-noDue)' },
+  { name: 'Beginner grammar', words: 64, progress: 0, due: 0, newc: 64, tint: 'var(--mx-color-srs-preSrsSurface)', ink: 'var(--mx-color-srs-preSrs)' },
+];
+
+function DeckTile({ d, onClick }) {
+  return (
+    <div onClick={onClick} role="button" tabIndex={0} style={{ width: 150, flex: '0 0 auto', cursor: 'pointer' }}>
+      <div style={{ position: 'relative', height: 104, borderRadius: 18, background: d.tint, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span className="mx-korean" style={{ font: `800 40px var(--mx-font-display)`, color: d.ink }}>{d.name[0]}</span>
+        {d.due > 0 && <span style={{ position: 'absolute', top: 8, right: 8 }}><MxBadge tone="due" size="small">{d.due} due</MxBadge></span>}
+        {d.due === 0 && d.progress > 0 && <span style={{ position: 'absolute', top: 8, right: 8 }}><MxBadge tone="noDue" size="small">Done</MxBadge></span>}
+      </div>
+      <div style={{ marginTop: 8, font: '700 var(--mx-text-body-medium-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.name}</div>
+      <div style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{d.progress}% · {d.words} words</div>
+    </div>
+  );
+}
+
+function Phone({ theme }) {
+  const [sheet, setSheet] = React.useState(null);
+  const [nav, setNav] = React.useState('home');
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="signal" style={{width:15,height:15}}></i><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+      <MxTopBar
+        leading={<MxIconButton icon={<Ic n="search" s={20} />} label="Search" />}
+        title="MemoX"
+        actions={<MxIconButton icon={<Ic n="bell" s={20} />} label="Notifications" />}
+      />
+      <div className="mx-scroll" style={{ paddingBottom: 12 }}>
+        {/* Promo / daily goal banner */}
+        <div style={{ margin: '4px 16px 24px', borderRadius: 20, padding: '16px 24px', background: 'var(--mx-color-state-selectedSurface)', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ flex: '1 1 auto' }}>
+            <div style={{ font: '600 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-action-primary)', marginBottom: 3 }}>Daily goal</div>
+            <div style={{ font: '800 var(--mx-text-title-medium-size)/1.2 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', marginBottom: 12 }}>12 cards due today</div>
+            <MxActionButton size="small" onClick={() => setSheet(decks[0])} style={{ whiteSpace: 'nowrap' }}>Study now</MxActionButton>
+          </div>
+          <span style={{ width: 64, height: 64, flex: '0 0 auto', borderRadius: '50%', background: 'var(--mx-color-action-primary)', color: 'var(--mx-color-text-onAction)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <i data-lucide="flame" style={{ width: 30, height: 30 }}></i>
+          </span>
+        </div>
+
+        {/* Continue studying — carousel */}
+        <MxSectionHeader title="Continue studying" actionLabel="See all" onAction={()=>{}} style={{ margin: '0 16px 12px' }} />
+        <div style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '0 16px 6px', scrollbarWidth: 'none' }}>
+          {decks.map((d, i) => <DeckTile key={i} d={d} onClick={() => setSheet(d)} />)}
+        </div>
+
+        {/* Your decks — list */}
+        <MxSectionHeader title="Your decks" actionLabel="See all" onAction={()=>{}} style={{ margin: '24px 16px 12px' }} />
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {decks.slice(0, 2).map((d, i) => (
+            <MxCard key={i} variant="interactive" onClick={() => setSheet(d)} padding="12" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <Ring p={d.progress} />
+              <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+                <div style={{ font: '700 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.name}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 3 }}>
+                  <span style={{ fontSize: 'var(--mx-text-body-small-size)', color: 'var(--mx-color-text-tertiary)' }}>{d.words} words</span>
+                  {d.due > 0 && <MxBadge tone="due" size="small">{d.due} due</MxBadge>}
+                </div>
+              </div>
+              <span aria-hidden="true" style={{ width: 42, height: 42, flex: '0 0 auto', borderRadius: '50%', background: 'var(--mx-color-action-primary)', color: 'var(--mx-color-text-onAction)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <i data-lucide="play" style={{ width: 18, height: 18, marginLeft: 2 }}></i>
+              </span>
+            </MxCard>
+          ))}
+        </div>
+      </div>
+
+      <MxBottomNav value={nav} onChange={setNav} items={[
+        { key: 'home', label: 'Home', icon: 'house' },
+        { key: 'decks', label: 'Decks', icon: 'layers' },
+        { key: 'stats', label: 'Stats', icon: 'bar-chart-3' },
+        { key: 'more', label: 'More', icon: 'menu' },
+      ]} />
+
+      {sheet && (
+        <MxModalSheet title={sheet.name} onClose={() => setSheet(null)}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 8 }}>
+            {sheet.newc > 0 && <MxListRow leading={<Ic n="graduation-cap" />} title="Learn" subtitle={`${sheet.newc} new words`} showChevron onClick={()=>{}} />}
+            {sheet.progress > 0 && <MxListRow leading={<Ic n="repeat" />} title="Repeat" subtitle={sheet.due > 0 ? `${sheet.due} words due` : 'Nothing due'} showChevron onClick={()=>{}} />}
+            <MxListRow leading={<Ic n="book-open" />} title="Review words" subtitle="Browse content" showChevron onClick={()=>{}} />
+            <MxListRow leading={<Ic n="gamepad-2" />} title="A game" disabled trailing={<MxBadge tone="preSrs">Soon</MxBadge>} />
+          </div>
+        </MxModalSheet>
+      )}
+    </div>
+  );
+}
+function Skel({ w, h, r }) {
+  return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)' }} />;
+}
+function LoadingPhone({ theme }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined} aria-busy="true">
+      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="signal" style={{width:15,height:15}}></i><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+      <MxTopBar leading={<MxIconButton icon={<Ic n="search" s={20} />} label="Search" />} title="MemoX" actions={<MxIconButton icon={<Ic n="bell" s={20} />} label="Notifications" />} />
+      <div className="mx-scroll" style={{ paddingBottom: 12 }}>
+        <div style={{ margin: '4px 16px 24px' }}><Skel w="100%" h={96} r="20px" /></div>
+        <div style={{ margin: '0 16px 12px' }}><Skel w={150} h={18} r="var(--mx-radius-sm)" /></div>
+        <div style={{ display: 'flex', gap: 16, padding: '0 16px 6px' }}>
+          {[0, 1].map(i => (
+            <div key={i} style={{ width: 150, flex: '0 0 auto' }}>
+              <Skel w={150} h={104} r="18px" />
+              <div style={{ height: 8 }} />
+              <Skel w={120} h={13} r="var(--mx-radius-sm)" />
+              <div style={{ height: 6 }} />
+              <Skel w={90} h={11} r="var(--mx-radius-sm)" />
+            </div>
+          ))}
+        </div>
+        <div style={{ margin: '24px 16px 12px' }}><Skel w={110} h={18} r="var(--mx-radius-sm)" /></div>
+        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[0, 1].map(i => <Skel key={i} w="100%" h={72} r="var(--mx-radius-lg)" />)}
+        </div>
+      </div>
+      <MxBottomNav value="home" onChange={() => {}} items={[
+        { key: 'home', label: 'Home', icon: 'house' },
+        { key: 'decks', label: 'Decks', icon: 'layers' },
+        { key: 'stats', label: 'Stats', icon: 'bar-chart-3' },
+        { key: 'more', label: 'More', icon: 'menu' },
+      ]} />
+    </div>
+  );
+}
+function StatePhone({ theme, children }) {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
+  return (
+    <div className="mx-phone" data-theme={theme === 'light' ? 'light' : undefined}>
+      <div className="mx-status"><span>9:41</span><span style={{display:'flex',gap:6}}><i data-lucide="signal" style={{width:15,height:15}}></i><i data-lucide="wifi" style={{width:15,height:15}}></i><i data-lucide="battery-full" style={{width:15,height:15}}></i></span></div>
+      <MxTopBar leading={<MxIconButton icon={<Ic n="search" s={20} />} label="Search" />} title="MemoX" actions={<MxIconButton icon={<Ic n="bell" s={20} />} label="Notifications" />} />
+      <div className="mx-scroll" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 var(--mx-space-16)' }}>{children}</div>
+      <MxBottomNav value="home" onChange={() => {}} items={[
+        { key: 'home', label: 'Home', icon: 'house' },
+        { key: 'decks', label: 'Decks', icon: 'layers' },
+        { key: 'stats', label: 'Stats', icon: 'bar-chart-3' },
+        { key: 'more', label: 'More', icon: 'menu' },
+      ]} />
+    </div>
+  );
+}
+function EmptyPhone({ theme }) {
+  return (
+    <StatePhone theme={theme}>
+      <MxEmptyState icon={<Ic n="layers" s={40} />} title="No decks yet"
+        message="Create your first deck or import words to start learning."
+        action={<MxActionButton leadingIcon={<Ic n="plus" s={18} />}>Create deck</MxActionButton>} />
+    </StatePhone>
+  );
+}
+function ErrorPhone({ theme }) {
+  return (
+    <StatePhone theme={theme}>
+      <MxErrorState icon={<Ic n="cloud-off" s={40} />} title="Couldn't load your decks"
+        message="Your learning data is safe. Check your connection and try again."
+        action={<MxActionButton variant="secondary" leadingIcon={<Ic n="rotate-cw" s={18} />}>Retry</MxActionButton>} />
+    </StatePhone>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<><Phone theme="dark" /><Phone theme="light" /><LoadingPhone theme="dark" /><LoadingPhone theme="light" /><EmptyPhone theme="dark" /><EmptyPhone theme="light" /><ErrorPhone theme="dark" /><ErrorPhone theme="light" /></>);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 80);
+</script>
+</body>
+</html>
