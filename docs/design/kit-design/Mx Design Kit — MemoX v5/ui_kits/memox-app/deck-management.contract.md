@@ -76,9 +76,9 @@ Not a Form → form sub-states N/A.
 | Number 0 and very large | `MinDataPhone` (0 due) + `LongTextPhone` (9,999 words / 1,234 due) | Comma-formatted, badges fit |
 | Long badge/label | `LongTextPhone` (`1,234 due`) | Fits row, wraps to meta line |
 | 1-item vs many-item | `MinDataPhone` (1) / `DenseDataPhone` (12) | Both hold |
-| Font scale 1.3 & 1.5 | `FontScalePhone` (token `--mx-text-*-size` ×1.3 / ×1.5) | Rows reflow/clamp; bottom bar wraps (see D-02) |
-| Widths 320/360/390/430 | `WidthPhone` (frame width override) | Verified rendered at exactly 320/360/390/430; content reflows, no overflow (D-02) |
-| Keyboard open | `KeyboardSearchPhone` | Bottom CTA yields to keyboard; focused search + results stay visible (active control reachable) |
+| Font scale 1.3 & 1.5 | `FontScalePhone` (token `--mx-text-*-size` ×1.3 / ×1.5) | Rows reflow/clamp; single CTA holds; measured overflow 0px |
+| Widths 320/360/390/430 | `WidthPhone` (frame width override) | Rendered at exactly 320/360/390/430; content reflows; metadata wraps not clips (D-03); overflow 0px |
+| Keyboard open | `KeyboardSearchPhone` | Single CTA yields to keyboard; focused search + results stay visible (active control reachable) |
 | Safe-area notch / gesture | `.mx-status` (top), `.mx-bottom`/keyboard use `env(safe-area-inset-bottom)` | Respected via phone.css + inset padding |
 | No/broken image | N/A — screen has no imagery (avatars are token glyph rings) | — |
 
@@ -89,9 +89,26 @@ Runtime note: fixed 384px `phone.css` frame — widths/font-scale/keyboard/safe-
 | ID | Defect | Gate | Fix | Re-verify |
 |---|---|---|---|---|
 | **D-01** | Deck-row name used 1-line `nowrap` + ellipsis → long/KO/VN names hidden | "important content not hidden by ellipsis" | 2-line `-webkit-line-clamp` clamp; full name on Deck Detail | `LongTextPhone` shows 2 lines, no break |
-| **D-02** | Bottom bar (New subdeck + Add card) overflowed → **Add card clipped** at width-320 and font-1.5 | "no overflow" / "primary action reachable" | `.mx-bottom` `flexWrap:wrap` + rowGap 8 → primary wraps to full-width line | Measured overflow 0px at 320 & 1.5×; screenshot confirms |
+| **D-02** | Bottom bar (New subdeck + Add card) overflowed → **Add card clipped** at width-320 and font-1.5 | "no overflow" / "primary action reachable" | **New subdeck moved to the app bar (folder+ icon)** → a single full-width primary CTA that cannot overflow | Measured overflow 0px at 320 & 1.5×; screenshot confirms |
+| **D-03** | On the metadata line, the status badge was **clipped** at width-320 (forced single line) | "no overflow / no important content clipped" | Metadata `flex-wrap` (consistent across all rows) → badge drops below the word count only when tight; single line at ≥360 | Worst badge overflow re-measured 0px at 320; single line at 384 |
 
-All other visual gates passed: no off-scale spacing (guard), no hard-coded style (guard), touch ≥44, one primary CTA, consistent 16px section alignment, clear hierarchy, empty/loading/error share the composition, long text bounded, primary action reachable with keyboard open.
+All other visual gates passed: no off-scale spacing (guard), no hard-coded style (guard), touch ≥44, one primary CTA, consistent 16px alignment, clear hierarchy, empty/loading/error share the composition, long text bounded, primary action reachable with keyboard open.
+
+## Composition revision (design-critique pass — P0/P1/P2)
+
+Applied after review feedback ("right components, wrong composition"):
+
+- **P0 header height** — app-bar → 12 → search **48px** (elevated surface) → 12 → filter chips **40px** → 16 → list. Header ≈ **181px** above the list (excl. status bar), within the 180–200 target.
+- **P0 New subdeck** — moved from a competing bottom button to an app-bar `folder+` action; bottom now holds a **single** primary `+ Add card` (resolves D-02).
+- **P0 play button** — kept at 44px `MxIconButton` surface; the **progress ring is now lower visual weight** (3px muted track, `--mx-color-srs-preSrs`/`secondary` text) so it reads as info, not a second button. Ring is non-interactive (no ripple), `aria-label="{p}% mastered"`.
+- **P0 metadata/status** — one consistent line `{words} words  {status badge}`; standardized badges Due=amber+clock / New=neutral+sparkle / Completed=success+check, 24px, icon 14.
+- **P0 progress %** — ring shows `66%` / `100%` / `0%` (0% = neutral track, no accent).
+- **P1 filters** — both are now one control system: 40px capsule chips, radius 999. `KO → EN` selected (tonal surface); `A → Z` outline. (Direction has **no ▼ picker** — read-only in Phase 1 per the deck-management spec drift note.)
+- **P1 title** — deck name `body-large` **semibold (600)** (was 700), 2-line clamp, name-first hierarchy.
+- **P1 surface** — 3 levels: screen bg (0) / deck card (1) / search+elevated control (2, `surface-elevated`); sticky footer keeps its `phone.css` top divider.
+- **P1 contrast** — word count raised to `text-secondary`.
+- **§10 hierarchy** — name + due are the first-read elements; rings de-emphasized; a single create action.
+- **P2** — verified 2-line title, font scale 1.3/1.5, 3-digit due (`127 due` in dense fixture, `1,234 due` in long fixture), plus loading/empty/search-empty/error states.
 
 ## §9 Definition of Done
 
