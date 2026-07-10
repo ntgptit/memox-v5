@@ -7,7 +7,14 @@ depends only on `window.React` (UMD) + the kit bundle `window.MxDesignKitMemoXV5
 | File | Kind | Exposes | Consume from a screen |
 |------|------|---------|-----------------------|
 | `phone.css` | CSS | `.mx-desk` / `.mx-phone` / `.mx-status` / `.mx-scroll` / `.mx-bottom` — the 384×824 Galaxy S23 Ultra frame | `<link rel="stylesheet" href="../_shared/phone.css" />` |
-| `deck-card-list.js` | Babel/JSX partial | `window.MxDeckList` = `{ L, EN, VI, Ic, fmt, Ring, STATUS, StatusChip, DueBadge, DeckRow, Chip, SearchField, ControlArea, DeckList }` | `<script type="text/babel" src="../_shared/deck-card-list.js"></script>` then `const { DeckList, ControlArea } = window.MxDeckList` |
+| `kit-helpers.js` | Babel/JSX partial | `window.MxKit` = `{ Ic, Skel, fmt }` — the small atoms every screen used to re-declare (icon wrapper, skeleton block, number format). Analogous to V4's `kit-helpers.jsx`. | `<script type="text/babel" src="../_shared/kit-helpers.js"></script>` then `const { Ic, Skel } = window.MxKit` |
+| `deck-card-list.js` | Babel/JSX partial | `window.MxDeckList` = `{ L, EN, VI, Ic, fmt, Ring, STATUS, StatusChip, DueBadge, DeckRow, Chip, SearchField, ControlArea, DeckList }` (self-contained deck composite) | `<script type="text/babel" src="../_shared/deck-card-list.js"></script>` then `const { DeckList, ControlArea } = window.MxDeckList` |
+
+> **Atoms vs composites.** `kit-helpers.js` holds cross-screen **atoms** — load it in every screen so
+> nothing re-declares `Ic`/`Skel`. `deck-card-list.js` is a self-contained **composite** (a full
+> deck list), loaded only by screens that show one; it keeps its own private `Ic`/`fmt` by design.
+> Load order when both are present: `_ds_bundle.js` → `kit-helpers.js` → `deck-card-list.js` → the
+> screen's inline script.
 
 ## Rules
 
