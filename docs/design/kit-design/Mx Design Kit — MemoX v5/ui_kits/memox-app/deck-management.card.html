@@ -1,4 +1,4 @@
-<!-- @dsCard group="Sample Screens" viewport="430x900" name="Deck Management" subtitle="List archetype (composition-reworked): tight header, single primary CTA, name→due-first row hierarchy; states + edge fixtures. See deck-management.contract.md" -->
+<!-- @dsCard group="Sample Screens" viewport="430x900" name="Deck Management" subtitle="List archetype — reuses the shared deck-card-list.js partial (Ring/StatusChip/DeckRow/DeckList/ControlArea). States + edge fixtures. See deck-management.contract.md" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,131 +10,20 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
 <script src="../../_ds_bundle.js"></script>
+<script type="text/babel" src="deck-card-list.js"></script>
 <link rel="stylesheet" href="phone.css" />
 </head>
 <body class="mx-desk">
 <div id="root"></div>
 <script type="text/babel">
 const K = window.MxDesignKitMemoXV5_9f1387;
-const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxEmptyState, MxErrorState, MxConfirmDialog } = K;
-function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
-function fmt(n) { return n.toLocaleString('en-US'); }
+const { MxTopBar, MxIconButton, MxActionButton, MxEmptyState, MxErrorState, MxConfirmDialog } = K;
+/* reusable deck card-list building blocks (shared partial: deck-card-list.js) */
+const { L, EN, VI, Ic, fmt, DeckRow, ControlArea, DeckList } = window.MxDeckList;
 
-/* named layout constants (no scattered magic numbers) — all on the 4/8/12/16/24/32/48 scale or a component size */
-const L = { ringSize: 48, playSize: 48, playIcon: 22, cardMinH: 112, gapRingContent: 16, gapContentPlay: 12, gapTitleMeta: 8, searchH: 48, filterH: 40, primaryBtnH: 52 };
-
-/* ---- i18n (§7 VN / EN) ---- */
-const EN = { search: 'Search decks', dir: 'KO → EN', sort: 'A → Z', newDeck: 'New subdeck', addCard: 'Add card',
-  words: n => `${fmt(n)} words`, subdecks: (n, w) => `${n} subdecks · ${fmt(w)} words`, results: (n, q) => `${n} results for “${q}”` };
-const VI = { search: 'Tìm bộ thẻ', dir: 'KO → VI', sort: 'A → Z', newDeck: 'Bộ thẻ mới', addCard: 'Thêm thẻ',
-  words: n => `${fmt(n)} từ`, subdecks: (n, w) => `${n} bộ thẻ · ${fmt(w)} từ`, results: (n, q) => `${n} kết quả cho “${q}”` };
-
-/* ---- §7 large-font: override px text tokens ×f ---- */
+/* ---- screen-specific: §7 large-font test (override px text tokens ×f) ---- */
 const TEXT_ROLES = { 'display-large': 40, 'title-large': 26, 'title-medium': 20, 'body-large': 17, 'body-medium': 15, 'body-small': 13, 'label-large': 15, 'label-medium': 13, 'caption': 12, 'study-korean': 34, 'study-explanation': 18, 'stat-number': 30, 'button': 16 };
 function scaleTokens(f) { const o = {}; for (const k in TEXT_ROLES) o[`--mx-text-${k}-size`] = `${Math.round(TEXT_ROLES[k] * f * 10) / 10}px`; return o; }
-
-/* ---- progress ring: lower visual weight than the play button (thin track, muted, non-interactive), shows % + a11y label ---- */
-function Ring({ p, size = L.ringSize }) {
-  const sw = 4, r = (size - sw) / 2, c = 2 * Math.PI * r;
-  const done = p > 0;
-  const color = done ? 'var(--mx-color-srs-active)' : 'var(--mx-color-srs-preSrs)';
-  return (
-    <div role="img" aria-label={`${p} percent mastered`} style={{ position: 'relative', width: size, height: size, flex: '0 0 auto' }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--mx-color-border-subtle)" strokeWidth={sw} />
-        {done && <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - p / 100)} />}
-      </svg>
-      <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', font: `600 12px var(--mx-font-mono)`, color: done ? 'var(--mx-color-text-secondary)' : 'var(--mx-color-text-tertiary)' }}>{p}%</span>
-    </div>
-  );
-}
-
-/* ---- status chip (VIS-014: exact 24px / pad 8 / icon 14 / gap 4 — MxBadge is fixed at 20px). Token-only semantic variants. ---- */
-const STATUS = {
-  due:   { bg: 'var(--mx-color-feedback-warningSurface)', fg: 'var(--mx-color-feedback-warning)', icon: 'alarm-clock' },
-  new:   { bg: 'var(--mx-color-srs-preSrsSurface)',       fg: 'var(--mx-color-text-secondary)',   icon: 'sparkles' },
-  done:  { bg: 'var(--mx-color-feedback-correctSurface)', fg: 'var(--mx-color-feedback-correct)', icon: 'check' },
-  empty: { bg: 'var(--mx-color-state-disabledSurface)',   fg: 'var(--mx-color-text-tertiary)',    icon: null },
-};
-function StatusChip({ kind, children }) {
-  const s = STATUS[kind];
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, height: 24, padding: '0 8px', borderRadius: 'var(--mx-radius-pill)', background: s.bg, color: s.fg, font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', whiteSpace: 'nowrap', flex: '0 0 auto' }}>
-      {s.icon && <i data-lucide={s.icon} style={{ width: 14, height: 14 }}></i>}{children}
-    </span>
-  );
-}
-function DueBadge({ d }) {
-  if (d.newc > 0 && d.progress === 0) return <StatusChip kind="new">{fmt(d.newc)} new</StatusChip>;
-  if (d.due > 0) return <StatusChip kind="due">{fmt(d.due)} due</StatusChip>;
-  if (d.words === 0) return <StatusChip kind="empty">Empty</StatusChip>;
-  return <StatusChip kind="done">Up to date</StatusChip>;
-}
-
-/* ---- deck row: name-first hierarchy, single-line metadata, ring left (info) / play right (action) ---- */
-function DeckRow({ d, pressed, t = EN }) {
-  const noStudy = d.disabled || d.words === 0;
-  return (
-    /* interaction: tap card = open subdeck detail; tap play = start studying (stops propagation) */
-    <MxCard variant="interactive" state={noStudy ? 'disabled' : 'none'} padding="16"
-      onClick={noStudy ? undefined : () => {}}
-      style={{ display: 'flex', alignItems: 'center', minHeight: L.cardMinH, background: pressed ? 'var(--mx-color-state-pressedSurface)' : undefined }}>
-      <Ring p={d.progress} />
-      {/* content fills the space between ring and play: ring→content 16, content→play 12 */}
-      <div style={{ flex: '1 1 auto', minWidth: 0, marginLeft: L.gapRingContent, marginRight: L.gapContentPlay }}>
-        {/* primary = deck name (semibold, ≤2 lines). VIS-012: no reserved whitespace — card grows only when the title truly needs 2 lines. */}
-        <div style={{ font: '600 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{d.name}</div>
-        {/* consistent metadata — words + status; wraps as a whole at narrow widths so the badge is never clipped */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: L.gapTitleMeta, minWidth: 0, flexWrap: 'wrap', rowGap: 4 }}>
-          <span style={{ font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-secondary)', flex: '0 0 auto' }}>{t.words(d.words)}</span>
-          <DueBadge d={d} />
-        </div>
-      </div>
-      <MxIconButton icon={<Ic n="play" s={L.playIcon} />} label={`Study ${d.name}`} variant="surface" disabled={noStudy} style={{ width: L.playSize, height: L.playSize, flex: '0 0 auto' }} onClick={e => { if (e && e.stopPropagation) e.stopPropagation(); }} />
-    </MxCard>
-  );
-}
-
-/* ---- filter chip: one control system for both filters (40px capsule) ---- */
-function Chip({ selected, icon, trailing, children, label }) {
-  return (
-    <div role="button" tabIndex={0} aria-label={label} style={{
-      display: 'inline-flex', alignItems: 'center', gap: 8, height: L.filterH, padding: '0 14px', borderRadius: 999, cursor: 'pointer', whiteSpace: 'nowrap',
-      background: selected ? 'var(--mx-color-state-selectedSurface)' : 'transparent',
-      border: `1px solid ${selected ? 'var(--mx-color-state-selected)' : 'var(--mx-color-border-default)'}`,
-      /* VIS-004: selected foreground uses the onSecondary token (~6:1 on the tonal surface) instead of the too-dark action-primary */
-      color: selected ? 'var(--mx-color-action-onSecondary)' : 'var(--mx-color-text-secondary)',
-      font: '600 var(--mx-text-body-small-size) var(--mx-font-display)',
-    }}>{icon}{children}{trailing}</div>
-  );
-}
-
-/* ---- search field: 48px, elevated surface (level 2), tight ---- */
-function SearchField({ value, focused, t = EN }) {
-  const has = value && value.length > 0;
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, height: L.searchH, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-elevated)', border: `1px solid ${focused ? 'var(--mx-color-state-selected)' : 'var(--mx-color-border-subtle)'}` }}>
-      <i data-lucide="search" style={{ width: 18, height: 18, color: 'var(--mx-color-text-tertiary)', flex: '0 0 auto' }}></i>
-      <span style={{ flex: '1 1 auto', font: '500 var(--mx-text-body-medium-size) var(--mx-font-display)', color: has ? 'var(--mx-color-text-primary)' : 'var(--mx-color-text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{has ? value : t.search}</span>
-      {focused && <span style={{ width: 2, height: 20, background: 'var(--mx-color-action-primary)', flex: '0 0 auto' }} />}
-      {has && !focused && <MxIconButton icon={<Ic n="x" s={16} />} label="Clear search" variant="ghost" size="small" />}
-    </div>
-  );
-}
-
-/* ---- header control area: app-bar → 12 → search(48) → 12 → filter(40) → 16 → list ---- */
-function ControlArea({ query, focused, t = EN }) {
-  return (
-    <div style={{ padding: '12px 16px 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <SearchField value={query} focused={focused} t={t} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        {/* direction is READ-ONLY per product spec (no picker in Phase 1) — chip styled for parity, no ▼ affordance */}
-        <Chip selected icon={<Ic n="arrow-right" s={18} />} label={`Study direction ${t.dir}`}>{t.dir}</Chip>
-        <Chip icon={<Ic n="arrow-up-down" s={18} />} label="Sort A to Z">{t.sort}</Chip>
-      </div>
-    </div>
-  );
-}
 
 function Skel({ w, h, r }) {
   return <div style={{ width: w, height: h, borderRadius: r || 'var(--mx-radius-md)', background: 'var(--mx-color-state-loadingSurface)', flex: '0 0 auto' }} />;
@@ -180,7 +69,7 @@ const viDecks = [
 ];
 const totalWords = decks.reduce((a, d) => a + d.words, 0);
 
-/* ---- shared phone shell: New subdeck moved to app bar; single primary CTA at bottom ---- */
+/* ---- screen chrome: New subdeck in the app bar; single primary CTA at bottom ---- */
 function Shell({ theme, subtitle, children, overlay, busy, t = EN, frameStyle, noBottom, keyboard }) {
   React.useEffect(() => { window.lucide && window.lucide.createIcons(); });
   return (
@@ -191,7 +80,6 @@ function Shell({ theme, subtitle, children, overlay, busy, t = EN, frameStyle, n
         title="Korean TOPIK I" subtitle={subtitle}
         actions={<MxIconButton icon={<Ic n="folder-plus" s={20} />} label="Create new subdeck" variant="ghost" />} />
       <div className="mx-scroll">{children}</div>
-      {/* VIS-018: primary CTA uses radius-lg (16) instead of the kit pill on this screen */}
       {!noBottom && <div className="mx-bottom"><MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />} style={{ height: L.primaryBtnH, borderRadius: 'var(--mx-radius-lg)' }}>{t.addCard}</MxActionButton></div>}
       {keyboard && <Keyboard />}
       {overlay}
@@ -200,9 +88,6 @@ function Shell({ theme, subtitle, children, overlay, busy, t = EN, frameStyle, n
 }
 function Centered({ children }) {
   return <div style={{ minHeight: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>{children}</div>;
-}
-function DeckList({ items, t = EN }) {
-  return <div style={{ padding: '16px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>{items.map((d, i) => <DeckRow key={i} d={d} t={t} />)}</div>;
 }
 
 /* ==== STATE MATRIX (§6) ==== */
@@ -305,7 +190,7 @@ function DeleteConfirmPhone({ theme }) {
         warning="Your other decks and learning history stay safe — but this subdeck can’t be recovered."
         confirmLabel="Delete deck" cancelLabel="Keep deck" />}>
       <ControlArea query="" />
-      <DeckList items={decks.slice(0, 3).map((d, i) => (i === 2 ? { ...d } : d))} />
+      <DeckList items={decks.slice(0, 3)} />
     </Shell>
   );
 }

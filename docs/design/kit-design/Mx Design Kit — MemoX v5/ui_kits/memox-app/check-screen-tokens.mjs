@@ -18,7 +18,7 @@ const ALLOWED_SPACING = new Set([4, 8, 12, 16, 24, 32, 48]);
 const EXCLUDE = new Set(['appearance-reminders.card.html']);
 
 const files = readdirSync(DIR).filter(
-  (f) => (f.endsWith('.card.html') || f === 'index.html') && !EXCLUDE.has(f),
+  (f) => (f.endsWith('.card.html') || f === 'index.html' || f === 'deck-card-list.js') && !EXCLUDE.has(f),
 );
 
 let failures = 0;
