@@ -35,7 +35,7 @@ function scaleTokens(f) { const o = {}; for (const k in TEXT_ROLES) o[`--mx-text
 
 /* ---- progress ring: lower visual weight than the play button (thin track, muted, non-interactive), shows % + a11y label ---- */
 function Ring({ p, size = L.ringSize }) {
-  const sw = 3, r = (size - sw) / 2, c = 2 * Math.PI * r;
+  const sw = 4, r = (size - sw) / 2, c = 2 * Math.PI * r;
   const done = p > 0;
   const color = done ? 'var(--mx-color-srs-active)' : 'var(--mx-color-srs-preSrs)';
   return (
@@ -44,17 +44,31 @@ function Ring({ p, size = L.ringSize }) {
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--mx-color-border-subtle)" strokeWidth={sw} />
         {done && <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - p / 100)} />}
       </svg>
-      <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', font: `600 11px var(--mx-font-mono)`, color: done ? 'var(--mx-color-text-secondary)' : 'var(--mx-color-text-tertiary)' }}>{p}%</span>
+      <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', font: `600 12px var(--mx-font-mono)`, color: done ? 'var(--mx-color-text-secondary)' : 'var(--mx-color-text-tertiary)' }}>{p}%</span>
     </div>
   );
 }
 
-/* ---- standardized status badge: Due=warning · New=neutral · Completed=success · Empty=neutral (24px, icon 14) ---- */
+/* ---- status chip (VIS-014: exact 24px / pad 8 / icon 14 / gap 4 — MxBadge is fixed at 20px). Token-only semantic variants. ---- */
+const STATUS = {
+  due:   { bg: 'var(--mx-color-feedback-warningSurface)', fg: 'var(--mx-color-feedback-warning)', icon: 'alarm-clock' },
+  new:   { bg: 'var(--mx-color-srs-preSrsSurface)',       fg: 'var(--mx-color-text-secondary)',   icon: 'sparkles' },
+  done:  { bg: 'var(--mx-color-feedback-correctSurface)', fg: 'var(--mx-color-feedback-correct)', icon: 'check' },
+  empty: { bg: 'var(--mx-color-state-disabledSurface)',   fg: 'var(--mx-color-text-tertiary)',    icon: null },
+};
+function StatusChip({ kind, children }) {
+  const s = STATUS[kind];
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, height: 24, padding: '0 8px', borderRadius: 'var(--mx-radius-pill)', background: s.bg, color: s.fg, font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', whiteSpace: 'nowrap', flex: '0 0 auto' }}>
+      {s.icon && <i data-lucide={s.icon} style={{ width: 14, height: 14 }}></i>}{children}
+    </span>
+  );
+}
 function DueBadge({ d }) {
-  if (d.newc > 0 && d.progress === 0) return <MxBadge tone="preSrs" size="small" icon={<Ic n="sparkles" s={14} />}>{fmt(d.newc)} new</MxBadge>;
-  if (d.due > 0) return <MxBadge tone="due" size="small" icon={<Ic n="alarm-clock" s={14} />}>{fmt(d.due)} due</MxBadge>;
-  if (d.words === 0) return <MxBadge tone="neutral" size="small">Empty</MxBadge>;
-  return <MxBadge tone="noDue" size="small" icon={<Ic n="check" s={14} />}>Up to date</MxBadge>;
+  if (d.newc > 0 && d.progress === 0) return <StatusChip kind="new">{fmt(d.newc)} new</StatusChip>;
+  if (d.due > 0) return <StatusChip kind="due">{fmt(d.due)} due</StatusChip>;
+  if (d.words === 0) return <StatusChip kind="empty">Empty</StatusChip>;
+  return <StatusChip kind="done">Up to date</StatusChip>;
 }
 
 /* ---- deck row: name-first hierarchy, single-line metadata, ring left (info) / play right (action) ---- */
@@ -68,8 +82,8 @@ function DeckRow({ d, pressed, t = EN }) {
       <Ring p={d.progress} />
       {/* content fills the space between ring and play: ring→content 16, content→play 12 */}
       <div style={{ flex: '1 1 auto', minWidth: 0, marginLeft: L.gapRingContent, marginRight: L.gapContentPlay }}>
-        {/* primary = deck name (semibold). Title area reserves 2 lines (§4) so metadata baseline is stable across 1- and 2-line names. */}
-        <div style={{ font: '600 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '2.5em' }}>{d.name}</div>
+        {/* primary = deck name (semibold, ≤2 lines). VIS-012: no reserved whitespace — card grows only when the title truly needs 2 lines. */}
+        <div style={{ font: '600 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{d.name}</div>
         {/* consistent metadata — words + status; wraps as a whole at narrow widths so the badge is never clipped */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: L.gapTitleMeta, minWidth: 0, flexWrap: 'wrap', rowGap: 4 }}>
           <span style={{ font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-secondary)', flex: '0 0 auto' }}>{t.words(d.words)}</span>
@@ -177,7 +191,8 @@ function Shell({ theme, subtitle, children, overlay, busy, t = EN, frameStyle, n
         title="Korean TOPIK I" subtitle={subtitle}
         actions={<MxIconButton icon={<Ic n="folder-plus" s={20} />} label="Create new subdeck" variant="ghost" />} />
       <div className="mx-scroll">{children}</div>
-      {!noBottom && <div className="mx-bottom"><MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />} style={{ height: L.primaryBtnH }}>{t.addCard}</MxActionButton></div>}
+      {/* VIS-018: primary CTA uses radius-lg (16) instead of the kit pill on this screen */}
+      {!noBottom && <div className="mx-bottom"><MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />} style={{ height: L.primaryBtnH, borderRadius: 'var(--mx-radius-lg)' }}>{t.addCard}</MxActionButton></div>}
       {keyboard && <Keyboard />}
       {overlay}
     </div>

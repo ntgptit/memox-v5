@@ -160,3 +160,20 @@ Applied to `deck-management.card.html` + `phone.css`. Medium = HTML mockup (no F
 | VIS-010 | 3 surfaces: bg(0) / card=transparent+single border(1) / search=`surface-elevated`(2); footer top-divider | measured card bg transparent + one border |
 
 Named layout constants (`const L`) replace scattered magic numbers. Residual: `MxBadge` height 20px (VIS-008 asked 24) and `MxActionButton` pill radius — component geometry baked into the kit/bundle; changing needs a kit-source task (flagged, not hacked).
+
+## VIS-011…020 fix pass (measured @ 384/390 unless noted)
+
+| ID | Fix | Measured |
+|----|-----|----------|
+| VIS-011 | 3-zone anatomy [ring · content(title+meta) · play], vertically centered, consistent across cards | column layout, same per card |
+| VIS-012 | Removed the title-reserve whitespace; card `min-height 112`; 2-line grows only when needed (≤136) | 1-line card **112**, long-title card **112** (≤136), **4** full cards visible at 384 |
+| VIS-013 | Title semibold 600, ≤2-line clamp (no ellipsis-to-1-line) | 17px/600 (nearest token; no 18px token) |
+| VIS-014 | New token-only `StatusChip` at **exactly 24px** / pad 8 / icon 14 / gap 4 (MxBadge is fixed 20px); semantic due=warn / new=neutral / done=success | chip height **24**; metadata single-line **24px** at 360/390/430 |
+| VIS-015 | Ring 48, **stroke 4**, text 12, `%`, 0% neutral track, no shadow/pressed, muted track | stroke **4**, ring 48 |
+| VIS-016 | Play 48×48, icon 22, `surface` (lighter than the primary CTA) | 48×48 |
+| VIS-017 | search 48 / filter 40, gaps 12/12/16, both filters one chip anatomy | search 48, chip 40 |
+| VIS-018 | Single `+ Add card` height 52, **radius-lg (16)** instead of the kit pill; footer top-divider | Add-card radius **16px**, height 52 |
+| VIS-019 | Hierarchy title → due → play → progress → word count; only the badge/due carries accent, ring muted | verified visually |
+| VIS-020 | Shared alignment grid: card L-pad 16, ring→content 16, content→play 12, R-pad 16, title→meta 8 | identical columns across cards |
+
+Viewports: 320 overflow **0px** (widest badge wraps, no clip); 360/390/430 metadata single-line; scrollbar **0px** (fresh CSS). Divergence: status now uses local `StatusChip` (24px) instead of kit `MxBadge` (20px) — recommend promoting a 24px badge size to the kit for cross-screen consistency; likewise the per-screen non-pill button radius.
