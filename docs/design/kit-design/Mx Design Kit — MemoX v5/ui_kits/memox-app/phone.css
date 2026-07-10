@@ -19,7 +19,9 @@
   padding: 12px 22px 4px; height: 34px;
   font: 600 14px var(--mx-font-display); color: var(--mx-color-text-primary);
 }
-.mx-scroll { flex: 1 1 auto; overflow-y: auto; }
+/* VIS-001: scroll by gesture/wheel but hide the desktop scrollbar (mobile-like, no white bar stealing width) */
+.mx-scroll { flex: 1 1 auto; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; overscroll-behavior: contain; }
+.mx-scroll::-webkit-scrollbar { width: 0; height: 0; display: none; }
 .mx-bottom {
   display: flex; gap: 10px; padding: 12px 16px;
   padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));

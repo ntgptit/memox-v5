@@ -20,6 +20,9 @@ const { MxTopBar, MxIconButton, MxCard, MxBadge, MxActionButton, MxEmptyState, M
 function Ic({ n, s = 20 }) { return <i data-lucide={n} style={{ width: s, height: s }}></i>; }
 function fmt(n) { return n.toLocaleString('en-US'); }
 
+/* named layout constants (no scattered magic numbers) — all on the 4/8/12/16/24/32/48 scale or a component size */
+const L = { ringSize: 48, playSize: 48, playIcon: 22, cardMinH: 112, gapRingContent: 16, gapContentPlay: 12, gapTitleMeta: 8, searchH: 48, filterH: 40, primaryBtnH: 52 };
+
 /* ---- i18n (§7 VN / EN) ---- */
 const EN = { search: 'Search decks', dir: 'KO → EN', sort: 'A → Z', newDeck: 'New subdeck', addCard: 'Add card',
   words: n => `${fmt(n)} words`, subdecks: (n, w) => `${n} subdecks · ${fmt(w)} words`, results: (n, q) => `${n} results for “${q}”` };
@@ -31,12 +34,12 @@ const TEXT_ROLES = { 'display-large': 40, 'title-large': 26, 'title-medium': 20,
 function scaleTokens(f) { const o = {}; for (const k in TEXT_ROLES) o[`--mx-text-${k}-size`] = `${Math.round(TEXT_ROLES[k] * f * 10) / 10}px`; return o; }
 
 /* ---- progress ring: lower visual weight than the play button (thin track, muted, non-interactive), shows % + a11y label ---- */
-function Ring({ p, size = 48 }) {
+function Ring({ p, size = L.ringSize }) {
   const sw = 3, r = (size - sw) / 2, c = 2 * Math.PI * r;
   const done = p > 0;
   const color = done ? 'var(--mx-color-srs-active)' : 'var(--mx-color-srs-preSrs)';
   return (
-    <div role="img" aria-label={`${p}% mastered`} style={{ position: 'relative', width: size, height: size, flex: '0 0 auto' }}>
+    <div role="img" aria-label={`${p} percent mastered`} style={{ position: 'relative', width: size, height: size, flex: '0 0 auto' }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="var(--mx-color-border-subtle)" strokeWidth={sw} />
         {done && <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - p / 100)} />}
@@ -61,18 +64,19 @@ function DeckRow({ d, pressed, t = EN }) {
     /* interaction: tap card = open subdeck detail; tap play = start studying (stops propagation) */
     <MxCard variant="interactive" state={noStudy ? 'disabled' : 'none'} padding="16"
       onClick={noStudy ? undefined : () => {}}
-      style={{ display: 'flex', alignItems: 'center', gap: 16, minHeight: 104, background: pressed ? 'var(--mx-color-state-pressedSurface)' : undefined }}>
+      style={{ display: 'flex', alignItems: 'center', minHeight: L.cardMinH, background: pressed ? 'var(--mx-color-state-pressedSurface)' : undefined }}>
       <Ring p={d.progress} />
-      <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+      {/* content fills the space between ring and play: ring→content 16, content→play 12 */}
+      <div style={{ flex: '1 1 auto', minWidth: 0, marginLeft: L.gapRingContent, marginRight: L.gapContentPlay }}>
         {/* primary = deck name (semibold). Title area reserves 2 lines (§4) so metadata baseline is stable across 1- and 2-line names. */}
         <div style={{ font: '600 var(--mx-text-body-large-size)/1.25 var(--mx-font-display)', color: 'var(--mx-color-text-primary)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '2.5em' }}>{d.name}</div>
-        {/* D-03: consistent metadata — words + status; wraps as a whole at narrow widths so the badge is never clipped */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6, minWidth: 0, flexWrap: 'wrap', rowGap: 4 }}>
+        {/* consistent metadata — words + status; wraps as a whole at narrow widths so the badge is never clipped */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: L.gapTitleMeta, minWidth: 0, flexWrap: 'wrap', rowGap: 4 }}>
           <span style={{ font: '500 var(--mx-text-body-small-size) var(--mx-font-display)', color: 'var(--mx-color-text-secondary)', flex: '0 0 auto' }}>{t.words(d.words)}</span>
           <DueBadge d={d} />
         </div>
       </div>
-      <MxIconButton icon={<Ic n="play" s={18} />} label={`Study ${d.name}`} variant="surface" disabled={noStudy} onClick={e => { if (e && e.stopPropagation) e.stopPropagation(); }} />
+      <MxIconButton icon={<Ic n="play" s={L.playIcon} />} label={`Study ${d.name}`} variant="surface" disabled={noStudy} style={{ width: L.playSize, height: L.playSize, flex: '0 0 auto' }} onClick={e => { if (e && e.stopPropagation) e.stopPropagation(); }} />
     </MxCard>
   );
 }
@@ -81,10 +85,11 @@ function DeckRow({ d, pressed, t = EN }) {
 function Chip({ selected, icon, trailing, children, label }) {
   return (
     <div role="button" tabIndex={0} aria-label={label} style={{
-      display: 'inline-flex', alignItems: 'center', gap: 8, height: 40, padding: '0 14px', borderRadius: 999, cursor: 'pointer', whiteSpace: 'nowrap',
+      display: 'inline-flex', alignItems: 'center', gap: 8, height: L.filterH, padding: '0 14px', borderRadius: 999, cursor: 'pointer', whiteSpace: 'nowrap',
       background: selected ? 'var(--mx-color-state-selectedSurface)' : 'transparent',
-      border: `1px solid ${selected ? 'transparent' : 'var(--mx-color-border-default)'}`,
-      color: selected ? 'var(--mx-color-action-primary)' : 'var(--mx-color-text-secondary)',
+      border: `1px solid ${selected ? 'var(--mx-color-state-selected)' : 'var(--mx-color-border-default)'}`,
+      /* VIS-004: selected foreground uses the onSecondary token (~6:1 on the tonal surface) instead of the too-dark action-primary */
+      color: selected ? 'var(--mx-color-action-onSecondary)' : 'var(--mx-color-text-secondary)',
       font: '600 var(--mx-text-body-small-size) var(--mx-font-display)',
     }}>{icon}{children}{trailing}</div>
   );
@@ -94,7 +99,7 @@ function Chip({ selected, icon, trailing, children, label }) {
 function SearchField({ value, focused, t = EN }) {
   const has = value && value.length > 0;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, height: 48, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-elevated)', border: `1px solid ${focused ? 'var(--mx-color-state-selected)' : 'var(--mx-color-border-subtle)'}` }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, height: L.searchH, padding: '0 8px 0 12px', borderRadius: 'var(--mx-radius-md)', background: 'var(--mx-color-surface-elevated)', border: `1px solid ${focused ? 'var(--mx-color-state-selected)' : 'var(--mx-color-border-subtle)'}` }}>
       <i data-lucide="search" style={{ width: 18, height: 18, color: 'var(--mx-color-text-tertiary)', flex: '0 0 auto' }}></i>
       <span style={{ flex: '1 1 auto', font: '500 var(--mx-text-body-medium-size) var(--mx-font-display)', color: has ? 'var(--mx-color-text-primary)' : 'var(--mx-color-text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{has ? value : t.search}</span>
       {focused && <span style={{ width: 2, height: 20, background: 'var(--mx-color-action-primary)', flex: '0 0 auto' }} />}
@@ -170,9 +175,9 @@ function Shell({ theme, subtitle, children, overlay, busy, t = EN, frameStyle, n
       <MxTopBar
         leading={<MxIconButton icon={<Ic n="chevron-left" />} label="Back" />}
         title="Korean TOPIK I" subtitle={subtitle}
-        actions={<MxIconButton icon={<Ic n="folder-plus" s={20} />} label={t.newDeck} variant="ghost" />} />
+        actions={<MxIconButton icon={<Ic n="folder-plus" s={20} />} label="Create new subdeck" variant="ghost" />} />
       <div className="mx-scroll">{children}</div>
-      {!noBottom && <div className="mx-bottom"><MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />}>{t.addCard}</MxActionButton></div>}
+      {!noBottom && <div className="mx-bottom"><MxActionButton variant="primary" fullWidth leadingIcon={<Ic n="plus" s={18} />} style={{ height: L.primaryBtnH }}>{t.addCard}</MxActionButton></div>}
       {keyboard && <Keyboard />}
       {overlay}
     </div>
@@ -204,10 +209,10 @@ function LoadingPhone({ theme }) {
       </div>
       <div style={{ padding: '16px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
         {[0, 1, 2, 3].map(i => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, minHeight: 104, padding: 16, border: '1px solid var(--mx-color-border-subtle)', borderRadius: 'var(--mx-radius-lg)' }}>
-            <Skel w={48} h={48} r="999px" />
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, minHeight: L.cardMinH, padding: 16, border: '1px solid var(--mx-color-border-subtle)', borderRadius: 'var(--mx-radius-lg)' }}>
+            <Skel w={L.ringSize} h={L.ringSize} r="999px" />
             <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: 8 }}><Skel w="70%" h={16} r="var(--mx-radius-sm)" /><Skel w="42%" h={12} r="var(--mx-radius-sm)" /></div>
-            <Skel w={44} h={44} r="999px" />
+            <Skel w={L.playSize} h={L.playSize} r="999px" />
           </div>
         ))}
       </div>
